@@ -34,3 +34,4 @@ product-local copies it supersedes.
 - The Doctrine-Enforcer (ADIS Enforcer) repo executes invariants against code;
   this repo defines them. Keep invariant wording changes here synchronized with
   the Enforcer's detectors.
+| `platform-doctrine/references/disciplined-retrieval.md` | New amendment, 2026-09-30 | Written from the Community Violence Register reference implementation (`server/evidence/graph.ts`, GV PR #1) | Adds layered graph → passage → abstain retrieval, tiers, logging and tests (R1–R8). Authorized by Terry Flood 2026-09-30 ("disciplined RAG and graph system… push and merge each"). |

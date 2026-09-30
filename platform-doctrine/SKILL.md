@@ -188,6 +188,7 @@ The bar: looking through a window at something real, calm on the surface and den
 - **Controls live outside the model.** A prompt, doctrine, or an agent's agreement is not a control. Where agents can take consequential actions, enforce at the resource: no valid capability, no executable effect.
 - **Human authority:** the system recommends; humans authorize anything clinical, legal, financial, safety-critical, or operational (evacuation, dispatch, alerting, closure). Fail closed. Record approvals. Guard against automation bias: give reviewers interpretable evidence and time.
 - **Evidence graph:** when unstructured text feeds a claim, figure, decision or advisor answer, populate the project's SPOC evidence graph (evidence-bound quads, source as context, typed predicates, conflicts surfaced to a human). See `references/evidence-knowledge-graph.md` and `tools/spoc_kg.py`.
+- **Disciplined retrieval:** anything that answers from text retrieves graph → passages → abstain. Every hit carries a tier and URL, conflicts are shown, every retrieval is logged, and the gates are tested in CI (R1–R8). Model memory is never a source. See `references/disciplined-retrieval.md`.
 - **Disclosure:** no source code, keys, internal endpoints, customer data, or enabling technical detail in public pages or documents.
 
 ## 10. Audit (tiered, relevance-gated)
@@ -246,4 +247,5 @@ Source of truth: `references/adis-constitution-v2.json` (v2.0.0, 2026-07-19), wi
 - Keep your `tattletale` skill SEPARATE. It is an NSF document agent and should trigger only for those documents.
 - `references/domain-profiles.md`, `references/audit.md`, `references/OPEN-ITEMS.md`.
 - `references/evidence-knowledge-graph.md` + `tools/spoc_kg.py`: evidence-bound SPOC knowledge-graph population (K1–K8).
+- `references/disciplined-retrieval.md`: how answers retrieve from the graph and passages (R1–R8).
 - `templates/situation-model.md`, `templates/build-ledger.md`: copy into the project's `docs/` on first use.
