@@ -12,6 +12,7 @@ product-local copies it supersedes.
 | `platform-doctrine/SKILL.md` | LineReady (packaged form) | `lineready/attached_assets/platform-doctrine_1789862589945.zip` | The installable single-master-doctrine skill (ADIS triage, Preflight, C1–C9 invariants, Build Ledger). Packaged 2026-09-19. |
 | `platform-doctrine/references/*` | LineReady (packaged form) | same zip | ADIS-AAP technical report, ADIS constitution v2 (JSON), DIS doctrine, domain profiles, audit notes, open items. |
 | `platform-doctrine/templates/*` | LineReady (packaged form) | same zip | Build Ledger and Situation Model templates. |
+| `platform-doctrine/references/evidence-knowledge-graph.md`, `platform-doctrine/tools/spoc_kg.py` | New amendment, 2026-09-30 | Adapted from MachineLearningMastery.com, "Automating Knowledge Graph Population" (Palomares Carrascosa, 2026-09-29); first applied in the Community Violence Register | Adds evidence binding, provenance, typed predicates and conflict surfacing. Authorized by Terry Flood 2026-09-30. |
 
 ## Rules of the canonical repo
 
