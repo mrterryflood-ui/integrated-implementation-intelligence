@@ -263,6 +263,8 @@ class QuadStore:
             qd = json.loads(q or "{}")
             is_date = CONSTRAINTS[p]["type"] == "date"
             place = norm(qd.get("place", ""))
+            if place in ("the city", "city", "the county", "county") or norm(self.canonical(place)) == norm(s):
+                place = ""
             key = (norm(s), p, "" if is_date else norm(qd.get("time", "")),
                    "" if place == norm(s) else place)
             groups.setdefault(key, []).append((o, c))
