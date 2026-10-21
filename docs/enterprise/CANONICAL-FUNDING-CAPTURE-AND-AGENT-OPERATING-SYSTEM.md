@@ -1,7 +1,7 @@
 # Canonical Funding, Capture, Proposal, and Agent Operating System
 
 **Owner:** Dr. Terry D. Flood  
-**Entities:** Integrated Services & Solutions LLC (ISS LLC) and Thriving Communities for All Foundation (TCAF)  
+**Entities:** Integrated Services & Solutions LLC (ISS LLC) and **The Collaborative Advocate Foundation (TCAF)**, operating the public-facing Thriving Communities for All / ThriveUp program identity  
 **Effective:** October 21, 2026  
 **Purpose:** Give Dr. Flood one simple, repeatable collaborative system that finds and understands opportunities, develops relationships, produces winning proposals, executes approved submissions, captures receipts, and learns—while preserving human authority and ISS/TCAF/customer separation.
 
@@ -12,6 +12,10 @@ Every funding or contracting item follows one chain:
 > **Signal → Official source → Mechanism → Eligibility → Entity → Platform → Capability evidence → Capacity gaps → Capture decision → Proposal package → Approval → Submission → Receipt → Decision → Delivery → Outcome → Learning**
 
 The system may automate retrieval, classification, verification, deduplication, matching, drafting, compliance checks, calendars, reminders, and package assembly. Dr. Flood retains authority for legal certifications, final submissions, contracts, commitments, spending, production deployment, and public consequential claims.
+
+### Legal identity control
+
+For legal, tax, banking, registration, grant, contract, certification and receipt records, use **The Collaborative Advocate Foundation** only when the controlling IRS determination, W-9, SAM/entity record and governing documents support that exact applicant. “Thriving Communities for All,” “ThriveUp,” and `thrivingcommunitiesforall.com` are program/brand identities, not substitutes for the legal applicant name. Preserve any future rename or DBA evidence as a separate, authoritative record before changing this rule.
 
 ## 2. Funding mechanism portfolio
 
