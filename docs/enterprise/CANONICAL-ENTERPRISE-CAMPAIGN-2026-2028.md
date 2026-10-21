@@ -5,6 +5,8 @@
 **Version:** 1.0 — October 21, 2026  
 **Status:** Controlling enterprise campaign plan. Earlier ORCHESTRATION reports supply evidence and subordinate detail; they do not override this plan.
 
+**Entity identity:** TCAF means **The Collaborative Advocate Foundation**, the legal nonprofit currently associated with EIN `41-3618003`, UEI `KDDVD1FGLW35`, and CAGE `209N1` in the available evidence. Thriving Communities for All / ThriveUp is the public-facing program and platform identity. Reverify these identifiers from the controlling IRS, W-9, SAM and governing records before any certification or submission.
+
 ## 1. Commander's intent
 
 Build one evidence-controlled enterprise in which every owned platform can stand alone, earn revenue or funding, and deliver a measurable outcome, while also contributing to a larger system that turns community, government, health, education, resilience, and defense signals into verified decisions, funded execution, receipts, outcomes, and learning.
