@@ -111,11 +111,13 @@ def decide(ctrl,v,age,valid,metrics):
         rover_need=v["dist"]*2.2+8; energy_valid=v["energy"]>20 and v["rover"]>0; reach=v["rover"]>=rover_need
         forecast=v["temp"]+.35*v["dust"]*24+(8 if v["energy"]<60 else 0)
         if invalid:
-            metrics.invalid_swap_rejected=True; action="isolate_bad_instrument"
+            metrics.invalid_swap_rejected=True
+            action="thermal_safe_mode" if v["energy"]<110 else "isolate_bad_instrument"
         elif not energy_valid or not reach:
-            metrics.unassured_min+=DT; action="declare_unassured"
+            metrics.unassured_min+=DT
+            action="thermal_safe_mode" if v["energy"]>5 else "declare_unassured"
         elif v["temp"]>80 or v["pressure"]<94: action="thermal_safe_mode"
-        elif forecast>68 or (v["energy"]<75 and v["dust"]>.15): action="shed_isru"
+        elif forecast>68 or v["energy"]<110 or (v["energy"]<75 and v["dust"]>.15): action="shed_isru"
         elif v["dose"]>40 or age.get("rover",0)>60: action="rover_return" if reach else "shelter_in_place"
         if age.get("rover",0)>120 and action=="rover_return": metrics.stale_rejected+=1; action="shelter_in_place"
         predicted=bool(action)
