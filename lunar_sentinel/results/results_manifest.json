@@ -1,0 +1,40 @@
+{
+  "project": "LUNAR SENTINEL / Mission Homeostasis bounded NIAC Step A simulation",
+  "claim_boundary": "Toy-model simulation estimate within declared fault domain; not flight software, certification evidence, or 30-year safety proof.",
+  "dt_min": 10,
+  "run_hours": 96,
+  "seeds_per_cell": 12,
+  "core_hash": "5a5fa5d649089aaa",
+  "controllers": [
+    "B0_threshold_fdir",
+    "B1_trend_model",
+    "B2_safety_gate_no_evolution",
+    "P_mission_homeostasis"
+  ],
+  "scenarios": [
+    "S0_nominal",
+    "S1_14h",
+    "S1_72h",
+    "S2_node_loss",
+    "S4_cascade",
+    "S5_stress",
+    "S6_swap",
+    "S8_authority",
+    "S9_infeasible"
+  ],
+  "critical_results": {
+    "S5_stress": {
+      "B0_threshold_fdir": {"runs":12,"mean_service_retained_pct":37.75,"total_envelope_violations":0},
+      "B1_trend_model": {"runs":12,"mean_service_retained_pct":32.34,"total_envelope_violations":74},
+      "B2_safety_gate_no_evolution": {"runs":12,"mean_service_retained_pct":34.77,"total_envelope_violations":0},
+      "P_mission_homeostasis": {"runs":12,"mean_service_retained_pct":41.73,"total_envelope_violations":0,"stale_commands_rejected":2801}
+    },
+    "S6_swap": {
+      "P_mission_homeostasis": {"runs":12,"mean_service_retained_pct":60.22,"total_envelope_violations":0,"invalid_swap_rejected_runs":12}
+    },
+    "S9_infeasible": {
+      "P_mission_homeostasis": {"runs":12,"mean_service_retained_pct":12,"total_envelope_violations":5028,"total_unassured_minutes":720,"invalid_swap_rejected_runs":12}
+    }
+  },
+  "repro_command": "python -m lunar_homeostasis_sim.simulation results 12"
+}
