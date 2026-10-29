@@ -3,6 +3,7 @@ export const MEMBERS:CouncilMember[]=[
 ["ibn-al-haytham","Ibn al-Haytham","Scientific inquiry","Question observations, experiments and causal inference","historical","Science"],
 ["deming","W. Edwards Deming","Quality systems","Study process variation and systemic causes","historical","Engineering"],
 ["meadows","Donella Meadows","Systems dynamics","Identify feedback loops and leverage points","historical","Science"],
+["hypatia","Hypatia","Mathematics","Explore mathematical assumptions","historical","Science"],
 ["socrates","Socrates","Inquiry","Question assumptions and test definitions","historical","Philosophy"],
 ["aristotle","Aristotle","Logic","Separate causes, evidence, and inference","historical","Philosophy"],
 ["sun-tzu","Sun Tzu","Strategy","Examine terrain, timing and alternatives","historical","Strategy"],
