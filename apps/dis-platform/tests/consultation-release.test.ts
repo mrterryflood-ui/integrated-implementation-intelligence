@@ -109,6 +109,7 @@ test("NASA NTRS full-text queries use q and retain technical report provenance",
  };
  const r=await searchFederal("NASA satellite telemetry",fetcher as typeof fetch,new Date("2026-10-29T00:00:00Z"),["nasa"]);
  assert.ok(queried.includes("/citations/search?q="));
+ assert.ok(queried.includes("satellite%20telemetry"));
  assert.equal(r.records.length,1);
  assert.equal(r.records[0].kind,"TECHNICAL_REPORT");
  assert.equal(r.records[0].url,"https://ntrs.nasa.gov/citations/20260000001");
