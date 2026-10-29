@@ -25,16 +25,28 @@ export async function research(query:string,fetcher=fetch):Promise<{sources:Sour
 const instructions="You are an analysis role in DIS, a multidisciplinary research and implementation platform. The named thinkers are conceptual lenses derived from documented work; do not imitate their speech, invent quotes, or claim their participation. Treat retrieved source metadata and abstracts as limited evidence only. Cite relevant records as [S1] etc only when an abstract supports the precise claim. Otherwise explicitly call the assertion a hypothesis or unknown. Deliberately ask what is missing; consider stakeholders, ethics, feasible action, decision rights, falsification and sustainable outcomes. Never claim an action or test was executed if it was not.";
 function sourceContext(sources:Source[]){return sources.map(s=>`[${s.id}] ${s.title} (${s.year??"unknown year"}) ${s.url}\nAbstract: ${s.abstract||"NOT AVAILABLE"}`).join("\n\n").slice(0,17500)}
 function model(){return process.env.AI_GATEWAY_MODEL||"openai/gpt-5.4-mini"}
-export async function infer(system:string,prompt:string,modelOverride?:string,fetcher=fetch):Promise<{ok:boolean,text:string,error?:string,model?:string}>{
+export async function infer(system:string,prompt:string,modelOverride?:string,fetcher=fetch):Promise<{ok:boolean,text:string,error?:string,model?:string,fallbackUsed?:boolean}>{
  const token=process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||await getVercelOidcToken().catch(()=>null);
  if(!token)return {ok:false,text:"",error:"AI Gateway authentication not configured"};
- const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18500);
+ const primary=modelOverride||model(),fallback=model();
+ const attempts=[primary,...(primary!==fallback?[fallback]:[])];
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),19000);
  try{
-  const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:modelOverride||model(),max_completion_tokens:1100,messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
-  if(!res.ok){const detail:any=await res.json().catch(()=>({}));const value=detail?.error?.code||detail?.code||detail?.error?.type||"unknown";const code=typeof value==="string"?value.slice(0,80):"unknown";return {ok:false,text:"",error:"Gateway HTTP "+res.status+" ("+code+")"};}
-  const json=await res.json();
-  const text=compact(json.choices?.[0]?.message?.content,5000);
-  return text?{ok:true,text,model:typeof json.model==="string"?json.model:undefined}:{ok:false,text:"",error:"Gateway returned no text"};
+  for(let i=0;i<attempts.length;i++){
+   const selected=attempts[i];
+   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:1100,messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
+   if(!res.ok){
+    const detail:any=await res.json().catch(()=>({}));
+    const value=detail?.error?.code||detail?.code||detail?.error?.type||"unknown";
+    const code=typeof value==="string"?value.slice(0,80):"unknown";
+    if(i===0&&attempts.length>1&&[402,403,429,503].includes(res.status))continue;
+    return {ok:false,text:"",error:"Gateway HTTP "+res.status+" ("+code+")"};
+   }
+   const json=await res.json();
+   const content=compact(json.choices?.[0]?.message?.content,5000);
+   return content?{ok:true,text:content,model:typeof json.model==="string"?json.model:undefined,fallbackUsed:i>0}:{ok:false,text:"",error:"Gateway returned no text"};
+  }
+  return {ok:false,text:"",error:"No allowed model accepted the request"};
  }catch{return {ok:false,text:"",error:"Inference unavailable or timed out"}}finally{clearTimeout(timer)}
 }
 export function citationAudit(text:string,sources:Source[]){
@@ -87,5 +99,5 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
  const providerSet=new Set(identities.filter((x):x is string=>Boolean(x)).map(x=>x.split("/")[0]));
  const independentSystemsVerified=identities.every(Boolean)&&providerSet.size>=3;
  const audit=citationAudit(synthesis.text,found.sources);
- return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,actionPlan,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,modelProvenance:{models:identities,verifiedProviderCount:providerSet.size,independentSystemsVerified},callStatuses:[...calls,synthesis].map(x=>({ok:x.ok,model:(x as {model?:string}).model||null})),limitations:"Up to five model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
+ return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,actionPlan,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,modelProvenance:{models:identities,verifiedProviderCount:providerSet.size,independentSystemsVerified},callStatuses:[...calls,synthesis].map(x=>({ok:x.ok,model:(x as {model?:string}).model||null,fallbackUsed:(x as {fallbackUsed?:boolean}).fallbackUsed||false})),limitations:"Up to five model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
 }
