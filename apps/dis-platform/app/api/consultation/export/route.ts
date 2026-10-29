@@ -28,6 +28,7 @@ export async function POST(req:Request){
   intelligence={query:String(raw.query||"").slice(0,160),retrievedAt:String(raw.retrievedAt||new Date().toISOString()).slice(0,40),records,coverage:{},errors:[],researchStandard:"Exported source metadata was supplied by the client and has not been independently verified by the export service."};
  }
  const pkg=buildPackage(intake,mode,intelligence);
+ const theme=(["midnight","forest","slate"].includes(input.theme)?input.theme:"midnight") as "midnight"|"forest"|"slate";
  if(Array.isArray(input.slides)){
   if(input.slides.length!==12||!input.slides.every(validSlide))return Response.json({error:"Invalid slide design"},{status:400});
   // Only verified source IDs already in the normalized draft can be referenced.
@@ -35,7 +36,7 @@ export async function POST(req:Request){
   pkg.slides=input.slides.map((s:SlideSpec)=>({...s,sourceIds:s.sourceIds.filter(id=>allowed.has(id))}));
  }
  try{
-  const buffer=format==="pptx"?await exportPptx(pkg):await exportDocx(pkg);
+  const buffer=format==="pptx"?await exportPptx(pkg,theme):await exportDocx(pkg);
   const filename="DIS-"+(format==="pptx"?"pitch-deck.pptx":"consultation-report.docx");
   return new Response(new Uint8Array(buffer),{status:200,headers:{"content-type":format==="pptx"?"application/vnd.openxmlformats-officedocument.presentationml.presentation":"application/vnd.openxmlformats-officedocument.wordprocessingml.document","content-disposition":'attachment; filename="'+filename+'"',"cache-control":"no-store","x-content-type-options":"nosniff"}});
  }catch{return Response.json({error:"Document generation failed"},{status:503})}
