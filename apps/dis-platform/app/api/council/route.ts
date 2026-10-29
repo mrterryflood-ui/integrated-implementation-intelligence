@@ -4,7 +4,7 @@ import {MEMBERS,selectCouncil,councilBrief,DEFAULT_RED} from "../../../lib/counc
 import {convene} from "../../../lib/council-engine";
 export const runtime="nodejs";
 export const maxDuration=90;
-export async function GET(){return NextResponse.json({members:[...new Map(MEMBERS.map(m=>[m.id,m])).values()],defaultRed:DEFAULT_RED})}
+export async function GET(){return NextResponse.json({members:[...new Map(MEMBERS.map(m=>[m.id,m])).values()],defaultRed:DEFAULT_RED,runtime:{model:process.env.AI_GATEWAY_MODEL||null,gatewayConfigured:Boolean(process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN)},notice:"Gateway connectivity requires live authenticated POST verification"})}
 export async function POST(req:Request){
  let body:any;try{body=await req.json()}catch{return NextResponse.json({error:"Invalid JSON"},{status:400})}
  const prompt=typeof body.prompt==="string"?body.prompt.trim():"";
