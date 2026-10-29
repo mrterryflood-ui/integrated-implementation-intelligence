@@ -54,7 +54,10 @@ export async function searchFederal(query:string,fetcher:typeof fetch=fetch,at=n
   return (Array.isArray(list)?list:[list]).filter(Boolean).slice(0,6).map((x:any)=>({id:"F-NSF-"+String(x.id||""),kind:"PAST_AWARD" as const,title:clean(x.title,250),summary:[clean(x.fundProgramName),clean(x.awardeeName),x.fundsObligatedAmt?"Obligated amount: $"+x.fundsObligatedAmt:""].filter(Boolean).join(" · "),source:"NSF Award Search",url:/^\d+$/.test(String(x.id))?"https://www.nsf.gov/awardsearch/showAward?AWD_ID="+x.id:"https://www.nsf.gov/awardsearch/",retrievedAt,sourceStatus:"OFFICIAL_RECORD" as const}));
  }
  if(id==="nasa"){
-  const j=await fetchJson(fetcher,"https://ntrs.nasa.gov/api/citations/search?q="+encodeURIComponent(q)+"&page.size=6");
+  const stop=new Set(["nasa","improve","improving","develop","developing","using","with","from","system","systems","mission","planning","analysis","research","technology","engineering","data","and","the","for"]);
+  const terms=(q.toLowerCase().match(/[a-z][a-z0-9-]{2,}/g)||[]).filter(w=>!stop.has(w));
+  const nasaQuery=terms.slice(0,2).join(" ")||q.slice(0,60);
+  const j=await fetchJson(fetcher,"https://ntrs.nasa.gov/api/citations/search?q="+encodeURIComponent(nasaQuery)+"&page.size=6");
   const list=Array.isArray(j.results)?j.results:Array.isArray(j.citations)?j.citations:[];
   return list.slice(0,6).map((x:any)=>({id:"F-NASA-"+String(x.id||""),kind:"TECHNICAL_REPORT" as const,title:clean(x.title,250),summary:clean(x.abstract,500)||"Technical report metadata; inspect original record before citing.",source:"NASA NTRS",url:urlNtrs(x.id),retrievedAt,sourceStatus:"OFFICIAL_RECORD" as const}));
  }
