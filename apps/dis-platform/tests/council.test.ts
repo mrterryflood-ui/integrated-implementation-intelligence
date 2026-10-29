@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {selectCouncil,MEMBERS} from "../lib/council";
-import {reconstruct,citationAudit,convene,parseActionPlan} from "../lib/council-engine";
+import {reconstruct,citationAudit,convene,parseActionPlan,infer} from "../lib/council-engine";
 test("council registry has unique IDs and requested limits",()=>{
  assert.equal(new Set(MEMBERS.map(m=>m.id)).size,MEMBERS.length);
  assert.equal(selectCouncil("health and clinical study",6).length,6);
@@ -51,4 +51,23 @@ test("turning off challenge council does not invoke adversarial model",async()=>
  const result=await convene({prompt:"How might we improve a grant platform?",count:4,redCount:3,selected:[],redSelected:[],depth:"Standard",challengeEnabled:false},{research:async()=>({sources:[],status:"NO_RESULTS"}),infer:async(system:string)=>{calls.push(system);return {ok:true,text:"Working hypothesis"};}});
  assert.equal(result.red?.length,0);
  assert.equal(calls.filter(x=>x.includes("Independent challenge strand")).length,0);
+});
+
+test("AI inference fallback uses an allowed model and records actual response provider",async()=>{
+ const key=process.env.AI_GATEWAY_API_KEY,defaultModel=process.env.AI_GATEWAY_MODEL;
+ process.env.AI_GATEWAY_API_KEY="test-only";process.env.AI_GATEWAY_MODEL="nvidia/nemotron-3.5-lightning-free";
+ const attempts:string[]=[];
+ try{
+  const fetcher=async(_url:RequestInfo|URL,opts?:RequestInit)=>{
+   const model=JSON.parse(String(opts?.body||"{}")).model;
+   attempts.push(model);
+   if(attempts.length===1)return new Response(JSON.stringify({error:{code:"no_providers_available"}}),{status:403});
+   return new Response(JSON.stringify({model:"nvidia/nemotron-3.5-lightning-free",choices:[{message:{content:"A cautious preliminary answer."}}]}),{status:200});
+  };
+  const result=await infer("Test evidence","A short question", "google/gemini-3.5-flash-lite",fetcher as typeof fetch);
+  assert.equal(result.ok,true);
+  assert.equal(result.fallbackUsed,true);
+  assert.deepEqual(attempts,["google/gemini-3.5-flash-lite","nvidia/nemotron-3.5-lightning-free"]);
+  assert.equal(result.model,"nvidia/nemotron-3.5-lightning-free");
+ }finally{if(key===undefined)delete process.env.AI_GATEWAY_API_KEY;else process.env.AI_GATEWAY_API_KEY=key;if(defaultModel===undefined)delete process.env.AI_GATEWAY_MODEL;else process.env.AI_GATEWAY_MODEL=defaultModel}
 });
