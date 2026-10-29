@@ -3,7 +3,8 @@ import {useEffect,useState} from "react";
 type W={id:string,title:string,created_at:string};
 type Doc={id:string,filename:string,byte_size:number,extraction_state:string,created_at:string};
 export default function WorkspaceClient(){
- const [query,setQuery]=useState(""),[hits,setHits]=useState<{id:string,filename:string,preview:string}[]>([]);\n const [items,setItems]=useState<W[]>([]),[title,setTitle]=useState(""),[error,setError]=useState(""),[selected,setSelected]=useState(""),[docs,setDocs]=useState<Doc[]>([]),[busy,setBusy]=useState(false);
+ const [query,setQuery]=useState(""),[hits,setHits]=useState<{id:string,filename:string,preview:string}[]>([]);
+ const [items,setItems]=useState<W[]>([]),[title,setTitle]=useState(""),[error,setError]=useState(""),[selected,setSelected]=useState(""),[docs,setDocs]=useState<Doc[]>([]),[busy,setBusy]=useState(false);
  const refresh=async()=>{const r=await fetch("/api/workspaces");if(!r.ok){setError("Unable to load workspaces");return}const j=await r.json();setItems(j.workspaces||[])};
  const refreshDocs=async(id:string)=>{if(!id){setDocs([]);return}const r=await fetch("/api/documents?workspaceId="+encodeURIComponent(id));if(!r.ok){setError("Unable to load documents");return}const j=await r.json();setDocs(j.documents||[])};
  useEffect(()=>{void refresh()},[]);
