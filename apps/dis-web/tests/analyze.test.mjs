@@ -1,0 +1,5 @@
+import test from "node:test";import assert from "node:assert/strict";import {analyze} from "../api/analyze.js";
+test("RFP draft does not invent capabilities",()=>{const r=analyze({mode:"proposal",company:"Example Inc",rfp:"The offeror must provide a budget and shall demonstrate experience."});assert.match(r.draft,/NOT SUBMISSION READY/);assert.match(r.draft,/REQUIRES VERIFIED/);assert.ok(r.requirements.length>0);assert.match(r.decision,/NO EXTERNAL ACTION/);});
+test("scenario hypotheses are not causal forecasts",()=>{const r=analyze({mode:"systems",action:"Introduce citywide training"});assert.equal(r.effects.length,6);assert.ok(r.effects.every(x=>x.status==="UNTESTED HYPOTHESIS"));});
+test("research has no invented consensus",()=>{const r=analyze({mode:"research",question:"What improves learning?"});assert.match(r.consensus,/NOT CONVENED/);assert.equal(r.evidence.length,0);});
+test("source records remain discovery only",()=>{const r=analyze({mode:"research",question:"health"},[{title:"Example",url:"https://doi.org/10.1/x",year:2020}]);assert.match(r.evidence[0].role,/DISCOVERY ONLY/);});

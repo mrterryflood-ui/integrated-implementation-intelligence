@@ -1,0 +1,6 @@
+import test from "node:test";import assert from "node:assert/strict";import {parseRepository,reviewFiles,inspectRepository} from "../api/repository.js";
+test("parse only exact repository addresses",()=>{assert.deepEqual(parseRepository("https://github.com/example/project"),{owner:"example",repo:"project"});assert.equal(parseRepository("https://evil.example/repo"),null)});
+test("path-level checks do not pretend to be verified defects",()=>{const r=reviewFiles([{path:"README.md"},{path:"src/index.ts"}],"https://github.com/example/project");assert.ok(r.findings.length);assert.ok(r.findings.every(f=>f.classification.includes("NOT CONFIRMED")))});
+test("incomplete GitHub tree fails closed",async()=>{const r=await inspectRepository("example/project",async()=>({ok:true,json:async()=>({tree:[],truncated:true})}));assert.equal(r.status,"INCOMPLETE");assert.equal(r.findings,undefined)});
+test("GitHub errors are visible",async()=>{const r=await inspectRepository("example/project",async()=>({ok:false,status:404}));assert.equal(r.status,"UNAVAILABLE")});
+test("complete tree produces inspectable finding evidence",async()=>{const r=await inspectRepository("example/project",async()=>({ok:true,json:async()=>({sha:"abc",tree:[{type:"blob",path:"README.md"}]})}));assert.equal(r.status,"INSPECTED");assert.equal(r.treeSha,"abc");assert.equal(r.filesInspected,1)});
