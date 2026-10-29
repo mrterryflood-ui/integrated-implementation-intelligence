@@ -23,7 +23,7 @@ export default async function Home(){
  return <div className="dis-home">
  <header className="site-nav">
  <Link href="/" className="brand"><span className="brand-mark">D·I</span><span>DYNAMIC INTELLIGENCE</span></Link>
- <nav aria-label="Main navigation"><a href="#approach">The approach</a><a href="#possibilities">Possibilities</a><a href="#consult">Consultation studio</a><Link href="/integrations">Integrations</Link><a href="#council">Council studio</a></nav>
+ <nav aria-label="Main navigation"><a href="#approach">The approach</a><a href="#possibilities">Possibilities</a><a href="#consult">Consultation studio</a><a href="/realty-atlas">GIS Atlas</a><Link href="/integrations">Integrations</Link><a href="#council">Council studio</a></nav>
  <div className="nav-actions">{userId?<><Link href="/workspace">My knowledge</Link><UserButton/></>:<SignInButton mode="modal"><button className="nav-sign">Sign in</button></SignInButton>}<a href="#council" className="nav-start">Ask DIS</a></div>
  </header>
  <main><section className="hero">
