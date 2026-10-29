@@ -8,7 +8,7 @@ export default function ConsultationStudio(){
  const [intake,setIntake]=useState<Intake>(empty),[items,setItems]=useState<Deliverable[]>([]),[working,setWorking]=useState(false),[error,setError]=useState(""),[answer,setAnswer]=useState("");
  const [mode,setMode]=useState<"startup"|"general">("startup");
  const build=async()=>{setError("");if(intake.mission.trim().length<8){setError("Describe the problem in at least eight characters.");return}
- setWorking(true);try{const result=deliverables(sanitizeIntake(intake));setItems(result)}finally{setWorking(false)}};
+ setWorking(true);try{const result=deliverables(sanitizeIntake(intake),undefined,mode);setItems(result)}finally{setWorking(false)}};
  const download=()=>{const md=packageMarkdown(intake,items);const blob=new Blob([md],{type:"text/markdown;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="DIS-consultation-draft.md";a.click();setTimeout(()=>URL.revokeObjectURL(url),500)};
  const copy=async()=>{await navigator.clipboard.writeText(packageMarkdown(intake,items));setAnswer("Copied the complete draft package.")};
  return <section className="lab-section" id="consult"><div className="section-heading"><span className="eyebrow">FROM CONSULTATION TO DELIVERABLES</span><h2>Bring an idea. Leave with a working package.</h2><p>Start with what you know. DIS identifies what must still be verified, drafts practical artifacts, and preserves a path from research to action.</p></div>
