@@ -34,7 +34,7 @@ export async function infer(system:string,prompt:string,modelOverride?:string,fe
  try{
   for(let i=0;i<attempts.length;i++){
    const selected=attempts[i];
-   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:1100,messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
+   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:2400,reasoning:{effort:"none"},messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
    if(!res.ok){
     const detail:any=await res.json().catch(()=>({}));
     const value=detail?.error?.code||detail?.code||detail?.error?.type||"unknown";
@@ -44,7 +44,7 @@ export async function infer(system:string,prompt:string,modelOverride?:string,fe
    }
    const json=await res.json();
    const content=compact(json.choices?.[0]?.message?.content,5000);
-   return content?{ok:true,text:content,model:typeof json.model==="string"?json.model:undefined,fallbackUsed:i>0}:{ok:false,text:"",error:"Gateway returned no text"};
+   return content?{ok:true,text:content,model:typeof json.model==="string"?json.model:undefined,fallbackUsed:i>0}:{ok:false,text:"",error:"Gateway returned no text (finish="+String(json.choices?.[0]?.finish_reason||"unknown").slice(0,30)+",output="+String(json.usage?.completion_tokens||"unknown")+")"};
   }
   return {ok:false,text:"",error:"No allowed model accepted the request"};
  }catch{return {ok:false,text:"",error:"Inference unavailable or timed out"}}finally{clearTimeout(timer)}
