@@ -8,7 +8,7 @@ export const dynamic="force-dynamic";
 const steps=[
  ["01","Start with the real question","A new business needs its first customer. A researcher sees an unanswered question. A community faces a problem no single expert can solve."],
  ["02","See through other perspectives","Bring engineering, ethics, science, design, human experience, leadership, markets, and implementation into the same investigation."],
- ["03","Challenge the conclusion","A separate challenge council asks what is missing, who might be harmed, what might change, and what would prove the leading theory wrong."],
+ ["03","Challenge the conclusion","A distinct set of challenge perspectives asks what is missing, who might be harmed, and what could disprove the leading theory. Independent model execution is reported separately."],
  ["04","Make understanding useful","Investigate evidence, test alternatives, document uncertainty, and design a pathway to measurable, enduring improvement."]
 ];
 const useCases=[
