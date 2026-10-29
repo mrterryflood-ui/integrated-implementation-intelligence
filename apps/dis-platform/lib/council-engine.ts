@@ -30,7 +30,7 @@ export async function infer(system:string,prompt:string,fetcher=fetch):Promise<{
  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18500);
  try{
   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:model(),max_completion_tokens:1100,messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
-  if(!res.ok)return {ok:false,text:"",error:"Gateway rejected request (HTTP "+res.status+")"};
+  if(!res.ok){const detail:any=await res.json().catch(()=>({}));const value=detail?.error?.code||detail?.code||detail?.error?.type||"unknown";const code=typeof value==="string"?value.slice(0,80):"unknown";return {ok:false,text:"",error:"Gateway HTTP "+res.status+" ("+code+")"};}
   const json=await res.json();
   const text=compact(json.choices?.[0]?.message?.content,5000);
   return text?{ok:true,text}:{ok:false,text:"",error:"Gateway returned no text"};
