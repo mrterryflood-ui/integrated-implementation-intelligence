@@ -1,3 +1,4 @@
+import JSZip from "jszip";
 import test from "node:test";
 import assert from "node:assert/strict";
 import {sanitizeIntake} from "../lib/consultation";
@@ -51,9 +52,21 @@ test("PowerPoint export produces a zip-based, editable presentation with notes",
  const buffer=await exportPptx(buildPackage(intake),"forest");
  assert.equal(buffer.subarray(0,2).toString("ascii"),"PK");
  assert.ok(buffer.length>18000);
+ const zip=await JSZip.loadAsync(buffer);
+ assert.ok(zip.file("ppt/presentation.xml"));
+ assert.ok(zip.file("ppt/slides/slide1.xml"));
+ const notes=Object.keys(zip.files).filter(p=>/^ppt\/notesSlides\/notesSlide\d+\.xml$/.test(p));
+ assert.equal(notes.length,12);
+ const speakerText=await zip.file(notes[0])!.async("string");
+ assert.ok(speakerText.includes("Source")||speakerText.includes("DIS draft"));
 });
 test("Word export produces a genuine editable OpenXML document",async()=>{
  const buffer=await exportDocx(buildPackage(intake));
  assert.equal(buffer.subarray(0,2).toString("ascii"),"PK");
  assert.ok(buffer.length>10000);
+ const zip=await JSZip.loadAsync(buffer);
+ const doc=await zip.file("word/document.xml")!.async("string");
+ assert.ok(doc.includes("CONSULTATION"));
+ assert.ok(doc.includes("EVIDENCE"));
+ assert.ok(doc.includes("DRAFT"));
 });
