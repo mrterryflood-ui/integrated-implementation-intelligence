@@ -3,7 +3,8 @@ import {Document,Packer,Paragraph,TextRun,HeadingLevel,AlignmentType} from "docx
 import type {ConsultationPackage} from "./consultation-package";
 const NAVY="11283C",DEEP="071E2D",GOLD="CBAE77",CREAM="F6F3EA",INK="17324B",PALE="EFF4F6";
 const shrink=(value:string,max=200)=>value.trim().slice(0,max);
-export async function exportPptx(pkg:ConsultationPackage):Promise<Buffer>{
+export async function exportPptx(pkg:ConsultationPackage,theme:"midnight"|"forest"|"slate"="midnight"):Promise<Buffer>{
+ const palette=theme==="forest"?{deep:"0C2E2A",navy:"143B34",gold:"D6B980"}:theme==="slate"?{deep:"1F293B",navy:"263248",gold:"97BBDF"}:{deep:DEEP,navy:NAVY,gold:GOLD};
  const pptx=new pptxgen();
  pptx.layout="LAYOUT_WIDE";
  pptx.author="Dynamic Intelligence";
@@ -13,9 +14,9 @@ export async function exportPptx(pkg:ConsultationPackage):Promise<Buffer>{
  pptx.lang="en-US";
  for(let i=0;i<pkg.slides.length;i++){
   const spec=pkg.slides[i],slide=pptx.addSlide();
-  slide.background={color:i===0||i===pkg.slides.length-1?DEEP:NAVY};
-  slide.addShape(pptx.ShapeType.rect,{x:0,y:0,w:0.12,h:7.5,line:{color:GOLD},fill:{color:GOLD}});
-  slide.addText("DYNAMIC INTELLIGENCE  /  DIS",{x:0.58,y:0.34,w:7.4,h:0.28,fontSize:10,bold:true,charSpacing:1.7,color:GOLD,breakLine:false,margin:0});
+  slide.background={color:i===0||i===pkg.slides.length-1?palette.deep:palette.navy};
+  slide.addShape(pptx.ShapeType.rect,{x:0,y:0,w:0.12,h:7.5,line:{color:palette.gold},fill:{color:palette.gold}});
+  slide.addText("DYNAMIC INTELLIGENCE  /  DIS",{x:0.58,y:0.34,w:7.4,h:0.28,fontSize:10,bold:true,charSpacing:1.7,color:palette.gold,breakLine:false,margin:0});
   slide.addText("WORKING DRAFT — EVIDENCE GATES OPEN",{x:9.17,y:0.34,w:3.55,h:0.25,fontSize:8,color:"AABAC6",align:"right",margin:0});
   slide.addShape(pptx.ShapeType.line,{x:0.58,y:0.81,w:12.13,h:0,line:{color:"38566D",transparency:25,width:0.6}});
   slide.addText(shrink(spec.kicker,120).toUpperCase(),{x:0.77,y:1.03,w:11.8,h:0.35,color:GOLD,fontSize:12,charSpacing:2,margin:0});
