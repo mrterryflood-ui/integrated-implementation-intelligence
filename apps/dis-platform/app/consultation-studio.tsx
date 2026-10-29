@@ -1,6 +1,6 @@
 "use client";
 import {useState} from "react";
-import {sanitizeIntake,deliverables,packageMarkdown,type Intake,type Deliverable} from "../../lib/consultation";
+import {sanitizeIntake,deliverables,packageMarkdown,type Intake,type Deliverable} from "../lib/consultation";
 const labels:Record<keyof Intake,string>={mission:"What problem do you want to solve?",organization:"Company, organization or project name",audience:"Who has this problem? Who buys or decides?",stage:"What exists today (idea, prototype, MVP, traction)?",alternatives:"How do people solve it today? Known competitors?",traction:"What have you measured or validated?",resources:"Budget, team and constraints",geography:"Industry or geography",desiredOutcome:"What does a successful engagement deliver?"};
 const keys=Object.keys(labels) as (keyof Intake)[];
 const empty=Object.fromEntries(keys.map(k=>[k,""])) as Intake;
