@@ -51,10 +51,10 @@ export function parseActionPlan(raw:string){
   return tasks.length>=2&&metrics.length>=1?{tasks,metrics,status:"MODEL_PROPOSED_UNVERIFIED"}:null;
  }catch{return null}
 }
-export async function convene(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string},deps={research,infer}){
+export async function convene(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string,challengeEnabled?:boolean},deps={research,infer}){
  const prompt=input.prompt.trim();
  const primary=selectCouncil(prompt,input.count,input.selected,false);
- const red=selectCouncil(prompt,input.redCount,input.redSelected.length?input.redSelected:DEFAULT_RED,true);
+ const red=input.challengeEnabled===false?[]:selectCouncil(prompt,input.redCount,input.redSelected.length?input.redSelected:DEFAULT_RED,true);
  const found=await deps.research(prompt);
  const ctx=sourceContext(found.sources);
  const p1=primary.slice(0,Math.max(1,Math.ceil(primary.length/2))).map(x=>x.name+" — "+x.lens).join("; ");
@@ -64,7 +64,7 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
  const [first,second,critic]=await Promise.all([
   deps.infer("Primary council strand A. Analyze problem, propose alternative hypotheses. Intellectual lenses: "+p1,shared),
   deps.infer("Primary council strand B. Independently explore stakeholder needs, feasibility, and counterarguments. Lenses: "+p2,shared),
-  deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared)
+  input.challengeEnabled===false?Promise.resolve({ok:true,text:"Challenge council disabled by user choice."}):deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared)
  ]);
  const calls=[first,second,critic];
  const primaryViews=primary.map(m=>({id:m.id,name:m.name,perspective:m.lens,question:`From the ${m.domain.toLowerCase()} perspective, what evidence could prove or disprove our approach?`}));
