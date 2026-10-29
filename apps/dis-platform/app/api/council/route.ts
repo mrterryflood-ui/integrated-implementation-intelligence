@@ -11,14 +11,16 @@ export async function POST(req:Request){
  let body:any;try{body=await req.json()}catch{return NextResponse.json({error:"Invalid JSON"},{status:400})}
  const prompt=typeof body.prompt==="string"?body.prompt.trim():"";
  if(prompt.length<5||prompt.length>3000)return NextResponse.json({error:"Question must be 5–3000 characters"},{status:400});
- const chosen=Array.isArray(body.selected)?body.selected.filter((x:unknown)=>typeof x==="string").slice(0,16):[];
- const redSelected=Array.isArray(body.redSelected)?body.redSelected.filter((x:unknown)=>typeof x==="string").slice(0,16):[];
+ const isCustom=body.selectionMode==="custom";
+ const challengeEnabled=body.challengeEnabled!==false;
+ const chosen=isCustom&&Array.isArray(body.selected)?body.selected.filter((x:unknown)=>typeof x==="string").slice(0,16):[];
+ const redSelected=isCustom&&challengeEnabled&&Array.isArray(body.redSelected)?body.redSelected.filter((x:unknown)=>typeof x==="string").slice(0,16):[];
  const count=Math.max(2,Math.min(16,Math.floor(Number(body.count)||6)));
  const redCount=Math.max(2,Math.min(16,Math.floor(Number(body.redCount)||4)));
  const depth=["Quick","Standard","Deep","Research"].includes(body.depth)?body.depth:"Standard";
  const {userId}=await auth();
  const primary=selectCouncil(prompt,count,chosen,false);
- const red=selectCouncil(prompt,redCount,redSelected.length?redSelected:DEFAULT_RED,true);
+ const red=challengeEnabled?selectCouncil(prompt,redCount,redSelected.length?redSelected:DEFAULT_RED,true):[];
  if(!userId)return NextResponse.json({...councilBrief(prompt,primary,red),state:"SIGN_IN_REQUIRED",notice:"Sign in to run model-based deliberation. Public preview does not consume paid inference."});
  if(body.allowExternalResearch!==true)return NextResponse.json({...councilBrief(prompt,primary,red),state:"CONSENT_REQUIRED",notice:"External scholarly search and AI provider transfer requires explicit consent."});
  if(!process.env.DIS_DATABASE_URL)return NextResponse.json({error:"Council quota service unavailable"},{status:503});
@@ -32,6 +34,6 @@ export async function POST(req:Request){
   ]);
   if(!usage[1]?.length)return NextResponse.json({error:"Daily council beta limit reached (20 investigations)"},{status:429});
  }catch{return NextResponse.json({error:"Council quota authorization unavailable"},{status:503});}
- const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth});
+ const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth,challengeEnabled});
  return NextResponse.json({...councilBrief(prompt,primary,red),...report,assurance:report.limitations||report.error||"Independent execution was not completed."});
 }
