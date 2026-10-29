@@ -1,3 +1,4 @@
+import GraphExplorer,{type Graph} from "./knowledge-graph";
 import KnowledgeMap from "./knowledge-map";
 "use client";
 import {useEffect,useMemo,useState} from "react";
@@ -23,6 +24,7 @@ export default function ConsultationStudio(){
  const [allowResearch,setAllowResearch]=useState(false),[working,setWorking]=useState(false),[status,setStatus]=useState(""),[error,setError]=useState("");
  const [councilReport,setCouncilReport]=useState<any>(null),[filter,setFilter]=useState("all"),[query,setQuery]=useState("");
  const [review,setReview]=useState<"DRAFT"|"REVIEWED"|"APPROVED">("DRAFT");
+ const [knowledgeGraph,setKnowledgeGraph]=useState<Graph|null>(null);
  const [importJson,setImportJson]=useState("");
  const [opportunity,setOpportunity]=useState<any>(null);
  const current=useMemo(()=>pkg?.slides[slideIndex]||null,[pkg,slideIndex]);
@@ -74,14 +76,27 @@ export default function ConsultationStudio(){
   setIntake(i);setMode(m);setIntel(s.research?.records?s.research:null);setCouncilReport(null);const p=buildPackage(i,m,s.research?.records?s.research:null);
   if(Array.isArray(s.slides)&&s.slides.length===12)p.slides=s.slides;
   if(Array.isArray(s.artifacts)&&s.artifacts.length)p.documents=s.artifacts;
-  setPkg(p);setSavedId(id);setVersion(s.version);setTitle(s.title);setReview(s.review_status);setTheme((["midnight","forest","slate"].includes(s.research?.designTheme)?s.research.designTheme:"midnight") as Theme);setTab("Design & deliver");setStatus("Loaded saved consultation. Review changes before exporting.");
+  setPkg(p);setSavedId(id);setKnowledgeGraph(null);setVersion(s.version);setTitle(s.title);setReview(s.review_status);setTheme((["midnight","forest","slate"].includes(s.research?.designTheme)?s.research.designTheme:"midnight") as Theme);setTab("Design & deliver");setStatus("Loaded saved consultation. Review changes before exporting.");
  }catch(e){setError(e instanceof Error?e.message:"Unable to load saved consultation")}finally{setWorking(false)}};
+ const syncGraph=async()=>{
+  if(!savedId){setError("Save the consultation to your private workspace before adding it to your knowledge map.");return}
+  setWorking(true);setError("");setStatus("Linking this saved consultation to your private evidence graph…");
+  try{
+   const response=await fetch("/api/consultation/graph",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({sessionId:savedId,confirmSync:true})});
+   const data=await response.json();
+   if(!response.ok)throw Error(data.error||"Graph sync unavailable");
+   const read=await fetch("/api/consultation/graph?sessionId="+encodeURIComponent(savedId));
+   const view=await read.json();
+   if(!read.ok)throw Error(view.error||"Graph could not be read");
+   setKnowledgeGraph(view);setStatus("Knowledge graph synchronized: "+view.nodes.length+" nodes and "+view.edges.length+" relationships. All source links remain unverified discovery leads.");
+  }catch(e){setError(e instanceof Error?e.message:"Knowledge graph unavailable")}finally{setWorking(false)}
+ };
  const exportOffice=async(format:"pptx"|"docx")=>{if(!pkg)return;setWorking(true);setError("");setStatus("Creating editable "+format.toUpperCase()+" document…");
  try{const response=await fetch("/api/consultation/export",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({format,intake,mode,slides:pkg.slides,intelligence:intel,theme})});
   if(!response.ok){const j=await response.json().catch(()=>({}));throw Error(j.error||"Export unavailable")}
   const blob=await response.blob(),url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=format==="pptx"?"Dynamic-Intelligence-Pitch.pptx":"Dynamic-Intelligence-Consultation.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus("Editable file generated. Review citations and all factual claims before circulation.");
  }catch(e){setError(e instanceof Error?e.message:"Export failed")}finally{setWorking(false)}};
- const reset=()=>{setIntake(blank);setPkg(null);setIntel(null);setSavedId("");setVersion(0);setCouncilReport(null);setReview("DRAFT");setStatus("New consultation started.");setTab("Consult")};
+ const reset=()=>{setIntake(blank);setPkg(null);setIntel(null);setSavedId("");setKnowledgeGraph(null);setVersion(0);setCouncilReport(null);setReview("DRAFT");setStatus("New consultation started.");setTab("Consult")};
  return <section id="consult" className="lab-section consult-studio"><div className="section-heading"><span className="eyebrow">YOUR DECISION-TO-DELIVERY STUDIO</span><h2>Walk in with a question. Leave with an actionable package.</h2><p>Explore customers, science, funding and competing approaches, convene a challenge council, design a pitch, and keep editable deliverables in your private knowledge workspace.</p></div>
  <div className="lab-card">
  <div className="selection-mode" aria-label="Consultation type"><button type="button" aria-pressed={mode==="startup"} onClick={()=>setMode("startup")}>Founder & MVP</button><button type="button" aria-pressed={mode==="general"} onClick={()=>setMode("general")}>Any question or organization</button><button type="button" onClick={reset}>New consultation</button></div>
@@ -106,7 +121,7 @@ export default function ConsultationStudio(){
  <h4>Reports and editable documents</h4><div className="consult-docs">{pkg.documents.map(d=><details key={d.id}><summary>{d.title} · {d.validation}</summary><label>Edit document<textarea rows={9} value={d.body} onChange={e=>editDoc(d.id,e.target.value)}/></label><p>{d.note}</p></details>)}</div>
  <details><summary>Unresolved evidence and acceptance gates ({pkg.quality.knownGaps.length})</summary><ul>{pkg.quality.knownGaps.map(x=><li key={x}>{x}</li>)}</ul></details>
  <div className="consult-actions"><button type="button" disabled={working} onClick={()=>exportOffice("pptx")}>Export editable PowerPoint</button><button type="button" disabled={working} onClick={()=>exportOffice("docx")}>Export Word report</button><button type="button" onClick={()=>downloadText(renderPackageMarkdown(pkg),"DIS-Consultation-Package.md")}>Export Markdown</button></div>
- <div className="consult-save"><h4>Retain the consultation</h4><p>Save or resume a versioned consultation in your own DIS workspace. Saving never authorizes sending or implementation.</p><label>Workspace<select value={workspaceId} onChange={e=>{setWorkspaceId(e.target.value);setSavedId("");setVersion(0)}}><option value="">Sign in to select workspace</option>{spaces.map(s=><option key={s.id} value={s.id}>{s.title}</option>)}</select></label><label>Project title<input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Name this decision package"/></label><label>Review state<select value={review} onChange={e=>setReview(e.target.value as typeof review)}><option>DRAFT</option><option>REVIEWED</option><option>APPROVED</option></select></label><button type="button" disabled={working||!workspaceId} onClick={save}>Save revision to my workspace</button>{savedId&&<small>Saved ID: {savedId} · version {version}</small>}</div>{savedId&&<KnowledgeMap sessionId={savedId}/>}
+ <div className="consult-save"><h4>Retain the consultation</h4><p>Save or resume a versioned consultation in your own DIS workspace. Saving never authorizes sending or implementation.</p><label>Workspace<select value={workspaceId} onChange={e=>{setWorkspaceId(e.target.value);setSavedId("");setVersion(0)}}><option value="">Sign in to select workspace</option>{spaces.map(s=><option key={s.id} value={s.id}>{s.title}</option>)}</select></label><label>Project title<input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Name this decision package"/></label><label>Review state<select value={review} onChange={e=>setReview(e.target.value as typeof review)}><option>DRAFT</option><option>REVIEWED</option><option>APPROVED</option></select></label><button type="button" disabled={working||!workspaceId} onClick={save}>Save revision to my workspace</button>{savedId&&<><small>Saved ID: {savedId} · version {version}</small><button type="button" disabled={working} onClick={syncGraph}>Map this consultation into my knowledge graph</button></>}</div>{savedId&&<KnowledgeMap sessionId={savedId}/>}
  </>}</div>}
  <div className="consult-session-bar"><span>Resume a previous consultation:</span><select value={savedId} onChange={e=>{if(e.target.value)void load(e.target.value)}}><option value="">Choose saved project</option>{sessions.map(s=><option key={s.id} value={s.id}>{s.title} · v{s.version}</option>)}</select><a href="/workspace">Manage my workspaces</a></div>
  {status&&<p role="status" className="consult-status">{status}</p>}{error&&<p role="alert" className="error">{error}</p>}
