@@ -27,7 +27,7 @@ export async function POST(req:Request){
  const {primary}=roster;
  const red=challengeEnabled?roster.red:[];
  const selection={primaryMode,redMode,reasons:roster.reasons,ancientPair:roster.ancientPair};
- const councilReport={...councilReport,selection};
+ const councilReport={...councilBrief(prompt,primary,red),selection};
  if(!userId)return NextResponse.json({...councilReport,state:"SIGN_IN_REQUIRED",notice:"Sign in to run model-based deliberation. Public preview does not consume paid inference."});
  if(body.allowExternalResearch!==true)return NextResponse.json({...councilReport,state:"CONSENT_REQUIRED",notice:"External scholarly search and AI provider transfer requires explicit consent."});
  if(!process.env.DIS_DATABASE_URL)return NextResponse.json({error:"Council quota service unavailable"},{status:503});
