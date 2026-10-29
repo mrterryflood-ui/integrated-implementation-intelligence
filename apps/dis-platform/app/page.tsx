@@ -2,7 +2,7 @@ import ConsultationStudio from "./consultation-studio";
 import Link from "next/link";
 import {auth} from "@clerk/nextjs/server";
 import {SignInButton,UserButton} from "@clerk/nextjs";
-import {productionIdentityBlocked,RELEASE_NOTICE} from "./lib/release-gates";
+import {productionIdentityBlocked,RELEASE_NOTICE} from "../lib/release-gates";
 import CouncilLab from "./council-lab";
 export const dynamic="force-dynamic";
 const steps=[
