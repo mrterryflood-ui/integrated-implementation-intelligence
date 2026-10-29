@@ -24,7 +24,7 @@ export function chooseFederalSources(query:string,requested:string[]=[]):string[
  if(!ids.length)ids.push("federalregister","usaspending");
  return [...new Set(ids)].slice(0,4);
 }
-function urlNtrs(id:unknown){const v=clean(id,100);return /^[0-9]{4,18}$/.test(v)?"https://ntrs.nasa.gov/citations/"+v:"https://ntrs.nasa.gov/search";}
+function urlNtrs(id:unknown){const v=typeof id==="number"&&Number.isSafeInteger(id)?String(id):clean(id,100);return /^[0-9]{4,18}$/.test(v)?"https://ntrs.nasa.gov/citations/"+v:"https://ntrs.nasa.gov/search";}
 async function fetchJson(fetcher:typeof fetch,url:string,options:RequestInit={}){
  const ac=new AbortController(),t=setTimeout(()=>ac.abort(),8500);
  try{const r=await fetcher(url,{...options,signal:ac.signal,cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);return await r.json()}finally{clearTimeout(t)}
