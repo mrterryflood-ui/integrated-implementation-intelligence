@@ -41,6 +41,16 @@ export function citationAudit(text:string,sources:Source[]){
  const unknown=cited.filter(id=>!sources.some(s=>s.id===id));
  return {citedIds:cited,unknownIds:unknown,checked:"IDENTIFIER_EXISTENCE_ONLY",claimSupport:"NOT INDEPENDENTLY VERIFIED"};
 }
+export function parseActionPlan(raw:string){
+ try{
+  const cleaned=raw.trim().replace(/^\x60\x60\x60(?:json)?\s*/i,"").replace(/\s*\x60\x60\x60$/,"");
+  const a=JSON.parse(cleaned) as Record<string,unknown>;
+  if(!a||!Array.isArray(a.tasks)||!Array.isArray(a.metrics))return null;
+  const tasks=a.tasks.slice(0,6).filter((t:unknown)=>t&&typeof t==="object"&&typeof (t as {title?:unknown}).title==="string"&&typeof (t as {success?:unknown}).success==="string").map((t:{title:string,why?:string,success:string})=>({title:t.title.slice(0,180),why:String(t.why||"Verify applicability before implementation").slice(0,350),success:t.success.slice(0,350)}));
+  const metrics=a.metrics.slice(0,5).filter((m:unknown)=>m&&typeof m==="object"&&typeof (m as {label?:unknown}).label==="string").map((m:{label:string,baseline?:string,target?:string,unit?:string})=>({label:m.label.slice(0,150),baseline:String(m.baseline||"Not measured").slice(0,90),target:String(m.target||"To be agreed").slice(0,90),unit:String(m.unit||"Defined by user").slice(0,60)}));
+  return tasks.length>=2&&metrics.length>=1?{tasks,metrics,status:"MODEL_PROPOSED_UNVERIFIED"}:null;
+ }catch{return null}
+}
 export async function convene(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string},deps={research,infer}){
  const prompt=input.prompt.trim();
  const primary=selectCouncil(prompt,input.count,input.selected,false);
@@ -63,6 +73,8 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
  const joined="PRIMARY A:\n"+first.text+"\nPRIMARY B:\n"+second.text+"\nRED TEAM:\n"+critic.text;
  const synthesis=await deps.infer("Synthesis and independent assurance strand. Give: (1) direct answer, (2) strongest opposing hypothesis, (3) tested versus untested evidence, (4) what we are not asking, (5) actionable pilot plan with measurements, owners and safeguards, (6) remaining dissent and uncertainty. Do not claim verified consensus or experimentally tested results. Do not invent references; use cited source identifiers only if supported by given abstracts.",shared+"\n\nSeparate deliberation outputs:\n"+joined.slice(0,10000));
  if(!synthesis.ok)return {state:"INCOMPLETE",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,callStatuses:[...calls,{ok:false,error:synthesis.error}],error:"Synthesis did not complete",citations:{checked:"NOT_RUN"}};
+ const planner=await deps.infer("Produce a concise tailored decision implementation workplan. Return ONLY a JSON object with tasks (3 to 5 objects with title,why,success) and metrics (3 to 4 objects with label,baseline,target,unit). Make tasks actionable for the precise question and intended stakeholders. All targets are proposals, not observed facts; use 'Not measured' if baseline unknown. Include a stop/go validation checkpoint and an adoption/sustainability measure. Do not invent outcomes or mark work complete.",shared+"\n\nCouncil synthesis and dissent:\n"+synthesis.text.slice(0,4300)+"\n\nAdversarial review:\n"+critic.text.slice(0,1800));
+ const actionPlan=planner.ok?parseActionPlan(planner.text):null;
  const audit=citationAudit(synthesis.text,found.sources);
- return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,callStatuses:[...calls,synthesis].map(x=>({ok:x.ok})),limitations:"Four separate model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
+ return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,actionPlan,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,callStatuses:[...calls,synthesis].map(x=>({ok:x.ok})),limitations:"Up to five model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
 }
