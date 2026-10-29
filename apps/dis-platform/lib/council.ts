@@ -1,5 +1,8 @@
 export type CouncilMember={id:string,name:string,domain:string,lens:string,era:"historical"|"modern",group:string};
 export const MEMBERS:CouncilMember[]=[
+["ibn-al-haytham","Ibn al-Haytham","Scientific inquiry","Question observations, experiments and causal inference","historical","Science"],
+["deming","W. Edwards Deming","Quality systems","Study process variation and systemic causes","historical","Engineering"],
+["meadows","Donella Meadows","Systems dynamics","Identify feedback loops and leverage points","historical","Science"],
 ["socrates","Socrates","Inquiry","Question assumptions and test definitions","historical","Philosophy"],
 ["aristotle","Aristotle","Logic","Separate causes, evidence, and inference","historical","Philosophy"],
 ["sun-tzu","Sun Tzu","Strategy","Examine terrain, timing and alternatives","historical","Strategy"],
@@ -45,7 +48,7 @@ export const MEMBERS:CouncilMember[]=[
 ["mark-zuckerberg","Mark Zuckerberg","Platforms","Examine networks, scale and social tradeoffs","modern","Business"],
 ["mika-brzezinski","Mika Brzezinski","Media","Question framing and stakeholder communication","modern","Communication"],
 ["sarah-lord","Sarah Lord","Implementation","Examine adoption, implementation and sustainment","modern","Science"],
-["an-wang","An Wang","Computing","Examine hardware and system reliability","historical","Engineering"],
+
 ["henry-kissinger","Henry Kissinger","Geopolitics","Examine negotiation, power and unintended consequences","modern","Strategy"],
 ["zbigniew-brzezinski","Zbigniew Brzezinski","Geopolitics","Examine systems, second-order effects and competing interests","modern","Strategy"],
 ["james-clapper","James Clapper","Intelligence","Challenge source reliability and analytic confidence","modern","Strategy"]
@@ -65,7 +68,7 @@ export function selectCouncil(prompt:string,count:number,selected:string[]=[],re
  const words=prompt.toLowerCase();
  const unique=new Map(MEMBERS.map(m=>[m.id,m]));
  const explicit=[...new Set(selected)].map(id=>unique.get(id)).filter((m):m is CouncilMember=>!!m);
- const pool=MEMBERS.filter(m=>!explicit.some(x=>x.id===m.id));
+ const pool=[...unique.values()].filter(m=>!explicit.some(x=>x.id===m.id));
  const score=(m:CouncilMember)=>{const terms=WORDS[m.group]||[];let s=terms.filter(t=>words.includes(t)).length*5; if(red&&DEFAULT_RED.includes(m.id))s+=20; if(m.id==="socrates"||m.id==="angie-jones")s+=2;return s};
  pool.sort((a,b)=>score(b)-score(a)||a.name.localeCompare(b.name));
  return [...explicit,...pool].slice(0,n);
