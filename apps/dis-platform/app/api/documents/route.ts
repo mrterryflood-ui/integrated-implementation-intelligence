@@ -6,7 +6,7 @@ export const runtime="nodejs";
 export const maxDuration=30;
 const MAX_BYTES=5*1024*1024;
 const TEXT_EXT=new Set(["txt","md","csv","json","xml","html","htm","log","eml","yaml","yml","rtf"]);
-const MIME={pdf:"application/pdf",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
+const MIME:Record<string,string>={pdf:"application/pdf",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document"};
 export function extension(name:string){return (name.split(".").pop()||"").toLowerCase()}
 export function safeName(name:string){return name.replace(/[^a-zA-Z0-9._-]/g,"_").slice(0,110)||"document"}
 export async function extractFile(name:string,buffer:Buffer):Promise<{state:"EXTRACTED"|"UNSUPPORTED"|"FAILED"|"EMPTY",text:string|null}>{
