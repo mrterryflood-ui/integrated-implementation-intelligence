@@ -58,6 +58,13 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
  const red=input.challengeEnabled===false?[]:(input.redMembers??selectCouncil(prompt,input.redCount,input.redSelected.length?input.redSelected:DEFAULT_RED,true));
  const found=await deps.research(prompt);
  const ctx=sourceContext(found.sources);
+ if(primary.length===1&&red.length===0){
+  const member=primary[0];
+  const answer=await deps.infer("One-on-one educational analytical lens: "+member.name+". Use documented ideas in "+member.domain+" and "+member.lens+". Do not imitate their voice, claim to be them or invent opinions, quotes or endorsements. Engage conversationally and ask a useful follow-up.", "Question: "+prompt+"\n\nRetrieved abstract-level evidence:\n"+ctx,process.env.AI_GATEWAY_PRIMARY_A_MODEL||model());
+  if(!answer.ok)return {state:"INCOMPLETE",primary:[{id:member.id,name:member.name,perspective:member.lens,question:"Explore this approach"}],red:[],sources:found.sources,retrieval:found.status,error:answer.error||"One-on-one model unavailable",citations:{checked:"NOT_RUN",claimSupport:"NOT_VERIFIED"}};
+  return {state:"PRELIMINARY_DELIBERATION",primary:[{id:member.id,name:member.name,perspective:member.lens,question:"Explore this approach"}],red:[],sources:found.sources,retrieval:found.status,deliberation:{primaryA:answer.text,primaryB:"",challenge:"",synthesis:answer.text},citations:citationAudit(answer.text,found.sources),modelProvenance:{models:[answer.model||null],verifiedProviderCount:answer.model?1:0,independentSystemsVerified:false},limitations:"One-on-one educational lens. This is not the actual person, their endorsement, or a consultation. Evidence is abstract-level and unverified."};
+ }
+
  const p1=primary.slice(0,Math.max(1,Math.ceil(primary.length/2))).map(x=>x.name+" — "+x.lens).join("; ");
  const p2=primary.slice(Math.ceil(primary.length/2)).map(x=>x.name+" — "+x.lens).join("; ");
  const challenge=red.map(x=>x.name+" — "+x.lens).join("; ");
