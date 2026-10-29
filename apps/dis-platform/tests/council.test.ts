@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {selectCouncil,MEMBERS} from "../lib/council";
-import {reconstruct,citationAudit,convene} from "../lib/council-engine";
+import {reconstruct,citationAudit,convene,parseActionPlan} from "../lib/council-engine";
 test("council registry has unique IDs and requested limits",()=>{
  assert.equal(new Set(MEMBERS.map(m=>m.id)).size,MEMBERS.length);
  assert.equal(selectCouncil("health and clinical study",6).length,6);
@@ -27,7 +27,7 @@ test("actual deliberation invokes separate research, primary and challenge passe
  const research=async()=>({status:"ABSTRACT_AND_METADATA",sources:[{id:"S1",title:"Title",doi:null,url:"https://example.org",year:2024,abstract:"One useful abstract."}]});
  const infer=async(system:string,prompt:string)=>{calls.push(system);return {ok:true,text:"Preliminary assessment [S1]"}};
  const result=await convene({prompt:"How can a community improve?",count:4,redCount:3,selected:[],redSelected:[],depth:"Standard"},{research,infer});
- assert.equal(calls.length,4);
+ assert.equal(calls.length,5);
  assert.ok(calls.some(x=>x.includes("challenge")));
  assert.equal(result.state,"PRELIMINARY_DELIBERATION");
  assert.equal(result.citations?.claimSupport,"NOT INDEPENDENTLY VERIFIED");
@@ -36,4 +36,12 @@ test("failure prevents fabricated council consensus",async()=>{
  const result=await convene({prompt:"How can our organization improve?",count:4,redCount:3,selected:[],redSelected:[],depth:"Standard"},{research:async()=>({sources:[],status:"UNAVAILABLE"}),infer:async()=>({ok:false,text:"",error:"offline"})});
  assert.equal(result.state,"INCOMPLETE");
  assert.ok(result.error?.includes("incomplete"));
+});
+
+test("proposed action plans require structured tasks and measures",()=>{
+ const plan=parseActionPlan(JSON.stringify({tasks:[{title:"Pilot the service",why:"Test an alternative",success:"Observed outcomes reported"},{title:"Validate costs",why:"Control spend",success:"Cost estimate verified"}],metrics:[{label:"Adoption",baseline:"Unknown",target:"To agree",unit:"%"}]}));
+ assert.equal(plan?.status,"MODEL_PROPOSED_UNVERIFIED");
+ assert.equal(plan?.tasks.length,2);
+ assert.equal(parseActionPlan("not json"),null);
+ assert.equal(parseActionPlan(JSON.stringify({tasks:[],metrics:[]})),null);
 });
