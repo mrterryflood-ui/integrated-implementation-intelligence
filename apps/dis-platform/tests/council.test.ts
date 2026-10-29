@@ -71,3 +71,19 @@ test("AI inference fallback uses an allowed model and records actual response pr
   assert.equal(result.model,"nvidia/nemotron-3.5-lightning-free");
  }finally{if(key===undefined)delete process.env.AI_GATEWAY_API_KEY;else process.env.AI_GATEWAY_API_KEY=key;if(defaultModel===undefined)delete process.env.AI_GATEWAY_MODEL;else process.env.AI_GATEWAY_MODEL=defaultModel}
 });
+
+test("free-model beta is explicitly non-independent and uses one real model call",async()=>{
+ const prior=process.env.AI_GATEWAY_MODEL,force=process.env.AI_GATEWAY_FORCE_MULTIPROVIDER;
+ process.env.AI_GATEWAY_MODEL="nvidia/nemotron-3.5-lightning-free";delete process.env.AI_GATEWAY_FORCE_MULTIPROVIDER;
+ try{
+  let calls=0;
+  const result=await convene({prompt:"How should a clinic test its scheduling prototype?",count:5,redCount:3,selected:[],redSelected:[],depth:"Deep"},{
+   research:async()=>({sources:[],status:"NO_RESULTS"}),
+   infer:async()=>{calls++;return {ok:true,text:"Pilot: measure baseline, errors, user completion and uncertainty.",model:"nvidia/nemotron-3.5-lightning-free"}}
+  });
+  assert.equal(calls,1);
+  assert.equal(result.state,"SINGLE_MODEL_BETA_UNVERIFIED");
+  assert.equal(result.modelProvenance?.independentSystemsVerified,false);
+  assert.match(result.limitations||"",/one real model inference/);
+ }finally{if(prior===undefined)delete process.env.AI_GATEWAY_MODEL;else process.env.AI_GATEWAY_MODEL=prior;if(force===undefined)delete process.env.AI_GATEWAY_FORCE_MULTIPROVIDER;else process.env.AI_GATEWAY_FORCE_MULTIPROVIDER=force}
+});
