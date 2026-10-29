@@ -1,3 +1,4 @@
+import {inspectContents} from "./source-review.js";
 /** Read-only inspection of public GitHub repositories. No credentials, cloning or code execution. */
 export function parseRepository(input) {
  const value=String(input||"").trim();
