@@ -1,8 +1,8 @@
 import {auth} from "@clerk/nextjs/server";
-import {sanitizeIntake} from "../../../lib/consultation";
-import {buildPackage,type SlideSpec} from "../../../lib/consultation-package";
-import {exportPptx,exportDocx} from "../../../lib/consultation-export";
-import type {IntelligenceBundle} from "../../../lib/consultation-research";
+import {sanitizeIntake} from "../../../../lib/consultation";
+import {buildPackage,type SlideSpec} from "../../../../lib/consultation-package";
+import {exportPptx,exportDocx} from "../../../../lib/consultation-export";
+import type {IntelligenceBundle} from "../../../../lib/consultation-research";
 export const runtime="nodejs";
 export const maxDuration=45;
 function validSlide(x:any):x is SlideSpec{return x&&typeof x.id==="string"&&x.id.length<25&&typeof x.title==="string"&&x.title.length<=180&&typeof x.kicker==="string"&&x.kicker.length<=140&&Array.isArray(x.bullets)&&x.bullets.length<=6&&x.bullets.every((v:unknown)=>typeof v==="string"&&v.length<=500)&&typeof x.notes==="string"&&x.notes.length<=2000&&Array.isArray(x.sourceIds)&&x.sourceIds.every((v:unknown)=>typeof v==="string"&&v.length<50)}
