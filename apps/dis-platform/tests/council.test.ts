@@ -45,3 +45,10 @@ test("proposed action plans require structured tasks and measures",()=>{
  assert.equal(parseActionPlan("not json"),null);
  assert.equal(parseActionPlan(JSON.stringify({tasks:[],metrics:[]})),null);
 });
+
+test("turning off challenge council does not invoke adversarial model",async()=>{
+ const calls:string[]=[];
+ const result=await convene({prompt:"How might we improve a grant platform?",count:4,redCount:3,selected:[],redSelected:[],depth:"Standard",challengeEnabled:false},{research:async()=>({sources:[],status:"NO_RESULTS"}),infer:async(system:string)=>{calls.push(system);return {ok:true,text:"Working hypothesis"};}});
+ assert.equal(result.red?.length,0);
+ assert.equal(calls.filter(x=>x.includes("Independent challenge strand")).length,0);
+});
