@@ -1,9 +1,9 @@
 import {searchFederal} from "./federal-sources";
 import type {Intake} from "./consultation";
 import {research as openAlexResearch} from "./council-engine";
-export type IntelligenceRecord={id:string,kind:"SCHOLARLY"|"OPEN_GRANT"|"PAST_AWARD"|"LANDSCAPE_LEAD"|"TECHNICAL_REPORT"|"REGULATION",title:string,summary:string,source:string,url:string,retrievedAt:string,sourceStatus:"OFFICIAL_RECORD"|"DISCOVERY_ONLY",opportunityStatus?:string,closeDate?:string,awardAmount?:number|null,eligibilityStatus?:"UNVERIFIED"};
+export type IntelligenceRecord={id:string,kind:"SCHOLARLY"|"OPEN_GRANT"|"PAST_AWARD"|"LANDSCAPE_LEAD"|"TECHNICAL_REPORT"|"REGULATION",title:string,summary:string,source:string,url:string,retrievedAt:string,sourceStatus:"OFFICIAL_RECORD"|"DISCOVERY_ONLY",opportunityStatus?:string,closeDate?:string,awardAmount?:number|null,eligibilityStatus?:"UNVERIFIED",textMatches?:number,queryMatchStatus?:"MULTI_TERM_CANDIDATE"|"ONE_TERM_CANDIDATE"|"NO_TEXT_OVERLAP"};
 export type IntelligenceBundle={query:string,retrievedAt:string,records:IntelligenceRecord[],errors:string[],coverage:Record<string,string>,researchStandard:string};
-const stopWords=new Set("that this what with about from your their where when how which want need have does they there would could should into through more best help build better proposal founder funding system platform business idea startup grant grants".split(" "));
+const stopWords=new Set("that this what with about from your their where when how which want need have does they there would could should into through more best help build better improve improving use using develop developing mission proposal founder funding system platform business idea startup grant grants".split(" "));
 export function keywords(value:string){
  const words=value.toLowerCase().match(/[a-z][a-z0-9-]{2,}/g)||[];
  return [...new Set(words.filter(w=>!stopWords.has(w)))].slice(0,6).join(" ")||value.trim().slice(0,100);
@@ -16,6 +16,7 @@ async function jsonRequest(url:string,options:RequestInit,fetcher:typeof fetch){
 function publicLink(id:unknown){const n=Number(id);return Number.isInteger(n)&&n>0?"https://www.grants.gov/search-results-detail/"+n:"https://www.grants.gov/search-grants";}
 export async function investigate(intake:Intake,fetcher:typeof fetch=fetch,at=new Date()):Promise<IntelligenceBundle>{
  const q=keywords(intake.mission+" "+intake.audience);
+ const biomedical=/health|clinical|patient|hospital|nursing|medicine|medical|biomed|disease|therapy|mental health|public health/.test((intake.mission+" "+intake.audience).toLowerCase());
  const retrievedAt=at.toISOString(),records:IntelligenceRecord[]=[],errors:string[]=[];
  const coverage={scholarly:"UNAVAILABLE",grants:"UNAVAILABLE",pastAwards:"UNAVAILABLE",landscape:"UNAVAILABLE"};
  const tasks=[
@@ -26,8 +27,8 @@ export async function investigate(intake:Intake,fetcher:typeof fetch=fetch,at=ne
    coverage.grants="OFFICIAL_INDEX";
    for(const x of found.data.oppHits.slice(0,8))records.push({id:"G"+String(x.id||records.length+1),kind:"OPEN_GRANT",title:safeText(x.title,230),summary:[safeText(x.agencyName,140),safeText(x.number,90),x.oppStatus==="forecasted"?"Forecasted opportunity":"Posted opportunity"].filter(Boolean).join(" · "),source:"Grants.gov",url:publicLink(x.id),retrievedAt,sourceStatus:"OFFICIAL_RECORD",opportunityStatus:safeText(x.oppStatus,40),closeDate:safeText(x.closeDate,40),eligibilityStatus:"UNVERIFIED"});
   }catch(e){errors.push("Grants.gov: "+String(e instanceof Error?e.message:e).slice(0,120))}})(),
-  (async()=>{try{
-   const found=await jsonRequest("https://api.reporter.nih.gov/v2/projects/search",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({criteria:{advanced_text_search:{operator:"or",search_field:"projecttitle,abstracttext",search_text:q.slice(0,120)}},limit:5,offset:0})},fetcher);
+  (async()=>{if(!biomedical){coverage.pastAwards="NOT_APPLICABLE";return}try{
+   const found=await jsonRequest("https://api.reporter.nih.gov/v2/projects/search",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({criteria:{advanced_text_search:{operator:"and",search_field:"projecttitle,abstracttext",search_text:q.split(" ").slice(0,3).join(" ").slice(0,100)}},limit:5,offset:0})},fetcher);
    coverage.pastAwards=Array.isArray(found.results)?"OFFICIAL_AWARD_INDEX":"NO_RESULTS";
    for(const x of (Array.isArray(found.results)?found.results:[]).slice(0,5)){
     const id=Number(x.appl_id);
@@ -51,6 +52,11 @@ export async function investigate(intake:Intake,fetcher:typeof fetch=fetch,at=ne
  await Promise.all(tasks);
  // Stable IDs, source-bound and deduplicated; no claims are promoted to verified competitive fit.
  const seen=new Set<string>();
- const deduped=records.filter(x=>{if(!x.url||seen.has(x.kind+x.url))return false;seen.add(x.kind+x.url);return true}).map((x,i)=>({...x,id:"E"+(i+1)}));
- return {query:q,retrievedAt,records:deduped,errors,coverage,researchStandard:"OFFICIAL_RECORD means an official index returned this item, not independently verified eligibility, accuracy, legal advice, investor interest, nor claim-level passage support. OPEN_GRANT has a provider status that still requires direct solicitation review. PAST_AWARD is historical and not an active funding opportunity. LANDSCAPE_LEAD is not a verified competitor. Regulations require review of the official published document and effective dates."};
+ const terms=q.split(" ").filter(x=>x.length>3);
+ const deduped=records.filter(x=>{if(!x.url||seen.has(x.kind+x.url))return false;seen.add(x.kind+x.url);return true}).map((x,i)=>{
+  const context=(x.title+" "+x.summary).toLowerCase();
+  const hits=terms.filter(t=>context.includes(t)).length;
+  return {...x,id:"E"+(i+1),textMatches:hits,queryMatchStatus:(hits>=2?"MULTI_TERM_CANDIDATE":hits===1?"ONE_TERM_CANDIDATE":"NO_TEXT_OVERLAP") as IntelligenceRecord["queryMatchStatus"]};
+ }).sort((a,b)=>b.textMatches-a.textMatches);
+ return {query:q,retrievedAt,records:deduped,errors,coverage,researchStandard:"Text matching is a rough discovery signal, not proof of eligibility or semantic relevance. NIH RePORTER searches are run only for biomedical topics. OFFICIAL_RECORD means an official index returned this item, not independently verified eligibility, accuracy, legal advice, investor interest, nor claim-level passage support. OPEN_GRANT has a provider status that still requires direct solicitation review. PAST_AWARD is historical and not an active funding opportunity. LANDSCAPE_LEAD is not a verified competitor. Regulations require review of the official published document and effective dates."};
 }
