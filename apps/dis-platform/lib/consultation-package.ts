@@ -1,3 +1,5 @@
+import {generateUnknowns} from "./unknowns-radar";
+import {realtyDocuments} from "./realty-consultation";
 import type {Intake,Deliverable} from "./consultation";
 import {deliverables,packageMarkdown} from "./consultation";
 import type {IntelligenceBundle,IntelligenceRecord} from "./consultation-research";
@@ -9,7 +11,12 @@ const outline=(records:IntelligenceRecord[],kind:IntelligenceRecord["kind"],n=5)
 const refs=(records:IntelligenceRecord[])=>records.map(r=>r.id);
 const sourceRow=(x:IntelligenceRecord)=>`[${x.id}] ${x.title} — ${x.source}; ${x.url}; ${x.retrievedAt}; ${x.sourceStatus}. ${x.summary}`;
 export function buildPackage(intake:Intake,mode:"startup"|"general"="startup",intelligence:IntelligenceBundle|null=null,council?:{deliberation?:{synthesis?:string,challenge?:string}}):ConsultationPackage{
- const records=intelligence?.records||[],prospects=outline(records.filter(x=>x.queryMatchStatus!=="NO_TEXT_OVERLAP"),"OPEN_GRANT",8),historical=outline(records.filter(x=>x.queryMatchStatus!=="NO_TEXT_OVERLAP"),"PAST_AWARD",8),landscape=outline(records,"LANDSCAPE_LEAD",6);
+ const radar=generateUnknowns(intake,intelligence);
+ const realty=radar.mode==="REAL_ESTATE";
+ const records=intelligence?.records||[];
+ const potentiallyRelevant=records.filter(x=>x.queryMatchStatus==="MULTI_TERM_CANDIDATE");
+ const conditionalGrants=realty?potentiallyRelevant.filter(x=>/housing|homeowner|mortgage|property|foreclosure|land use|revitalization|neighborhood|community development/i.test(x.title)):potentiallyRelevant;
+ const prospects=outline(conditionalGrants,"OPEN_GRANT",8),historical=outline(potentiallyRelevant,"PAST_AWARD",8),landscape=outline(records,"LANDSCAPE_LEAD",6);
  const scientific=records.filter(x=>x.kind==="SCHOLARLY"||x.kind==="TECHNICAL_REPORT").slice(0,7);
  const regulation=outline(records,"REGULATION",5);
  const documents=deliverables(intake,council,mode);
@@ -26,6 +33,7 @@ export function buildPackage(intake:Intake,mode:"startup"|"general"="startup",in
  documents.push(sourceDoc);
  const riskDoc:Deliverable={id:"risk",title:"Decision and risk register",body:`Five key risks requiring verification:\n1. Problem-market fit — validate actual buyer demand and alternatives.\n2. Funding feasibility — official grants and historical awards do not establish eligibility, investor interest or award probability.\n3. Implementation feasibility — test user tasks, technical dependencies and security.\n4. Financial sustainability — baseline pricing, unit economics and adoption must be measured.\n5. Epistemic integrity — retain conflicts and avoid turning exploratory assumptions into facts.\n\nAction–reaction–counteraction: define who changes behavior following launch, how rivals or regulators might react, and what safe response would work.\n\nDecision state: INVESTIGATE ONLY; no commitments, outreach or production changes authorized.`,validation:"DRAFT",note:"Risks are candidate hypotheses until assessed in the domain context."};documents.push(riskDoc);
  const designDoc:Deliverable={id:"design",title:"User-centered design and product validation plan",body:`Primary users: ${audience}\nObjective: ${outcome}\nTask to observe: Ask a representative user to complete the core workflow unaided; measure success, time, clarity, accessibility, trust and errors.\nUX benchmark: Test existing alternatives and your MVP using the same task and comparable participants.\nBrand positioning: State the problem, distinctive value and credible proof in the user's own language; validate comprehension with non-experts.\nResearch method: conduct interviews; synthesize journey map; prioritize pain points; test prototypes; document before/after outcomes.\nExit criteria: user task acceptance thresholds, security review, measurable value, training/support plan and post-launch observation.\nCurrent state: NO USER TEST OBSERVATIONS VERIFIED.`,validation:"DRAFT",note:"This is a research and implementation plan, not proof of user adoption."};documents.push(designDoc);
+ documents.push(...realtyDocuments(intake,radar));
  const sources=records.slice(0,9),evidence=refs(sources);
  const slides:SlideSpec[]=[
  {id:"01",kicker:"THE OPPORTUNITY",title:company,bullets:[mission,outcome],notes:"Introduce the venture/project accurately and state the customer problem, not an unproven market-size claim.",sourceIds:[]},
@@ -48,6 +56,7 @@ export function buildPackage(intake:Intake,mode:"startup"|"general"="startup",in
  !prospects.length?"No active federal opportunity matched":null,
  !council?.deliberation?.synthesis?"No completed council deliberation attached":null,
  "Every cited market/funder claim requires exact source-passage validation",
+ ...radar.questions.filter(x=>x.priority==="RELEASE_BLOCKER"&&x.status==="NOT_ASKED").slice(0,6).map(x=>"Unasked release gate: "+x.area),
  "Designed slides are editable; pitch outcome and investor conversion remain untested"
  ].filter((x):x is string=>Boolean(x));
  return {mode,intake,documents,slides,intelligence,quality:{grade:"DRAFT / GATES OPEN",knownGaps,releases:["Research and compliance review","Independent challenge/dissent review","Customer acceptance","Export packaging","User approval before external distribution"],sources:records.length,activeOpportunityCandidates:prospects.length,historicalAwards:historical.length,marketLeads:landscape.length},createdAt:new Date().toISOString()};
