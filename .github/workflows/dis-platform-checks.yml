@@ -1,7 +1,7 @@
 name: DIS authenticated platform typecheck
 on:
   push:
-    branches: [dis/council-delivery-integrity]
+    branches: [main, "dis/**"]
     paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
   pull_request:
     paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
