@@ -7,6 +7,7 @@ export const RPLICE_DEFAULT_ORIGIN = "https://www.bettersciencelab.com";
 export const PARALLAX_EVIDENCE_STATE = "OPERATOR_DECLARED_UNVERIFIED";
 
 export type RpliceBridgeEnv = {
+  [key:string]: string | undefined;
   RPLICE_BASE_URL?: string;
   RPLICE_API_KEY?: string;
 };
