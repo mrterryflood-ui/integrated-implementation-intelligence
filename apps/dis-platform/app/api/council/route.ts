@@ -1,3 +1,4 @@
+import {neon} from "@neondatabase/serverless";
 import {NextResponse} from "next/server";
 import {auth} from "@clerk/nextjs/server";
 import {MEMBERS,selectCouncil,councilBrief,DEFAULT_RED} from "../../../lib/council";
@@ -18,6 +19,17 @@ export async function POST(req:Request){
  const primary=selectCouncil(prompt,count,chosen,false);
  const red=selectCouncil(prompt,redCount,redSelected.length?redSelected:DEFAULT_RED,true);
  if(!userId)return NextResponse.json({...councilBrief(prompt,primary,red),state:"SIGN_IN_REQUIRED",notice:"Sign in to run model-based deliberation. Public preview does not consume paid inference."});
+ if(!process.env.DIS_DATABASE_URL)return NextResponse.json({error:"Council quota service unavailable"},{status:503});
+ try{
+  const sql=neon(process.env.DIS_DATABASE_URL);
+  const usage=await sql.transaction([
+   sql`SELECT set_config('dis.subject_id',${userId},true)`,
+   sql`INSERT INTO dis_council_usage(subject_id,usage_day,calls) VALUES(${userId},CURRENT_DATE,1)
+      ON CONFLICT(subject_id,usage_day) DO UPDATE SET calls=dis_council_usage.calls+1,last_called=now()
+      WHERE dis_council_usage.calls<20 RETURNING calls`
+  ]);
+  if(!usage[1]?.length)return NextResponse.json({error:"Daily council beta limit reached (20 investigations)"},{status:429});
+ }catch{return NextResponse.json({error:"Council quota authorization unavailable"},{status:503});}
  const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth});
  return NextResponse.json({...councilBrief(prompt,primary,red),...report,assurance:report.limitations||report.error||"Independent execution was not completed."});
 }
