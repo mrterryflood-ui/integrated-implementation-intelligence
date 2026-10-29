@@ -23,7 +23,7 @@ export async function investigate(intake:Intake,fetcher:typeof fetch=fetch,at=ne
  const q=keywords(intake.mission+" "+intake.audience);
  const biomedical=/health|clinical|patient|hospital|nursing|medicine|medical|biomed|disease|therapy|mental health|public health/.test((intake.mission+" "+intake.audience).toLowerCase());
  const retrievedAt=at.toISOString(),records:IntelligenceRecord[]=[],errors:string[]=[];
- const coverage={scholarly:"UNAVAILABLE",grants:"UNAVAILABLE",pastAwards:"UNAVAILABLE",landscape:"UNAVAILABLE"};
+ const coverage:Record<string,string>={scholarly:"UNAVAILABLE",grants:"UNAVAILABLE",pastAwards:"UNAVAILABLE",landscape:"UNAVAILABLE"};
  if(realty){records.push(...realtyReferenceLeads(intake,at));Object.assign(coverage,{realtyReferences:"CURATED_SOURCE_LINKS_NOT_CLAIM_VERIFIED"});}
  const tasks=[
   (async()=>{try{
