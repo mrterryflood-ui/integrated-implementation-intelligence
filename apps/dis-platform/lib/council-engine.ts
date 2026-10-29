@@ -15,7 +15,7 @@ export async function research(query:string,fetcher=fetch):Promise<{sources:Sour
   const body=await response.json();
   const raw:Record<string,unknown>[]=Array.isArray(body.results)?body.results:[];
   const sources=raw.filter((x:Record<string,unknown>)=>typeof x.title==="string"&&typeof x.id==="string").map((x:Record<string,unknown>,i:number)=>({
-   id:"S"+(i+1),title:x.title,doi:typeof x.doi==="string"?x.doi:null,url:typeof x.doi==="string"?x.doi:x.id,year:Number.isInteger(x.publication_year)?x.publication_year:null,abstract:reconstruct(x.abstract_inverted_index)
+   id:"S"+(i+1),title:String(x.title),doi:typeof x.doi==="string"?x.doi:null,url:typeof x.doi==="string"?x.doi:String(x.id),year:typeof x.publication_year==="number"&&Number.isInteger(x.publication_year)?x.publication_year:null,abstract:reconstruct(x.abstract_inverted_index as Record<string,number[]>|null)
   }));
   return {sources,status:sources.length?"ABSTRACT_AND_METADATA":"NO_RESULTS"};
  }catch(e){return {sources:[],status:"UNAVAILABLE",error:"Source lookup unavailable"}}
