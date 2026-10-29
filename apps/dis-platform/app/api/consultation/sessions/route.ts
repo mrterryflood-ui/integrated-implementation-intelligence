@@ -1,7 +1,7 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
-import {sanitizeIntake} from "../../../lib/consultation";
-import {buildPackage,type SlideSpec} from "../../../lib/consultation-package";
+import {sanitizeIntake} from "../../../../lib/consultation";
+import {buildPackage,type SlideSpec} from "../../../../lib/consultation-package";
 export const runtime="nodejs";
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 function validSlides(value:unknown):value is SlideSpec[]{
