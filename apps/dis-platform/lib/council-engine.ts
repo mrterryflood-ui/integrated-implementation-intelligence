@@ -12,7 +12,7 @@ export async function research(query:string,fetcher=fetch):Promise<{sources:Sour
  try{
   const response=await fetcher(url,{signal:AbortSignal.timeout(6500),headers:{Accept:"application/json"},cache:"no-store"});
   if(!response.ok)return {sources:[],status:"UNAVAILABLE",error:"Research provider HTTP "+response.status};
-  const body=await response.json();
+  const body:any=await response.json();
   const raw:Record<string,unknown>[]=Array.isArray(body.results)?body.results:[];
   const sources=raw.filter((x:Record<string,unknown>)=>typeof x.title==="string"&&typeof x.id==="string").map((x:Record<string,unknown>,i:number)=>({
    id:"S"+(i+1),title:String(x.title),doi:typeof x.doi==="string"?x.doi:null,url:typeof x.doi==="string"?x.doi:String(x.id),year:typeof x.publication_year==="number"&&Number.isInteger(x.publication_year)?x.publication_year:null,abstract:reconstruct(x.abstract_inverted_index as Record<string,number[]>|null)
