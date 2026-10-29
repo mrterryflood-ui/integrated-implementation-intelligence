@@ -77,6 +77,21 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
   return {state:"PRELIMINARY_DELIBERATION",primary:[{id:member.id,name:member.name,perspective:member.lens,question:"Explore this approach"}],red:[],sources:found.sources,retrieval:found.status,deliberation:{primaryA:answer.text,primaryB:"",challenge:"",synthesis:answer.text},citations:citationAudit(answer.text,found.sources),modelProvenance:{models:[(answer as {model?:string}).model||null],verifiedProviderCount:(answer as {model?:string}).model?1:0,independentSystemsVerified:false},limitations:"One-on-one educational lens. This is not the actual person, their endorsement, or a consultation. Evidence is abstract-level and unverified."};
  }
 
+ // Free-model beta: one actual inference, with conceptual council lenses only.
+ // Never label this as independently executed multi-provider deliberation.
+ if(model().endsWith("-free")&&!process.env.AI_GATEWAY_FORCE_MULTIPROVIDER){
+  const primaryLens=primary.map(m=>m.domain+" — "+m.lens).join("; ").slice(0,2600);
+  const challengeLens=red.map(m=>m.domain+" — "+m.lens).join("; ").slice(0,1400);
+  const promptText="Question: "+prompt+"\n\nPrimary analysis lenses: "+primaryLens+"\n\nAdversarial challenge lenses: "+(challengeLens||"No secondary council requested")+
+   "\n\nEvidence (abstracts only):\n"+ctx+
+   "\n\nWrite a structured consultation with: problem clarification; 5Ws/H; at least two competing hypotheses; primary views; skeptic challenge including action, reaction and counteraction; evidence versus assumptions using [S#] identifiers only where supported by the quoted abstract; what would falsify each option; a practical pilot with owner and measurable outcomes; adoption and sustainability; explicit uncertainty. All generated views arise from ONE model and are NOT independent council executions.";
+  const output=await deps.infer("One-model experimental DIS council simulation. All names and perspectives are educational analytical lenses, not real people. Do not fabricate consensus, research validation, or completed implementation.",promptText,model());
+  const primaryViews=primary.map(m=>({id:m.id,name:m.name,perspective:m.lens,question:"Evaluate this question through "+m.domain+" methods"}));
+  const redViews=red.map(m=>({id:m.id,name:m.name,challenge:"What assumption fails under "+m.domain+" scrutiny?"}));
+  if(!output.ok)return {state:"INCOMPLETE",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,error:output.error||"AI council unavailable",citations:{citedIds:[],unknownIds:[],checked:"NOT_RUN",claimSupport:"NOT_VERIFIED"}};
+  const audit=citationAudit(output.text,found.sources);
+  return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"SINGLE_MODEL_BETA_UNVERIFIED",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,actionPlan:null,deliberation:{primaryA:"See integrated synthesis. There was one underlying model call.",primaryB:"Not independently executed.",challenge:"Adversarial lens was requested within the same model response. This is not an independent red-team execution.",synthesis:output.text},citations:audit,modelProvenance:{models:[output.model||null],verifiedProviderCount:output.model?1:0,independentSystemsVerified:false},callStatuses:[{ok:true,model:output.model||null}],limitations:"Free-model beta used one real model inference to simulate diverse methodological perspectives. No independent model-vendor deliberation, human consultation, full-text claim verification or completed implementation occurred. This provider may retain prompts for product improvement; do not submit confidential or sensitive content."};
+ }
  const p1=primary.slice(0,Math.max(1,Math.ceil(primary.length/2))).map(x=>x.name+" — "+x.lens).join("; ");
  const p2=primary.slice(Math.ceil(primary.length/2)).map(x=>x.name+" — "+x.lens).join("; ");
  const challenge=red.map(x=>x.name+" — "+x.lens).join("; ");
