@@ -37,7 +37,8 @@ test("founder package contains twelve editable slides and source-linked document
  const intel={query:"clinic scheduling",retrievedAt:"2026-10-29T00:00:00Z",errors:[],coverage:{},researchStandard:"Unverified data",records:[{id:"E1",kind:"OPEN_GRANT" as const,title:"Example official posted listing",summary:"Agency item",source:"Grants.gov",url:"https://www.grants.gov/search-results-detail/12345",retrievedAt:"2026-10-29T00:00:00Z",sourceStatus:"OFFICIAL_RECORD" as const,opportunityStatus:"posted"}]};
  const pkg=buildPackage(intake,"startup",intel);
  assert.equal(pkg.slides.length,12);
- assert.ok(pkg.documents.some(d=>d.id==="sources"&&d.body.includes("Example official posted listing")));\n assert.equal(pkg.quality.activeOpportunityCandidates,0); // Records without demonstrated fit must not enter shortlist.
+ assert.ok(pkg.documents.some(d=>d.id==="sources"&&d.body.includes("Example official posted listing")));
+ assert.equal(pkg.quality.activeOpportunityCandidates,0); // Records without demonstrated fit must not enter shortlist.
  assert.ok(pkg.documents.some(d=>d.id==="sources"));
  assert.ok(pkg.quality.knownGaps.length>0);
  assert.equal(pkg.quality.grade,"DRAFT / GATES OPEN");
