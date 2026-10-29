@@ -28,7 +28,7 @@ export async function infer(system:string,prompt:string,fetcher=fetch):Promise<{
  if(!token)return {ok:false,text:"",error:"AI Gateway authentication not configured"};
  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18500);
  try{
-  const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:model(),max_tokens:850,messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
+  const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:model(),max_completion_tokens:1100,messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
   if(!res.ok)return {ok:false,text:"",error:"Gateway rejected request (HTTP "+res.status+")"};
   const json=await res.json();
   const text=compact(json.choices?.[0]?.message?.content,5000);
@@ -56,10 +56,12 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
   deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared)
  ]);
  const calls=[first,second,critic];
- if(calls.some(c=>!c.ok))return {state:"INCOMPLETE",primary,red,sources:found.sources,retrieval:found.status,callStatuses:calls.map(x=>({ok:x.ok,error:x.error||null})),error:"Multi-agent deliberation incomplete. No simulated consensus.",citations:{citedIds:[],unknownIds:[],checked:"NOT_RUN",claimSupport:"NOT_VERIFIED"}};
+ const primaryViews=primary.map(m=>({id:m.id,name:m.name,perspective:m.lens,question:`From the ${m.domain.toLowerCase()} perspective, what evidence could prove or disprove our approach?`}));
+ const redViews=red.map(m=>({id:m.id,name:m.name,challenge:`What important failure, unknown, or unintended consequence might this ${m.domain.toLowerCase()} lens reveal?`}));
+ if(calls.some(c=>!c.ok))return {state:"INCOMPLETE",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,callStatuses:calls.map(x=>({ok:x.ok,error:x.error||null})),error:"Multi-agent deliberation incomplete. No simulated consensus.",citations:{citedIds:[],unknownIds:[],checked:"NOT_RUN",claimSupport:"NOT_VERIFIED"}};
  const joined="PRIMARY A:\n"+first.text+"\nPRIMARY B:\n"+second.text+"\nRED TEAM:\n"+critic.text;
  const synthesis=await deps.infer("Synthesis and independent assurance strand. Give: (1) direct answer, (2) strongest opposing hypothesis, (3) tested versus untested evidence, (4) what we are not asking, (5) actionable pilot plan with measurements, owners and safeguards, (6) remaining dissent and uncertainty. Do not claim verified consensus or experimentally tested results. Do not invent references; use cited source identifiers only if supported by given abstracts.",shared+"\n\nSeparate deliberation outputs:\n"+joined.slice(0,10000));
- if(!synthesis.ok)return {state:"INCOMPLETE",primary,red,sources:found.sources,retrieval:found.status,callStatuses:[...calls,{ok:false,error:synthesis.error}],error:"Synthesis did not complete",citations:{checked:"NOT_RUN"}};
+ if(!synthesis.ok)return {state:"INCOMPLETE",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,callStatuses:[...calls,{ok:false,error:synthesis.error}],error:"Synthesis did not complete",citations:{checked:"NOT_RUN"}};
  const audit=citationAudit(synthesis.text,found.sources);
- return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary,red,sources:found.sources,retrieval:found.status,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,callStatuses:[...calls,synthesis].map(x=>({ok:x.ok})),limitations:"Four separate model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
+ return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,callStatuses:[...calls,synthesis].map(x=>({ok:x.ok})),limitations:"Four separate model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
 }
