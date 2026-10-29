@@ -1,7 +1,7 @@
 name: DIS web assurance
 on:
   push:
-    branches: [dis/council-delivery-integrity]
+    branches: [main, "dis/**"]
     paths: ['apps/dis-web/**', '.github/workflows/dis-web-checks.yml']
   pull_request:
     paths: ['apps/dis-web/**', '.github/workflows/dis-web-checks.yml']
