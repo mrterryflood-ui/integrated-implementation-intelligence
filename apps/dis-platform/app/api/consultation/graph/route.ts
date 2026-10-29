@@ -6,7 +6,7 @@ const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 type GraphNode={kind:string,label:string,metadata:Record<string,unknown>};
 const clean=(x:unknown,n=250)=>typeof x==="string"?x.replace(/[\u0000-\u001f]/g," ").trim().slice(0,n):"";
 export function buildGraphData(sessionId:string,intake:Record<string,unknown>,research:Record<string,unknown>):GraphNode[]{
- const base=[
+ const base:GraphNode[]=[
   {kind:"question",label:clean(intake.mission,240),metadata:{role:"problem",consultationId:sessionId}},
   {kind:"organization",label:clean(intake.organization,160),metadata:{role:"organization",consultationId:sessionId}},
   {kind:"stakeholder",label:clean(intake.audience,180),metadata:{role:"customer",consultationId:sessionId}},
