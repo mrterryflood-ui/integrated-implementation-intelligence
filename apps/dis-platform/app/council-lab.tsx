@@ -5,6 +5,8 @@ type Result={actionPlan?:{status:string,tasks:{title:string,why:string,success:s
 export default function CouncilLab(){
  const [depth,setDepth]=useState("Standard"),[allowExternalResearch,setAllowExternalResearch]=useState(false);
  const [selectionMode,setSelectionMode]=useState<"auto"|"custom">("auto");
+ const [soloMode,setSoloMode]=useState(false);
+ const [redMode,setRedMode]=useState<"auto"|"manual">("auto");
  const [groupFilter,setGroupFilter]=useState("All"),[memberSearch,setMemberSearch]=useState("");
  const [challengeEnabled,setChallengeEnabled]=useState(true);
  const [workspaces,setWorkspaces]=useState<{id:string,title:string}[]>([]);
@@ -28,7 +30,16 @@ export default function CouncilLab(){
   const body=await request.json();if(!request.ok)throw Error(body.error||"Unable to save case");
   setSavedCase(body.case.id);setSaveMessage("Saved to your private decision workspace. Review the checklist, evidence requirements and outcome metrics.");
  }catch(e){setSaveMessage(e instanceof Error?e.message:"Save failed")}finally{setSaving(false)}}
- const toggle=(id:string,red:boolean)=>{const current=red?redChosen:chosen, setter=red?setRedChosen:setChosen;setter(current.includes(id)?current.filter(x=>x!==id):[...current,id])};
+ const toggle=(id:string,red:boolean)=>{
+ if(soloMode){setChosen([id]);setError("");return;}
+ if(id==="socrates"||id==="hypatia"){setError("The two ancient perspectives are included automatically for full councils.");return}
+ const current=red?redChosen:chosen;
+ const limit=red?12:10;
+ if(!current.includes(id)&&current.length>=limit){setError("Selection limit reached; use 12 or fewer per council.");return}
+ if(red){setRedChosen(current.includes(id)?current.filter(x=>x!==id):[...current,id]);setChosen(previous=>previous.filter(x=>x!==id))}
+ else{setChosen(current.includes(id)?current.filter(x=>x!==id):[...current,id]);setRedChosen(previous=>previous.filter(x=>x!==id))}
+ setError("");
+};
  async function assemble(){setLoading(true);setError("");setResult(null);try{const r=await fetch("/api/council",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt,count,redCount,selected:chosen,redSelected:selectionMode==="custom"&&challengeEnabled?redChosen:[],selectionMode,challengeEnabled,depth,allowExternalResearch})});const d=await r.json();if(!r.ok)throw Error(d.error||"Council unavailable");setResult(d)}catch(e){setError(e instanceof Error?e.message:"Request failed")}finally{setLoading(false)}}
  return <section id="council" className="lab-section"><div className="section-heading"><span className="eyebrow">THE COUNCIL STUDIO</span><h2>One question. Many ways to see it.</h2><p>Choose the perspectives that matter—or let DIS assemble a topic-matched council. Then convene a second council to challenge the first.</p></div><div className="lab-card"><div className="lab-top"><div><span className="step-label">01 / THE MISSION</span><label htmlFor="mission">What are you trying to understand, decide, or improve?</label></div><span className="lab-note">No question is too small.</span></div><textarea id="mission" value={prompt} onChange={e=>setPrompt(e.target.value)} maxLength={3000} placeholder="Describe a question, problem, opportunity or goal…"/><div className="selection-mode" role="group" aria-label="Council selection">
  <button type="button" aria-pressed={selectionMode==="auto"} onClick={()=>setSelectionMode("auto")}>Automatic selection</button>
