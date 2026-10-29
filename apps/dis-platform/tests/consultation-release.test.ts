@@ -1,0 +1,59 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {sanitizeIntake} from "../lib/consultation";
+import {buildPackage,renderPackageMarkdown} from "../lib/consultation-package";
+import {chooseFederalSources,searchFederal,FEDERAL_REGISTRY} from "../lib/federal-sources";
+import {investigate} from "../lib/consultation-research";
+import {exportPptx,exportDocx} from "../lib/consultation-export";
+const intake=sanitizeIntake({mission:"Help rural clinics improve access to care and make scheduling usable",organization:"Example Health",audience:"Rural primary-care patients",stage:"Working prototype",alternatives:"Phone call scheduling",traction:"Three interviews (user reported, not verified)",geography:"Texas",resources:"Two-person team",desiredOutcome:"Higher appointment completion"});
+test("federal source selection is based on query and cannot include unknown IDs",()=>{
+ assert.ok(chooseFederalSources("nasa satellite technology").includes("nasa"));
+ assert.ok(chooseFederalSources("new federal contracts and grants").includes("usaspending"));
+ assert.deepEqual(chooseFederalSources("x",["unknown","nsf","nsf"]),["nsf"]);
+ assert.ok(FEDERAL_REGISTRY.length>=6);
+});
+test("federal records are marked as historical and never active without proof",async()=>{
+ const fetcher=async(url:RequestInfo|URL)=>{
+  const s=String(url);
+  if(s.includes("api.nsf.gov"))return new Response(JSON.stringify({response:{award:[{id:"12345",title:"Prior research",awardeeName:"Example College",fundsObligatedAmt:"10000"}]}}),{status:200});
+  throw Error("offline fixture");
+ };
+ const r=await searchFederal("research health",fetcher as typeof fetch,new Date("2026-10-29T00:00:00Z"),["nsf"]);
+ assert.equal(r.records.length,1);
+ assert.equal(r.records[0].kind,"PAST_AWARD");
+ assert.equal(r.records[0].sourceStatus,"OFFICIAL_RECORD");
+ assert.equal(r.records[0].url,"https://www.nsf.gov/awardsearch/showAward?AWD_ID=12345");
+ assert.equal(r.coverage.nsf,"OFFICIAL_INDEX_RECORDS");
+});
+test("incomplete repository services report gaps rather than inventing records",async()=>{
+ const fetcher=async()=>{throw Error("mock network failure")};
+ const r=await investigate(intake,fetcher as typeof fetch,new Date("2026-10-29T00:00:00Z"));
+ assert.equal(r.records.length,0);
+ assert.ok(r.errors.length>=4);
+ assert.equal(r.coverage.grants,"UNAVAILABLE");
+});
+test("founder package contains twelve editable slides and source-linked documents",()=>{
+ const intel={query:"clinic scheduling",retrievedAt:"2026-10-29T00:00:00Z",errors:[],coverage:{},researchStandard:"Unverified data",records:[{id:"E1",kind:"OPEN_GRANT" as const,title:"Example official posted listing",summary:"Agency item",source:"Grants.gov",url:"https://www.grants.gov/search-results-detail/12345",retrievedAt:"2026-10-29T00:00:00Z",sourceStatus:"OFFICIAL_RECORD" as const,opportunityStatus:"posted"}]};
+ const pkg=buildPackage(intake,"startup",intel);
+ assert.equal(pkg.slides.length,12);
+ assert.ok(pkg.documents.some(d=>d.id==="funding"&&d.body.includes("Example official posted listing")));
+ assert.ok(pkg.documents.some(d=>d.id==="sources"));
+ assert.ok(pkg.quality.knownGaps.length>0);
+ assert.equal(pkg.quality.grade,"DRAFT / GATES OPEN");
+ assert.ok(renderPackageMarkdown(pkg).includes("Speaker notes"));
+});
+test("general consultation has adaptable deliverables",()=>{
+ const p=buildPackage(intake,"general");
+ assert.ok(p.documents.find(d=>d.id==="pitch")?.title.includes("implementation"));
+ assert.equal(p.quality.activeOpportunityCandidates,0);
+});
+test("PowerPoint export produces a zip-based, editable presentation with notes",async()=>{
+ const buffer=await exportPptx(buildPackage(intake),"forest");
+ assert.equal(buffer.subarray(0,2).toString("ascii"),"PK");
+ assert.ok(buffer.length>18000);
+});
+test("Word export produces a genuine editable OpenXML document",async()=>{
+ const buffer=await exportDocx(buildPackage(intake));
+ assert.equal(buffer.subarray(0,2).toString("ascii"),"PK");
+ assert.ok(buffer.length>10000);
+});
