@@ -1,0 +1,24 @@
+name: DIS authenticated platform typecheck
+on:
+  push:
+    branches: [dis/council-delivery-integrity]
+    paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
+  pull_request:
+    paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
+permissions:
+  contents: read
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/dis-platform
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npx tsc --noEmit
