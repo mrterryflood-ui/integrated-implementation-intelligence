@@ -1,3 +1,4 @@
+import ConsultationStudio from "./consultation-studio";
 import Link from "next/link";
 import {auth} from "@clerk/nextjs/server";
 import {SignInButton,UserButton} from "@clerk/nextjs";
@@ -22,7 +23,7 @@ export default async function Home(){
  return <div className="dis-home">
  <header className="site-nav">
  <Link href="/" className="brand"><span className="brand-mark">D·I</span><span>DYNAMIC INTELLIGENCE</span></Link>
- <nav aria-label="Main navigation"><a href="#approach">The approach</a><a href="#possibilities">Possibilities</a><a href="#council">Council studio</a></nav>
+ <nav aria-label="Main navigation"><a href="#approach">The approach</a><a href="#possibilities">Possibilities</a><a href="#consult">Consultation studio</a><a href="#council">Council studio</a></nav>
  <div className="nav-actions">{userId?<><Link href="/workspace">My knowledge</Link><UserButton/></>:<SignInButton mode="modal"><button className="nav-sign">Sign in</button></SignInButton>}<a href="#council" className="nav-start">Ask DIS</a></div>
  </header>
  <main><section className="hero">
@@ -37,7 +38,7 @@ export default async function Home(){
  <div className="story-grid">{steps.map(step=><article key={step[0]}><span>{step[0]}</span><h3>{step[1]}</h3><p>{step[2]}</p></article>)}</div></section>
  <section className="interlude"><span className="eyebrow">THE POWER OF DIFFERENT THINKING</span><h2>One perspective can be insightful.<br/><em>Several can change the question.</em></h2><p>Our educational lenses draw on publicly documented intellectual approaches—not impersonations, endorsements, or claimed participation.</p></section>
  <section id="possibilities" className="possibilities"><div className="section-heading"><span className="eyebrow">YOUR CURIOSITY HAS NO CATEGORY</span><h2>Big problems. Small questions. Everything between.</h2></div><div className="possibility-grid">{useCases.map(x=><article key={x[0]}><h3>{x[0]}</h3><p>{x[1]}</p></article>)}</div></section>
- <CouncilLab/>
+ <ConsultationStudio/><CouncilLab/>
  <section className="closing"><span className="eyebrow">CURIOSITY IS THE BEGINNING</span><h2>Better questions.<br/><em>More thoughtful possibilities.</em></h2><p>Build understanding. Challenge the assumptions. Seek evidence. Make something better.</p><a className="hero-primary" href="#council">Start with a question</a></section></main>
  <footer className="site-footer"><strong>Dynamic Intelligence · dynamicintel.io</strong><p>Multidisciplinary intelligence for people and systems.</p><small>Historical and contemporary names identify educational reasoning lenses inspired by documented work. No endorsement, affiliation, exact personal simulation, or real-person consultation is implied. AI-generated deliberation remains preliminary until evidence and outcomes are independently verified.</small></footer>
  </div>
