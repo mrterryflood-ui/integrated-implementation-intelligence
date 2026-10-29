@@ -69,3 +69,35 @@ export async function GET(request:Request){
   return Response.json({documents:rows[1]});
  }catch{return Response.json({error:"Unable to list documents"},{status:503})}
 }
+
+export async function DELETE(request: Request) {
+ const {userId}=await auth();
+ if(!userId)return Response.json({error:"Unauthorized"},{status:401});
+ const origin=request.headers.get("origin");
+ if(!origin)return Response.json({error:"Origin required"},{status:403});
+ try{if(new URL(origin).origin!==new URL(request.url).origin)return Response.json({error:"Origin mismatch"},{status:403})}
+ catch{return Response.json({error:"Invalid origin"},{status:403})}
+ const id=new URL(request.url).searchParams.get("id")||"";
+ if(!/^[0-9a-f-]{36}$/i.test(id))return Response.json({error:"Invalid document"},{status:400});
+ if(!process.env.DIS_DATABASE_URL||!process.env.BLOB_READ_WRITE_TOKEN)return Response.json({error:"Deletion unavailable"},{status:503});
+ const sql=neon(process.env.DIS_DATABASE_URL);
+ try{
+  const found=await sql.transaction([
+   sql`SELECT set_config('dis.subject_id',${userId},true)`,
+   sql`SELECT id,blob_path FROM dis_documents WHERE id=${id} LIMIT 1`
+  ]);
+  if(!found[1]?.length)return Response.json({error:"Document not found"},{status:404});
+  const path=String(found[1][0].blob_path||"");
+  if(!path.startsWith("dis/"))return Response.json({error:"Invalid storage path"},{status:503});
+  // Delete private file first; failure leaves owner metadata intact for a safe retry.
+  await del(path);
+  const removed=await sql.transaction([
+   sql`SELECT set_config('dis.subject_id',${userId},true)`,
+   sql`DELETE FROM dis_documents WHERE id=${id} RETURNING id`
+  ]);
+  if(!removed[1]?.length)return Response.json({error:"File deleted but record cleanup requires support"},{status:503});
+  return Response.json({deleted:true,note:"Private file removed; CDN caches may take up to one minute to expire."},{headers:{"cache-control":"no-store"}});
+ }catch{
+  return Response.json({error:"Deletion could not be fully confirmed. No success is recorded. Retry or contact support."},{status:503});
+ }
+}
