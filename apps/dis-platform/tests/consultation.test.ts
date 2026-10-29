@@ -1,0 +1,7 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {sanitizeIntake,deliverables,packageMarkdown} from "../lib/consultation";
+test("consultation generates six complete practical documents",()=>{const intake=sanitizeIntake({mission:"Improve hospital scheduling",organization:"Example Organization",audience:"Patients",stage:"Prototype",traction:"No validated results"});const result=deliverables(intake);assert.equal(result.length,6);assert.ok(result.every(x=>x.validation==="DRAFT"));assert.ok(result.some(x=>x.title.includes("pitch")));assert.ok(result.some(x=>x.title.includes("Blue Ocean")||x.title.includes("blue-ocean")));});
+test("funding leads never invented",()=>{const result=deliverables(sanitizeIntake({mission:"An education startup"}));const funding=result.find(x=>x.id==="funding");assert.match(funding!.body,/NONE VERIFIED/);});
+test("missing data is explicitly marked",()=>{const result=deliverables(sanitizeIntake({mission:"Help small businesses"}));assert.ok(result.some(x=>x.body.includes("RESEARCH REQUIRED")));});
+test("complete Markdown download preserves all sections",()=>{const intake=sanitizeIntake({mission:"Support new students",organization:"Example"});const docs=deliverables(intake);const md=packageMarkdown(intake,docs);assert.ok(md.startsWith("# DIS Consultation Package"));for(const doc of docs)assert.ok(md.includes(doc.title));assert.match(md,/DRAFT/);});
