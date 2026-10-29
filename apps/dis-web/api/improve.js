@@ -1,3 +1,4 @@
+import {inspectRepository} from "./repository.js";
 import {council,retrieve} from "./ask.js";
 const lenses={
 industry:["Market structure and buyer alternatives","Regulatory and technology trends","Competitors and substitution"],
@@ -40,6 +41,6 @@ export default async function handler(req,res){
  const question=String(req.body?.question||"").trim();
  const context=String(req.body?.context||"").trim();
  if(question.length<5||question.length>1500||context.length>8000)return res.status(400).json({error:"Question must be 5–1500 characters and context at most 8000"});
- const found=await retrieve(question.slice(0,250));
- return res.status(200).json({...plan({...req.body,question,context},found.sources),retrievalErrors:found.errors});
+ const [found,repositoryReview]=await Promise.all([retrieve(question.slice(0,250)),req.body?.repository?inspectRepository(req.body.repository):Promise.resolve(null)]);
+ return res.status(200).json({...plan({...req.body,question,context},found.sources),retrievalErrors:found.errors,repositoryReview});
 }
