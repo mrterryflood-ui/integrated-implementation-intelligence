@@ -4,6 +4,12 @@ type Member={id:string,name:string,domain:string,lens:string,group:string};
 type Result={primary:{id:string,name:string,perspective:string,question:string}[],red:{id:string,name:string,challenge:string}[],stages:string[],assurance:string,state:string,notice?:string,error?:string,limitations?:string,deliberation?:{primaryA:string,primaryB:string,challenge:string,synthesis:string},sources?:{id:string,title:string,url:string,year:number|null,abstract:string|null}[],citations?:{citedIds:string[],unknownIds:string[],checked:string,claimSupport:string},retrieval?:string};
 export default function CouncilLab(){
  const [depth,setDepth]=useState("Standard"),[allowExternalResearch,setAllowExternalResearch]=useState(false);
+ const [workspaces,setWorkspaces]=useState<{id:string,title:string}[]>([]);
+ const [workspaceId,setWorkspaceId]=useState("");
+ const [workspaceName,setWorkspaceName]=useState("");
+ const [savedCase,setSavedCase]=useState("");
+ const [saveMessage,setSaveMessage]=useState("");
+ const [saving,setSaving]=useState(false);
  const [members,setMembers]=useState<Member[]>([]),[prompt,setPrompt]=useState("How could a small organization find, win, and sustainably deliver more competitive grant opportunities?"),[count,setCount]=useState(6),[redCount,setRedCount]=useState(4),[chosen,setChosen]=useState<string[]>([]),[redChosen,setRedChosen]=useState<string[]>([]),[result,setResult]=useState<Result|null>(null),[loading,setLoading]=useState(false),[error,setError]=useState(""),[manual,setManual]=useState(false);
  useEffect(()=>{fetch("/api/council").then(r=>r.json()).then(d=>setMembers(d.members||[])).catch(()=>setError("Council registry unavailable"))},[]);
  async function loadWorkspaces(){try{const r=await fetch("/api/workspaces");if(!r.ok)return;const j=await r.json();setWorkspaces(j.workspaces||[]);if(j.workspaces?.length)setWorkspaceId((old:string)=>old||j.workspaces[0].id)}catch{}}
