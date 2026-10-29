@@ -6,7 +6,7 @@ export async function GET(){
  if(process.env.VERCEL_ENV!=="preview")return NextResponse.json({error:"Not found"},{status:404});
  const token=await getVercelOidcToken().catch(()=>null);
  if(!token)return NextResponse.json({configured:false},{status:503});
- const names=["openai/gpt-5.4-mini","google/gemini-3.1-flash-lite"];
+ const names=["nvidia/nemotron-3.5-lightning-free","reflection/beam-free"];
  const outputs=[];
  for(const model of names){
   try{
