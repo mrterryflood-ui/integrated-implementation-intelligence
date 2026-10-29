@@ -1,7 +1,8 @@
+import {searchFederal} from "./federal-sources";
 import type {Intake} from "./consultation";
 import {research as openAlexResearch} from "./council-engine";
-export type IntelligenceRecord={id:string,kind:"SCHOLARLY"|"OPEN_GRANT"|"PAST_AWARD"|"LANDSCAPE_LEAD",title:string,summary:string,source:string,url:string,retrievedAt:string,sourceStatus:"OFFICIAL_RECORD"|"DISCOVERY_ONLY",opportunityStatus?:string,closeDate?:string,awardAmount?:number|null,eligibilityStatus?:"UNVERIFIED"};
-export type IntelligenceBundle={query:string,retrievedAt:string,records:IntelligenceRecord[],errors:string[],coverage:{scholarly:string,grants:string,pastAwards:string,landscape:string},researchStandard:string};
+export type IntelligenceRecord={id:string,kind:"SCHOLARLY"|"OPEN_GRANT"|"PAST_AWARD"|"LANDSCAPE_LEAD"|"TECHNICAL_REPORT"|"REGULATION",title:string,summary:string,source:string,url:string,retrievedAt:string,sourceStatus:"OFFICIAL_RECORD"|"DISCOVERY_ONLY",opportunityStatus?:string,closeDate?:string,awardAmount?:number|null,eligibilityStatus?:"UNVERIFIED"};
+export type IntelligenceBundle={query:string,retrievedAt:string,records:IntelligenceRecord[],errors:string[],coverage:Record<string,string>,researchStandard:string};
 const stopWords=new Set("that this what with about from your their where when how which want need have does they there would could should into through more best help build better proposal founder funding system platform business idea startup grant grants".split(" "));
 export function keywords(value:string){
  const words=value.toLowerCase().match(/[a-z][a-z0-9-]{2,}/g)||[];
@@ -34,6 +35,12 @@ export async function investigate(intake:Intake,fetcher:typeof fetch=fetch,at=ne
    }
   }catch(e){errors.push("NIH RePORTER: "+String(e instanceof Error?e.message:e).slice(0,120))}})(),
   (async()=>{try{
+   const federal=await searchFederal(intake.mission+" "+intake.audience+" "+intake.geography,fetcher,at);
+   for(const rec of federal.records)records.push(rec);
+   Object.assign(coverage,federal.coverage);
+   errors.push(...federal.errors);
+  }catch{errors.push("Federal source routing unavailable")}})(),
+  (async()=>{try{
    const names=intake.alternatives.trim()||q;
    const url="https://en.wikipedia.org/w/api.php?action=query&list=search&format=json&formatversion=2&srlimit=6&srsearch="+encodeURIComponent(names.slice(0,120));
    const found=await jsonRequest(url,{headers:{Accept:"application/json"}},fetcher);
@@ -45,5 +52,5 @@ export async function investigate(intake:Intake,fetcher:typeof fetch=fetch,at=ne
  // Stable IDs, source-bound and deduplicated; no claims are promoted to verified competitive fit.
  const seen=new Set<string>();
  const deduped=records.filter(x=>{if(!x.url||seen.has(x.kind+x.url))return false;seen.add(x.kind+x.url);return true}).map((x,i)=>({...x,id:"E"+(i+1)}));
- return {query:q,retrievedAt,records:deduped,errors,coverage,researchStandard:"OFFICIAL_RECORD means the index record was returned by an official provider—not that eligibility, current deadline, competitors, investor interest, source passages or proposed causal claims have been verified. PAST_AWARD records are historical, never current offers. LANDSCAPE_LEAD is not a verified competitor."};
+ return {query:q,retrievedAt,records:deduped,errors,coverage,researchStandard:"OFFICIAL_RECORD means an official index returned this item, not independently verified eligibility, accuracy, legal advice, investor interest, nor claim-level passage support. OPEN_GRANT has a provider status that still requires direct solicitation review. PAST_AWARD is historical and not an active funding opportunity. LANDSCAPE_LEAD is not a verified competitor. Regulations require review of the official published document and effective dates."};
 }
