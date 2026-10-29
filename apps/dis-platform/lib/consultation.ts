@@ -7,7 +7,7 @@ export function sanitizeIntake(raw:Record<string,unknown>):Intake{
  return result;
 }
 const placeholder=(v:string,request:string)=>v||("[RESEARCH REQUIRED: "+request+"]");
-export function deliverables(input:Intake,council?:{deliberation?:{synthesis?:string,challenge?:string},sources?:{id:string,title:string,url:string}[]}):Deliverable[]{
+export function deliverables(input:Intake,council?:{deliberation?:{synthesis?:string,challenge?:string},sources?:{id:string,title:string,url:string}[]},mode:"startup"|"general"="startup"):Deliverable[]{
  const org=placeholder(input.organization,"confirm venture/legal identity");
  const problem=placeholder(input.mission,"clarify problem and expected improvement");
  const buyer=placeholder(input.audience,"interview target customers");
@@ -25,7 +25,7 @@ export function deliverables(input:Intake,council?:{deliberation?:{synthesis?:st
  {id:"council",title:"Council consultation and opposing analysis",body:`Council synthesis (preliminary, not verified):\n${council?.deliberation?.synthesis||"[NOT YET RUN — use the Council Studio for live research and deliberation]"}\n\nChallenge and dissent:\n${council?.deliberation?.challenge||"[NOT YET RUN]"}\n\nCitation audit: Source links alone are not proof. Validate claim-to-passage support before circulation.`}
  ];
  const generalTitles:Record<string,string>={brief:"Problem and stakeholder brief",pitch:"Decision and implementation presentation",competition:"Alternatives and systems-gap analysis",funding:"Resources, partners and external support",execution:"30/60/90-day implementation and evaluation plan",council:"Council critique and open questions"};
- if(input.stage==="__GENERAL_MODE__")for(const item of base)item.title=generalTitles[item.id]||item.title;
+ if(mode==="general")for(const item of base)item.title=generalTitles[item.id]||item.title;
  return base.map(item=>({...item,validation:"DRAFT" as const,note:baseline}));
 }
 export function packageMarkdown(intake:Intake,items:Deliverable[]){
