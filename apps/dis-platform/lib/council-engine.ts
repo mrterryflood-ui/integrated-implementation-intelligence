@@ -1,5 +1,6 @@
 import {getVercelOidcToken} from "@vercel/oidc";
 import {selectCouncil,DEFAULT_RED} from "./council";
+import type {CouncilMember} from "./council";
 type Source={id:string,title:string,doi:string|null,url:string,year:number|null,abstract:string|null};
 function compact(value:unknown,n=1000){return typeof value==="string"?value.slice(0,n):""}
 export function reconstruct(index:Record<string,number[]>|null):string|null{
@@ -51,10 +52,10 @@ export function parseActionPlan(raw:string){
   return tasks.length>=2&&metrics.length>=1?{tasks,metrics,status:"MODEL_PROPOSED_UNVERIFIED"}:null;
  }catch{return null}
 }
-export async function convene(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string,challengeEnabled?:boolean},deps={research,infer}){
+export async function convene(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string,challengeEnabled?:boolean,primaryMembers?:CouncilMember[],redMembers?:CouncilMember[]},deps={research,infer}){
  const prompt=input.prompt.trim();
- const primary=selectCouncil(prompt,input.count,input.selected,false);
- const red=input.challengeEnabled===false?[]:selectCouncil(prompt,input.redCount,input.redSelected.length?input.redSelected:DEFAULT_RED,true);
+ const primary=input.primaryMembers??selectCouncil(prompt,input.count,input.selected,false);
+ const red=input.challengeEnabled===false?[]:(input.redMembers??selectCouncil(prompt,input.redCount,input.redSelected.length?input.redSelected:DEFAULT_RED,true));
  const found=await deps.research(prompt);
  const ctx=sourceContext(found.sources);
  const p1=primary.slice(0,Math.max(1,Math.ceil(primary.length/2))).map(x=>x.name+" — "+x.lens).join("; ");
