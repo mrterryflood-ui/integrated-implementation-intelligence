@@ -100,3 +100,16 @@ test("unrelated funding records stay in provenance but not ranked pitch recommen
  assert.equal(pkg.quality.activeOpportunityCandidates,0);
  assert.ok(pkg.documents.find(x=>x.id==="sources")?.body.includes("Unrelated social services grant"));
 });
+
+test("NASA NTRS full-text queries use q and retain technical report provenance",async()=>{
+ let queried="";
+ const fetcher=async(url:RequestInfo|URL)=>{
+  queried=String(url);
+  return new Response(JSON.stringify({results:[{id:20260000001,title:"Satellite telemetry systems",abstract:"Technical mission analysis"}]}),{status:200});
+ };
+ const r=await searchFederal("NASA satellite telemetry",fetcher as typeof fetch,new Date("2026-10-29T00:00:00Z"),["nasa"]);
+ assert.ok(queried.includes("/citations/search?q="));
+ assert.equal(r.records.length,1);
+ assert.equal(r.records[0].kind,"TECHNICAL_REPORT");
+ assert.equal(r.records[0].url,"https://ntrs.nasa.gov/citations/20260000001");
+});
