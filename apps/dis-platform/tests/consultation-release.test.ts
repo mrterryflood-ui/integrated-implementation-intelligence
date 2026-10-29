@@ -85,3 +85,18 @@ test("PubMed adapter retains official PMID provenance without inventing evidence
  assert.equal(r.records[0].sourceStatus,"OFFICIAL_RECORD");
  assert.ok(r.records[0].summary.includes("not validated"));
 });
+
+test("aerospace consultations do not ingest unrelated NIH clinical awards",async()=>{
+ const query=sanitizeIntake({mission:"Improve NASA satellite telemetry, orbital navigation and aerospace system testing",audience:"Aerospace engineers",geography:"USA"});
+ const called:string[]=[];
+ const fetcher=async(url:RequestInfo|URL)=>{called.push(String(url));throw Error("Network off in fixture")};
+ const result=await investigate(query,fetcher as typeof fetch,new Date("2026-10-29T00:00:00Z"));
+ assert.equal(result.coverage.pastAwards,"NOT_APPLICABLE");
+ assert.equal(called.some(x=>x.includes("api.reporter.nih.gov")),false);
+});
+test("unrelated funding records stay in provenance but not ranked pitch recommendations",()=>{
+ const research={query:"satellite telemetry",retrievedAt:"2026-10-29T00:00:00Z",records:[{id:"E1",kind:"OPEN_GRANT" as const,title:"Unrelated social services grant",summary:"Unrelated policy",source:"Grants.gov",url:"https://www.grants.gov/search-results-detail/12345",retrievedAt:"2026-10-29T00:00:00Z",sourceStatus:"OFFICIAL_RECORD" as const,queryMatchStatus:"NO_TEXT_OVERLAP" as const}],errors:[],coverage:{},researchStandard:"Discovery only"};
+ const pkg=buildPackage(sanitizeIntake({mission:"Analyze satellite telemetry adoption"}),"startup",research);
+ assert.equal(pkg.quality.activeOpportunityCandidates,0);
+ assert.ok(pkg.documents.find(x=>x.id==="sources")?.body.includes("Unrelated social services grant"));
+});
