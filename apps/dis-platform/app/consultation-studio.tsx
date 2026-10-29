@@ -12,6 +12,15 @@ const label:Record<keyof Intake,string>={
 };
 const fields=Object.keys(label) as (keyof Intake)[];
 const blank=Object.fromEntries(fields.map(k=>[k,""])) as Intake;
+function declaredPerspectives(notes:string){
+ return notes.split("\n").map(v=>v.trim()).filter(Boolean).slice(0,12).flatMap((line,i)=>{
+  const split=line.indexOf("|");
+  if(split<1)return [];
+  const name=line.slice(0,split).trim().slice(0,120);
+  const observation=line.slice(split+1).trim().slice(0,280);
+  return name&&observation?[{id:"voice-"+(i+1),name,role:name,visible:[observation]}]:[];
+ });
+}
 const tabs=["Consult","Investigate","Council review","Design & deliver"] as const;
 const palettes={midnight:{ink:"#11283C",paper:"#F9F7F0",accent:"#C7AA75"},forest:{ink:"#143B34",paper:"#F7FAF5",accent:"#D6B980"},slate:{ink:"#263248",paper:"#F7F9FE",accent:"#7F9EC3"}} as const;
 type Theme=keyof typeof palettes;
@@ -23,6 +32,7 @@ export default function ConsultationStudio(){
  const [workspaceId,setWorkspaceId]=useState(""),[spaces,setSpaces]=useState<Space[]>([]),[sessions,setSessions]=useState<Saved[]>([]),[savedId,setSavedId]=useState(""),[version,setVersion]=useState(0),[title,setTitle]=useState("");
  const [allowResearch,setAllowResearch]=useState(false),[working,setWorking]=useState(false),[status,setStatus]=useState(""),[error,setError]=useState("");
  const [councilReport,setCouncilReport]=useState<any>(null),[filter,setFilter]=useState("all"),[query,setQuery]=useState("");
+ const [stakeholderNotes,setStakeholderNotes]=useState(""),[parallaxReport,setParallaxReport]=useState<any>(null);
  const [review,setReview]=useState<"DRAFT"|"REVIEWED"|"APPROVED">("DRAFT");
  const [importJson,setImportJson]=useState("");
  const [opportunity,setOpportunity]=useState<any>(null);
@@ -54,11 +64,28 @@ export default function ConsultationStudio(){
  }catch(e){setError(e instanceof Error?e.message:"Invalid research JSON")}};
  const verifyOpportunity=async(rec:IntelligenceRecord)=>{setError("");setOpportunity(null);const m=rec.url.match(/search-results-detail\/(\d+)/);if(!m){setError("This record does not have an official Grants.gov opportunity ID.");return}
  setWorking(true);try{const response=await fetch("/api/consultation/opportunity",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({opportunityId:Number(m[1])})});const j=await response.json();if(!response.ok)throw Error(j.error||"Official details unavailable");setOpportunity(j)}catch(e){setError(e instanceof Error?e.message:"Verification failed")}finally{setWorking(false)}};
- const debate=async()=>{if(!allowResearch){setError("External research and inference require your permission.");return}setWorking(true);setStatus("Conducting primary analysis, challenge and synthesis…");setError("");
+ const debate=async()=>{if(!allowResearch){setError("External research and inference require your permission.");return}setWorking(true);setParallaxReport(null);setStatus("Conducting primary analysis, challenge and synthesis…");setError("");
  try{const q=[intake.mission,intake.audience,intake.organization,intake.stage,intake.alternatives,intake.traction,intake.desiredOutcome].filter(Boolean).join("\n");
   const response=await fetch("/api/council",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({prompt:q,count:6,redCount:4,depth:"Deep",selectionMode:"auto",challengeEnabled:true,allowExternalResearch:true})});
   const report=await response.json();if(!response.ok)throw Error(report.error||"Council unavailable");
-  setCouncilReport(report);generate(intel,report);setTab("Council review");setStatus(report.deliberation?.synthesis?"Preliminary council analysis attached. Source support and proposed outcomes remain unverified.":"Council incomplete. No fabricated consensus.");if(!report.deliberation?.synthesis)setError(report.error||report.notice||"Model inference incomplete");
+  setCouncilReport(report);generate(intel,report);setTab("Council review");
+  setStatus(report.deliberation?.synthesis?"Preliminary council analysis attached. Source support and proposed outcomes remain unverified.":"Council incomplete. No fabricated consensus.");
+  if(!report.deliberation?.synthesis)setError(report.error||report.notice||"Model inference incomplete");
+  // One conversation; no separate tool navigation. Do not invent stakeholder testimony.
+  const views=declaredPerspectives(stakeholderNotes);
+  if(report.deliberation?.synthesis && views.length>=2) {
+   try {
+    const p=await fetch("/api/consultation/parallax",{
+     method:"POST",headers:{"content-type":"application/json"},
+     body:JSON.stringify({scenario:intake.mission,stakeholders:views,externalConsent:true}),
+    });
+    const j=await p.json().catch(()=>({}));
+    if(p.ok && j.factState==="OPERATOR_DECLARED_UNVERIFIED")setParallaxReport(j);
+    else setParallaxReport({notice:"The separate stakeholder comparison is unavailable; no comparison was inferred."});
+   }catch{setParallaxReport({notice:"The separate stakeholder comparison is unavailable; no comparison was inferred."})}
+  }else if(stakeholderNotes.trim() && views.length<2){
+   setParallaxReport({notice:"Add at least two viewpoints in the format 'Role | What they see' to compare perspectives."});
+  }
  }catch(e){setError(e instanceof Error?e.message:"Council unavailable")}finally{setWorking(false)}};
  const editSlide=(next:Partial<SlideSpec>)=>setPkg(p=>!p?null:{...p,slides:p.slides.map((s,i)=>i===slideIndex?{...s,...next}:s)});
  const editDoc=(id:string,body:string)=>setPkg(p=>!p?null:{...p,documents:p.documents.map(x=>x.id===id?{...x,body,validation:"DRAFT"}:x)});
@@ -66,13 +93,13 @@ export default function ConsultationStudio(){
  try{
   let id=savedId,ver=version;
   if(!id){const a=await fetch("/api/consultation/sessions",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({workspaceId,intake,mode,title:title||intake.organization||"Consultation"})});const j=await a.json();if(!a.ok)throw Error(j.error||"Unable to create session");id=j.session.id;ver=j.session.version;setSavedId(id);setTitle(j.session.title)}
-  const b=await fetch("/api/consultation/sessions",{method:"PATCH",headers:{"content-type":"application/json"},body:JSON.stringify({id,version:ver,slides:pkg.slides,artifacts:pkg.documents,research:{...intel,designTheme:theme,mode},reviewStatus:review})});const result=await b.json();if(!b.ok)throw Error(result.error||"Save failed");
+  const b=await fetch("/api/consultation/sessions",{method:"PATCH",headers:{"content-type":"application/json"},body:JSON.stringify({id,version:ver,slides:pkg.slides,artifacts:pkg.documents,research:{...intel,designTheme:theme,mode,stakeholderNotes,parallax:parallaxReport},reviewStatus:review})});const result=await b.json();if(!b.ok)throw Error(result.error||"Save failed");
   setVersion(result.session.version);setStatus("Saved to your private workspace, revision "+result.session.version+".");await refreshSessions();
  }catch(e){setError(e instanceof Error?e.message:"Save unavailable")}finally{setWorking(false)}};
  const refreshSessions=async()=>{if(!workspaceId)return;const r=await fetch("/api/consultation/sessions?workspaceId="+encodeURIComponent(workspaceId));if(r.ok)setSessions((await r.json()).sessions||[])};
  const load=async(id:string)=>{setWorking(true);setError("");try{const response=await fetch("/api/consultation/sessions?id="+encodeURIComponent(id));const data=await response.json();if(!response.ok)throw Error(data.error||"Consultation unavailable");const s=data.session;
   const restored=s.intake||{},m=restored.mode==="general"?"general":"startup";const i=sanitizeIntake(restored);
-  setIntake(i);setMode(m);setIntel(s.research?.records?s.research:null);setCouncilReport(null);const p=buildPackage(i,m,s.research?.records?s.research:null);
+  setIntake(i);setMode(m);setIntel(s.research?.records?s.research:null);setCouncilReport(null);setStakeholderNotes(typeof s.research?.stakeholderNotes==="string"?s.research.stakeholderNotes:"");setParallaxReport(s.research?.parallax||null);const p=buildPackage(i,m,s.research?.records?s.research:null);
   if(Array.isArray(s.slides)&&s.slides.length===12)p.slides=s.slides;
   if(Array.isArray(s.artifacts)&&s.artifacts.length)p.documents=s.artifacts;
   setPkg(p);setSavedId(id);setVersion(s.version);setTitle(s.title);setReview(s.review_status);setTheme((["midnight","forest","slate"].includes(s.research?.designTheme)?s.research.designTheme:"midnight") as Theme);setTab("Design & deliver");setStatus("Loaded saved consultation. Review changes before exporting.");
@@ -82,7 +109,7 @@ export default function ConsultationStudio(){
   if(!response.ok){const j=await response.json().catch(()=>({}));throw Error(j.error||"Export unavailable")}
   const blob=await response.blob(),url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=format==="pptx"?"Dynamic-Intelligence-Pitch.pptx":"Dynamic-Intelligence-Consultation.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus("Editable file generated. Review citations and all factual claims before circulation.");
  }catch(e){setError(e instanceof Error?e.message:"Export failed")}finally{setWorking(false)}};
- const reset=()=>{setIntake(blank);setPkg(null);setIntel(null);setSavedId("");setVersion(0);setCouncilReport(null);setReview("DRAFT");setStatus("New consultation started.");setTab("Consult")};
+ const reset=()=>{setIntake(blank);setPkg(null);setIntel(null);setSavedId("");setVersion(0);setCouncilReport(null);setStakeholderNotes("");setParallaxReport(null);setReview("DRAFT");setStatus("New consultation started.");setTab("Consult")};
  return <section id="consult" className="lab-section consult-studio"><div className="section-heading"><span className="eyebrow">YOUR DECISION-TO-DELIVERY STUDIO</span><h2>Walk in with a question. Leave with an actionable package.</h2><p>Explore customers, science, funding and competing approaches, convene a challenge council, design a pitch, and keep editable deliverables in your private knowledge workspace.</p></div>
  <div className="lab-card">
  <div className="selection-mode" aria-label="Consultation type"><button type="button" aria-pressed={mode==="startup"} onClick={()=>setMode("startup")}>Founder & MVP</button><button type="button" aria-pressed={mode==="general"} onClick={()=>setMode("general")}>Any question or organization</button><button type="button" onClick={reset}>New consultation</button></div>
