@@ -18,5 +18,6 @@ export async function POST(req:Request){
  const primary=selectCouncil(prompt,count,chosen,false);
  const red=selectCouncil(prompt,redCount,redSelected.length?redSelected:DEFAULT_RED,true);
  if(!userId)return NextResponse.json({...councilBrief(prompt,primary,red),state:"SIGN_IN_REQUIRED",notice:"Sign in to run model-based deliberation. Public preview does not consume paid inference."});
- return NextResponse.json(await convene({prompt,count,redCount,selected:chosen,redSelected,depth}));
+ const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth});
+ return NextResponse.json({...councilBrief(prompt,primary,red),...report,assurance:report.limitations||report.error||"Independent execution was not completed."});
 }
