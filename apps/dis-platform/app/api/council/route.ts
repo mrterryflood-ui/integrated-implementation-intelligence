@@ -1,3 +1,4 @@
+import {assemble} from "../../../lib/council-assembly";
 import {getVercelOidcToken} from "@vercel/oidc";
 import {neon} from "@neondatabase/serverless";
 import {NextResponse} from "next/server";
@@ -19,10 +20,16 @@ export async function POST(req:Request){
  const redCount=Math.max(2,Math.min(16,Math.floor(Number(body.redCount)||4)));
  const depth=["Quick","Standard","Deep","Research"].includes(body.depth)?body.depth:"Standard";
  const {userId}=await auth();
- const primary=selectCouncil(prompt,count,chosen,false);
- const red=challengeEnabled?selectCouncil(prompt,redCount,redSelected.length?redSelected:DEFAULT_RED,true):[];
- if(!userId)return NextResponse.json({...councilBrief(prompt,primary,red),state:"SIGN_IN_REQUIRED",notice:"Sign in to run model-based deliberation. Public preview does not consume paid inference."});
- if(body.allowExternalResearch!==true)return NextResponse.json({...councilBrief(prompt,primary,red),state:"CONSENT_REQUIRED",notice:"External scholarly search and AI provider transfer requires explicit consent."});
+ const primaryMode=body.primaryMode==="solo"?"solo":isCustom?"manual":"auto";
+ const redMode=body.redMode==="manual"?"manual":"auto";
+ const roster=assemble({prompt,count,redCount,selected:chosen,redSelected,primaryMode,redMode});
+ if(roster.errors.length)return NextResponse.json({error:roster.errors.join(" ")},{status:400});
+ const {primary}=roster;
+ const red=challengeEnabled?roster.red:[];
+ const selection={primaryMode,redMode,reasons:roster.reasons,ancientPair:roster.ancientPair};
+ const councilReport={...councilReport,selection};
+ if(!userId)return NextResponse.json({...councilReport,state:"SIGN_IN_REQUIRED",notice:"Sign in to run model-based deliberation. Public preview does not consume paid inference."});
+ if(body.allowExternalResearch!==true)return NextResponse.json({...councilReport,state:"CONSENT_REQUIRED",notice:"External scholarly search and AI provider transfer requires explicit consent."});
  if(!process.env.DIS_DATABASE_URL)return NextResponse.json({error:"Council quota service unavailable"},{status:503});
  try{
   const sql=neon(process.env.DIS_DATABASE_URL);
@@ -34,6 +41,6 @@ export async function POST(req:Request){
   ]);
   if(!usage[1]?.length)return NextResponse.json({error:"Daily council beta limit reached (20 investigations)"},{status:429});
  }catch{return NextResponse.json({error:"Council quota authorization unavailable"},{status:503});}
- const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth,challengeEnabled});
- return NextResponse.json({...councilBrief(prompt,primary,red),...report,assurance:report.limitations||report.error||"Independent execution was not completed."});
+ const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth,challengeEnabled,primaryMembers:primary,redMembers:red});
+ return NextResponse.json({...councilReport,...report,assurance:report.limitations||report.error||"Independent execution was not completed."});
 }
