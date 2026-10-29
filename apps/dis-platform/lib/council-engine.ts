@@ -64,7 +64,7 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
  const [first,second,critic]=await Promise.all([
   deps.infer("Primary council strand A. Analyze problem, propose alternative hypotheses. Intellectual lenses: "+p1,shared),
   deps.infer("Primary council strand B. Independently explore stakeholder needs, feasibility, and counterarguments. Lenses: "+p2,shared),
-  input.challengeEnabled===false?Promise.resolve({ok:true,text:"Challenge council disabled by user choice."}):deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared)
+  input.challengeEnabled===false?Promise.resolve({ok:true,text:"Challenge council disabled by user choice.",error:undefined as string|undefined}):deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared)
  ]);
  const calls=[first,second,critic];
  const primaryViews=primary.map(m=>({id:m.id,name:m.name,perspective:m.lens,question:`From the ${m.domain.toLowerCase()} perspective, what evidence could prove or disprove our approach?`}));
