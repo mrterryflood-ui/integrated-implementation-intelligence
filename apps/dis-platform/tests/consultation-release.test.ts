@@ -70,3 +70,18 @@ test("Word export produces a genuine editable OpenXML document",async()=>{
  assert.ok(doc.includes("EVIDENCE"));
  assert.ok(doc.includes("DRAFT"));
 });
+
+test("PubMed adapter retains official PMID provenance without inventing evidence support",async()=>{
+ const fetcher=async(url:RequestInfo|URL)=>{
+  const u=String(url);
+  if(u.includes("esearch.fcgi"))return new Response(JSON.stringify({esearchresult:{idlist:["12345678"]}}),{status:200});
+  if(u.includes("esummary.fcgi"))return new Response(JSON.stringify({result:{"12345678":{title:"Example clinical study",pubdate:"2026",source:"Example Journal"}}}),{status:200});
+  throw Error("Unexpected provider");
+ };
+ const r=await searchFederal("mental health",fetcher as typeof fetch,new Date("2026-10-29T00:00:00Z"),["pubmed"]);
+ assert.equal(r.records.length,1);
+ assert.equal(r.records[0].kind,"SCHOLARLY");
+ assert.equal(r.records[0].url,"https://pubmed.ncbi.nlm.nih.gov/12345678/");
+ assert.equal(r.records[0].sourceStatus,"OFFICIAL_RECORD");
+ assert.ok(r.records[0].summary.includes("not validated"));
+});
