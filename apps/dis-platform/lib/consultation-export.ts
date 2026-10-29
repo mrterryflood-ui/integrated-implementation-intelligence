@@ -11,7 +11,6 @@ export async function exportPptx(pkg:ConsultationPackage,theme:"midnight"|"fores
  pptx.subject="DIS consultation — draft pending verification";
  pptx.title=shrink(pkg.intake.organization||"DIS Consultation",100);
  pptx.company="Dynamic Intelligence";
- pptx.lang="en-US";
  for(let i=0;i<pkg.slides.length;i++){
   const spec=pkg.slides[i],slide=pptx.addSlide();
   slide.background={color:i===0||i===pkg.slides.length-1?palette.deep:palette.navy};
@@ -56,12 +55,12 @@ export async function exportDocx(pkg:ConsultationPackage):Promise<Buffer>{
  children.push(new Paragraph({text:"Slide storyboard and speaker notes",heading:HeadingLevel.HEADING_1,spacing:{before:220}}));
  for(const slide of pkg.slides){
   children.push(new Paragraph({text:slide.id+" — "+slide.title,heading:HeadingLevel.HEADING_2,spacing:{before:190}}));
-  for(const b of slide.bullets)children.push(new Paragraph({text:b,bullet:{indent:420},spacing:{after:100}}));
+  for(const b of slide.bullets)children.push(new Paragraph({text:b,bullet:{level:0},spacing:{after:100}}));
   children.push(rich("Presenter notes: "+slide.notes));
   children.push(rich("Sources: "+(slide.sourceIds.join(", ")||"None")));
  }
  children.push(new Paragraph({text:"Acceptance and outstanding verification gates",heading:HeadingLevel.HEADING_1,spacing:{before:230}}));
- for(const g of pkg.quality.knownGaps)children.push(new Paragraph({text:g,bullet:{indent:420},spacing:{after:95}}));
+ for(const g of pkg.quality.knownGaps)children.push(new Paragraph({text:g,bullet:{level:0},spacing:{after:95}}));
  const document=new Document({creator:"Dynamic Intelligence",title:"DIS Consultation Package — Draft",description:"Research, implementation and evidence-labeled draft artifacts",sections:[{properties:{},children}]});
  return Packer.toBuffer(document);
 }
