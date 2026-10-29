@@ -1,7 +1,7 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
-import {investigate} from "../../../lib/consultation-research";
-import {sanitizeIntake} from "../../../lib/consultation";
+import {investigate} from "../../../../lib/consultation-research";
+import {sanitizeIntake} from "../../../../lib/consultation";
 export const runtime="nodejs";
 export const maxDuration=45;
 export async function POST(request:Request){
