@@ -3,24 +3,26 @@ type QueryGroup="science"|"aerospace"|"grants"|"procurement"|"regulation"|"gener
 export const FEDERAL_REGISTRY=[
  {id:"grants",name:"Grants.gov",topic:"Current and forecast federal assistance",access:"NO_API_KEY",classification:"OPEN_GRANT"},
  {id:"nih",name:"NIH RePORTER",topic:"Historical biomedical research awards",access:"NO_API_KEY",classification:"PAST_AWARD"},
+ {id:"pubmed",name:"NLM PubMed",topic:"Biomedical journal records and indexed literature",access:"NO_API_KEY",classification:"SCHOLARLY"},
  {id:"nsf",name:"NSF Award Search",topic:"Historically funded science and technology research",access:"NO_API_KEY",classification:"PAST_AWARD"},
  {id:"nasa",name:"NASA Technical Reports Server",topic:"Aerospace scientific and technical publications",access:"NO_API_KEY",classification:"TECHNICAL_REPORT"},
  {id:"federalregister",name:"Federal Register",topic:"Proposed and final federal regulations and notices",access:"NO_API_KEY",classification:"REGULATION"},
  {id:"usaspending",name:"USAspending",topic:"Federal contract and assistance award history",access:"NO_API_KEY",classification:"PAST_AWARD"}
 ] as const;
-export type FederalKind="TECHNICAL_REPORT"|"REGULATION"|"PAST_AWARD";
+export type FederalKind="TECHNICAL_REPORT"|"REGULATION"|"PAST_AWARD"|"SCHOLARLY";
 export type FederalRecord=Omit<IntelligenceRecord,"kind"> & {kind:FederalKind};
 export type FederalSearch={records:FederalRecord[],errors:string[],coverage:Record<string,string>,selected:string[]};
 const clean=(x:unknown,n=320)=>typeof x==="string"?x.trim().slice(0,n):"";
 export function chooseFederalSources(query:string,requested:string[]=[]):string[]{
  if(requested.length)return [...new Set(requested)].filter(x=>FEDERAL_REGISTRY.some(f=>f.id===x)&&!["grants","nih"].includes(x)).slice(0,4);
  const q=query.toLowerCase(),ids:string[]=[];
+ if(/health|clinic|hospital|medicine|patient|biomed|drug|epidem|mental health|public health/.test(q))ids.push("pubmed");
  if(/aerospace|space|orbit|satellite|nasa|aviation|rocket|weather|geospatial/.test(q))ids.push("nasa","nsf");
  if(/research|health|clinical|medicine|technology|engineering|science|grant|education|university|innovation/.test(q))ids.push("nsf");
  if(/company|contract|supplier|procurement|government|federal|funding|grant|business|commercial/.test(q))ids.push("usaspending");
  if(/regulat|policy|law|compliance|fda|environment|safety|labor|rule/.test(q))ids.push("federalregister");
  if(!ids.length)ids.push("federalregister","usaspending");
- return [...new Set(ids)].slice(0,3);
+ return [...new Set(ids)].slice(0,4);
 }
 function urlNtrs(id:unknown){const v=clean(id,100);return /^[0-9]{4,18}$/.test(v)?"https://ntrs.nasa.gov/citations/"+v:"https://ntrs.nasa.gov/search";}
 async function fetchJson(fetcher:typeof fetch,url:string,options:RequestInit={}){
@@ -32,6 +34,20 @@ export async function searchFederal(query:string,fetcher:typeof fetch=fetch,at=n
  const retrievedAt=at.toISOString(),records:FederalRecord[]=[],errors:string[]=[],coverage:Record<string,string>={};
  const run=async(id:string,fn:()=>Promise<FederalRecord[]>)=>{try{const found=await fn();records.push(...found);coverage[id]=found.length?"OFFICIAL_INDEX_RECORDS":"NO_MATCHES"}catch(e){coverage[id]="UNAVAILABLE";errors.push(id+": "+String(e instanceof Error?e.message:e).slice(0,115))}};
  await Promise.all(selected.map(id=>run(id,async()=>{
+ if(id==="pubmed"){
+  // NCBI E-utilities: two requests per biomedical query, no key; service rate limits apply.
+  const root="https://eutils.ncbi.nlm.nih.gov/entrez/eutils/";
+  const found=await fetchJson(fetcher,root+"esearch.fcgi?db=pubmed&retmode=json&retmax=5&term="+encodeURIComponent(q));
+  const ids=(Array.isArray(found?.esearchresult?.idlist)?found.esearchresult.idlist:[]).map(String).filter((id:string)=>/^\d{1,15}$/.test(id)).slice(0,5);
+  if(!ids.length)return [];
+  const summaries=await fetchJson(fetcher,root+"esummary.fcgi?db=pubmed&retmode=json&id="+ids.join(","));
+  const output=summaries.result||{};
+  return ids.flatMap((id:string)=>{
+   const item=output[id];
+   if(!item||typeof item.title!=="string")return [];
+   return [{id:"F-PM-"+id,kind:"SCHOLARLY" as const,title:clean(item.title,250),summary:[clean(item.pubdate,60),clean(item.source,90),"PubMed index record; abstract and full text not validated"].filter(Boolean).join(" · "),source:"NLM PubMed",url:"https://pubmed.ncbi.nlm.nih.gov/"+id+"/",retrievedAt,sourceStatus:"OFFICIAL_RECORD" as const}];
+  });
+ }
  if(id==="nsf"){
   const j=await fetchJson(fetcher,"https://api.nsf.gov/services/v1/awards.json?keyword="+encodeURIComponent(q)+"&rpp=6");
   const list=j.response?.award||[];
