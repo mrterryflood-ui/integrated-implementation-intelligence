@@ -1,7 +1,7 @@
 "use client";
 import KnowledgeMap from "./knowledge-map";
 import UnknownsRadar from "./unknowns-radar-panel";
-import {useEffect,useMemo,useState} from "react";
+import {useEffect,useMemo,useState,useRef} from "react";
 import {sanitizeIntake,type Intake} from "../lib/consultation";
 import {buildPackage,renderPackageMarkdown,type ConsultationPackage,type SlideSpec} from "../lib/consultation-package";
 import type {IntelligenceBundle,IntelligenceRecord} from "../lib/consultation-research";
@@ -33,6 +33,7 @@ export default function ConsultationStudio(){
  const [allowResearch,setAllowResearch]=useState(false),[allowCouncil,setAllowCouncil]=useState(false),[allowParallaxShare,setAllowParallaxShare]=useState(false),[working,setWorking]=useState(false),[status,setStatus]=useState(""),[error,setError]=useState("");
  const [councilReport,setCouncilReport]=useState<any>(null),[filter,setFilter]=useState("all"),[query,setQuery]=useState("");
  const [stakeholderNotes,setStakeholderNotes]=useState(""),[parallaxReport,setParallaxReport]=useState<any>(null);
+ const rplConsentRef=useRef(false),stakeholderNotesRef=useRef(""),rplRequestRef=useRef<AbortController|null>(null);
  const [review,setReview]=useState<"DRAFT"|"REVIEWED"|"APPROVED">("DRAFT");
  const [importJson,setImportJson]=useState("");
  const [opportunity,setOpportunity]=useState<any>(null);
@@ -72,20 +73,26 @@ export default function ConsultationStudio(){
   setStatus(report.deliberation?.synthesis?"Preliminary council analysis attached. Source support and proposed outcomes remain unverified.":"Council incomplete. No fabricated consensus.");
   if(!report.deliberation?.synthesis)setError(report.error||report.notice||"Model inference incomplete");
   // One conversation; no separate tool navigation. Do not invent stakeholder testimony.
-  const views=declaredPerspectives(stakeholderNotes);
-  if(report.deliberation?.synthesis && views.length>=2 && allowParallaxShare) {
+  const currentNotes=stakeholderNotesRef.current;
+  const views=declaredPerspectives(currentNotes);
+  if(report.deliberation?.synthesis && views.length>=2 && rplConsentRef.current) {
+   const controller=new AbortController();rplRequestRef.current=controller;
    try {
+    if(!rplConsentRef.current)throw Error("Consent revoked");
     const p=await fetch("/api/consultation/parallax",{
-     method:"POST",headers:{"content-type":"application/json"},
+     method:"POST",headers:{"content-type":"application/json"},signal:controller.signal,
      body:JSON.stringify({scenario:intake.mission,stakeholders:views,externalConsent:true}),
     });
     const j=await p.json().catch(()=>({}));
-    if(p.ok && j.factState==="OPERATOR_DECLARED_UNVERIFIED")setParallaxReport(j);
-    else setParallaxReport({notice:"The separate stakeholder comparison is unavailable; no comparison was inferred."});
-   }catch{setParallaxReport({notice:"The separate stakeholder comparison is unavailable; no comparison was inferred."})}
-  }else if(stakeholderNotes.trim() && views.length>=2 && !allowParallaxShare){
+    if(!controller.signal.aborted && rplConsentRef.current){
+     if(p.ok && j.factState==="OPERATOR_DECLARED_UNVERIFIED")setParallaxReport(j);
+     else setParallaxReport({notice:"The separate stakeholder comparison is unavailable; no comparison was inferred."});
+    }
+   }catch{if(!controller.signal.aborted && rplConsentRef.current)setParallaxReport({notice:"The separate stakeholder comparison is unavailable; no comparison was inferred."})}
+   finally{if(rplRequestRef.current===controller)rplRequestRef.current=null}
+  }else if(currentNotes.trim() && views.length>=2 && !rplConsentRef.current){
    setParallaxReport({notice:"RPLICE perspective transfer was not authorized. Check the separate consent box to compare viewpoints."});
-  }else if(stakeholderNotes.trim() && views.length<2){
+  }else if(currentNotes.trim() && views.length<2){
    setParallaxReport({notice:"Add at least two viewpoints in the format 'Role | What they see' to compare perspectives."});
   }
  }catch(e){setError(e instanceof Error?e.message:"Council unavailable")}finally{setWorking(false)}};
@@ -101,7 +108,7 @@ export default function ConsultationStudio(){
  const refreshSessions=async()=>{if(!workspaceId)return;const r=await fetch("/api/consultation/sessions?workspaceId="+encodeURIComponent(workspaceId));if(r.ok)setSessions((await r.json()).sessions||[])};
  const load=async(id:string)=>{setWorking(true);setError("");try{const response=await fetch("/api/consultation/sessions?id="+encodeURIComponent(id));const data=await response.json();if(!response.ok)throw Error(data.error||"Consultation unavailable");const s=data.session;
   const restored=s.intake||{},m=restored.mode==="general"?"general":"startup";const i=sanitizeIntake(restored);
-  setIntake(i);setMode(m);setIntel(s.research?.records?s.research:null);setCouncilReport(null);setStakeholderNotes(typeof s.research?.stakeholderNotes==="string"?s.research.stakeholderNotes:"");setParallaxReport(s.research?.parallax||null);const p=buildPackage(i,m,s.research?.records?s.research:null);
+  setIntake(i);setMode(m);setIntel(s.research?.records?s.research:null);setCouncilReport(null);stakeholderNotesRef.current=typeof s.research?.stakeholderNotes==="string"?s.research.stakeholderNotes:"";setStakeholderNotes(stakeholderNotesRef.current);setParallaxReport(s.research?.parallax||null);const p=buildPackage(i,m,s.research?.records?s.research:null);
   if(Array.isArray(s.slides)&&s.slides.length===12)p.slides=s.slides;
   if(Array.isArray(s.artifacts)&&s.artifacts.length)p.documents=s.artifacts;
   setPkg(p);setSavedId(id);setVersion(s.version);setTitle(s.title);setReview(s.review_status);setTheme((["midnight","forest","slate"].includes(s.research?.designTheme)?s.research.designTheme:"midnight") as Theme);setTab("Design & deliver");setStatus("Loaded saved consultation. Review changes before exporting.");
@@ -111,7 +118,7 @@ export default function ConsultationStudio(){
   if(!response.ok){const j=await response.json().catch(()=>({}));throw Error(j.error||"Export unavailable")}
   const blob=await response.blob(),url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=format==="pptx"?"Dynamic-Intelligence-Pitch.pptx":"Dynamic-Intelligence-Consultation.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus("Editable file generated. Review citations and all factual claims before circulation.");
  }catch(e){setError(e instanceof Error?e.message:"Export failed")}finally{setWorking(false)}};
- const reset=()=>{setIntake(blank);setPkg(null);setIntel(null);setSavedId("");setVersion(0);setCouncilReport(null);setStakeholderNotes("");setParallaxReport(null);setAllowCouncil(false);setAllowResearch(false);setAllowParallaxShare(false);setReview("DRAFT");setStatus("New consultation started.");setTab("Consult")};
+ const reset=()=>{setIntake(blank);setPkg(null);setIntel(null);setSavedId("");setVersion(0);setCouncilReport(null);stakeholderNotesRef.current="";rplConsentRef.current=false;rplRequestRef.current?.abort();setStakeholderNotes("");setParallaxReport(null);setAllowCouncil(false);setAllowResearch(false);setAllowParallaxShare(false);setReview("DRAFT");setStatus("New consultation started.");setTab("Consult")};
  return <section id="consult" className="lab-section consult-studio"><div className="section-heading"><span className="eyebrow">YOUR DECISION-TO-DELIVERY STUDIO</span><h2>Walk in with a question. Leave with an actionable package.</h2><p>Explore customers, science, funding and competing approaches, convene a challenge council, design a pitch, and keep editable deliverables in your private knowledge workspace.</p></div>
  <div className="lab-card">
  <div className="selection-mode" aria-label="Consultation type"><button type="button" aria-pressed={mode==="startup"} onClick={()=>setMode("startup")}>Founder & MVP</button><button type="button" aria-pressed={mode==="general"} onClick={()=>setMode("general")}>Any question or organization</button><button type="button" onClick={reset}>New consultation</button></div>
@@ -123,7 +130,7 @@ export default function ConsultationStudio(){
  {intel.errors.length>0&&<details><summary>Sources not available ({intel.errors.length})</summary><ul>{intel.errors.map((e,i)=><li key={i}>{e}</li>)}</ul></details>}
  <p>{intel.researchStandard}</p></>}
  </div>}
- {tab==="Council review"&&<div className="consult-panel"><h3>Challenge the ideas, not just the presentation</h3><p>DIS examines the issue through distinct analytical lenses. Depending on provider availability, this can be one model simulation rather than independently executed agents; the result names which occurred.</p><label className="privacy-consent"><input type="checkbox" checked={allowCouncil} onChange={e=>setAllowCouncil(e.target.checked)}/> I authorize external AI providers to analyze this consultation question for Council review. This does not authorize sending stakeholder statements to RPLICE. Do not include confidential or protected information; providers may retain prompts as explained in their policies.</label><details className="research-import"><summary>What are different stakeholders seeing? (optional)</summary><p>One perspective per line: Role | What this person or group reports. These are your statements, not verified interviews. DIS will compare perspectives automatically during council review when at least two are entered.</p><textarea rows={4} maxLength={4000} value={stakeholderNotes} placeholder={"Program participant | I cannot reach the clinic without a car\\nClinic manager | Our appointment slots are full"} aria-label="Stakeholder observations" onChange={e=>{setStakeholderNotes(e.target.value);setParallaxReport(null)}}/></details><label className="privacy-consent"><input type="checkbox" checked={allowParallaxShare} onChange={e=>{setAllowParallaxShare(e.target.checked);setParallaxReport(null)}}/> I separately authorize sending the stakeholder viewpoints above and this consultation question to RPLICE (BetterScienceLab.com) solely for a preliminary Parallax comparison. This is not verified testimony. Leave unchecked to keep stakeholder observations within DIS.</label><button className="primary-cta" disabled={working||intake.mission.length<8} onClick={debate}>{working?"Debating…":"Run council review (beta)"}</button><p><a href="#council">Customize the wider council first</a></p>
+ {tab==="Council review"&&<div className="consult-panel"><h3>Challenge the ideas, not just the presentation</h3><p>DIS examines the issue through distinct analytical lenses. Depending on provider availability, this can be one model simulation rather than independently executed agents; the result names which occurred.</p><label className="privacy-consent"><input type="checkbox" checked={allowCouncil} onChange={e=>setAllowCouncil(e.target.checked)}/> I authorize external AI and scholarly discovery services (including OpenAlex) to process this consultation question for Council review. This does not authorize the separate Investigate search or sending stakeholder statements to RPLICE. Do not include confidential or protected information; providers may retain prompts as explained in their policies.</label><details className="research-import"><summary>What are different stakeholders seeing? (optional)</summary><p>One perspective per line: Role | What this person or group reports. These are your statements, not verified interviews. DIS will compare perspectives automatically during council review when at least two are entered.</p><textarea rows={4} maxLength={4000} value={stakeholderNotes} placeholder={"Program participant | I cannot reach the clinic without a car\\nClinic manager | Our appointment slots are full"} aria-label="Stakeholder observations" onChange={e=>{stakeholderNotesRef.current=e.target.value;rplRequestRef.current?.abort();setStakeholderNotes(e.target.value);setParallaxReport(null)}}/></details><label className="privacy-consent"><input type="checkbox" checked={allowParallaxShare} onChange={e=>{rplConsentRef.current=e.target.checked;if(!e.target.checked)rplRequestRef.current?.abort();setAllowParallaxShare(e.target.checked);setParallaxReport(null)}}/> I separately authorize sending the stakeholder viewpoints above and this consultation question to RPLICE (BetterScienceLab.com) solely for a preliminary Parallax comparison. This is not verified testimony. Leave unchecked to keep stakeholder observations within DIS.</label><button className="primary-cta" disabled={working||intake.mission.length<8} onClick={debate}>{working?"Debating…":"Run council review (beta)"}</button><p><a href="#council">Customize the wider council first</a></p>
  {parallaxReport?.result?.displacement&&<div className="consult-council"><h4>Stakeholder perspective check</h4><p>{parallaxReport.assurance}</p><ul>{parallaxReport.result.displacement.map((p:any,i:number)=><li key={i}><strong>{p.aName} and {p.bName}</strong>: {p.band==="undefined"?"not enough comparable statements":p.band+" difference in wording"} (lexical measure only)</li>)}</ul><p>Structural power and practical decision authority still require direct stakeholder confirmation.</p></div>}
  {parallaxReport?.notice&&<p role="status" className="truth-note">{parallaxReport.notice}</p>}
  {councilReport&&<div className="consult-council"><strong>State: {councilReport.state}</strong><p>{councilReport.limitations||councilReport.error}</p>{councilReport.deliberation&&<><h4>Synthesis</h4><pre>{councilReport.deliberation.synthesis}</pre><details><summary>Primary analyses and red-team dissent</summary><pre>{councilReport.deliberation.primaryA}</pre><pre>{councilReport.deliberation.primaryB}</pre><pre>{councilReport.deliberation.challenge}</pre></details></>}</div>}</div>}
