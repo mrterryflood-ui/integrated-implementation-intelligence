@@ -1,3 +1,4 @@
+import {getVercelOidcToken} from "@vercel/oidc";
 import {selectCouncil,DEFAULT_RED} from "./council";
 type Source={id:string,title:string,doi:string|null,url:string,year:number|null,abstract:string|null};
 function compact(value:unknown,n=1000){return typeof value==="string"?value.slice(0,n):""}
@@ -24,7 +25,7 @@ const instructions="You are an analysis role in DIS, a multidisciplinary researc
 function sourceContext(sources:Source[]){return sources.map(s=>`[${s.id}] ${s.title} (${s.year??"unknown year"}) ${s.url}\nAbstract: ${s.abstract||"NOT AVAILABLE"}`).join("\n\n").slice(0,17500)}
 function model(){return process.env.AI_GATEWAY_MODEL||"openai/gpt-5.4-mini"}
 export async function infer(system:string,prompt:string,fetcher=fetch):Promise<{ok:boolean,text:string,error?:string}>{
- const token=process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN;
+ const token=process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||await getVercelOidcToken().catch(()=>null);
  if(!token)return {ok:false,text:"",error:"AI Gateway authentication not configured"};
  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18500);
  try{
