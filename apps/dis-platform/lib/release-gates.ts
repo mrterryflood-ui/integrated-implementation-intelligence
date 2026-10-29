@@ -1,4 +1,5 @@
 export type ReleaseEnvironment = {
+  [key: string]: string | undefined;
   VERCEL_ENV?: string;
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?: string;
   CLERK_SECRET_KEY?: string;
