@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "tsx scripts/run-synthesis-evaluation.ts && next build",
     "start": "next start",
     "test": "tsx --test tests/*.test.ts"
   },
