@@ -71,7 +71,7 @@ function fitForQuestion(cap:Capability,terms:Set<string>):{ok:boolean;matched:st
  if(!matched.length)return {ok:false,matched};
  // Generic "services" is not evidence of a community aggregate data entitlement.
  // Veterans, clinical, and client-specific cases must not route to ThriveUp on that word alone.
- const community=includesAny(terms,["community","nonprofit","organization","program","workforce","local","county","population","public"]);
+ const community=includesAny(terms,["community","workforce","population"]);
  const impact=includesAny(terms,["impact","outcome","outcomes","evaluation","measure","report","employment","results"]);
  const intervention=includesAny(terms,["implementation","intervention","evidence","program","roi","evaluation"]);
  const benefit=includesAny(terms,["benefits","assistance","eligibility","coverage","medicaid","snap"]);
