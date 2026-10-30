@@ -39,8 +39,12 @@ async function journey(browserType,label){
  page.setDefaultTimeout(15000);
  const crashes=[];
  const outgoing=[];
+ const devIdentityRequests=[];
  page.on("pageerror",e=>crashes.push(e.message));
- page.on("request",request=>{if(request.method()==="POST"&&/\/api\/(council|consultation\/research|consultation\/parallax)/.test(request.url()))outgoing.push(request.url());});
+ page.on("request",request=>{
+  if(request.method()==="POST"&&/\/api\/(council|consultation\/research|consultation\/parallax)/.test(request.url()))outgoing.push(request.url());
+  if(/https?:\/\/[^/]*\.clerk\.accounts\.dev\//.test(request.url()))devIdentityRequests.push(request.url());
+ });
  try {
   for(const [id,name] of sites){
    const url=base+"/?focus="+id+"#consult";
@@ -92,6 +96,7 @@ async function journey(browserType,label){
    console.log("PASS "+label+" "+id+": tap -> real draft -> visible output");
   }
   assert.deepEqual(outgoing,[],"offline example must not send prompts to external AI/research services");
+  assert.deepEqual(devIdentityRequests,[],"public-only production must not initialize a development Clerk tenant in the browser");
   assert.deepEqual(crashes,[],"no unhandled browser page errors");
   const width=await page.evaluate(()=>{
     const root=document.documentElement,client=root.clientWidth,scroll=root.scrollWidth;
