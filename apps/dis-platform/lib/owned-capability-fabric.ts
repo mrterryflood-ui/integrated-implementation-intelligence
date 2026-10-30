@@ -1,3 +1,4 @@
+import {readRpliceMethodology} from "./rplice-methodology-reader";
 /**
  * Private DIS capability fabric, bounded phase 1.
  * NOT the public MCP registry or a list of promoted third-party apps.
@@ -11,13 +12,13 @@ export type CapabilityState="DISCOVERED_UNVERIFIED"|"SOURCE_INSPECTED"|"CONTRACT
 export type CandidateState="CONTRACT_ONLY"|"CREDENTIAL_PRESENT_UNVERIFIED"|"UNAVAILABLE"|"RETURNED_UNVERIFIED";
 export type IntelligenceDomain="community"|"implementation"|"benefits"|"civic"|"business"|"veterans"|"health"|"social_health"|"hazards"|"security"|"academic_research";
 export type UseClearance="GENERAL_PURPOSE_CANDIDATE"|"NOT_CLEARED_FOR_DIS";
-export type DataBoundary="TCAF_PARTNER_AGGREGATE"|"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY";
+export type DataBoundary="TCAF_PARTNER_AGGREGATE"|"PUBLIC_METHODOLOGY"|"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY";
 export type Capability = {
  id:string;owner:string;domain:IntelligenceDomain;intentTerms:readonly string[];
  useClearance:UseClearance;dataBoundary:DataBoundary;
  operation:string;method:"GET"|"POST";path:string;scope:string;
- state:CapabilityState;execution:"THRIVEUP_READ_V1"|"NOT_AUTHORIZED";
- evidence:string;dataClass:"PUBLIC_AGGREGATE"|"PROTECTED_REQUIRES_AUTH";
+ state:CapabilityState;execution:"THRIVEUP_READ_V1"|"RPLICE_READ_V1"|"NOT_AUTHORIZED";
+ evidence:string;dataClass:"PUBLIC_AGGREGATE"|"PUBLIC_METHODOLOGY"|"PROTECTED_REQUIRES_AUTH";
 };
 const confirmed="Existing repository contract inspected 2026-10-30; runtime key, upstream response and partner scope NOT independently verified.";
 export const CAPABILITIES: readonly Capability[]=[
@@ -27,7 +28,7 @@ export const CAPABILITIES: readonly Capability[]=[
  {id:"benefits-program-catalog",owner:"ThriveUp",domain:"benefits",intentTerms:["benefits","assistance","insurance","resources","support","healthcare","veterans"],operation:"Read bounded public program catalog",method:"GET",path:"/api/partner/v1/benefits?limit=12",scope:"benefits:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
  {id:"local-civic-context",owner:"Civic Signal",domain:"civic",intentTerms:["civic","policy","city","county","public","governance","community"],operation:"Signed bounded civic-context lookup",method:"POST",path:"/api/partner-exchange/v1/civic-context",scope:"civic-context:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Signed HMAC contract inspected; no DIS-specific partner key or verified tenant-safe round trip.",dataClass:"PUBLIC_AGGREGATE"},
  {id:"funding-qualification",owner:"GrantPathPro",domain:"business",intentTerms:["funding","grant","procurement","business","contract","rfi","rfp"],operation:"Owner-scoped opportunity decision intelligence",method:"GET",path:"/api/opportunity-desk",scope:"owner:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Canonical Grants2 opportunity API inspected; no DIS-to-GrantPath delegated identity or partner grant.",dataClass:"PROTECTED_REQUIRES_AUTH"},
- {id:"implementation-methodology",owner:"RPLICE",domain:"implementation",intentTerms:["research","evidence","cfir","implementation","fidelity","strategy","science"],operation:"Versioned implementation-methodology comparison",method:"GET",path:"/api/v1/public/frameworks",scope:"research:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"RPLICE public methodology and MCP contract inspected; dedicated DIS partner credential unavailable.",dataClass:"PUBLIC_AGGREGATE"},
+ {id:"implementation-methodology",owner:"RPLICE",domain:"implementation",intentTerms:["research","evidence","cfir","implementation","fidelity","strategy","science","framework","methodology"],operation:"Read-only methodology framework metadata, no case transfer",method:"GET",path:"/api/v1/public/frameworks",scope:"research:read",state:"CONTRACT_VERIFIED",execution:"RPLICE_READ_V1",useClearance:"GENERAL_PURPOSE_CANDIDATE",dataBoundary:"PUBLIC_METHODOLOGY",evidence:"Versioned RPLICE methodology contract inspected; dedicated DIS key and live round trip not yet verified.",dataClass:"PUBLIC_METHODOLOGY"},
  {id:"veteran-transition",owner:"M2C",domain:"veterans",intentTerms:["veteran","transition","military","employment","caregiver"],operation:"Veteran transition and resource intelligence",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Veteran-transition repository inspected; no approved scoped DIS service contract.",dataClass:"PROTECTED_REQUIRES_AUTH"},
  {id:"health-implementation",owner:"HerHealth / Whole Person",domain:"health",intentTerms:["health","clinical","care","community","prevention"],operation:"Permitted aggregate health implementation evidence",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Healthcare repository inspected; no patient data or PHI access authorized.",dataClass:"PROTECTED_REQUIRES_AUTH"},
  // First-class healthcare and social-health families are cataloged for gap recognition,
@@ -72,6 +73,7 @@ function fitForQuestion(cap:Capability,terms:Set<string>):{ok:boolean;matched:st
   case "community-impact":ok=community&&impact;break;
   case "community-system-context":ok=community&&includesAny(terms,["community","local","network","partner","partners","services","ecosystem"]);break;
   case "intervention-evidence":ok=community&&intervention;break;
+  case "implementation-methodology":ok=includesAny(terms,["research","science","framework","cfir","fidelity","methodology","implementation"])&&includesAny(terms,["implementation","science","framework","cfir","fidelity","methodology"]);break;
   case "benefits-program-catalog":ok=benefit;break;
   default:ok=false;
  }
@@ -81,14 +83,14 @@ export function planOwnedCapabilities(problem:string,options:{max?:number;allowe
  const terms=new Set(normalize(problem.slice(0,1200)).trim().split(/\s+/).filter(Boolean));
  const max=Math.max(1,Math.min(options.max??4,4));
  const candidates=CAPABILITIES.flatMap((cap,i)=>{
-  if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||cap.dataBoundary!=="TCAF_PARTNER_AGGREGATE")return [];
+  if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||!["TCAF_PARTNER_AGGREGATE","PUBLIC_METHODOLOGY"].includes(cap.dataBoundary))return [];
   if(options.allowedDomains&&!options.allowedDomains.includes(cap.domain))return [];
   const fit=fitForQuestion(cap,terms);if(!fit.ok)return [];
   return [{cap,i,matched:fit.matched,score:fit.matched.length}];
  }).sort((a,b)=>b.score-a.score||a.i-b.i);
  const selected=candidates.slice(0,max).map(x=>({
   id:x.cap.id,domain:x.cap.domain,operation:x.cap.operation,scope:x.cap.scope,state:x.cap.state,
-  execution:x.cap.execution==="THRIVEUP_READ_V1"?"CANDIDATE" as const:"NOT_CONNECTED" as const,
+  execution:x.cap.execution==="THRIVEUP_READ_V1"||x.cap.execution==="RPLICE_READ_V1"?"CANDIDATE" as const:"NOT_CONNECTED" as const,
   reason:"Eligible general-purpose aggregate matched "+x.matched.slice(0,3).join(", ")+". A matching partner grant is still required."
  }));
  const deferredDomains=[...new Set(CAPABILITIES.filter(cap=>
@@ -104,7 +106,7 @@ export function planOwnedCapabilities(problem:string,options:{max?:number;allowe
   limits:[
    "A repository's existence or similar domain does not grant DIS a right to access it.",
    "Client-specific, protected, unverified-owner and restricted-purpose systems are never automatically selected or invoked.",
-   "TCAF partner aggregates are candidates only; each live request still needs a separately granted service scope and current user consent.",
+   "TCAF aggregate data and RPLICE methodology metadata are candidates only; each read requires a dedicated scoped credential and consent.",
    "No external platform marketing, catalog, user identity sharing or raw case text is sent to specialist services.",
    "No matched/authorized capability means DIS uses only its independent intelligence and reports the relevant knowledge gap."
   ]
@@ -162,7 +164,12 @@ export async function invokeOwnedCapabilities(selectedIds:readonly string[],env:
   if(!cap)return {id,state:"UNAVAILABLE",source:"unknown",scope:"none",sourceTimestamp:null,evidenceClass:"NONE",value:null,reason:"Unregistered capability."} as CapabilityReceipt;
   const receipt=(state:CandidateState,reason:string,value:unknown=null,ts:string|null=null):CapabilityReceipt=>({
    id,state,source:cap.owner,scope:cap.scope,sourceTimestamp:ts,evidenceClass:state==="RETURNED_UNVERIFIED"?"PARTNER_REPORTED_UNVERIFIED":"NONE",value,reason});
-  if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||cap.dataBoundary!=="TCAF_PARTNER_AGGREGATE"||cap.execution!=="THRIVEUP_READ_V1"||cap.method!=="GET")return receipt("CONTRACT_ONLY","Specialist is not cleared for DIS use; source ownership and client-specific restrictions are not bypassed.");
+  if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||cap.method!=="GET")return receipt("CONTRACT_ONLY","Specialist is not cleared for DIS; client-specific boundaries remain intact.");
+  if(cap.execution==="RPLICE_READ_V1"&&cap.dataBoundary==="PUBLIC_METHODOLOGY"){
+   const reading=await readRpliceMethodology(env.RPLICE_API_KEY,fetcher);
+   return receipt(reading.ok?"RETURNED_UNVERIFIED":reading.reason.includes("key absent")?"CONTRACT_ONLY":"UNAVAILABLE",reading.reason,reading.data,reading.observedAt);
+  }
+  if(cap.execution!=="THRIVEUP_READ_V1"||cap.dataBoundary!=="TCAF_PARTNER_AGGREGATE")return receipt("CONTRACT_ONLY","No approved private service contract.");
   const key=env[scopes[cap.scope]];
   if(!key||key.trim().length<20)return receipt("CONTRACT_ONLY","No approved server-side scoped credential; no upstream request made.");
   try{

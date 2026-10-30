@@ -76,6 +76,12 @@ async function journey(browserType,label){
     return r.top>=-5&&r.top<innerHeight-60;
    },null,{timeout:2500,polling:"raf"});
    if(id==="software-technology"){
+    // Private DIS integrations must remain fail-closed while the public-only
+    // release is serving test identity. Exercise HTTP, not an inert button.
+    if(await page.getByText("Private workspace pending").count()>0){
+     const denied=await page.request.post(base+"/api/capability-fabric",{data:{problem:"Evaluate the science of implementation",mode:"invoke",externalConsent:true}});
+     assert.equal(denied.status(),503,"production must deny private specialist calls before Clerk live identity exists");
+    }
     await page.screenshot({path:join(out,label+"-software-preview.png"),fullPage:false});
     const download=page.waitForEvent("download",{timeout:12000});
     await clickAndObserve(page,page.getByRole("button",{name:"Export Markdown"}),"Markdown export");
