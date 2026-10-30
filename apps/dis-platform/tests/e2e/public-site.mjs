@@ -39,7 +39,9 @@ async function journey(browserType,label){
  page.setDefaultTimeout(15000);
  const crashes=[];
  const outgoing=[];
+ const clerkRequests=[];
  page.on("pageerror",e=>crashes.push(e.message));
+ page.on("request",r=>{if(/\\.clerk\\.accounts\\.dev\\//.test(r.url()))clerkRequests.push(r.url());});
  page.on("request",request=>{if(request.method()==="POST"&&/\/api\/(council|consultation\/research|consultation\/parallax)/.test(request.url()))outgoing.push(request.url());});
  try {
   for(const [id,name] of sites){
@@ -93,6 +95,7 @@ async function journey(browserType,label){
   }
   assert.deepEqual(outgoing,[],"offline example must not send prompts to external AI/research services");
   assert.deepEqual(crashes,[],"no unhandled browser page errors");
+  assert.deepEqual(clerkRequests,[],"public-only production must not load unreleased Clerk developer accounts");
   const width=await page.evaluate(()=>{
     const root=document.documentElement,client=root.clientWidth,scroll=root.scrollWidth;
     const offenders=[...document.querySelectorAll("body *")].map(el=>{
