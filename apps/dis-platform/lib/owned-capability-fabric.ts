@@ -59,11 +59,15 @@ const record=(v:unknown)=>v&&typeof v==="object"&&!Array.isArray(v)?v as Record<
 function summarize(id:string,body:unknown):unknown{
  const x=record(body);
  if(id==="community-impact"){
-  if(finite(x.count)===null||!x.totals||typeof x.totals!=="object")return null;
+  const count=finite(x.count);
+  // No small-cell inference: five approved source records is only a modest
+  // privacy floor, not evidence of statistical validity or local relevance.
+  if(count===null||count<5||!x.totals||typeof x.totals!=="object")return null;
   const totals=record(x.totals);
-  return {count:finite(x.count),participantsServed:finite(totals.participantsServed),
-   enteredEmployment:finite(totals.enteredEmployment),credentialsAttained:finite(totals.credentialsAttained),
-   medianEarnings:finite(x.medianEarnings),notice:"Approved partner-reported outcomes, bounded to returned records; not causal effects or whole-population totals."};
+  const suppress=(v:unknown)=>{const n=finite(v);return n===null||n<5?null:n;};
+  return {count,participantsServed:suppress(totals.participantsServed),
+   enteredEmployment:suppress(totals.enteredEmployment),credentialsAttained:suppress(totals.credentialsAttained),
+   medianEarnings:suppress(x.medianEarnings),notice:"Approved partner-reported cohort aggregates; small counts suppressed. NO geography match, whole-population estimate, independent source verification or causal effect established."};
  }
  if(id==="community-system-context"){
   if(!x.summary||typeof x.summary!=="object")return null;
@@ -104,7 +108,7 @@ export async function invokeOwnedCapabilities(selectedIds:readonly string[],env:
    if(bodyText.length>128000)return receipt("UNAVAILABLE","Response exceeded bounded evidence budget.");
    const parsed=JSON.parse(bodyText);
    const payload=summarize(id,parsed);
-   if(payload===null)return receipt("UNAVAILABLE","Partner response lacked required source data; rejected without importing.");
+   if(payload===null)return receipt("UNAVAILABLE","Partner data absent, malformed or below privacy suppression floor; rejected without importing.");
    const timestamp=safeText(record(parsed).exportedAt,40)||safeText(record(parsed).timestamp,40);
    return receipt("RETURNED_UNVERIFIED","Received bounded partner-reported aggregate; verify source method, coverage, and freshness before use.",payload,timestamp);
   }catch{return receipt("UNAVAILABLE","Timed out, malformed, or unreachable; no substitute data invented.");}
