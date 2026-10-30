@@ -143,3 +143,12 @@
  .slide-list{max-width:100%;overscroll-behavior-inline:contain}
  .design-editor input,.design-editor textarea{min-width:0}
 }
+
+/* Private DIS capability enrichment, integrated into existing consultation. */
+.owned-intel-panel{margin:22px 0;padding:18px;background:#f2f7fa;border:1px solid #bfd5df;border-radius:12px;min-width:0}
+.owned-intel-panel h4{margin:0 0 8px;color:#193f53;font-size:18px}
+.owned-intel-panel p{font-size:13px;line-height:1.55;margin:8px 0}
+.owned-intel-panel button{min-height:48px;touch-action:manipulation}
+.owned-intel-panel button:disabled{cursor:not-allowed;opacity:.65}
+.owned-intel-panel li{margin:8px 0;font-size:13px;overflow-wrap:anywhere}
+.owned-intel-panel pre{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}
