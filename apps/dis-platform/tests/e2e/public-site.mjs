@@ -17,6 +17,8 @@ const out=process.env.DIS_E2E_ARTIFACT_DIR||"test-results/dis-public-browser";
 const sites=[
  ["funding-contracts","Funding & contracts"],
  ["research-healthcare","Research & healthcare"],
+ ["clinical-health-systems","Healthcare & clinical systems"],
+ ["social-health","Social health & whole-person care"],
  ["research-universities","Universities, research & implementation"],
  ["software-technology","Software & technology"],
  ["enterprise-leadership","Enterprise & leadership"],
@@ -128,7 +130,7 @@ async function journey(browserType,label){
    });
    console.log("MOBILE WIDTH "+label+" "+JSON.stringify(width));
    assert.ok(width.scroll<=width.client+3,"mobile page must not cause horizontal document overflow: "+JSON.stringify(width));
-  console.log("PASS "+label+": six links, visible previews, Markdown, tabs, reset, negative auth checks, no external calls");
+  console.log("PASS "+label+": nine links, visible previews, Markdown, tabs, reset, negative auth checks, no external calls");
  }catch(error){
   const filename=join(out,label+"-failure.png");
   await page.screenshot({path:filename,fullPage:false}).catch(()=>{});

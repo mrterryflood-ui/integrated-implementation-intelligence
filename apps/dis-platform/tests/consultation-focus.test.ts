@@ -8,9 +8,9 @@ import {
  findConsultationFocus,
 } from "../lib/consultation-focus";
 
-test("all seven research and cross-domain use-case cards have unique, usable consultation destinations",()=>{
- assert.equal(CONSULTATION_FOCUS_AREAS.length,7);
- assert.equal(new Set(CONSULTATION_FOCUS_AREAS.map(a=>a.id)).size,7);
+test("all nine cross-domain use-case cards have unique, usable consultation destinations",()=>{
+ assert.equal(CONSULTATION_FOCUS_AREAS.length,9);
+ assert.equal(new Set(CONSULTATION_FOCUS_AREAS.map(a=>a.id)).size,9);
  for(const area of CONSULTATION_FOCUS_AREAS){
   const url=new URL(consultationFocusHref(area.id),"https://dynamicintel.io");
   assert.equal(url.origin,"https://dynamicintel.io");
@@ -56,4 +56,15 @@ test("mobile workflow navigation waits until the selected tab is committed",()=>
  assert.match(studio,/pendingTabNavigationRef\.current/);
  assert.match(studio,/panel\.scrollIntoView\(\{behavior:"instant",block:"start"\}\)/);
  assert.match(studio,/\[tab\]\)/);
+});
+
+test("healthcare and social health have distinct first-class user journeys without private-record promises",()=>{
+ const clinical=findConsultationFocus("clinical-health-systems");
+ const social=findConsultationFocus("social-health");
+ assert.ok(clinical&&social);
+ assert.notEqual(clinical.id,social.id);
+ assert.match(clinical.description,/mental health/);
+ assert.match(social.description,/housing/);
+ assert.match(clinical.guidance,/permissions/);
+ assert.match(social.guidance,/not automatically shared/);
 });
