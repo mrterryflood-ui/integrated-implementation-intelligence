@@ -62,7 +62,7 @@ async function journey(browserType,label){
    });
    assert.equal(visible,true,"result must scroll into view on mobile");
    if(id==="software-technology"){
-    await page.screenshot({path:join(out,label+"-software-preview.png"),fullPage:true});
+    await page.screenshot({path:join(out,label+"-software-preview.png"),fullPage:false});
     const download=page.waitForEvent("download",{timeout:12000});
     await clickAndObserve(page,page.getByRole("button",{name:"Export Markdown"}),"Markdown export");
     const received=await download;
@@ -89,12 +89,20 @@ async function journey(browserType,label){
   }
   assert.deepEqual(outgoing,[],"offline example must not send prompts to external AI/research services");
   assert.deepEqual(crashes,[],"no unhandled browser page errors");
-  const width=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth}));
-  assert.ok(width.scroll<=width.client+3,"mobile page must not cause horizontal document overflow");
+  const width=await page.evaluate(()=>{
+    const root=document.documentElement,client=root.clientWidth,scroll=root.scrollWidth;
+    const offenders=[...document.querySelectorAll("body *")].map(el=>{
+      const r=el.getBoundingClientRect(),cs=getComputedStyle(el);
+      return {tag:el.tagName,cls:typeof el.className==="string"?el.className.slice(0,90):"",right:Math.round(r.right),left:Math.round(r.left),width:Math.round(r.width),overflowX:cs.overflowX};
+    }).filter(x=>x.right>client+3||x.left< -3).slice(0,25);
+    return {client,scroll,offenders};
+   });
+   console.log("MOBILE WIDTH "+label+" "+JSON.stringify(width));
+   assert.ok(width.scroll<=width.client+3,"mobile page must not cause horizontal document overflow: "+JSON.stringify(width));
   console.log("PASS "+label+": six links, visible previews, Markdown, tabs, reset, negative auth checks, no external calls");
  }catch(error){
   const filename=join(out,label+"-failure.png");
-  await page.screenshot({path:filename,fullPage:true}).catch(()=>{});
+  await page.screenshot({path:filename,fullPage:false}).catch(()=>{});
   const contextInfo=await page.evaluate(()=>({url:location.href,title:document.title,ready:document.readyState,
     bodyText:document.body?.innerText.slice(0,1400)||"",rootTags:Array.from(document.querySelectorAll("h1,h2,[role=region]")).slice(0,12).map(n=>n.textContent?.trim().slice(0,85))})).catch(()=>({url:page.url()}));
   console.error("PAGE STATE "+label+" "+JSON.stringify(contextInfo));
