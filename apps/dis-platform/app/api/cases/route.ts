@@ -28,12 +28,26 @@ export async function POST(request:Request){try{
  const report=input.report&&typeof input.report==="object"?input.report:{state:"NOT_RUN"};
  if(JSON.stringify(report).length>65000)return Response.json({error:"Report exceeds save limit"},{status:413});
  const playbook=buildPlaybook(question,report);
+ // Opening a case also writes its original unmeasured baseline to the same
+ // protected event ledger. If the journal insert fails, case creation rolls back.
+ const baseline=JSON.stringify(buildLearningCheckpoint(playbook,1,new Date().toISOString()));
  const rows=await ctx.sql.transaction([
- ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
- ctx.sql`INSERT INTO dis_casework(workspace_id,owner_subject,title,question,report,playbook,status) VALUES(${workspaceId},${ctx.userId},${title},${question},${JSON.stringify(report)}::jsonb,${JSON.stringify(playbook)}::jsonb,'ACTIVE') RETURNING id,workspace_id,title,question,report,playbook,version,status,updated_at`
+  ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
+  ctx.sql`WITH created AS (
+    INSERT INTO dis_casework(workspace_id,owner_subject,title,question,report,playbook,status)
+    VALUES(${workspaceId},${ctx.userId},${title},${question},${JSON.stringify(report)}::jsonb,${JSON.stringify(playbook)}::jsonb,'ACTIVE')
+    RETURNING id,workspace_id,owner_subject,title,question,report,playbook,version,status,updated_at
+   ), journal AS (
+    INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
+    SELECT id,workspace_id,owner_subject,'CREATED',${baseline}::jsonb FROM created
+    RETURNING id
+   )
+   SELECT created.id,created.workspace_id,created.title,created.question,
+     created.report,created.playbook,created.version,created.status,created.updated_at,
+     journal.id AS learning_event_id FROM created CROSS JOIN journal`
  ]);
  if(!rows[1].length)return Response.json({error:"Workspace not found or not authorized"},{status:404});
- return Response.json({case:rows[1][0],note:"Saved draft and checkpoints; acceptance and observed outcomes still require verification."},{status:201});
+ return Response.json({case:rows[1][0],note:"Saved original baseline and action plan; acceptance and outcomes still require independent verification.",historyRecorded:true},{status:201});
 }catch{return fail()}}
 export async function PATCH(request:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
