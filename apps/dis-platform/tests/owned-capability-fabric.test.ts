@@ -19,12 +19,15 @@ test("different missions route to relevant capabilities without universal fan-ou
  assert.ok(impact.selected.some(x=>x.id==="intervention-evidence"));
  assert.ok(impact.selected.length<=4);
  const veteran=planOwnedCapabilities("Veteran military transition planning and employment support");
- assert.ok(veteran.selected.some(x=>x.id==="veteran-transition"));
+ assert.ok(veteran.deferredDomains.includes("veterans"));
+ assert.ok(!veteran.selected.some(x=>x.id==="veteran-transition"),"client-specific or unapproved capability never selected");
  const hazard=planOwnedCapabilities("Wildfire hazard and weather situation risks");
- assert.ok(hazard.selected.some(x=>x.id==="hazard-signals"));
+ assert.ok(hazard.deferredDomains.includes("hazards"));
+ assert.ok(!hazard.selected.some(x=>x.id==="hazard-signals"),"unapproved hazard adapter is plan-only");
  assert.ok(!hazard.selected.some(x=>x.id==="community-impact"));
  const funding=planOwnedCapabilities("Grant funding and RFP business decision");
- assert.ok(funding.selected.some(x=>x.id==="funding-qualification"));
+ assert.ok(funding.deferredDomains.includes("business"));
+ assert.ok(!funding.selected.some(x=>x.id==="funding-qualification"),"private grant data must not leak via similar keywords");
 });
 test("arbitrary or empty questions never fabricate evidence or live integrations",()=>{
  const plan=planOwnedCapabilities("unclassifiableword");
@@ -129,4 +132,18 @@ test("small partner cohorts are not promoted to evidence",async()=>{
  assert.equal(receipts[0].state,"UNAVAILABLE");
  assert.equal(receipts[0].value,null);
  assert.match(receipts[0].reason,/suppression floor/);
+});
+
+test("uncleared or client-specific specialists are never invoked even with an unrelated valid partner key",async()=>{
+ let calls=0;
+ const mock=(async()=>{calls++;throw Error("do not call")}) as typeof fetch;
+ const keys={DIS_THRIVEUP_IMPACT_KEY:"test-partner-only-1234567890"};
+ const r=await invokeOwnedCapabilities(["funding-qualification","health-implementation","veteran-transition","hazard-signals"],keys,mock);
+ assert.equal(calls,0);
+ assert.ok(r.every(x=>x.state==="CONTRACT_ONLY"));
+});
+test("consent revocation stops in-flight busy state and invalidates pending replies",()=>{
+ const studio=readFileSync(join(process.cwd(),"app/consultation-studio.tsx"),"utf8");
+ assert.match(studio,/const cancelOwned=\(\)=>\{const inFlight=Boolean\(ownedRequestRef\.current\)/);
+ assert.match(studio,/if\(inFlight\)setWorking\(false\)/);
 });
