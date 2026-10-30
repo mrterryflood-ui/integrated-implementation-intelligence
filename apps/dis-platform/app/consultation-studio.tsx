@@ -171,7 +171,7 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
   setPkg(p);setSavedId(id);setVersion(s.version);setTitle(s.title);setReview(s.review_status);setTheme((["midnight","forest","slate"].includes(s.research?.designTheme)?s.research.designTheme:"midnight") as Theme);setTab("Design & deliver");setStatus("Loaded saved consultation. Review changes before exporting.");
  }catch(e){setError(e instanceof Error?e.message:"Unable to load saved consultation")}finally{setWorking(false)}};
  const exportOffice=async(format:"pptx"|"docx")=>{if(!pkg)return;setWorking(true);setError("");setStatus("Creating editable "+format.toUpperCase()+" document…");
- try{const response=await fetch("/api/consultation/export",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({format,intake,mode,slides:pkg.slides,intelligence:intel,theme})});
+ try{const response=await fetch("/api/consultation/export",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({format,intake,mode,slides:pkg.slides,intelligence:intel,theme,ownedIntelAnnex:format==="docx"?(pkg.documents.find(d=>d.id==="owned-intelligence")?.body||null):null})});
   if(!response.ok){const j=await response.json().catch(()=>({}));throw Error(j.error||"Export unavailable")}
   const blob=await response.blob(),url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download=format==="pptx"?"Dynamic-Intelligence-Pitch.pptx":"Dynamic-Intelligence-Consultation.docx";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus("Editable file generated. Review citations and all factual claims before circulation.");
  }catch(e){setError(e instanceof Error?e.message:"Export failed")}finally{setWorking(false)}};
