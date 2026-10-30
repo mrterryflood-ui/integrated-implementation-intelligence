@@ -1,5 +1,6 @@
 import {generateUnknowns} from "./unknowns-radar";
 import {realtyDocuments} from "./realty-consultation";
+import {designEnterpriseMission,renderEnterpriseMission} from "./enterprise-mission";
 import type {Intake,Deliverable} from "./consultation";
 import {deliverables,packageMarkdown} from "./consultation";
 import type {IntelligenceBundle,IntelligenceRecord} from "./consultation-research";
@@ -33,6 +34,7 @@ export function buildPackage(intake:Intake,mode:"startup"|"general"="startup",in
  documents.push(sourceDoc);
  const riskDoc:Deliverable={id:"risk",title:"Decision and risk register",body:`Five key risks requiring verification:\n1. Problem-market fit — validate actual buyer demand and alternatives.\n2. Funding feasibility — official grants and historical awards do not establish eligibility, investor interest or award probability.\n3. Implementation feasibility — test user tasks, technical dependencies and security.\n4. Financial sustainability — baseline pricing, unit economics and adoption must be measured.\n5. Epistemic integrity — retain conflicts and avoid turning exploratory assumptions into facts.\n\nAction–reaction–counteraction: define who changes behavior following launch, how rivals or regulators might react, and what safe response would work.\n\nDecision state: INVESTIGATE ONLY; no commitments, outreach or production changes authorized.`,validation:"DRAFT",note:"Risks are candidate hypotheses until assessed in the domain context."};documents.push(riskDoc);
  const designDoc:Deliverable={id:"design",title:"User-centered design and product validation plan",body:`Primary users: ${audience}\nObjective: ${outcome}\nTask to observe: Ask a representative user to complete the core workflow unaided; measure success, time, clarity, accessibility, trust and errors.\nUX benchmark: Test existing alternatives and your MVP using the same task and comparable participants.\nBrand positioning: State the problem, distinctive value and credible proof in the user's own language; validate comprehension with non-experts.\nResearch method: conduct interviews; synthesize journey map; prioritize pain points; test prototypes; document before/after outcomes.\nExit criteria: user task acceptance thresholds, security review, measurable value, training/support plan and post-launch observation.\nCurrent state: NO USER TEST OBSERVATIONS VERIFIED.`,validation:"DRAFT",note:"This is a research and implementation plan, not proof of user adoption."};documents.push(designDoc);
+ documents.push({id:"enterprise-mission",title:"DIS discipline-based mission plan",body:renderEnterpriseMission(designEnterpriseMission(intake.mission)),validation:"DRAFT",note:"Planning only; acceptance evidence and approvals are not established."});
  documents.push(...realtyDocuments(intake,radar));
  const sources=records.slice(0,9),evidence=refs(sources);
  const slides:SlideSpec[]=[
