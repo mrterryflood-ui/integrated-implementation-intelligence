@@ -33,9 +33,15 @@ export function validatePlaybook(value:unknown):value is Playbook{
  if(typeof x.objective!=="string"||x.objective.length>3000||typeof x.decision!=="string"||x.decision.length>2000)return false;
  if(!Array.isArray(x.tasks)||x.tasks.length>35||!Array.isArray(x.metrics)||x.metrics.length>25||!Array.isArray(x.progressNotes)||x.progressNotes.length>80)return false;
  if(!x.tasks.every(t=>t&&typeof t==="object"&&typeof t.id==="string"&&typeof t.title==="string"&&t.title.length<500&&typeof t.done==="boolean"&&typeof t.evidence==="string"&&t.evidence.length<=2000&&typeof t.owner==="string"&&t.owner.length<150&&typeof t.success==="string"&&t.success.length<800))return false;
- if(!x.metrics.every(m=>m&&typeof m==="object"&&typeof m.id==="string"&&typeof m.label==="string"&&m.label.length<200&&typeof m.observed==="string"&&m.observed.length<250&&typeof m.target==="string"&&m.target.length<250&&typeof m.verified==="boolean"&&
-   (m.source===undefined||(typeof m.source==="string"&&m.source.length<=500))&&
-   (m.observedAt===undefined||(typeof m.observedAt==="string"&&(m.observedAt===""||/^\d{4}-\d{2}-\d{2}$/.test(m.observedAt)))))return false;
+ if(!x.metrics.every(m=>{
+  if(!m||typeof m!=="object"||typeof m.id!=="string"||typeof m.label!=="string"||
+     m.label.length>=200||typeof m.observed!=="string"||m.observed.length>=250||
+     typeof m.target!=="string"||m.target.length>=250||typeof m.verified!=="boolean")return false;
+  if(m.source!==undefined&&(typeof m.source!=="string"||m.source.length>500))return false;
+  if(m.observedAt!==undefined&&(typeof m.observedAt!=="string"||
+    (m.observedAt!==""&&!/^\d{4}-\d{2}-\d{2}$/.test(m.observedAt))))return false;
+  return true;
+ }))return false;
  if(x.learningReview!==undefined){
   if(!x.learningReview||typeof x.learningReview!=="object")return false;
   const r=x.learningReview as Record<string,unknown>;
