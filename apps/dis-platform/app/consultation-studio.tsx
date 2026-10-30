@@ -1,7 +1,7 @@
 "use client";
 import KnowledgeMap from "./knowledge-map";
 import UnknownsRadar from "./unknowns-radar-panel";
-import {useEffect,useMemo,useState,useRef} from "react";
+import {useEffect,useLayoutEffect,useMemo,useState,useRef} from "react";
 import {sanitizeIntake,type Intake} from "../lib/consultation";
 import {findConsultationFocus,type ConsultationFocusArea} from "../lib/consultation-focus";
 import {buildPackage,renderPackageMarkdown,type ConsultationPackage,type SlideSpec} from "../lib/consultation-package";
@@ -29,6 +29,7 @@ function downloadText(text:string,name:string){const url=URL.createObjectURL(new
 export default function ConsultationStudio({privateReady=false}:{privateReady?:boolean}){
  const [mode,setMode]=useState<"startup"|"general">("startup");
  const workflowPanelRef=useRef<HTMLDivElement|null>(null);
+ const pendingTabNavigationRef=useRef(false);
  const [focusedArea,setFocusedArea]=useState<ConsultationFocusArea|null>(null);
  const [intake,setIntake]=useState<Intake>(blank),[intel,setIntel]=useState<IntelligenceBundle|null>(null),[pkg,setPkg]=useState<ConsultationPackage|null>(null);
  const [tab,setTab]=useState<(typeof tabs)[number]>("Consult"),[slideIndex,setSlideIndex]=useState(0),[theme,setTheme]=useState<Theme>("midnight");
@@ -54,7 +55,30 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
   if(selected){setFocusedArea(selected);setMode("general");setTab("Consult");}
  },[]);
  useEffect(()=>{if(!workspaceId){setSessions([]);return}fetch("/api/consultation/sessions?workspaceId="+encodeURIComponent(workspaceId)).then(r=>r.ok?r.json():null).then(v=>setSessions(v?.sessions||[])).catch(()=>{})},[workspaceId]);
- const goToTab=(next:(typeof tabs)[number])=>{setTab(next);setError("");requestAnimationFrame(()=>{workflowPanelRef.current?.focus({preventScroll:true});workflowPanelRef.current?.scrollIntoView({behavior:"auto",block:"start"});});};
+ // Scroll after React commits the new tab panel, not in a racing RAF.
+ // iOS WebKit can otherwise render the correct content below the viewport.
+ useLayoutEffect(()=>{
+  if(!pendingTabNavigationRef.current)return;
+  pendingTabNavigationRef.current=false;
+  const panel=workflowPanelRef.current;
+  if(!panel)return;
+  panel.focus({preventScroll:true});
+  panel.scrollIntoView({behavior:"instant",block:"start"});
+ },[tab]);
+ const goToTab=(next:(typeof tabs)[number])=>{
+  setError("");
+  pendingTabNavigationRef.current=true;
+  if(tab===next){
+   // An example may open a draft while already on the design tab.
+   // Wait for updated content to commit, then reveal the same panel.
+   requestAnimationFrame(()=>{
+    pendingTabNavigationRef.current=false;
+    const panel=workflowPanelRef.current;
+    panel?.focus({preventScroll:true});
+    panel?.scrollIntoView({behavior:"instant",block:"start"});
+   });
+  }else setTab(next);
+ };
  const cancelOwned=()=>{const inFlight=Boolean(ownedRequestRef.current);ownedRevisionRef.current++;ownedRequestRef.current?.abort();ownedRequestRef.current=null;setOwnedIntel(null);setAllowOwnedIntel(false);if(inFlight)setWorking(false)};
  const update=(key:keyof Intake,value:string)=>{cancelOwned();reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();setWorking(false);setIntake(old=>({...old,[key]:value}));};
  const generate=(researchIntel:IntelligenceBundle|null=intel,report:any=councilReport)=>{const result=buildPackage(sanitizeIntake(intake),mode,researchIntel,report?.deliberation?.synthesis?report:undefined);setPkg(result);setSlideIndex(0);setStatus("Draft consultation package built. Review the evidence gates and edit any slides or reports.");setError("");return result};
