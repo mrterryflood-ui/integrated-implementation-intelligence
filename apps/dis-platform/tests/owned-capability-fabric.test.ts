@@ -60,6 +60,7 @@ test("upstream failure, malformed data and large payloads never become valid fin
  for(const mock of [
   (async()=>new Response("unauthorized",{status:401})) as typeof fetch,
   (async()=>new Response("invalid json",{status:200})) as typeof fetch,
+  (async()=>new Response(JSON.stringify({error:"Partner not available"}),{status:200})) as typeof fetch,
   (async()=>new Response("a".repeat(128001),{status:200})) as typeof fetch,
   (async()=>{throw Error("timeout")}) as typeof fetch
  ]){
