@@ -62,3 +62,18 @@ export function buildPackage(intake:Intake,mode:"startup"|"general"="startup",in
  return {mode,intake,documents,slides,intelligence,quality:{grade:"DRAFT / GATES OPEN",knownGaps,releases:["Research and compliance review","Independent challenge/dissent review","Customer acceptance","Export packaging","User approval before external distribution"],sources:records.length,activeOpportunityCandidates:prospects.length,historicalAwards:historical.length,marketLeads:landscape.length},createdAt:new Date().toISOString()};
 }
 export function renderPackageMarkdown(p:ConsultationPackage){return packageMarkdown(p.intake,p.documents)+"\n\n## Presentation storyboard\n\n"+p.slides.map(s=>"### "+s.id+". "+s.title+"\n\n"+s.bullets.map(x=>"- "+x).join("\n")+"\n\nSpeaker notes: "+s.notes+"\nSources: "+s.sourceIds.join(", ")).join("\n\n")+"\n\n## Validation gates\n\n"+p.quality.knownGaps.map(x=>"- "+x).join("\n");}
+
+/**
+ * The export API regenerates its package server-side. Preserve only a bounded
+ * user-supplied company-intelligence annex, always labeled UNVERIFIED.
+ * The input is not a trusted tool receipt, even when the client displays one.
+ */
+export function attachUnverifiedOwnedIntelAnnex(pkg:ConsultationPackage,raw:unknown):ConsultationPackage{
+ if(raw===null||raw===undefined)return pkg;
+ if(typeof raw!=="string"||raw.length>20000)throw new Error("Invalid company intelligence annex");
+ const safeBody="USER-SUPPLIED UNVERIFIED COMPANY INTELLIGENCE ANNEX. No independent source verification, live cross-platform authentication, causal analysis or authorization for downstream action is implied.\\n\\n"+raw;
+ return {...pkg,documents:[...pkg.documents.filter(d=>d.id!=="owned-intelligence"),{
+  id:"owned-intelligence",title:"Company intelligence — evidence and gap register (unverified draft)",
+  body:safeBody,validation:"DRAFT",note:"This client-supplied annex is not elevated to verified status by export. Verify every source and date before publication."
+ }]};
+}
