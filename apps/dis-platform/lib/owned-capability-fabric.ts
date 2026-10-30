@@ -59,22 +59,27 @@ const record=(v:unknown)=>v&&typeof v==="object"&&!Array.isArray(v)?v as Record<
 function summarize(id:string,body:unknown):unknown{
  const x=record(body);
  if(id==="community-impact"){
+  if(finite(x.count)===null||!x.totals||typeof x.totals!=="object")return null;
   const totals=record(x.totals);
   return {count:finite(x.count),participantsServed:finite(totals.participantsServed),
    enteredEmployment:finite(totals.enteredEmployment),credentialsAttained:finite(totals.credentialsAttained),
    medianEarnings:finite(x.medianEarnings),notice:"Approved partner-reported outcomes, bounded to returned records; not causal effects or whole-population totals."};
  }
  if(id==="community-system-context"){
+  if(!x.summary||typeof x.summary!=="object")return null;
   const s=record(x.summary);
+  if(finite(s.totalPlatforms)===null)return null;
   return {totalPublicPlatforms:finite(s.totalPlatforms),onlineReported:finite(s.platformsOnline),
    supportedLanguages:finite(s.languagesSupported),notice:"Public ecosystem capacity counts, NOT neighborhood-level community conditions."};
  }
  if(id==="intervention-evidence"){
+  if(!x.coefficients||typeof x.coefficients!=="object"||Array.isArray(x.coefficients))return null;
   const coeff=record(x.coefficients);
   return {coefficientFamilies:Object.keys(coeff).slice(0,15),count:Object.keys(coeff).length,
    notice:"Coefficient metadata only; individual coefficients and causal claims must be verified against primary studies."};
  }
  if(id==="benefits-program-catalog"){
+  if(!Array.isArray(x.programs)||finite(x.count)===null)return null;
   return {count:finite(x.count),programs:Array.isArray(x.programs)?x.programs.slice(0,12).map(p=>{
    const item=record(p);return {title:safeText(item.title),status:safeText(item.status),geography:safeText(item.geographicFocus)};
   }):[],notice:"Catalog only; individual program eligibility and current enrollment require official verification."};
@@ -99,6 +104,7 @@ export async function invokeOwnedCapabilities(selectedIds:readonly string[],env:
    if(bodyText.length>128000)return receipt("UNAVAILABLE","Response exceeded bounded evidence budget.");
    const parsed=JSON.parse(bodyText);
    const payload=summarize(id,parsed);
+   if(payload===null)return receipt("UNAVAILABLE","Partner response lacked required source data; rejected without importing.");
    const timestamp=safeText(record(parsed).exportedAt,40)||safeText(record(parsed).timestamp,40);
    return receipt("RETURNED_UNVERIFIED","Received bounded partner-reported aggregate; verify source method, coverage, and freshness before use.",payload,timestamp);
   }catch{return receipt("UNAVAILABLE","Timed out, malformed, or unreachable; no substitute data invented.");}
