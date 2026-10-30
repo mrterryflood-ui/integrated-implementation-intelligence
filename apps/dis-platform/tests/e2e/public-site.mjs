@@ -32,7 +32,7 @@ async function clickAndObserve(page,locator,description){
 
 async function journey(browserType,label){
  const browser=await browserType.launch({headless:true});
- const profile=label==="webkit"?devices["iPhone 13"]: {viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true};
+ const profile=label==="webkit-iphone"?devices["iPhone 13"]: {viewport:{width:390,height:844},deviceScaleFactor:3,isMobile:true,hasTouch:true};
  const context=await browser.newContext({...profile,acceptDownloads:true});
  const page=await context.newPage();
  page.setDefaultTimeout(15000);
