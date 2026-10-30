@@ -11,6 +11,7 @@ const privateRoutes = createRouteMatcher([
   "/api/consultation/sessions(.*)",
   "/api/consultation/graph(.*)",
   "/api/consultation/research(.*)",
+  "/api/capability-fabric(.*)",
   "/api/consultation/parallax(.*)",
   "/api/consultation/opportunity(.*)",
   "/api/consultation/export(.*)",
