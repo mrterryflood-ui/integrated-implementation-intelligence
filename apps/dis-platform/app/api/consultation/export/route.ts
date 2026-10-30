@@ -1,6 +1,6 @@
 import {auth} from "@clerk/nextjs/server";
 import {sanitizeIntake} from "../../../../lib/consultation";
-import {buildPackage,type SlideSpec} from "../../../../lib/consultation-package";
+import {buildPackage,attachUnverifiedOwnedIntelAnnex,type SlideSpec} from "../../../../lib/consultation-package";
 import {exportPptx,exportDocx} from "../../../../lib/consultation-export";
 import type {IntelligenceBundle} from "../../../../lib/consultation-research";
 export const runtime="nodejs";
@@ -27,7 +27,8 @@ export async function POST(req:Request){
   }));
   intelligence={query:String(raw.query||"").slice(0,160),retrievedAt:String(raw.retrievedAt||new Date().toISOString()).slice(0,40),records,coverage:{},errors:[],researchStandard:"Exported source metadata was supplied by the client and has not been independently verified by the export service."};
  }
- const pkg=buildPackage(intake,mode,intelligence);
+ let pkg=buildPackage(intake,mode,intelligence);
+ try{pkg=attachUnverifiedOwnedIntelAnnex(pkg,format==="docx"?input?.ownedIntelAnnex:null)}catch{return Response.json({error:"Invalid unverified annex"},{status:400})}
  const theme=(["midnight","forest","slate"].includes(input.theme)?input.theme:"midnight") as "midnight"|"forest"|"slate";
  if(Array.isArray(input.slides)){
   if(input.slides.length!==12||!input.slides.every(validSlide))return Response.json({error:"Invalid slide design"},{status:400});
