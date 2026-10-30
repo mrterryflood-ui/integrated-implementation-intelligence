@@ -95,6 +95,10 @@ async function journey(browserType,label){
  }catch(error){
   const filename=join(out,label+"-failure.png");
   await page.screenshot({path:filename,fullPage:true}).catch(()=>{});
+  const contextInfo=await page.evaluate(()=>({url:location.href,title:document.title,ready:document.readyState,
+    bodyText:document.body?.innerText.slice(0,1400)||"",rootTags:Array.from(document.querySelectorAll("h1,h2,[role=region]")).slice(0,12).map(n=>n.textContent?.trim().slice(0,85))})).catch(()=>({url:page.url()}));
+  console.error("PAGE STATE "+label+" "+JSON.stringify(contextInfo));
+  console.error("BROWSER JS ERRORS "+label+" "+JSON.stringify(crashes.slice(0,10)));
   console.error("FAIL "+label+" "+String(error)+"; screenshot: "+filename);
   throw error;
  }finally{await context.close();await browser.close();}
