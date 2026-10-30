@@ -99,6 +99,15 @@ async function journey(browserType,label){
    }
    console.log("PASS "+label+" "+id+": tap -> real draft -> visible output");
   }
+  if(await page.locator("body").getAttribute("data-dis-identity")==="public-only"){
+   // Bypassing Clerk's public handshake must NEVER unblock private endpoints.
+   for(const route of ["/api/workspaces","/api/capability-fabric","/api/consultation/parallax"]){
+    const response=await page.request.get(base+route);
+    assert.equal(response.status(),503,route+" must remain fail-closed without production identity");
+   }
+   const council=await page.request.post(base+"/api/council",{data:{prompt:"Public-only gate test"}});
+   assert.equal(council.status(),503,"council execution must remain fail-closed");
+  }
   assert.deepEqual(outgoing,[],"offline example must not send prompts to external AI/research services");
   if(devIdentityRequests.length){
    // Only emit origins and paths, never credential-like URL query parameters.
