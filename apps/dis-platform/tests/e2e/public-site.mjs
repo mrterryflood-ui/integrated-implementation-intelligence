@@ -57,11 +57,14 @@ async function journey(browserType,label){
    const slides=page.locator("#consult-workflow-panel .slide-list button");
    assert.equal(await slides.count(),12,"local draft has 12 editable slides");
    // No hidden interaction: the new panel is in the viewport after the click.
-   const visible=await page.locator("#consult-workflow-panel").evaluate(el=>{
-    const r=el.getBoundingClientRect();
+   // Check the observable mobile result after the browser's layout cycle.
+   // A synchronous DOM query immediately after click can precede WebKit paint.
+   await page.waitForFunction(()=>{
+    const panel=document.querySelector("#consult-workflow-panel");
+    if(!panel)return false;
+    const r=panel.getBoundingClientRect();
     return r.top>=-5&&r.top<innerHeight-60;
-   });
-   assert.equal(visible,true,"result must scroll into view on mobile");
+   },null,{timeout:2500,polling:"raf"});
    if(id==="software-technology"){
     await page.screenshot({path:join(out,label+"-software-preview.png"),fullPage:false});
     const download=page.waitForEvent("download",{timeout:12000});
