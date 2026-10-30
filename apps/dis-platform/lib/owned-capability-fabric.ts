@@ -10,41 +10,94 @@
 export type CapabilityState="SOURCE_INSPECTED"|"CONTRACT_VERIFIED"|"RUNTIME_AUTHORIZED"|"E2E_ACCEPTED";
 export type CandidateState="CONTRACT_ONLY"|"CREDENTIAL_PRESENT_UNVERIFIED"|"UNAVAILABLE"|"RETURNED_UNVERIFIED";
 export type IntelligenceDomain="community"|"implementation"|"benefits"|"civic"|"business"|"veterans"|"health"|"hazards"|"security";
+export type UseClearance="GENERAL_PURPOSE_CANDIDATE"|"NOT_CLEARED_FOR_DIS";
+export type DataBoundary="TCAF_PARTNER_AGGREGATE"|"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY";
 export type Capability = {
  id:string;owner:string;domain:IntelligenceDomain;intentTerms:readonly string[];
+ useClearance:UseClearance;dataBoundary:DataBoundary;
  operation:string;method:"GET"|"POST";path:string;scope:string;
  state:CapabilityState;execution:"THRIVEUP_READ_V1"|"NOT_AUTHORIZED";
  evidence:string;dataClass:"PUBLIC_AGGREGATE"|"PROTECTED_REQUIRES_AUTH";
 };
 const confirmed="Existing repository contract inspected 2026-10-30; runtime key, upstream response and partner scope NOT independently verified.";
 export const CAPABILITIES: readonly Capability[]=[
- {id:"community-impact",owner:"ThriveUp",domain:"community",intentTerms:["impact","outcome","employment","report","evaluation","program","workforce","community"],operation:"Retrieve approved aggregate outcome summaries",method:"GET",path:"/api/partner/v1/impact?limit=15",scope:"impact:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
- {id:"community-system-context",owner:"ThriveUp",domain:"community",intentTerms:["community","services","partner","network","local","ecosystem","impact"],operation:"Read publicly visible ecosystem aggregate",method:"GET",path:"/api/partner/v1/community",scope:"community:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
- {id:"intervention-evidence",owner:"ThriveUp",domain:"implementation",intentTerms:["intervention","implementation","evidence","strategy","evaluate","roi","impact","program"],operation:"Read published Chainweb evidence-coefficient metadata",method:"GET",path:"/api/partner/v1/chainweb/coefficients",scope:"chainweb:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
- {id:"benefits-program-catalog",owner:"ThriveUp",domain:"benefits",intentTerms:["benefits","assistance","insurance","resources","support","healthcare","veterans"],operation:"Read bounded public program catalog",method:"GET",path:"/api/partner/v1/benefits?limit=12",scope:"benefits:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
- {id:"local-civic-context",owner:"Civic Signal",domain:"civic",intentTerms:["civic","policy","city","county","public","governance","community"],operation:"Signed bounded civic-context lookup",method:"POST",path:"/api/partner-exchange/v1/civic-context",scope:"civic-context:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",evidence:"Signed HMAC contract inspected; no DIS-specific partner key or verified tenant-safe round trip.",dataClass:"PUBLIC_AGGREGATE"},
- {id:"funding-qualification",owner:"GrantPathPro",domain:"business",intentTerms:["funding","grant","procurement","business","contract","rfi","rfp"],operation:"Owner-scoped opportunity decision intelligence",method:"GET",path:"/api/opportunity-desk",scope:"owner:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",evidence:"Canonical Grants2 opportunity API inspected; no DIS-to-GrantPath delegated identity or partner grant.",dataClass:"PROTECTED_REQUIRES_AUTH"},
- {id:"implementation-methodology",owner:"RPLICE",domain:"implementation",intentTerms:["research","evidence","cfir","implementation","fidelity","strategy","science"],operation:"Versioned implementation-methodology comparison",method:"GET",path:"/api/v1/public/frameworks",scope:"research:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",evidence:"RPLICE public methodology and MCP contract inspected; dedicated DIS partner credential unavailable.",dataClass:"PUBLIC_AGGREGATE"},
- {id:"veteran-transition",owner:"M2C",domain:"veterans",intentTerms:["veteran","transition","military","employment","caregiver"],operation:"Veteran transition and resource intelligence",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",evidence:"Veteran-transition repository inspected; no approved scoped DIS service contract.",dataClass:"PROTECTED_REQUIRES_AUTH"},
- {id:"health-implementation",owner:"HerHealth / Whole Person",domain:"health",intentTerms:["health","clinical","care","community","prevention"],operation:"Permitted aggregate health implementation evidence",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",evidence:"Healthcare repository inspected; no patient data or PHI access authorized.",dataClass:"PROTECTED_REQUIRES_AUTH"},
- {id:"hazard-signals",owner:"HazardAware",domain:"hazards",intentTerms:["hazard","weather","flood","disaster","wildfire","environment"],operation:"Official-source hazard signal query",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",evidence:"HazardAware source inspected; no DIS integration or release-specific contract accepted.",dataClass:"PUBLIC_AGGREGATE"},
- {id:"agent-assurance",owner:"TATTLETALE",domain:"security",intentTerms:["agent","security","risk","threat","audit","policy"],operation:"Agent identity and invocation assurance",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",evidence:"Security project source inspected; do not treat as deployed authorizer.",dataClass:"PROTECTED_REQUIRES_AUTH"}
+ {id:"community-impact",owner:"ThriveUp",domain:"community",intentTerms:["impact","outcome","employment","report","evaluation","program","workforce","community"],operation:"Retrieve approved aggregate outcome summaries",method:"GET",path:"/api/partner/v1/impact?limit=15",scope:"impact:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",useClearance:"GENERAL_PURPOSE_CANDIDATE",dataBoundary:"TCAF_PARTNER_AGGREGATE",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
+ {id:"community-system-context",owner:"ThriveUp",domain:"community",intentTerms:["community","services","partner","network","local","ecosystem","impact"],operation:"Read publicly visible ecosystem aggregate",method:"GET",path:"/api/partner/v1/community",scope:"community:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",useClearance:"GENERAL_PURPOSE_CANDIDATE",dataBoundary:"TCAF_PARTNER_AGGREGATE",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
+ {id:"intervention-evidence",owner:"ThriveUp",domain:"implementation",intentTerms:["intervention","implementation","evidence","strategy","evaluate","roi","impact","program"],operation:"Read published Chainweb evidence-coefficient metadata",method:"GET",path:"/api/partner/v1/chainweb/coefficients",scope:"chainweb:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",useClearance:"GENERAL_PURPOSE_CANDIDATE",dataBoundary:"TCAF_PARTNER_AGGREGATE",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
+ {id:"benefits-program-catalog",owner:"ThriveUp",domain:"benefits",intentTerms:["benefits","assistance","insurance","resources","support","healthcare","veterans"],operation:"Read bounded public program catalog",method:"GET",path:"/api/partner/v1/benefits?limit=12",scope:"benefits:read",state:"CONTRACT_VERIFIED",execution:"THRIVEUP_READ_V1",useClearance:"GENERAL_PURPOSE_CANDIDATE",dataBoundary:"TCAF_PARTNER_AGGREGATE",evidence:confirmed,dataClass:"PUBLIC_AGGREGATE"},
+ {id:"local-civic-context",owner:"Civic Signal",domain:"civic",intentTerms:["civic","policy","city","county","public","governance","community"],operation:"Signed bounded civic-context lookup",method:"POST",path:"/api/partner-exchange/v1/civic-context",scope:"civic-context:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Signed HMAC contract inspected; no DIS-specific partner key or verified tenant-safe round trip.",dataClass:"PUBLIC_AGGREGATE"},
+ {id:"funding-qualification",owner:"GrantPathPro",domain:"business",intentTerms:["funding","grant","procurement","business","contract","rfi","rfp"],operation:"Owner-scoped opportunity decision intelligence",method:"GET",path:"/api/opportunity-desk",scope:"owner:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Canonical Grants2 opportunity API inspected; no DIS-to-GrantPath delegated identity or partner grant.",dataClass:"PROTECTED_REQUIRES_AUTH"},
+ {id:"implementation-methodology",owner:"RPLICE",domain:"implementation",intentTerms:["research","evidence","cfir","implementation","fidelity","strategy","science"],operation:"Versioned implementation-methodology comparison",method:"GET",path:"/api/v1/public/frameworks",scope:"research:read",state:"CONTRACT_VERIFIED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"RPLICE public methodology and MCP contract inspected; dedicated DIS partner credential unavailable.",dataClass:"PUBLIC_AGGREGATE"},
+ {id:"veteran-transition",owner:"M2C",domain:"veterans",intentTerms:["veteran","transition","military","employment","caregiver"],operation:"Veteran transition and resource intelligence",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Veteran-transition repository inspected; no approved scoped DIS service contract.",dataClass:"PROTECTED_REQUIRES_AUTH"},
+ {id:"health-implementation",owner:"HerHealth / Whole Person",domain:"health",intentTerms:["health","clinical","care","community","prevention"],operation:"Permitted aggregate health implementation evidence",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Healthcare repository inspected; no patient data or PHI access authorized.",dataClass:"PROTECTED_REQUIRES_AUTH"},
+ {id:"hazard-signals",owner:"HazardAware",domain:"hazards",intentTerms:["hazard","weather","flood","disaster","wildfire","environment"],operation:"Official-source hazard signal query",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"HazardAware source inspected; no DIS integration or release-specific contract accepted.",dataClass:"PUBLIC_AGGREGATE"},
+ {id:"agent-assurance",owner:"TATTLETALE",domain:"security",intentTerms:["agent","security","risk","threat","audit","policy"],operation:"Agent identity and invocation assurance",method:"GET",path:"",scope:"not-defined",state:"SOURCE_INSPECTED",execution:"NOT_AUTHORIZED",useClearance:"NOT_CLEARED_FOR_DIS",dataBoundary:"UNVERIFIED_OWNER_OR_CLIENT_BOUNDARY",evidence:"Security project source inspected; do not treat as deployed authorizer.",dataClass:"PROTECTED_REQUIRES_AUTH"}
 ] as const;
-export type CapPlan={problemSummary:string;selected:Array<{id:string;domain:IntelligenceDomain;operation:string;scope:string;state:CapabilityState;execution:"CANDIDATE"|"NOT_CONNECTED";reason:string}>;notSelected:Array<{id:string;reason:string}>;limits:string[]};
-const normalize=(text:string)=>" "+text.toLowerCase().replace(/[^a-z0-9]+/g," ").trim()+" ";
+export type CapPlan={
+ problemSummary:string;
+ selected:Array<{id:string;domain:IntelligenceDomain;operation:string;scope:string;state:CapabilityState;execution:"CANDIDATE"|"NOT_CONNECTED";reason:string}>;
+ notSelected:Array<{id:string;reason:string}>;
+ deferredDomains:IntelligenceDomain[];
+ limits:string[];
+};
+const normalize=(value:string)=>" "+value.toLowerCase().replace(/[^a-z0-9]+/g," ").trim()+" ";
+const includesAny=(terms:Set<string>,values:readonly string[])=>values.some(t=>t.split(" ").every(w=>terms.has(w)));
+
+/**
+ * The specialist catalog is NOT a global asset pool. Source inspection does
+ * not confer ownership, consent, client licensing or a right to invoke.
+ * A capability must be cleared FOR DIS and fit the specific question before
+ * the planner even considers it. Sensitive/client-specific tools remain dark.
+ */
+function fitForQuestion(cap:Capability,terms:Set<string>):{ok:boolean;matched:string[]} {
+ const matched=cap.intentTerms.filter(t=>t.split(" ").every(w=>terms.has(w)));
+ if(!matched.length)return {ok:false,matched};
+ const community=includesAny(terms,["community","nonprofit","organization","program","services","workforce","local","county","population","public"]);
+ const impact=includesAny(terms,["impact","outcome","outcomes","evaluation","measure","report","employment","results"]);
+ const intervention=includesAny(terms,["implementation","intervention","evidence","program","roi","evaluation"]);
+ const benefit=includesAny(terms,["benefits","assistance","eligibility","coverage","medicaid","snap"]);
+ let ok=false;
+ switch(cap.id){
+  case "community-impact":ok=community&&impact;break;
+  case "community-system-context":ok=community&&includesAny(terms,["community","local","network","partner","partners","services","ecosystem"]);break;
+  case "intervention-evidence":ok=community&&intervention;break;
+  case "benefits-program-catalog":ok=benefit;break;
+  default:ok=false;
+ }
+ return {ok,matched};
+}
 export function planOwnedCapabilities(problem:string,options:{max?:number;allowedDomains?:readonly IntelligenceDomain[]}={}):CapPlan{
- const query=normalize(problem.slice(0,1200));const terms=new Set(query.trim().split(/\s+/));
+ const terms=new Set(normalize(problem.slice(0,1200)).trim().split(/\s+/).filter(Boolean));
  const max=Math.max(1,Math.min(options.max??4,4));
- const matches=CAPABILITIES.map((cap,i)=>{
-  const matched=cap.intentTerms.filter(t=>t.split(" ").every(x=>terms.has(x)));
-  const eligible=!options.allowedDomains||options.allowedDomains.includes(cap.domain);
-  const weight=(matched.length?matched.length:0)+(matched.includes("impact")?1:0);
-  return {cap,i,eligible,matched,weight};
- }).filter(x=>x.eligible&&x.weight>0).sort((a,b)=>b.weight-a.weight||a.i-b.i);
- const selected=matches.slice(0,max).map(x=>({id:x.cap.id,domain:x.cap.domain,operation:x.cap.operation,scope:x.cap.scope,state:x.cap.state,execution:x.cap.execution==="THRIVEUP_READ_V1"?"CANDIDATE" as const:"NOT_CONNECTED" as const,reason:"Matched the question to "+x.matched.slice(0,3).join(", ")+". Selection is not proof of data availability."}));
- return {problemSummary:"Specialist capabilities selected from declared domains; user question is NOT transmitted to upstream services.",
-  selected,notSelected:matches.slice(max).map(x=>({id:x.cap.id,reason:"Relevant but excluded by bounded invocation budget."})),
-  limits:["No public app switching or external product advertising.","Selection is deterministic and descriptive, not a validated measure of subject-matter fit.","Platform data, credentials, client identity and lessons are never pooled automatically.","A contract or server-side credential is not proof of a successful remote call."]};
+ const candidates=CAPABILITIES.flatMap((cap,i)=>{
+  if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||cap.dataBoundary!=="TCAF_PARTNER_AGGREGATE")return [];
+  if(options.allowedDomains&&!options.allowedDomains.includes(cap.domain))return [];
+  const fit=fitForQuestion(cap,terms);if(!fit.ok)return [];
+  return [{cap,i,matched:fit.matched,score:fit.matched.length}];
+ }).sort((a,b)=>b.score-a.score||a.i-b.i);
+ const selected=candidates.slice(0,max).map(x=>({
+  id:x.cap.id,domain:x.cap.domain,operation:x.cap.operation,scope:x.cap.scope,state:x.cap.state,
+  execution:x.cap.execution==="THRIVEUP_READ_V1"?"CANDIDATE" as const:"NOT_CONNECTED" as const,
+  reason:"Eligible general-purpose aggregate matched "+x.matched.slice(0,3).join(", ")+". A matching partner grant is still required."
+ }));
+ const deferredDomains=[...new Set(CAPABILITIES.filter(cap=>
+  cap.useClearance==="NOT_CLEARED_FOR_DIS" &&
+  (!options.allowedDomains||options.allowedDomains.includes(cap.domain)) &&
+  cap.intentTerms.some(t=>t.split(" ").every(w=>terms.has(w)))
+ ).map(c=>c.domain))];
+ return {
+  problemSummary:"DIS considered only purpose-cleared aggregate capabilities. Other repositories, including client-specific products, are not a default tool pool.",
+  selected,
+  notSelected:candidates.slice(max).map(x=>({id:x.cap.id,reason:"Potentially relevant, but excluded by the bounded invocation budget."})),
+  deferredDomains,
+  limits:[
+   "A repository's existence or similar domain does not grant DIS a right to access it.",
+   "Client-specific, protected, unverified-owner and restricted-purpose systems are never automatically selected or invoked.",
+   "TCAF partner aggregates are candidates only; each live request still needs a separately granted service scope and current user consent.",
+   "No external platform marketing, catalog, user identity sharing or raw case text is sent to specialist services.",
+   "No matched/authorized capability means DIS uses only its independent intelligence and reports the relevant knowledge gap."
+  ]
+ };
 }
 export type CapabilityReceipt={id:string;state:CandidateState;source:string;scope:string;sourceTimestamp:string|null;
  evidenceClass:"PARTNER_REPORTED_UNVERIFIED"|"NONE";value:unknown|null;reason:string};
@@ -98,7 +151,7 @@ export async function invokeOwnedCapabilities(selectedIds:readonly string[],env:
   if(!cap)return {id,state:"UNAVAILABLE",source:"unknown",scope:"none",sourceTimestamp:null,evidenceClass:"NONE",value:null,reason:"Unregistered capability."} as CapabilityReceipt;
   const receipt=(state:CandidateState,reason:string,value:unknown=null,ts:string|null=null):CapabilityReceipt=>({
    id,state,source:cap.owner,scope:cap.scope,sourceTimestamp:ts,evidenceClass:state==="RETURNED_UNVERIFIED"?"PARTNER_REPORTED_UNVERIFIED":"NONE",value,reason});
-  if(cap.execution!=="THRIVEUP_READ_V1"||cap.method!=="GET")return receipt("CONTRACT_ONLY","No approved DIS-specific exchange credential or adapter.");
+  if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||cap.dataBoundary!=="TCAF_PARTNER_AGGREGATE"||cap.execution!=="THRIVEUP_READ_V1"||cap.method!=="GET")return receipt("CONTRACT_ONLY","Specialist is not cleared for DIS use; source ownership and client-specific restrictions are not bypassed.");
   const key=env[scopes[cap.scope]];
   if(!key||key.trim().length<20)return receipt("CONTRACT_ONLY","No approved server-side scoped credential; no upstream request made.");
   try{
