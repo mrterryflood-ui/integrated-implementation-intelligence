@@ -59,6 +59,7 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
   // A local, substantive draft: the user sees an actual result immediately.
   // No remote research, model call, data transfer or private save is performed.
   reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();
+  setWorking(false);
   const next=sanitizeIntake({...intake,mission:question});
   setIntake(next);setMode("general");setIntel(null);setCouncilReport(null);setParallaxReport(null);
   setSavedId("");setVersion(0);setReview("DRAFT");
