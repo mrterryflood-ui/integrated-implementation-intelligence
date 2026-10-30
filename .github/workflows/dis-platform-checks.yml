@@ -5,11 +5,18 @@ on:
     paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
   pull_request:
     paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
+  workflow_dispatch:
+  schedule:
+    - cron: '17 8 * * *'
 permissions:
   contents: read
+concurrency:
+  group: dis-contracts-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   typecheck:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     defaults:
       run:
         working-directory: apps/dis-platform
@@ -23,3 +30,17 @@ jobs:
       - run: npm install --no-audit --no-fund
       - run: npx tsc --noEmit
       - run: npm test
+        env:
+          DIS_EVAL_ARTIFACT_DIR: test-results/decision-contracts
+      - name: Record bounded evaluation receipts
+        if: always()
+        run: |
+          node -e 'const fs=require("node:fs"); const p="test-results/decision-contracts/universal-summary.json"; if(fs.existsSync(p)) { const s=JSON.parse(fs.readFileSync(p,"utf8")); fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,"## Cross-domain decision contracts\n\n"+JSON.stringify({commit:process.env.GITHUB_SHA,run:process.env.GITHUB_RUN_ID,...s},null,2)+"\n"); }'
+      - name: Preserve synthetic evaluation ledger
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dis-decision-contracts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: apps/dis-platform/test-results/decision-contracts/
+          if-no-files-found: ignore
+          retention-days: 14
