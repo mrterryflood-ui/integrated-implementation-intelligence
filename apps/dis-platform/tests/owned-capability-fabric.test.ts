@@ -4,6 +4,8 @@ import {readFileSync} from "node:fs";
 import {join} from "node:path";
 import {CAPABILITIES,planOwnedCapabilities,invokeOwnedCapabilities} from "../lib/owned-capability-fabric";
 import {CONNECTOR_REGISTRY} from "../lib/integration-registry";
+import {sanitizeIntake} from "../lib/consultation";
+import {buildPackage,attachUnverifiedOwnedIntelAnnex} from "../lib/consultation-package";
 
 test("only one canonical id per specialist capability, and no public roster promotion",()=>{
  assert.equal(new Set(CAPABILITIES.map(x=>x.id)).size,CAPABILITIES.length);
@@ -96,4 +98,21 @@ test("public connector catalog is unique and does not misstate private identity 
  assert.equal(new Set(CONNECTOR_REGISTRY.map(x=>x.id)).size,CONNECTOR_REGISTRY.length);
  assert.equal(CONNECTOR_REGISTRY.filter(x=>x.id==="rplice").length,1);
  assert.equal(CONNECTOR_REGISTRY.find(x=>x.id==="clerk")?.configured,false);
+});
+
+test("server Word export retains the bounded annex without verifying untrusted user content",()=>{
+ const pkg=buildPackage(sanitizeIntake({mission:"Investigate the local business and community impact question"}),"general");
+ const appended=attachUnverifiedOwnedIntelAnnex(pkg,"Capability: community-impact\\nState: RETURNED_UNVERIFIED");
+ assert.equal(pkg.documents.some(d=>d.id==="owned-intelligence"),false,"pure helper must not mutate original");
+ const annex=appended.documents.find(d=>d.id==="owned-intelligence");
+ assert.ok(annex);
+ assert.equal(annex.validation,"DRAFT");
+ assert.match(annex.body,/UNVERIFIED COMPANY INTELLIGENCE/);
+ assert.match(annex.body,/community-impact/);
+ assert.throws(()=>attachUnverifiedOwnedIntelAnnex(pkg,"x".repeat(20001)),/Invalid company intelligence annex/);
+ assert.equal(attachUnverifiedOwnedIntelAnnex(pkg,null),pkg);
+ const route=readFileSync(join(process.cwd(),"app/api/consultation/export/route.ts"),"utf8");
+ const studio=readFileSync(join(process.cwd(),"app/consultation-studio.tsx"),"utf8");
+ assert.match(route,/attachUnverifiedOwnedIntelAnnex\(pkg,format==="docx"/);
+ assert.match(studio,/ownedIntelAnnex:format==="docx"/);
 });
