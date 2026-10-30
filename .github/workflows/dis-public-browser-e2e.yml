@@ -1,7 +1,7 @@
 name: DIS public mobile browser acceptance
 on:
   push:
-    branches: [main, "dis/audit-mobile-journey-browser-e2e-20261029"]
+    branches: [main]
     paths:
       - "apps/dis-platform/**"
       - ".github/workflows/dis-public-browser-e2e.yml"
@@ -31,7 +31,7 @@ jobs:
       - name: Test real deployed HTTP user journey in Chromium and mobile Safari WebKit
         run: node tests/e2e/public-site.mjs
         env:
-          DIS_E2E_BASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://dynamicintel.io' || 'https://dis-authenticated-platform-git-di-024cc4-terry-flood-s-projects.vercel.app' }}
+          DIS_E2E_BASE_URL: https://dynamicintel.io
           DIS_E2E_ARTIFACT_DIR: test-results/dis-public-browser
       - name: Retain screenshots from the browser test
         if: always()
