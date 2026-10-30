@@ -117,3 +117,29 @@
 .consult-focus-intro .consult-examples button{cursor:pointer;touch-action:manipulation;min-height:58px}
 .consult-focus-intro .consult-examples button:active{background:#d3e9f3}
 @media(max-width:600px){.consult-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.consult-tabs button{min-height:56px}.consult-mode-help{font-size:13px}}
+
+/* Real iPhone width audit: bounded decorative orbits and min-width:0 on
+   nested grid/flex items. Do not hide overflow globally; retain horizontal
+   scroll only for intentional slide lists and source tables. */
+.dis-home,.hero,.hero-content,.hero-art,.lab-section,.lab-card,
+.consult-panel,#consult-workflow-panel,.consult-focus-intro,
+.design-editor,.design-editor>div,.consult-docs,.consult-actions,
+.unknowns-radar,.unknowns-grid,.unknowns-item {min-width:0;box-sizing:border-box}
+.dis-home {max-width:100%;overflow-x:clip}
+.hero-art{max-width:100%;overflow:hidden}
+.orbit.one{width:min(200px,62vw);height:min(200px,62vw)}
+.orbit.two{width:min(340px,84vw);height:min(340px,84vw)}
+.orbit.three{width:min(440px,94vw);height:min(440px,94vw)}
+.consult-panel pre,.consult-panel code,.consult-panel p,.consult-focus-intro h3,
+.consult-panel summary,.slide-preview{overflow-wrap:anywhere}
+.consult-panel select,.consult-panel input,.consult-panel textarea{max-width:100%;box-sizing:border-box}
+.consult-actions button:disabled,.consult-panel button:disabled,.case-save button:disabled{cursor:not-allowed;opacity:.67}
+@media(max-width:600px){
+ .hero{padding:50px 20px}.hero h1{font-size:clamp(36px,10vw,56px)}
+ .hero-art{height:min(390px,94vw)}
+ .site-nav,.story-section,.possibilities,.lab-section{padding-left:16px;padding-right:16px}
+ .lab-card{padding:16px}
+ .consult-tabs button{min-width:0}
+ .slide-list{max-width:100%;overscroll-behavior-inline:contain}
+ .design-editor input,.design-editor textarea{min-width:0}
+}
