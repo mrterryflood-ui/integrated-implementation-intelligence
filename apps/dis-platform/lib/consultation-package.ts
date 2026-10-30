@@ -10,6 +10,10 @@ export function buildPackage(intake:Intake,mode:'startup'|'general'='startup',in
  // Preserve explicitly requested specialist startup/real-estate workflows.
  if(mode==='startup'||generateUnknowns(intake,intelligence).mode==='REAL_ESTATE')return buildSpecialistPackage(intake,mode,intelligence,council);
  const pkg=buildUniversalPackage(intake,intelligence,council);
+ // Match both save and Office-export schemas. Keep complete context in the
+ // documents; slides are explicitly abbreviated views, not the source record.
+ const clip=(value:string,max:number)=>value.length<=max?value:value.slice(0,max-1).replace(/[\uD800-\uDBFF]$/,'')+'…';
+ pkg.slides=pkg.slides.map(s=>({...s,title:clip(s.title,180),kicker:clip(s.kicker,140),bullets:s.bullets.slice(0,6).map(b=>clip(b,500)),notes:clip(s.notes,2000)}));
  pkg.documents.push({id:'enterprise-mission',title:'DIS discipline-based mission plan',body:renderEnterpriseMission(designEnterpriseMission(intake.mission)),validation:'DRAFT',note:'Existing discipline lenses are optional planning aids, not a closed list of permissible domains or proof of acceptance.'});
  return pkg;
 }
