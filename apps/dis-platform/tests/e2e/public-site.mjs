@@ -17,6 +17,7 @@ const out=process.env.DIS_E2E_ARTIFACT_DIR||"test-results/dis-public-browser";
 const sites=[
  ["funding-contracts","Funding & contracts"],
  ["research-healthcare","Research & healthcare"],
+ ["research-universities","Universities, research & implementation"],
  ["software-technology","Software & technology"],
  ["enterprise-leadership","Enterprise & leadership"],
  ["policy-community","Policy & community"],
