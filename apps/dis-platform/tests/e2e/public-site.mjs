@@ -52,6 +52,10 @@ async function journey(browserType,label){
    assert.ok(res && res.status()===200,"GET "+url+" must respond 200");
    const chosen=page.getByRole("region",{name:"Selected focus: "+name});
    await chosen.waitFor({state:"visible"});
+   // The root layout must agree with the dynamic page on identity release.
+   if(await page.getByText("Private workspace pending").count()>0){
+    assert.equal(await page.locator("body").getAttribute("data-dis-identity"),"public-only","root layout must use production release gate");
+   }
    const example=chosen.getByRole("button",{name:/Explore example:/}).first();
    await clickAndObserve(page,example,"example from "+name);
    const result=page.getByRole("heading",{name:"Design studio and finished draft package"});
@@ -96,6 +100,13 @@ async function journey(browserType,label){
    console.log("PASS "+label+" "+id+": tap -> real draft -> visible output");
   }
   assert.deepEqual(outgoing,[],"offline example must not send prompts to external AI/research services");
+  if(devIdentityRequests.length){
+   // Only emit origins and paths, never credential-like URL query parameters.
+   console.error("DEV CLERK REQUESTS "+label+" "+JSON.stringify(devIdentityRequests.slice(0,5).map(u=>{
+    const requestUrl=new URL(u);
+    return requestUrl.origin+requestUrl.pathname;
+   })));
+  }
   assert.deepEqual(devIdentityRequests,[],"public-only production must not initialize a development Clerk tenant in the browser");
   assert.deepEqual(crashes,[],"no unhandled browser page errors");
   const width=await page.evaluate(()=>{
