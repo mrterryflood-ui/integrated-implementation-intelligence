@@ -55,7 +55,7 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
  },[]);
  useEffect(()=>{if(!workspaceId){setSessions([]);return}fetch("/api/consultation/sessions?workspaceId="+encodeURIComponent(workspaceId)).then(r=>r.ok?r.json():null).then(v=>setSessions(v?.sessions||[])).catch(()=>{})},[workspaceId]);
  const goToTab=(next:(typeof tabs)[number])=>{setTab(next);setError("");requestAnimationFrame(()=>{workflowPanelRef.current?.focus({preventScroll:true});workflowPanelRef.current?.scrollIntoView({behavior:"auto",block:"start"});});};
- const cancelOwned=()=>{ownedRevisionRef.current++;ownedRequestRef.current?.abort();ownedRequestRef.current=null;setOwnedIntel(null);setAllowOwnedIntel(false)};
+ const cancelOwned=()=>{const inFlight=Boolean(ownedRequestRef.current);ownedRevisionRef.current++;ownedRequestRef.current?.abort();ownedRequestRef.current=null;setOwnedIntel(null);setAllowOwnedIntel(false);if(inFlight)setWorking(false)};
  const update=(key:keyof Intake,value:string)=>{cancelOwned();reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();setWorking(false);setIntake(old=>({...old,[key]:value}));};
  const generate=(researchIntel:IntelligenceBundle|null=intel,report:any=councilReport)=>{const result=buildPackage(sanitizeIntake(intake),mode,researchIntel,report?.deliberation?.synthesis?report:undefined);setPkg(result);setSlideIndex(0);setStatus("Draft consultation package built. Review the evidence gates and edit any slides or reports.");setError("");return result};
  const startExample=(question:string)=>{cancelOwned();
