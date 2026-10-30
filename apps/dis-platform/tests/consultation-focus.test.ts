@@ -49,3 +49,11 @@ test("homepage renders real links, while client route opens the existing consult
  assert.match(css,/\.possibility-grid \.possibility-card:focus-visible/);
  assert.match(css,/@media\(max-width:650px\)/);
 });
+
+test("mobile workflow navigation waits until the selected tab is committed",()=>{
+ const studio=readFileSync(join(process.cwd(),"app","consultation-studio.tsx"),"utf8");
+ assert.match(studio,/useLayoutEffect\(\(\)=>\{/);
+ assert.match(studio,/pendingTabNavigationRef\.current/);
+ assert.match(studio,/panel\.scrollIntoView\(\{behavior:"instant",block:"start"\}\)/);
+ assert.match(studio,/\[tab\]\)/);
+});
