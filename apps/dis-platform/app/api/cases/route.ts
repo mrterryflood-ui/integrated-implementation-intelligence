@@ -2,6 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {buildPlaybook,validatePlaybook} from "../../../lib/decision-playbook";
 import {buildLearningCheckpoint} from "../../../lib/longitudinal-learning";
+import {randomUUID} from "node:crypto";
 export const runtime="nodejs";
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 async function context(){const {userId}=await auth();if(!userId)return null;if(!process.env.DIS_DATABASE_URL)throw Error("Data unavailable");return {userId,sql:neon(process.env.DIS_DATABASE_URL)}}
@@ -28,25 +29,20 @@ export async function POST(request:Request){try{
  const report=input.report&&typeof input.report==="object"?input.report:{state:"NOT_RUN"};
  if(JSON.stringify(report).length>65000)return Response.json({error:"Report exceeds save limit"},{status:413});
  const playbook=buildPlaybook(question,report);
- // Opening a case also writes its original unmeasured baseline to the same
- // protected event ledger. If the journal insert fails, case creation rolls back.
+ // Server-generated case ID enables ordered inserts in one SQL transaction:
+ // the event RLS policy can see the case from the preceding statement. Sibling
+ // data-modifying CTEs share one snapshot and cannot safely see each other.
+ const caseId=randomUUID();
  const baseline=JSON.stringify(buildLearningCheckpoint(playbook,1,new Date().toISOString()));
  const rows=await ctx.sql.transaction([
   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
-  ctx.sql`WITH created AS (
-    INSERT INTO dis_casework(workspace_id,owner_subject,title,question,report,playbook,status)
-    VALUES(${workspaceId},${ctx.userId},${title},${question},${JSON.stringify(report)}::jsonb,${JSON.stringify(playbook)}::jsonb,'ACTIVE')
-    RETURNING id,workspace_id,owner_subject,title,question,report,playbook,version,status,updated_at
-   ), journal AS (
-    INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
-    SELECT id,workspace_id,owner_subject,'CREATED',${baseline}::jsonb FROM created
-    RETURNING id
-   )
-   SELECT created.id,created.workspace_id,created.title,created.question,
-     created.report,created.playbook,created.version,created.status,created.updated_at,
-     journal.id AS learning_event_id FROM created CROSS JOIN journal`
+  ctx.sql`INSERT INTO dis_casework(id,workspace_id,owner_subject,title,question,report,playbook,status)
+    VALUES(${caseId}::uuid,${workspaceId},${ctx.userId},${title},${question},${JSON.stringify(report)}::jsonb,${JSON.stringify(playbook)}::jsonb,'ACTIVE')
+    RETURNING id,workspace_id,title,question,report,playbook,version,status,updated_at`,
+  ctx.sql`INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
+    VALUES(${caseId}::uuid,${workspaceId},${ctx.userId},'CREATED',${baseline}::jsonb) RETURNING id`
  ]);
- if(!rows[1].length)return Response.json({error:"Workspace not found or not authorized"},{status:404});
+ if(!rows[1].length||!rows[2].length)return Response.json({error:"Workspace not found or not authorized"},{status:404});
  return Response.json({case:rows[1][0],note:"Saved original baseline and action plan; acceptance and outcomes still require independent verification.",historyRecorded:true},{status:201});
 }catch{return fail()}}
 export async function PATCH(request:Request){try{
