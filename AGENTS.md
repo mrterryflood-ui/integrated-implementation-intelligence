@@ -8,6 +8,10 @@ This repository is the canonical authority for Integrated Implementation Intelli
 4. `docs/enterprise/CANONICAL-ENTERPRISE-CAMPAIGN-2026-2028.md`;
 5. `docs/enterprise/CANONICAL-FUNDING-CAPTURE-AND-AGENT-OPERATING-SYSTEM.md`.
 
+## Correspondence integrity — fail-closed
+
+Before ANY externally visible correspondence or client-facing assertion, read and follow `docs/enterprise/CORRESPONDENCE-VERIFICATION-GATE.md`. No fabricated solicitation, deadline, eligibility, partnership, credential, deployment, attachment, recipient or source; primary-source claim manifest, independent challenge, exact-version owner approval, and verified sender/recipient/attachments are required. Any missing authoritative evidence or approval blocks transmission. This applies to every agent and delivery tool; documenting a rule is not proof that a platform's sending boundary enforces it.
+
 ## Binding execution rules
 
 - Preserve ISS LLC and TCAF as separate legal, financial, eligibility, contracting, evidence, and reporting entities.
