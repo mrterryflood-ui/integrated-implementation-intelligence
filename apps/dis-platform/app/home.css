@@ -107,3 +107,13 @@
  .consult-focus-intro{padding:14px}
 }
 @media(prefers-reduced-motion:reduce){.possibility-grid .possibility-card{transition:none;transform:none!important}}
+
+/* Homepage flow: changing tabs and examples reveals the next real panel in-view. */
+.consult-workflow-panel, #consult-workflow-panel{scroll-margin-top:22px;outline:none}
+#consult-workflow-panel:focus-visible{outline:3px solid #a88647;outline-offset:5px;border-radius:12px}
+.consult-mode-help{margin:5px 0 14px;color:#345569;font-size:14px;line-height:1.5}
+.consult-export-notice{width:100%;margin:0 0 10px;color:#5e4430;font-size:14px;line-height:1.55}
+.consult-status{scroll-margin-top:40px}
+.consult-focus-intro .consult-examples button{cursor:pointer;touch-action:manipulation;min-height:58px}
+.consult-focus-intro .consult-examples button:active{background:#d3e9f3}
+@media(max-width:600px){.consult-tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.consult-tabs button{min-height:56px}.consult-mode-help{font-size:13px}}

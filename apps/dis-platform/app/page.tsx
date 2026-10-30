@@ -15,6 +15,9 @@ const steps=[
 
 export default async function Home(){
  const identityBlocked=productionIdentityBlocked(process.env);
+ // Public features should never advertise private services as ready based only
+ // on a preview environment where productionIdentityBlocked deliberately returns false.
+ const privateReady=!identityBlocked&&Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.startsWith("pk_live_")&&process.env.CLERK_SECRET_KEY?.startsWith("sk_live_"));
  const {userId}=identityBlocked?{userId:null}:await auth();
  return <div className="dis-home">
  <header className="site-nav">
@@ -34,7 +37,7 @@ export default async function Home(){
  <div className="story-grid">{steps.map(step=><article key={step[0]}><span>{step[0]}</span><h3>{step[1]}</h3><p>{step[2]}</p></article>)}</div></section>
  <section className="interlude"><span className="eyebrow">THE POWER OF DIFFERENT THINKING</span><h2>One perspective can be insightful.<br/><em>Several can change the question.</em></h2><p>Our educational lenses draw on publicly documented intellectual approaches—not impersonations, endorsements, or claimed participation.</p></section>
  <section id="possibilities" className="possibilities"><div className="section-heading"><span className="eyebrow">YOUR CURIOSITY HAS NO CATEGORY</span><h2>Big problems. Small questions. Everything between.</h2><p>Choose an area to start a guided investigation. Your question and decisions remain yours.</p></div><div className="possibility-grid">{CONSULTATION_FOCUS_AREAS.map(area=><a className="possibility-card" key={area.id} href={consultationFocusHref(area.id)} aria-label={"Explore "+area.title+" in DIS consultation"}><h3>{area.title}</h3><p>{area.description}</p><span className="possibility-action">Start here <span aria-hidden="true">→</span></span></a>)}</div></section>
- <ConsultationStudio/><CouncilLab/>
+ <ConsultationStudio privateReady={privateReady}/><CouncilLab privateReady={privateReady}/>
  <section className="closing"><span className="eyebrow">CURIOSITY IS THE BEGINNING</span><h2>Better questions.<br/><em>More thoughtful possibilities.</em></h2><p>Build understanding. Challenge the assumptions. Seek evidence. Make something better.</p><a className="hero-primary" href="#council">Start with a question</a></section></main>
  <footer className="site-footer"><strong>Dynamic Intelligence · dynamicintel.io</strong><p>Multidisciplinary intelligence for people and systems.</p><small>Historical and contemporary names identify educational reasoning lenses inspired by documented work. No endorsement, affiliation, exact personal simulation, or real-person consultation is implied. AI-generated deliberation remains preliminary until evidence and outcomes are independently verified.</small></footer>
  </div>
