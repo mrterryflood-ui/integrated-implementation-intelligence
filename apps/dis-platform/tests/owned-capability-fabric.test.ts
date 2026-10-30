@@ -160,3 +160,18 @@ test("research and university expertise is a distinct planning lane, never an as
  assert.equal(network,0);
  assert.ok(results.every(x=>x.state==="CONTRACT_ONLY"));
 });
+
+test("healthcare and social health specialists are independently discoverable but never unauthorized live tools",async()=>{
+ const clinical=planOwnedCapabilities("Investigate mental behavioral health and clinical care continuity");
+ const social=planOwnedCapabilities("Investigate housing food transportation social needs and service navigation");
+ assert.ok(clinical.deferredDomains.includes("health"));
+ assert.ok(social.deferredDomains.includes("social_health"));
+ assert.ok(CAPABILITIES.some(c=>c.id==="behavioral-health-safety"&&c.state==="DISCOVERED_UNVERIFIED"));
+ assert.ok(CAPABILITIES.some(c=>c.id==="social-care-navigation"&&c.execution==="NOT_AUTHORIZED"));
+ let egress=0;
+ const fetcher=(async()=>{egress++;throw Error("unauthorized call")}) as typeof fetch;
+ const ids=["care-delivery-equity","behavioral-health-safety","patient-records-continuity","social-care-navigation"];
+ const receipts=await invokeOwnedCapabilities(ids,{DIS_THRIVEUP_IMPACT_KEY:"unrelated-valid-partner-key-12345"},fetcher);
+ assert.equal(egress,0);
+ assert.ok(receipts.every(r=>r.state==="CONTRACT_ONLY"&&r.value===null));
+});
