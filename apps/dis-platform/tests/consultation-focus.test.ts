@@ -8,9 +8,9 @@ import {
  findConsultationFocus,
 } from "../lib/consultation-focus";
 
-test("all six formerly inert use-case cards have unique, usable consultation destinations",()=>{
+test("all seven research and cross-domain use-case cards have unique, usable consultation destinations",()=>{
  assert.equal(CONSULTATION_FOCUS_AREAS.length,7);
- assert.equal(new Set(CONSULTATION_FOCUS_AREAS.map(a=>a.id)).size,6);
+ assert.equal(new Set(CONSULTATION_FOCUS_AREAS.map(a=>a.id)).size,7);
  for(const area of CONSULTATION_FOCUS_AREAS){
   const url=new URL(consultationFocusHref(area.id),"https://dynamicintel.io");
   assert.equal(url.origin,"https://dynamicintel.io");
