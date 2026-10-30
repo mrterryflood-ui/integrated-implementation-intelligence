@@ -71,7 +71,7 @@ export function renderPackageMarkdown(p:ConsultationPackage){return packageMarkd
 export function attachUnverifiedOwnedIntelAnnex(pkg:ConsultationPackage,raw:unknown):ConsultationPackage{
  if(raw===null||raw===undefined)return pkg;
  if(typeof raw!=="string"||raw.length>20000)throw new Error("Invalid company intelligence annex");
- const safeBody="USER-SUPPLIED UNVERIFIED COMPANY INTELLIGENCE ANNEX. No independent source verification, live cross-platform authentication, causal analysis or authorization for downstream action is implied.\\n\\n"+raw;
+ const safeBody="USER-SUPPLIED UNVERIFIED COMPANY INTELLIGENCE ANNEX. No independent source verification, live cross-platform authentication, causal analysis or authorization for downstream action is implied.\n\n"+raw;
  return {...pkg,documents:[...pkg.documents.filter(d=>d.id!=="owned-intelligence"),{
   id:"owned-intelligence",title:"Company intelligence — evidence and gap register (unverified draft)",
   body:safeBody,validation:"DRAFT",note:"This client-supplied annex is not elevated to verified status by export. Verify every source and date before publication."
