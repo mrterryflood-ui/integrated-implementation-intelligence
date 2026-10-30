@@ -84,6 +84,8 @@ async function journey(browserType,label){
     const question=await page.locator("#ci-mission").inputValue();
     assert.ok(question.length>8&&question.toLowerCase().includes("platform"),"example must persist in editable question");
     await clickAndObserve(page,page.getByRole("tab",{name:"2. Investigate"}),"Investigate tab");
+    const denied=await page.request.post(base+"/api/capability-fabric",{data:{problem:"Test protected partner capability access",mode:"plan"}});
+    assert.equal(denied.status(),503,"public-only production must return 503 before private capability invocation");
     const research=page.getByRole("button",{name:"Search live public records"});
     assert.equal(await research.isDisabled(),true,"unreleased research must not pretend it works");
     await clickAndObserve(page,page.getByRole("tab",{name:"3. Council review"}),"Council tab");
