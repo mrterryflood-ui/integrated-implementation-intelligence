@@ -35,7 +35,7 @@ export async function POST(request:Request){try{
    ), archived AS (
     INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
     SELECT id,workspace_id,owner_subject,'REASSESSMENT',
-      jsonb_build_object('previousVersion',${version},'previousReport',${previous}::jsonb,
+      jsonb_build_object('previousVersion',${version}::integer,'previousReport',${previous}::jsonb,
       'newVersion',version,'evidenceState','PRELIMINARY_NOT_INDEPENDENTLY_VERIFIED')
     FROM revised RETURNING id
    )
