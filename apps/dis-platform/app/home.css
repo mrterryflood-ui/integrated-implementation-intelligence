@@ -73,3 +73,37 @@
 .unknowns-foot{border-top:1px solid #C4D2D9;padding-top:13px;margin-top:20px;display:flex;gap:18px;align-items:center;flex-wrap:wrap}.unknowns-foot p{font-size:11px;color:#5E7280;max-width:750px}
 .unknowns-foot button{background:#183F55!important;color:#FDFDFD!important;border-radius:8px;border:0;padding:11px 15px;cursor:pointer}
 @media(max-width:600px){.unknowns-radar{padding:16px}.unknowns-grid{grid-template-columns:1fr}.unknowns-head{display:block}.unknowns-filter button{flex:1}}
+
+
+/* Every use-case card is a real, full-surface link into the same DIS workflow. */
+.possibility-grid .possibility-card{
+ background:#123045;border:1px solid #315067;border-radius:14px;
+ padding:26px;display:flex;flex-direction:column;gap:12px;
+ min-height:210px;box-sizing:border-box;cursor:pointer;
+ transition:background-color .16s ease,border-color .16s ease,transform .16s ease;
+}
+.possibility-grid .possibility-card h3{margin:0;font-size:clamp(20px,2vw,26px);line-height:1.3}
+.possibility-grid .possibility-card p{margin:0;line-height:1.55;color:#e2ebf1}
+.possibility-action{margin-top:auto;padding-top:16px;color:#f0d29d;font-weight:700;display:flex;align-items:center;gap:10px}
+.possibility-grid .possibility-card:hover{background:#1c4158;border-color:#e1bd7d;transform:translateY(-2px)}
+.possibility-grid .possibility-card:focus-visible{outline:3px solid #f1d08e;outline-offset:4px;background:#1b4055}
+.possibility-grid .possibility-card:active{background:#22475a;transform:translateY(0)}
+.consult-focus-intro{background:#e7f1f5;border:1px solid #a8cad6;border-radius:12px;padding:18px;margin:0 0 20px}
+.consult-focus-intro h3{margin:4px 0 8px}
+.consult-focus-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.consult-focus-label{font-size:11px;letter-spacing:1.3px;font-weight:800;color:#386276}
+.dis-home .consult-focus-heading a{color:#155476;text-decoration:underline;text-underline-offset:3px}
+.consult-focus-intro .consult-example-label{margin:12px 0 8px}
+.consult-examples{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}
+.consult-examples button{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;
+ background:#fff;color:#14384c;border:1px solid #9db7c4;border-radius:9px;padding:14px 16px;min-height:54px;font:inherit;line-height:1.45}
+.consult-examples button:hover{background:#f7fbfd;border-color:#347493}
+.consult-examples button:focus-visible{outline:3px solid #1f658a;outline-offset:2px}
+.consult-examples button span{font-size:20px;flex-shrink:0}
+.consult-focus-intro small{display:block;color:#3f6170;line-height:1.5}
+@media(max-width:650px){
+ .possibility-grid .possibility-card{min-height:0;padding:22px}
+ .consult-examples{grid-template-columns:minmax(0,1fr)}
+ .consult-focus-intro{padding:14px}
+}
+@media(prefers-reduced-motion:reduce){.possibility-grid .possibility-card{transition:none;transform:none!important}}
