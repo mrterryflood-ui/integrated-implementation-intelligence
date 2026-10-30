@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
 import {join} from "node:path";
 import {CAPABILITIES,planOwnedCapabilities,invokeOwnedCapabilities} from "../lib/owned-capability-fabric";
+import {CONNECTOR_REGISTRY} from "../lib/integration-registry";
 
 test("only one canonical id per specialist capability, and no public roster promotion",()=>{
  assert.equal(new Set(CAPABILITIES.map(x=>x.id)).size,CAPABILITIES.length);
@@ -89,4 +90,10 @@ test("private server endpoint is behind identity, quota, origin and separate con
  assert.match(studio,/Check permitted intelligence/);
  assert.match(studio,/disabled=\{working\|\|!privateReady\|\|!allowOwnedIntel/);
  assert.ok(!route.includes("NEXT_PUBLIC_DIS_THRIVEUP"));
+});
+
+test("public connector catalog is unique and does not misstate private identity as live",()=>{
+ assert.equal(new Set(CONNECTOR_REGISTRY.map(x=>x.id)).size,CONNECTOR_REGISTRY.length);
+ assert.equal(CONNECTOR_REGISTRY.filter(x=>x.id==="rplice").length,1);
+ assert.equal(CONNECTOR_REGISTRY.find(x=>x.id==="clerk")?.configured,false);
 });
