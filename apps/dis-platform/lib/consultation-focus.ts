@@ -38,7 +38,7 @@ export const CONSULTATION_FOCUS_AREAS = [
     id: "social-health",
     title: "Social health & whole-person care",
     description: "Explore housing, food, transportation, connection, family support, benefits, and community safety alongside health.",
-    guidance: "Start with the people, place, life circumstances, resources, social needs, stakeholders, and actual outcomes. Explore options through approved aggregate evidence and human-reviewed methods; no individual's service history, screening, referral, or client file is automatically shared.",
+    guidance: "Start with the people, place, life circumstances, resources, social needs, stakeholders, and actual outcomes. Explore options through approved aggregate evidence and human-reviewed methods; individual service histories, screenings, referrals, and client files are not automatically shared.",
     examples: [
       "How can housing, food access, transportation, and community partnerships influence preventable health burdens?",
       "How should we coordinate trusted social-care navigation with clinical teams and measure reach, referrals, uptake, and outcomes?"
