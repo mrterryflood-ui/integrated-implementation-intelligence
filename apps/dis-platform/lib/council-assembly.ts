@@ -1,3 +1,4 @@
+import {lensFit} from './collaboration-policy';
 import {MEMBERS,DEFAULT_RED} from "./council";
 export type Member=typeof MEMBERS[number];
 export type SelectionMode="auto"|"manual"|"solo";
@@ -17,10 +18,7 @@ export function explainChoice(m:Member,prompt:string){
  category==="design"&&/brand|user|ux|product|design/.test(words);
  return (relevant?"Topic relevance: ":"Complementary discipline: ")+m.lens+". This is an educational analytic method, not their personal opinion.";
 }
-function score(m:Member,prompt:string,red:boolean){
- const terms=(m.group==="Engineering"?["code","software","platform","system","technology","design"]:m.group==="Business"?["business","company","market","grant","revenue","funding","pricing"]:m.group==="Civic"?["community","policy","government","equity","vote"]:m.group==="Science"?["research","evidence","health","study","data"]:m.group==="Strategy"?["risk","conflict","scenario","strategy"]:m.group==="Design"?["user","brand","experience","design"]:["learn","education","quality","people"]).filter(w=>prompt.toLowerCase().includes(w)).length;
- return terms*8+(red&&DEFAULT_RED.includes(m.id)?4:0)+(m.id==="angie-jones"?2:0);
-}
+function score(m:Member,prompt:string,red:boolean){return lensFit(m,prompt)+(red&&m.id==='angie-jones'?1:0);}
 function order(candidates:Member[],prompt:string,red:boolean){return candidates.sort((a,b)=>score(b,prompt,red)-score(a,prompt,red)||a.name.localeCompare(b.name))}
 function unique(ids:string[]){return [...new Set(ids)].filter(x=>uniqueMembers.has(x))}
 export function assemble(input:AssemblyInput){

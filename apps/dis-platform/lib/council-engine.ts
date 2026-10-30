@@ -1,29 +1,29 @@
+import {conversationContext,sanitizeConversation,type ConversationTurn} from './conversation-context';
+import {reviewAnswer} from './answer-quality';
+import {COLLABORATION_RULES,conversationalTask} from './collaboration-policy';
+import {reconstructEvidence,evidenceContext,inspectCompletion} from './evidence-integrity';
 import {getVercelOidcToken} from "@vercel/oidc";
 import {selectCouncil,DEFAULT_RED} from "./council";
 import type {CouncilMember} from "./council";
 type Source={id:string,title:string,doi:string|null,url:string,year:number|null,abstract:string|null};
 function compact(value:unknown,n=1000){return typeof value==="string"?value.slice(0,n):""}
-export function reconstruct(index:Record<string,number[]>|null):string|null{
- if(!index||typeof index!=="object")return null;
- const arr:string[]=[];
- for(const [word,locations] of Object.entries(index))if(Array.isArray(locations))for(const p of locations)if(Number.isInteger(p)&&p>=0&&p<1800)arr[p]=word;
- return arr.filter(Boolean).join(" ").slice(0,3500)||null;
-}
+export function reconstruct(index:Record<string,number[]>|null):string|null{return reconstructEvidence(index).text;}
 export async function research(query:string,fetcher=fetch):Promise<{sources:Source[],status:string,error?:string}>{
- const url="https://api.openalex.org/works?search="+encodeURIComponent(query.slice(0,230))+"&per-page=6&select=id,title,doi,publication_year,abstract_inverted_index";
+ const since=new Date();since.setUTCFullYear(since.getUTCFullYear()-6);
+ const url="https://api.openalex.org/works?filter=from_publication_date:"+since.toISOString().slice(0,10)+",to_publication_date:"+new Date().toISOString().slice(0,10)+"&search="+encodeURIComponent(query.slice(0,230))+"&per-page=6&select=id,title,doi,publication_year,abstract_inverted_index";
  try{
   const response=await fetcher(url,{signal:AbortSignal.timeout(6500),headers:{Accept:"application/json"},cache:"no-store"});
   if(!response.ok)return {sources:[],status:"UNAVAILABLE",error:"Research provider HTTP "+response.status};
   const body:any=await response.json();
   const raw:Record<string,unknown>[]=Array.isArray(body.results)?body.results:[];
   const sources=raw.filter((x:Record<string,unknown>)=>typeof x.title==="string"&&typeof x.id==="string").map((x:Record<string,unknown>,i:number)=>({
-   id:"S"+(i+1),title:String(x.title),doi:typeof x.doi==="string"?x.doi:null,url:typeof x.doi==="string"?x.doi:String(x.id),year:typeof x.publication_year==="number"&&Number.isInteger(x.publication_year)?x.publication_year:null,abstract:reconstruct(x.abstract_inverted_index as Record<string,number[]>|null)
+   id:"S"+(i+1),title:String(x.title),doi:typeof x.doi==="string"?x.doi:null,url:typeof x.doi==="string"?x.doi:String(x.id),year:typeof x.publication_year==="number"&&Number.isInteger(x.publication_year)?x.publication_year:null,abstract:reconstructEvidence(x.abstract_inverted_index as Record<string,number[]>|null).text,abstractTruncated:reconstructEvidence(x.abstract_inverted_index as Record<string,number[]>|null).truncated
   }));
   return {sources,status:sources.length?"ABSTRACT_AND_METADATA":"NO_RESULTS"};
  }catch(e){return {sources:[],status:"UNAVAILABLE",error:"Source lookup unavailable"}}
 }
 const instructions="You are an analysis role in DIS, a multidisciplinary research and implementation platform. The named thinkers are conceptual lenses derived from documented work; do not imitate their speech, invent quotes, or claim their participation. Treat retrieved source metadata and abstracts as limited evidence only. Cite relevant records as [S1] etc only when an abstract supports the precise claim. Otherwise explicitly call the assertion a hypothesis or unknown. Deliberately ask what is missing; consider stakeholders, ethics, feasible action, decision rights, falsification and sustainable outcomes. Never claim an action or test was executed if it was not.";
-function sourceContext(sources:Source[]){return sources.map(s=>`[${s.id}] ${s.title} (${s.year??"unknown year"}) ${s.url}\nAbstract: ${s.abstract||"NOT AVAILABLE"}`).join("\n\n").slice(0,17500)}
+function sourceContext(sources:Source[]){return evidenceContext(sources)}
 function model(){return process.env.AI_GATEWAY_MODEL||"openai/gpt-5.4-mini"}
 export async function infer(system:string,prompt:string,modelOverride?:string,fetcher=fetch):Promise<{ok:boolean,text:string,error?:string,model?:string,fallbackUsed?:boolean}>{
  const token=process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||await getVercelOidcToken().catch(()=>null);
@@ -34,7 +34,7 @@ export async function infer(system:string,prompt:string,modelOverride?:string,fe
  try{
   for(let i=0;i<attempts.length;i++){
    const selected=attempts[i];
-   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:2400,reasoning:{effort:"none"},messages:[{role:"system",content:instructions+"\n"+system},{role:"user",content:prompt}]})});
+   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:2400,reasoning:{effort:"none"},messages:[{role:"system",content:instructions+"\n"+system+"\n"+COLLABORATION_RULES},{role:"user",content:prompt}]})});
    if(!res.ok){
     const detail:any=await res.json().catch(()=>({}));
     const value=detail?.error?.code||detail?.code||detail?.error?.type||"unknown";
@@ -43,8 +43,8 @@ export async function infer(system:string,prompt:string,modelOverride?:string,fe
     return {ok:false,text:"",error:"Gateway HTTP "+res.status+" ("+code+")"};
    }
    const json=await res.json();
-   const content=compact(json.choices?.[0]?.message?.content,5000);
-   return content?{ok:true,text:content,model:typeof json.model==="string"?json.model:undefined,fallbackUsed:i>0}:{ok:false,text:"",error:"Gateway returned no text (finish="+String(json.choices?.[0]?.finish_reason||"unknown").slice(0,30)+",output="+String(json.usage?.completion_tokens||"unknown")+")"};
+   const result=inspectCompletion(json);
+   return {...result,model:typeof json.model==="string"?json.model:undefined,fallbackUsed:i>0};
   }
   return {ok:false,text:"",error:"No allowed model accepted the request"};
  }catch{return {ok:false,text:"",error:"Inference unavailable or timed out"}}finally{clearTimeout(timer)}
@@ -64,12 +64,12 @@ export function parseActionPlan(raw:string){
   return tasks.length>=2&&metrics.length>=1?{tasks,metrics,status:"MODEL_PROPOSED_UNVERIFIED"}:null;
  }catch{return null}
 }
-export async function convene(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string,challengeEnabled?:boolean,primaryMembers?:CouncilMember[],redMembers?:CouncilMember[]},deps={research,infer}){
+async function conveneInternal(input:{prompt:string,count:number,redCount:number,selected:string[],redSelected:string[],depth:string,challengeEnabled?:boolean,primaryMembers?:CouncilMember[],redMembers?:CouncilMember[],conversation?:ConversationTurn[]},deps={research,infer}){
  const prompt=input.prompt.trim();
  const primary=input.primaryMembers??selectCouncil(prompt,input.count,input.selected,false);
- const red=input.challengeEnabled===false?[]:(input.redMembers??selectCouncil(prompt,input.redCount,input.redSelected.length?input.redSelected:DEFAULT_RED,true));
+ const red=input.challengeEnabled===false?[]:(input.redMembers??selectCouncil(prompt,input.redCount,input.redSelected,true));
  const found=await deps.research(prompt);
- const ctx=sourceContext(found.sources);
+ const ctx=sourceContext(found.sources)+conversationContext(input.conversation);
  if(primary.length===1&&red.length===0){
   const member=primary[0];
   const answer=await deps.infer("One-on-one educational analytical lens: "+member.name+". Use documented ideas in "+member.domain+" and "+member.lens+". Do not imitate their voice, claim to be them or invent opinions, quotes or endorsements. Engage conversationally and ask a useful follow-up.", "Question: "+prompt+"\n\nRetrieved abstract-level evidence:\n"+ctx,process.env.AI_GATEWAY_PRIMARY_A_MODEL||model());
@@ -84,8 +84,8 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
   const challengeLens=red.map(m=>m.domain+" — "+m.lens).join("; ").slice(0,1400);
   const promptText="Question: "+prompt+"\n\nPrimary analysis lenses: "+primaryLens+"\n\nAdversarial challenge lenses: "+(challengeLens||"No secondary council requested")+
    "\n\nEvidence (abstracts only):\n"+ctx+
-   "\n\nWrite a structured consultation with: problem clarification; 5Ws/H; at least two competing hypotheses; primary views; skeptic challenge including action, reaction and counteraction; evidence versus assumptions using [S#] identifiers only where supported by the quoted abstract; what would falsify each option; a practical pilot with owner and measurable outcomes; adoption and sustainability; explicit uncertainty. All generated views arise from ONE model and are NOT independent council executions.";
-  const output=await deps.infer("One-model experimental DIS council simulation. All names and perspectives are educational analytical lenses, not real people. Do not fabricate consensus, research validation, or completed implementation.",promptText,model());
+   "\n\n"+conversationalTask(input.depth)+" All generated perspectives use ONE model; do not claim independent review.";
+  const output=await deps.infer(COLLABORATION_RULES+" This execution uses one model, not independent reviewers.",promptText,model());
   const primaryViews=primary.map(m=>({id:m.id,name:m.name,perspective:m.lens,question:"Evaluate this question through "+m.domain+" methods"}));
   const redViews=red.map(m=>({id:m.id,name:m.name,challenge:"What assumption fails under "+m.domain+" scrutiny?"}));
   if(!output.ok)return {state:"INCOMPLETE",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,error:output.error||"AI council unavailable",citations:{citedIds:[],unknownIds:[],checked:"NOT_RUN",claimSupport:"NOT_VERIFIED"}};
@@ -115,4 +115,12 @@ export async function convene(input:{prompt:string,count:number,redCount:number,
  const independentSystemsVerified=identities.every(Boolean)&&providerSet.size>=3;
  const audit=citationAudit(synthesis.text,found.sources);
  return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,actionPlan,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,modelProvenance:{models:identities,verifiedProviderCount:providerSet.size,independentSystemsVerified},callStatuses:[...calls,synthesis].map(x=>({ok:x.ok,model:(x as {model?:string}).model||null,fallbackUsed:(x as {fallbackUsed?:boolean}).fallbackUsed||false})),limitations:"Up to five model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from scholarly abstracts/metadata, not full articles. All implementation proposals remain unexecuted."};
+}
+
+export async function convene(input:Parameters<typeof conveneInternal>[0],deps={research,infer}){
+ const history=sanitizeConversation(input.conversation);
+ const original=history.find(t=>t.role==='user')?.content;
+ const result=await conveneInternal({...input,conversation:history},{...deps,research:()=>deps.research(original?original.slice(0,150)+" "+input.prompt.slice(0,80):input.prompt)});
+ const text=result.deliberation?.synthesis||'';
+ return {...result,quality:text?reviewAnswer(text,input.prompt,result.sources):null};
 }

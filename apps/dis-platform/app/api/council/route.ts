@@ -1,3 +1,4 @@
+import {sanitizeConversation} from '../../../lib/conversation-context';
 import {assemble} from "../../../lib/council-assembly";
 import {getVercelOidcToken} from "@vercel/oidc";
 import {neon} from "@neondatabase/serverless";
@@ -12,6 +13,7 @@ export async function POST(req:Request){
  let body:any;try{body=await req.json()}catch{return NextResponse.json({error:"Invalid JSON"},{status:400})}
  const prompt=typeof body.prompt==="string"?body.prompt.trim():"";
  if(prompt.length<5||prompt.length>3000)return NextResponse.json({error:"Question must be 5–3000 characters"},{status:400});
+ let conversation;try{conversation=sanitizeConversation(body.conversation)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Invalid conversation"},{status:400})}
  const isCustom=body.selectionMode==="custom";
  const challengeEnabled=body.challengeEnabled!==false;
  const chosen=isCustom&&Array.isArray(body.selected)?body.selected.filter((x:unknown)=>typeof x==="string").slice(0,16):[];
@@ -41,6 +43,6 @@ export async function POST(req:Request){
   ]);
   if(!usage[1]?.length)return NextResponse.json({error:"Daily council beta limit reached (20 investigations)"},{status:429});
  }catch{return NextResponse.json({error:"Council quota authorization unavailable"},{status:503});}
- const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth,challengeEnabled,primaryMembers:primary,redMembers:red});
+ const report=await convene({prompt,count,redCount,selected:chosen,redSelected,depth,challengeEnabled,primaryMembers:primary,redMembers:red,conversation});
  return NextResponse.json({...councilReport,...report,assurance:report.limitations||report.error||"Independent execution was not completed."});
 }

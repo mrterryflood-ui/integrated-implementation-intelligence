@@ -62,7 +62,7 @@ test("AI inference fallback uses an allowed model and records actual response pr
    const model=JSON.parse(String(opts?.body||"{}")).model;
    attempts.push(model);
    if(attempts.length===1)return new Response(JSON.stringify({error:{code:"no_providers_available"}}),{status:403});
-   return new Response(JSON.stringify({model:"nvidia/nemotron-3.5-lightning-free",choices:[{message:{content:"A cautious preliminary answer."}}]}),{status:200});
+   return new Response(JSON.stringify({model:"nvidia/nemotron-3.5-lightning-free",choices:[{finish_reason:"stop",message:{content:"A cautious preliminary answer."}}]}),{status:200});
   };
   const result=await infer("Test evidence","A short question", "google/gemini-3.5-flash-lite",fetcher as typeof fetch);
   assert.equal(result.ok,true);
