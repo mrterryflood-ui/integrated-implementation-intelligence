@@ -38,8 +38,14 @@ test("homepage renders real links, while client route opens the existing consult
  assert.doesNotMatch(page,/useCases\.map\(x=><article/);
  assert.match(studio,/findConsultationFocus\(new URLSearchParams\(window\.location\.search\)\.get\("focus"\)\)/);
  assert.match(studio,/setMode\("general"\);setTab\("Consult"\)/);
- assert.match(studio,/onClick=\{\(\)=>\{update\("mission",example\);setError\(""\);\}\}/);
- assert.match(studio,/Nothing is researched, sent, approved or submitted/);
+ assert.match(studio,/onClick=\{\(\)=>startExample\(example\)\}/);
+ assert.match(studio,/const startExample=\(question:string\)=>\{/);
+ assert.match(studio,/setPkg\(draft\);setSlideIndex\(0\)/);
+ assert.match(studio,/goToTab\("Design & deliver"\)/);
+ assert.match(studio,/ref=\{workflowPanelRef\}/);
+ assert.match(studio,/Choosing an example builds an editable/);
+ assert.match(studio,/disabled=\{working\|\|!privateReady\}/);
+ assert.match(studio,/Public draft mode: download Markdown now/);
  assert.match(css,/\.possibility-grid \.possibility-card:focus-visible/);
  assert.match(css,/@media\(max-width:650px\)/);
 });
