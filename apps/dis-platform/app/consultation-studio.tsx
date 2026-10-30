@@ -77,7 +77,27 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
   try{
    const res=await fetch("/api/capability-fabric",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({problem:intake.mission,mode:"invoke",externalConsent:true})});
    const data=await res.json().catch(()=>({}));if(!res.ok)throw Error(data.error||"Private intelligence unavailable");
-   setOwnedIntel(data);setStatus(data.successful+" specialist evidence response(s), "+data.unavailable+" gaps. Each contribution requires source validation before use.");
+   setOwnedIntel(data);
+   // Treat company contributions as source-labeled draft annexes, never as
+   // independently verified claims. Preserve existing researched sources.
+   const receipts=Array.isArray(data.invocations)?data.invocations:[];
+   const annex=receipts.map((r:any)=>[
+     "Capability: "+String(r.id||"unknown"),
+     "State: "+String(r.state||"UNKNOWN"),
+     "Source: "+String(r.source||"unknown"),
+     "Source date: "+String(r.sourceTimestamp||"NOT REPORTED"),
+     "Evidence: "+String(r.evidenceClass||"NONE"),
+     "Limitations: "+String(r.reason||"Not established"),
+     "Returned bounded aggregate: "+JSON.stringify(r.value??null)
+   ].join("\n")).join("\n\n---\n\n");
+   setPkg(previous=>{
+     const original=previous||buildPackage(sanitizeIntake(intake),mode,intel);
+     return {...original,documents:[...original.documents.filter(d=>d.id!=="owned-intelligence"),
+       {id:"owned-intelligence",title:"Permitted company intelligence — source and gap register",
+        body:"UNVERIFIED EVIDENCE ANNEX. No user question or identity was transmitted to owned specialists. No external analysis was accepted as independently proven.\n\n"+(annex||"No specialist returned an accepted record."),
+        validation:"DRAFT",note:"Review source methods, scope, dates and contradictions before treating any reported number as evidence."}]};
+   });
+   setStatus(data.successful+" company intelligence response(s), "+data.unavailable+" documented gaps. Review the source-and-gap annex in Design & deliver.");
   }catch(e){setError(e instanceof Error?e.message:"Owned intelligence unavailable")}
   finally{setWorking(false)}
  };
