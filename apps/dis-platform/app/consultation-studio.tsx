@@ -54,9 +54,9 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
  },[]);
  useEffect(()=>{if(!workspaceId){setSessions([]);return}fetch("/api/consultation/sessions?workspaceId="+encodeURIComponent(workspaceId)).then(r=>r.ok?r.json():null).then(v=>setSessions(v?.sessions||[])).catch(()=>{})},[workspaceId]);
  const goToTab=(next:(typeof tabs)[number])=>{setTab(next);setError("");requestAnimationFrame(()=>{workflowPanelRef.current?.focus({preventScroll:true});workflowPanelRef.current?.scrollIntoView({behavior:"auto",block:"start"});});};
- const update=(key:keyof Intake,value:string)=>{setOwnedIntel(null);reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();setWorking(false);setIntake(old=>({...old,[key]:value}));};
+ const update=(key:keyof Intake,value:string)=>{setOwnedIntel(null);setAllowOwnedIntel(false);reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();setWorking(false);setIntake(old=>({...old,[key]:value}));};
  const generate=(researchIntel:IntelligenceBundle|null=intel,report:any=councilReport)=>{const result=buildPackage(sanitizeIntake(intake),mode,researchIntel,report?.deliberation?.synthesis?report:undefined);setPkg(result);setSlideIndex(0);setStatus("Draft consultation package built. Review the evidence gates and edit any slides or reports.");setError("");return result};
- const startExample=(question:string)=>{
+ const startExample=(question:string)=>{setOwnedIntel(null);setAllowOwnedIntel(false);
   // A local, substantive draft: the user sees an actual result immediately.
   // No remote research, model call, data transfer or private save is performed.
   reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();
@@ -163,7 +163,7 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
   setVersion(result.session.version);setStatus("Saved to your private workspace, revision "+result.session.version+".");await refreshSessions();
  }catch(e){setError(e instanceof Error?e.message:"Save unavailable")}finally{setWorking(false)}};
  const refreshSessions=async()=>{if(!workspaceId)return;const r=await fetch("/api/consultation/sessions?workspaceId="+encodeURIComponent(workspaceId));if(r.ok)setSessions((await r.json()).sessions||[])};
- const load=async(id:string)=>{reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();rplConsentRef.current=false;setAllowCouncil(false);setAllowResearch(false);setAllowParallaxShare(false);setWorking(true);setError("");try{const response=await fetch("/api/consultation/sessions?id="+encodeURIComponent(id));const data=await response.json();if(!response.ok)throw Error(data.error||"Consultation unavailable");const s=data.session;
+ const load=async(id:string)=>{setOwnedIntel(null);setAllowOwnedIntel(false);reviewRevisionRef.current++;councilRequestRef.current?.abort();rplRequestRef.current?.abort();rplConsentRef.current=false;setAllowCouncil(false);setAllowResearch(false);setAllowParallaxShare(false);setWorking(true);setError("");try{const response=await fetch("/api/consultation/sessions?id="+encodeURIComponent(id));const data=await response.json();if(!response.ok)throw Error(data.error||"Consultation unavailable");const s=data.session;
   const restored=s.intake||{},m=restored.mode==="general"?"general":"startup";const i=sanitizeIntake(restored);
   setIntake(i);setMode(m);setIntel(s.research?.records?s.research:null);setCouncilReport(null);stakeholderNotesRef.current=typeof s.research?.stakeholderNotes==="string"?s.research.stakeholderNotes:"";setStakeholderNotes(stakeholderNotesRef.current);setParallaxReport(s.research?.parallax||null);const p=buildPackage(i,m,s.research?.records?s.research:null);
   if(Array.isArray(s.slides)&&s.slides.length===12)p.slides=s.slides;
