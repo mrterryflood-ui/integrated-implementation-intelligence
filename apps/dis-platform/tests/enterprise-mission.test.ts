@@ -63,3 +63,14 @@ test("university/research selection is an actual consultation link, not an isola
  assert.match(page,/CONSULTATION_FOCUS_AREAS\.map/);
  assert.ok(f.guidance.includes("no institution is represented")||f.guidance.includes("no institution is represented as a partner"));
 });
+
+test("healthcare and social-health needs retain distinct clinical and community methods",()=>{
+ const clinical=designEnterpriseMission("Improve mental health care quality in clinical hospitals and preventive services");
+ const social=designEnterpriseMission("Improve community housing food transportation access and social needs");
+ assert.ok([clinical.primary?.id,...clinical.contributing.map(d=>d.id)].includes("health-wellbeing"));
+ assert.ok([social.primary?.id,...social.contributing.map(d=>d.id)].includes("community-civic-policy"));
+ assert.match(DISCIPLINES.find(x=>x.id==="health-wellbeing")?.label||"",/behavioral health/);
+ assert.match(DISCIPLINES.find(x=>x.id==="community-civic-policy")?.label||"",/Social health/);
+ assert.ok(clinical.milestones.every(x=>x.status==="NOT_VERIFIED"));
+ assert.ok(social.milestones.every(x=>x.status==="NOT_VERIFIED"));
+});
