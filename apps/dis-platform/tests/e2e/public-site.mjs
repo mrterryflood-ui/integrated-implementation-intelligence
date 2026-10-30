@@ -41,7 +41,7 @@ async function journey(browserType,label){
  const outgoing=[];
  const clerkRequests=[];
  page.on("pageerror",e=>crashes.push(e.message));
- page.on("request",r=>{if(/\\.clerk\\.accounts\\.dev\\//.test(r.url()))clerkRequests.push(r.url());});
+ page.on("request",r=>{if(/\.clerk\.accounts\.dev\//.test(r.url()))clerkRequests.push(r.url());});
  page.on("request",request=>{if(request.method()==="POST"&&/\/api\/(council|consultation\/research|consultation\/parallax)/.test(request.url()))outgoing.push(request.url());});
  try {
   for(const [id,name] of sites){
