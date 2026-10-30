@@ -92,6 +92,11 @@ test("private server endpoint is behind identity, quota, origin and separate con
  assert.match(route,/dis_consult_usage/);
  assert.match(studio,/Check permitted intelligence/);
  assert.match(studio,/disabled=\{working\|\|!privateReady\|\|!allowOwnedIntel/);
+ assert.match(studio,/ownedRevisionRef\.current\+\+/);
+ assert.match(studio,/ownedRequestRef\.current\?\.abort\(\)/);
+ assert.match(studio,/signal:controller\.signal/);
+ assert.match(studio,/controller\.signal\.aborted\|\|revision!==ownedRevisionRef\.current/);
+ assert.match(studio,/if\(!e\.target\.checked\)cancelOwned\(\)/);
  assert.ok(!route.includes("NEXT_PUBLIC_DIS_THRIVEUP"));
 });
 
