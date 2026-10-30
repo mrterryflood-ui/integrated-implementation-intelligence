@@ -28,3 +28,10 @@ test("production document ingestion is denied unless user is explicitly trusted"
   assert.equal(trustedProductionUploader("", { ...live, DIS_TRUSTED_UPLOAD_SUBJECTS: "user_a" }), false);
   assert.equal(trustedProductionUploader("user_a", { ...prod, NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_fixture", CLERK_SECRET_KEY: "sk_test_fixture", DIS_TRUSTED_UPLOAD_SUBJECTS: "user_a" }), false);
 });
+
+test("production public page does not initialize a Clerk browser SDK on test credentials",()=>{
+ const fs=require("node:fs") as typeof import("node:fs");
+ const layout=fs.readFileSync("app/layout.tsx","utf8");
+ assert.match(layout,/productionIdentityBlocked\(process\.env\)/);
+ assert.match(layout,/publicOnly\?children:<ClerkProvider>/);
+});
