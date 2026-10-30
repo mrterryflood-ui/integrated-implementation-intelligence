@@ -147,3 +147,16 @@ test("consent revocation stops in-flight busy state and invalidates pending repl
  assert.match(studio,/const cancelOwned=\(\)=>\{const inFlight=Boolean\(ownedRequestRef\.current\)/);
  assert.match(studio,/if\(inFlight\)setWorking\(false\)/);
 });
+
+test("research and university expertise is a distinct planning lane, never an assumed partner or live institutional API",async()=>{
+ const p=planOwnedCapabilities("University research collaboration and implementation science evaluation for a difficult community problem");
+ assert.ok(p.deferredDomains.includes("academic_research"));
+ assert.ok(!p.selected.some(x=>x.id.startsWith("university-")));
+ assert.ok(!p.selected.some(x=>x.id==="community-system-context"||x.id==="benefits-program-catalog"));
+ let network=0;
+ const mock=(async()=>{network++;return new Response("{}")}) as typeof fetch;
+ const results=await invokeOwnedCapabilities(["university-research-discovery","university-implementation-collaboration","community-system-context","benefits-program-catalog"],
+ {DIS_THRIVEUP_COMMUNITY_KEY:"test-aggregate-1234567890",DIS_THRIVEUP_BENEFITS_KEY:"test-aggregate-1234567890"},mock);
+ assert.equal(network,0);
+ assert.ok(results.every(x=>x.state==="CONTRACT_ONLY"));
+});
