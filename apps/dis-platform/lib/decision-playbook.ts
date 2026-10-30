@@ -21,7 +21,7 @@ export function buildPlaybook(question:string,report:unknown):Playbook{
  tasks:[...phases.map(([id,title,why,success])=>({id,phase:id,title,why,success,owner:"Unassigned",due:null,done:false,evidence:"",review:null})),...tailoredTasks],
  metrics:[...tailoredMetrics,
  {id:"evidence",label:"Priority claims independently checked",baseline:"Unknown",target:"100",observed:"",unit:"%",verified:false},
- {id:"delivery",label:"Planned milestones completed and accepted",baseline:"0",target:"100",observed:"0",unit:"%",verified:false},
+ {id:"delivery",label:"Planned milestones completed and accepted",baseline:"Not measured",target:"100",observed:"",unit:"%",verified:false},
  {id:"impact",label:"Primary outcome improvement over baseline",baseline:"Not established",target:"To be agreed",observed:"",unit:"Defined by user",verified:false},
  {id:"adoption",label:"Intended users successfully completing the key task",baseline:"Not established",target:"To be agreed",observed:"",unit:"%",verified:false},
  {id:"sustain",label:"Postimplementation outcome sustained",baseline:"Not established",target:"To be agreed",observed:"",unit:"Review cycles",verified:false}
