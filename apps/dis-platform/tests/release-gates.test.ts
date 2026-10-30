@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import {readFileSync} from "node:fs";
 import { productionIdentityBlocked, trustedProductionUploader } from "../lib/release-gates";
 
 const prod = { VERCEL_ENV: "production" };
@@ -27,4 +28,14 @@ test("production document ingestion is denied unless user is explicitly trusted"
   assert.equal(trustedProductionUploader("user_a", { ...live, DIS_TRUSTED_UPLOAD_SUBJECTS: "user_a, user_b" }), true);
   assert.equal(trustedProductionUploader("", { ...live, DIS_TRUSTED_UPLOAD_SUBJECTS: "user_a" }), false);
   assert.equal(trustedProductionUploader("user_a", { ...prod, NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: "pk_test_fixture", CLERK_SECRET_KEY: "sk_test_fixture", DIS_TRUSTED_UPLOAD_SUBJECTS: "user_a" }), false);
+});
+
+test("public-only requests bypass Clerk before any authentication client is bootstrapped",()=>{
+ const source=readFileSync("proxy.ts","utf8");
+ assert.match(source,/if\(productionIdentityBlocked\(process\.env\)\)\{/);
+ assert.match(source,/return NextResponse\.next\(\)/);
+ assert.match(source,/return liveClerkMiddleware\(req,event\)/);
+ assert.match(source,/Production identity not configured/);
+ assert.match(source,/status:503/);
+ assert.match(source,/\?workspace=pending/);
 });
