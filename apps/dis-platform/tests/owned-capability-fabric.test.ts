@@ -46,7 +46,7 @@ test("read-only upstream call uses fixed origin, path and scope key, never user 
  const mock=(async (url:RequestInfo|URL,opt?:RequestInit)=>{
   const headers=opt?.headers as Record<string,string>;
   calls.push({url:String(url),headers,method:String(opt?.method)});
-  return new Response(JSON.stringify({count:1,totals:{participantsServed:32,enteredEmployment:9,credentialsAttained:3},medianEarnings:1500,exportedAt:"2026-10-30T00:00:00Z",outcomes:[{orgName:"PRIVATE CUSTOMER NAME"}]}),{status:200});
+  return new Response(JSON.stringify({count:6,totals:{participantsServed:32,enteredEmployment:9,credentialsAttained:3},medianEarnings:1500,exportedAt:"2026-10-30T00:00:00Z",outcomes:[{orgName:"PRIVATE CUSTOMER NAME"}]}),{status:200});
  }) as typeof fetch;
  const results=await invokeOwnedCapabilities(["community-impact"],{DIS_THRIVEUP_IMPACT_KEY:"test-scope-key-1234567890"},mock);
  assert.equal(calls.length,1);
@@ -56,6 +56,7 @@ test("read-only upstream call uses fixed origin, path and scope key, never user 
  assert.equal(results[0].state,"RETURNED_UNVERIFIED");
  assert.equal(results[0].evidenceClass,"PARTNER_REPORTED_UNVERIFIED");
  assert.equal((results[0].value as any).participantsServed,32);
+ assert.equal((results[0].value as any).credentialsAttained,null,"small outcome cells must be suppressed");
  assert.ok(!JSON.stringify(results).includes("PRIVATE CUSTOMER NAME"),"raw client records must be dropped");
 });
 test("upstream failure, malformed data and large payloads never become valid findings",async()=>{
@@ -115,4 +116,12 @@ test("server Word export retains the bounded annex without verifying untrusted u
  const studio=readFileSync(join(process.cwd(),"app/consultation-studio.tsx"),"utf8");
  assert.match(route,/attachUnverifiedOwnedIntelAnnex\(pkg,format==="docx"/);
  assert.match(studio,/ownedIntelAnnex:format==="docx"/);
+});
+
+test("small partner cohorts are not promoted to evidence",async()=>{
+ const fetcher=(async()=>new Response(JSON.stringify({count:1,totals:{participantsServed:1,enteredEmployment:1,credentialsAttained:1},medianEarnings:1000}),{status:200})) as typeof fetch;
+ const receipts=await invokeOwnedCapabilities(["community-impact"],{DIS_THRIVEUP_IMPACT_KEY:"test-scope-key-1234567890"},fetcher);
+ assert.equal(receipts[0].state,"UNAVAILABLE");
+ assert.equal(receipts[0].value,null);
+ assert.match(receipts[0].reason,/suppression floor/);
 });
