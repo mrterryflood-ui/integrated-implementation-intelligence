@@ -1,0 +1,20 @@
+{
+  "kind": "LIVE_PUBLIC_SOURCE_RETRIEVAL_NOT_MODEL_SYNTHESIS",
+  "librarySourceSha": "e3ed9d45bf3ee01e3e38fd19af84888098d21bfb",
+  "sandboxSessionId": "sbx_mkpzKAIJZ1uthtstvLbrYM4IGa6F",
+  "executionCommandId": "cmd_38558d40443a48dea4e30cc4f29b",
+  "executedRequestStartUnixMs": 1793398565799,
+  "libraryInvestigations": 16,
+  "investigationsReturningRecords": 16,
+  "candidateRecordAppearances": 414,
+  "uniqueRecordUrls": 297,
+  "recordAppearancesWithNoTextOverlap": 173,
+  "httpResponses": {"200": 69, "429": 2},
+  "circuitOpenedAfterThrottle": ["eutils.ncbi.nlm.nih.gov", "en.wikipedia.org"],
+  "modelSynthesisCompletions": 0,
+  "authenticatedPartnerRoundTrips": 0,
+  "inferenceProbe": "AI Gateway authentication not configured in the isolated evaluation sandbox; production OIDC was not assessed by this probe.",
+  "sourceLedgerSha256": "674f5bdf8eb115e360403e9e365d9200103dd0018e6c0eff111d7dc8898eab14",
+  "requestReceiptSha256": "6aecba01b30464253896daeeae95f796fb334d274ffa8393ce591f55aac3af50",
+  "interpretation": "Synthetic questions; genuine public retrieval. Record counts do not measure relevance, truth, claim support, validated studies, platform federation, or real-world effects. Lexical overlap is only a relevance warning, not expert judgment. No private client data or paid model batch was used. Raw source/receipt files existed in the named sandbox at the time of this receipt; this summary does not promise indefinite artifact retention."
+}
