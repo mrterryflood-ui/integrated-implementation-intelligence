@@ -23,17 +23,26 @@ export async function POST(request:Request){try{
  const audit=JSON.stringify(report);
  if(audit.length>65000)return Response.json({error:"Report exceeds safe storage limit"},{status:413});
  // Prior report is preserved as an append-only revision event. Case update uses optimistic concurrency.
+ // A council reassessment must preserve its predecessor in the same
+ // transaction as the new report. No best-effort archival success claims.
+ const previous=JSON.stringify(prior.report);
  const updated=await sql.transaction([
   sql`SELECT set_config('dis.subject_id',${userId},true)`,
-  sql`UPDATE dis_casework SET report=${audit}::jsonb,version=version+1,updated_at=now(),status='REVIEW' WHERE id=${id} AND version=${version} RETURNING id,workspace_id,title,question,report,playbook,version,status,updated_at`
+  sql`WITH revised AS (
+    UPDATE dis_casework SET report=${audit}::jsonb,version=version+1,updated_at=now(),status='REVIEW'
+    WHERE id=${id} AND version=${version}
+    RETURNING id,workspace_id,owner_subject,title,question,report,playbook,version,status,updated_at
+   ), archived AS (
+    INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
+    SELECT id,workspace_id,owner_subject,'REASSESSMENT',
+      jsonb_build_object('previousVersion',${version},'previousReport',${previous}::jsonb,
+      'newVersion',version,'evidenceState','PRELIMINARY_NOT_INDEPENDENTLY_VERIFIED')
+    FROM revised RETURNING id
+   )
+   SELECT revised.id,revised.workspace_id,revised.title,revised.question,
+     revised.report,revised.playbook,revised.version,revised.status,revised.updated_at,
+     archived.id AS reassessment_event_id FROM revised CROSS JOIN archived`
  ]);
  if(!updated[1].length)return Response.json({error:"The case changed during recheck. New report was not applied."},{status:409});
- const current=updated[1][0];
- // Best-effort history, never falsely claim full historical retention if unavailable.
- let recorded=false;
- try{await sql.transaction([
-  sql`SELECT set_config('dis.subject_id',${userId},true)`,
-  sql`INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload) VALUES(${id},${String(prior.workspace_id)},${userId},'REASSESSMENT',${JSON.stringify({previousVersion:version,previousReport:prior.report,newVersion:version+1})}::jsonb)`
- ]);recorded=true}catch{}
- return Response.json({case:current,note:recorded?"New preliminary council reassessment saved; prior report archived.":"New preliminary assessment saved, but archival event could not be verified.",historyRecorded:recorded});
+ return Response.json({case:updated[1][0],note:"Preliminary council reassessment and prior report archived atomically; the new analysis is not independently verified.",historyRecorded:true});
 }catch{return Response.json({error:"Recheck unavailable"},{status:503})}}
