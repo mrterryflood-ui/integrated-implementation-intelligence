@@ -8,6 +8,20 @@
 
 ---
 
+## Human learning, not prescribed thinking
+
+DIS is a dynamic, domain-agnostic conductor for research, implementation science, engineering, field knowledge and accountable action. Its role is to show people **how to investigate**, not **what to believe**. It brings retrospective experience and history, the best available present evidence, competing explanations, and explicitly provisional future scenarios into the same decision process.
+
+Every consequential conclusion must expose assumptions, sources, alternatives, minority interpretations, stakes, limitations, affected people and human decision rights. Council archetypes teach analytical approaches; they are never disguised as statements or endorsements from real people. Parallax may compare user-declared perspectives, but cannot invent verified stakeholder testimony.
+
+**The system itself must learn longitudinally.** Its knowledge, skills, strategy, orchestration and implementation effectiveness are not static. Every cycle should capture an initial baseline, dated observations, source and method, human review, actual delivery receipts, changing conditions, errors and corrections, outcome measures, unintended effects, prospective hypotheses and authorized adaptations. A useful change must be distinguishable from ordinary variation and tested against relevant comparators. It must remain reversible and context-specific.
+
+Learning does not equal unsupervised model modification. No self-reported success, user checkbox, simulated council answer or dashboard number may silently train a model, update an institution-wide strategy, share data across tenants, or elevate an unverified conclusion. Knowledge promotion and consequential execution require independent review, appropriate consent, domain validation, human authority and a reproducible before/after record.
+
+**Working test:** Can a first-time user understand why a decision was made, what the alternatives were, who approved the action, what happened afterward, what remains unknown, what DIS learned, and what it should test differently next? If not, the system has not completed the learning loop.
+
+---
+
 # 1. Executive Doctrine
 
 The system is designed to help people and institutions understand, implement, adapt, measure, sustain, and improve evidence-informed work in the settings where they actually operate.
