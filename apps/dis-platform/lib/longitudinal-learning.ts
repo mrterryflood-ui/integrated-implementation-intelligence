@@ -117,7 +117,7 @@ export function buildLearningCheckpoint(plan:Playbook,caseVersion:number,recorde
 }
 export function asLearningCheckpoints(events:CaseLearningEvent[]):LearningCheckpoint[]{
  return events.flatMap(event=>{
-  if(event.event_type!=="CHECKPOINT"||!event.payload||typeof event.payload!=="object")return [];
+  if(!["CREATED","CHECKPOINT"].includes(event.event_type)||!event.payload||typeof event.payload!=="object")return [];
   const p=event.payload as Record<string,unknown>;
   if(p.kind!=="DIS_LONGITUDINAL_CHECKPOINT_V1"||!Array.isArray(p.metrics)||
      typeof p.caseVersion!=="number"||typeof p.recordedAt!=="string"||
