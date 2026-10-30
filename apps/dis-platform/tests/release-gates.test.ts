@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
 import test from "node:test";
 import { productionIdentityBlocked, trustedProductionUploader } from "../lib/release-gates";
 
@@ -30,8 +31,7 @@ test("production document ingestion is denied unless user is explicitly trusted"
 });
 
 test("production public page does not initialize a Clerk browser SDK on test credentials",()=>{
- const fs=require("node:fs") as typeof import("node:fs");
- const layout=fs.readFileSync("app/layout.tsx","utf8");
+ const layout=readFileSync("app/layout.tsx","utf8");
  assert.match(layout,/productionIdentityBlocked\(process\.env\)/);
  assert.match(layout,/publicOnly\?children:<ClerkProvider>/);
 });
