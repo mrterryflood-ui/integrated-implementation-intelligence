@@ -25,6 +25,16 @@ export const CONSULTATION_FOCUS_AREAS = [
     ]
   },
   {
+    id: "research-universities",
+    title: "Universities, research & implementation",
+    description: "Investigate difficult questions, compare methods, locate research gaps, and plan evidence-to-practice evaluation.",
+    guidance: "Define the scientific or societal problem, the people and settings involved, competing hypotheses, and the evidence needed. DIS can structure a convergence research and implementation plan; no institution is represented as a partner without agreement.",
+    examples: [
+      "How could we design a multidisciplinary research and implementation study to reduce community health disparities?",
+      "What would a defensible university-community research collaboration need to measure, validate, implement and sustain?"
+    ]
+  },
+  {
     id: "software-technology",
     title: "Software & technology",
     description: "Investigate an existing system before deciding whether to repair, integrate, redesign, or build.",
