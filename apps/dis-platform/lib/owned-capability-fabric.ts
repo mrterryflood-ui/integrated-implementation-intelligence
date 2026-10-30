@@ -166,7 +166,7 @@ export async function invokeOwnedCapabilities(selectedIds:readonly string[],env:
    id,state,source:cap.owner,scope:cap.scope,sourceTimestamp:ts,evidenceClass:state==="RETURNED_UNVERIFIED"?"PARTNER_REPORTED_UNVERIFIED":"NONE",value,reason});
   if(cap.useClearance!=="GENERAL_PURPOSE_CANDIDATE"||cap.method!=="GET")return receipt("CONTRACT_ONLY","Specialist is not cleared for DIS; client-specific boundaries remain intact.");
   if(cap.execution==="RPLICE_READ_V1"&&cap.dataBoundary==="PUBLIC_METHODOLOGY"){
-   const reading=await readRpliceMethodology(env.RPLICE_API_KEY,fetcher);
+   const reading=await readRpliceMethodology(env.DIS_RPLICE_METHODS_READ_KEY,fetcher);
    return receipt(reading.ok?"RETURNED_UNVERIFIED":reading.reason.includes("key absent")?"CONTRACT_ONLY":"UNAVAILABLE",reading.reason,reading.data,reading.observedAt);
   }
   if(cap.execution!=="THRIVEUP_READ_V1"||cap.dataBoundary!=="TCAF_PARTNER_AGGREGATE")return receipt("CONTRACT_ONLY","No approved private service contract.");

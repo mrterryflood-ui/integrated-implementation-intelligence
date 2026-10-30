@@ -25,7 +25,7 @@ test("RPLICE read only, fixed HTTPS endpoint, bearer and bounded projected evide
   seen.push({url:String(url),method:String(opts?.method),headers:opts?.headers as Record<string,string>,body:opts?.body});
   return new Response(JSON.stringify(envelope),{status:200});
  }) as typeof fetch;
- const x=await invokeOwnedCapabilities(["implementation-methodology"],{RPLICE_API_KEY:validKey},mock);
+ const x=await invokeOwnedCapabilities(["implementation-methodology"],{DIS_RPLICE_METHODS_READ_KEY:validKey},mock);
  assert.equal(seen.length,1);
  assert.equal(seen[0].url,"https://www.bettersciencelab.com/api/v1/public/frameworks");
  assert.equal(seen[0].method,"GET");
@@ -66,7 +66,7 @@ test("research convergence questions can select general methodology, not univers
 });
 test("a strong question alone cannot call RPLICE without dedicated key",async()=>{
  let n=0;const mock=(async()=>{n++;throw Error("called")}) as typeof fetch;
- const result=await invokeOwnedCapabilities(["implementation-methodology"],{},mock);
+ const result=await invokeOwnedCapabilities(["implementation-methodology"],{RPLICE_API_KEY:validKey},mock);
  assert.equal(n,0);
  assert.equal(result[0].state,"CONTRACT_ONLY");
  assert.equal(result[0].evidenceClass,"NONE");
