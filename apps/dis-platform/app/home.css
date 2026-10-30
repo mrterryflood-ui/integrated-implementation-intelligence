@@ -125,7 +125,7 @@
 .consult-panel,#consult-workflow-panel,.consult-focus-intro,
 .design-editor,.design-editor>div,.consult-docs,.consult-actions,
 .unknowns-radar,.unknowns-grid,.unknowns-item {min-width:0;box-sizing:border-box}
-.dis-home {max-width:100%;overflow-x:clip}
+.dis-home {max-width:100%}
 .hero-art{max-width:100%;overflow:hidden}
 .orbit.one{width:min(200px,62vw);height:min(200px,62vw)}
 .orbit.two{width:min(340px,84vw);height:min(340px,84vw)}
