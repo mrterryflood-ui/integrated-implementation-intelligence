@@ -1,3 +1,4 @@
+import {withCouncilEvidenceSnapshot} from '../../../lib/council-evidence-snapshot';
 import {runGroundedCouncil,validateCouncilEngagement} from '../../../lib/ecosystem/council-handoff';
 import {readBoundedOfficeRequest} from '../../../lib/consultation-export-artifacts';
 import {productionIdentityBlocked} from '../../../lib/release-gates';
@@ -52,6 +53,6 @@ export async function POST(req:Request){
   if(!usage[1]?.length)return NextResponse.json({error:"Daily council beta limit reached (20 investigations)"},{status:429});
  }catch{return NextResponse.json({error:"Council quota authorization unavailable"},{status:503});}
  const councilInput={prompt,count,redCount,selected:chosen,redSelected,depth,challengeEnabled,primaryMembers:primary,redMembers:red,conversation};
- let report;try{report=engagement?await runGroundedCouncil(councilInput,engagement,{kind:'AUTHENTICATED_AGGREGATE',subjectId:userId}):await convene(councilInput)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Council integration unavailable'},{status:503})}
+ let report;try{report=engagement?await runGroundedCouncil(councilInput,engagement,{kind:'AUTHENTICATED_AGGREGATE',subjectId:userId}):withCouncilEvidenceSnapshot(await convene(councilInput),prompt)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Council integration unavailable'},{status:503})}
  return NextResponse.json({...councilReport,...report,assurance:report.limitations||report.error||"Independent execution was not completed."},{headers:{"Cache-Control":"private, no-store"}});
 }
