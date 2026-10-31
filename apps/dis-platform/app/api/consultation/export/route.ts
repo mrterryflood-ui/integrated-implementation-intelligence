@@ -1,3 +1,4 @@
+import {preserveDraftExportArtifacts,readBoundedOfficeRequest} from '../../../../lib/consultation-export-artifacts';
 import {auth} from "@clerk/nextjs/server";
 import {sanitizeIntake} from "../../../../lib/consultation";
 import {buildPackage,attachUnverifiedOwnedIntelAnnex,type SlideSpec} from "../../../../lib/consultation-package";
@@ -10,7 +11,7 @@ export async function POST(req:Request){
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in to export Office documents"},{status:401});
  if(Number(req.headers.get("content-length")||0)>240000)return Response.json({error:"Export request too large"},{status:413});
  const origin=req.headers.get("origin");if(origin){try{if(new URL(origin).host!==new URL(req.url).host)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}}
- let input:any;try{input=await req.json()}catch{return Response.json({error:"Invalid JSON"},{status:400})}
+ let input:any;try{input=await readBoundedOfficeRequest(req)}catch(e){return Response.json({error:e instanceof Error?e.message:"Invalid export request"},{status:e instanceof Error&&e.message.includes("too large")?413:400})}
  const format=input?.format==="pptx"?"pptx":input?.format==="docx"?"docx":null;
  if(!format)return Response.json({error:"Supported formats: pptx, docx"},{status:400});
  const intake=sanitizeIntake(input?.intake&&typeof input.intake==="object"?input.intake:{});
@@ -29,6 +30,7 @@ export async function POST(req:Request){
  }
  let pkg=buildPackage(intake,mode,intelligence);
  try{pkg=attachUnverifiedOwnedIntelAnnex(pkg,format==="docx"?input?.ownedIntelAnnex:null)}catch{return Response.json({error:"Invalid unverified annex"},{status:400})}
+ if(format==="docx"){try{pkg=preserveDraftExportArtifacts(pkg,input.artifacts)}catch(e){return Response.json({error:e instanceof Error?e.message:"Invalid draft artifacts"},{status:400})}}
  const theme=(["midnight","forest","slate"].includes(input.theme)?input.theme:"midnight") as "midnight"|"forest"|"slate";
  if(Array.isArray(input.slides)){
   if(input.slides.length!==12||!input.slides.every(validSlide))return Response.json({error:"Invalid slide design"},{status:400});
