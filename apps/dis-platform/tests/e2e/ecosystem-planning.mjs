@@ -39,9 +39,13 @@ for(const [name,engine]of [['chromium',chromium],['iphone-webkit',webkit]]){
   assert.ok([401,503].includes(protectedCall.status()),'private execution remains gated');
   const untrusted=await context.request.post(base+'/api/mcp',{data:{jsonrpc:'2.0',id:9,method:'tools/call',params:{name:'dis_ecosystem_plan',arguments:{problem:'Assess community impact',token:'not-accepted'}}}});
   assert.ok((await untrusted.json()).error);assert.deepEqual(unexpectedInvocations,[]);assert.deepEqual(errors,[]);
-  await page.screenshot({path:join(out,'ecosystem-'+name+'.png'),fullPage:true});
-  receipts.push({engine:name,sourceRevision:process.env.GITHUB_SHA||'local-working-tree',state:'PUBLIC_PLANNING_AND_IDENTITY_DENIAL_PASSED',privateSignedInAcceptance:false,partnerRoundTrip:false,observedAt:new Date().toISOString(),checks:11});
- }catch(error){receipts.push({engine:name,state:'FAILED',error:error instanceof Error?error.message:String(error),pageErrors:errors,pendingRequests:[...pendingRequests].map(u=>{const v=new URL(u);return v.origin+v.pathname}),observedAt:new Date().toISOString()});await page?.screenshot({path:join(out,'ecosystem-'+name+'-failure.png'),fullPage:true}).catch(()=>{});throw error;}
+  await panel.getByRole('heading',{name:'Bring the right capabilities together'}).scrollIntoViewIfNeeded();
+  const pageDimensions=await page.evaluate(()=>({documentHeight:document.documentElement.scrollHeight,documentWidth:document.documentElement.scrollWidth,viewportHeight:innerHeight,viewportWidth:innerWidth}));
+  // This long-form studio can exceed browser full-page image limits. Capture
+  // the tested panel's viewport without changing any functional assertions.
+  await page.screenshot({path:join(out,'ecosystem-'+name+'.png'),fullPage:false});
+  receipts.push({engine:name,sourceRevision:process.env.GITHUB_SHA||'local-working-tree',state:'PUBLIC_PLANNING_AND_IDENTITY_DENIAL_PASSED',privateSignedInAcceptance:false,partnerRoundTrip:false,observedAt:new Date().toISOString(),checks:11,screenshotScope:'tested-panel-viewport',pageDimensions});
+ }catch(error){receipts.push({engine:name,state:'FAILED',error:error instanceof Error?error.message:String(error),pageErrors:errors,pendingRequests:[...pendingRequests].map(u=>{const v=new URL(u);return v.origin+v.pathname}),observedAt:new Date().toISOString()});await page?.screenshot({path:join(out,'ecosystem-'+name+'-failure.png'),fullPage:false}).catch(()=>{});throw error;}
  finally{writeFileSync(join(out,'ecosystem-planning-receipts.json'),JSON.stringify(receipts,null,2));await context?.close();await browser.close();}
 }
 console.log(JSON.stringify(receipts));
