@@ -18,7 +18,7 @@ export function validationAssertion(text:string){
  return /\b(?:is|are|using|use|with|a|the)\s+(?:(?:a|the|scientifically|clinically|fully)\s+)?validated\s+(?:tool|scale|instrument|measure|score|method|protocol)/i.test(text)&&!/(?:no|not|neither|without|lacks?|does not|do not|has not|have not)\b[^.!?\n]{0,90}\bvalidated\b/i.test(text);
 }
 export function releaseConcerns(text:string,question:string,sources:EvidenceSource[]):string[]{
- const issues=new Set<string>(observedAnswerFailures(text));const known=new Set(sources.map(s=>s.id));
+ const issues=new Set<string>(observedAnswerFailures(text,question+' '+sources.map(s=>s.abstract||'').join(' ')));const known=new Set(sources.map(s=>s.id));
  for(const id of text.match(/\bS\d+\b/g)||[])if(!known.has(id))issues.add('UNKNOWN_SOURCE_ID');
  const evidence=normalize(question+' '+sources.map(s=>s.abstract||'').join(' '));
  for(const sentence of text.split(/(?<=[.!?])\s+|\n+/u).filter(Boolean)){
