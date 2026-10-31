@@ -1,4 +1,4 @@
-import {convene as executeCouncil,research,infer} from './council-runtime';
+import {convene as executeCouncil,research,infer,citationAudit} from './council-runtime';
 import {selectAnswerEvidence,releaseConcerns,looksLikePrivateRecord,safeBoundaryReply,ANSWER_RELEASE_RULES} from './answer-release-policy';
 import {sanitizeConversation} from './conversation-context';
 import {reviewAnswer} from './answer-quality';
@@ -23,5 +23,5 @@ export async function convene(input:Parameters<typeof executeCouncil>[0],deps={r
  const correction=await deps.infer(ANSWER_RELEASE_RULES+'\nReturn only a corrected helpful answer, under 300 words. Remove the flagged risks; do not invent source support. No sensitive-record request, approval exemption, unsupported numerical target or causal claim.',JSON.stringify({question:input.prompt,untrustedHistory:history,sources,draft:text,issues}),process.env.AI_GATEWAY_MODEL||undefined);
  const remaining=correction.ok?releaseConcerns(correction.text,input.prompt,sources):['REVISION_FAILED'];
  if(remaining.length)return {...result,state:'ANSWER_WITHHELD',deliberation:undefined,actionPlan:null,notice:safeBoundaryReply('quality'),error:'Draft did not clear the bounded release checks.',quality:null,release:{state:'WITHHELD',issues:remaining,originalIssues:issues,revisionCalls:1,independentlyVerified:false}};
- return {...result,state:'REVISED_DRAFT_REVIEW_REQUIRED',actionPlan:null,deliberation:{primaryA:'Superseded candidate withheld after release review.',primaryB:'Superseded candidate withheld after release review.',challenge:'Automated review is not independent scientific validation.',synthesis:correction.text},quality:reviewAnswer(correction.text,input.prompt,sources),release:{state:'DRAFT_REVIEW_REQUIRED',issues:[],originalIssues:issues,revisionCalls:1,revisionModel:correction.model||null,independentlyVerified:false}};
+ return {...result,state:'REVISED_DRAFT_REVIEW_REQUIRED',citations:citationAudit(correction.text,sources),actionPlan:null,deliberation:{primaryA:'Superseded candidate withheld after release review.',primaryB:'Superseded candidate withheld after release review.',challenge:'Automated review is not independent scientific validation.',synthesis:correction.text},quality:reviewAnswer(correction.text,input.prompt,sources),release:{state:'DRAFT_REVIEW_REQUIRED',issues:[],originalIssues:issues,revisionCalls:1,revisionModel:correction.model||null,independentlyVerified:false}};
 }
