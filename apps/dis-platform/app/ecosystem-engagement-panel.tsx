@@ -1,6 +1,7 @@
 'use client';
 import type {EngagementInput} from '../lib/ecosystem/contracts';
 import {useEffect,useRef,useState} from 'react';
+import styles from './ecosystem-engagement-panel.module.css';
 import type {ConsultationPackage} from '../lib/consultation-package';
 import type {IntelligenceBundle} from '../lib/consultation-research';
 type Props={privateReady:boolean;problem:string;audience:string;initialContext?:EngagementInput|null;onResult:(pkg:ConsultationPackage,intel:IntelligenceBundle,context:EngagementInput)=>void};
@@ -25,7 +26,7 @@ export default function EcosystemEngagementPanel({privateReady,problem,audience,
    else setPlan(JSON.parse(data.result.content.find((c:any)=>c.type==='text').text));
   }catch(e){if(version===revision.current)setError(e instanceof Error?e.message:'Unable to complete this request.');}finally{if(version===revision.current)setBusy(false);}
  }
- return <section aria-label="Coordinate the ecosystem" style={{border:'1px solid currentColor',borderRadius:12,padding:20,marginBlock:20}}><h3>Bring the right capabilities together</h3><p>Use the question above once. DIS proposes the relevant specialist contributions, keeps their source dates and boundaries visible, and carries the results into the draft package.</p>
+ return <section className={styles.panel} aria-label="Coordinate the ecosystem" style={{border:'1px solid currentColor',borderRadius:12,padding:20,marginBlock:20}}><h3>Bring the right capabilities together</h3><p>Use the question above once. DIS proposes the relevant specialist contributions, keeps their source dates and boundaries visible, and carries the results into the draft package.</p>
  <label>Study boundary <select value={kind} onChange={e=>setKind(e.target.value as EngagementInput['geography']['kind'])}><option value="city">City</option><option value="county">County</option><option value="zcta">Census ZIP Code Tabulation Area</option><option value="unspecified">Not place-based</option></select></label>
  {kind!=='unspecified'&&<div><label>Public place name <input value={label} maxLength={120} onChange={e=>setLabel(e.target.value)} placeholder="City or county name"/></label><label>State FIPS <input value={state} inputMode="numeric" maxLength={2} onChange={e=>setState(e.target.value)} placeholder="Two digits"/></label><label>County FIPS for regional context <input value={county} inputMode="numeric" maxLength={5} onChange={e=>setCounty(e.target.value)} placeholder="Five digits"/></label>{kind==='city'&&<label>City/place FIPS, when known <input value={place} inputMode="numeric" maxLength={5} onChange={e=>setPlace(e.target.value)}/></label>}{kind==='zcta'&&<label>Census ZCTA <input value={zcta} inputMode="numeric" maxLength={5} onChange={e=>setZcta(e.target.value)}/></label>}</div>}
  <button type="button" disabled={busy||problem.trim().length<8} onClick={()=>run(false)}>Show the capability plan</button>
