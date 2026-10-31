@@ -1,3 +1,4 @@
+import {validationAssertion} from './answer-release-policy';
 import type {EvidenceSource} from './evidence-integrity';
 /** Heuristics locate review work; their absence NEVER certifies scientific truth. */
 export const LESSONS:Record<string,string>={
@@ -19,11 +20,12 @@ export function reviewAnswer(text:string,question:string,sources:EvidenceSource[
  if(cited.some(id=>!sources.some(s=>s.id===id)))issues.push('UNTRACEABLE_CITATION');
  const numbers=[...new Set(text.match(/\b\d+(?:\.\d+)?\s*(?:%|weeks?\b|months?\b|days?\b)/gi)||[])];
  if(numbers.some(n=>!evidence.toLowerCase().includes(n.toLowerCase()))&&!/illustrative|example only|proposed.*(?:agree|approval)/i.test(text))issues.push('UNSUPPORTED_NUMBER');
- if(/\bvalidated\b/i.test(text)&&!/\bvalidat/i.test(evidence)&&!/not validated|validity.*unknown|verify.*valid/i.test(text))issues.push('VALIDATION_OVERCLAIM');
+ if(text.split(/(?<=[.!?])\s+|\n+/u).some(sentence=>validationAssertion(sentence))&&!/\bvalidated\b/i.test(evidence))issues.push('VALIDATION_OVERCLAIM');
  if(/\b(?:Act|statute|regulation)\s*(?:\(|of\s+)?(?:19|20)\d{2}/.test(text))issues.push('LEGAL_DATE_REVIEW');
  if(/\b(individual|parent|resident|family member)\b/i.test(question)&&/you (?:must|should|can) (?:mandate|enforce|legislate|set tariffs|change municipal)/i.test(text))issues.push('AUTHORITY_MISMATCH');
  if((text.match(/^#{1,4}\s/gm)||[]).length>5||(text.match(/(?:Geodesy|Geopolitics|Mathematics|Health) (?:Lens|View)/gi)||[]).length>2)issues.push('ROBOTIC_STRUCTURE');
- if((text.match(/\?/g)||[]).length>1)issues.push('TOO_MANY_QUESTIONS');
+ const directed=text.split(/(?<=[.!?])\s+|\n+/u).filter(s=>/\?/.test(s)&&/\b(?:you|your|would it|could we|shall we)\b/i.test(s));
+ if(directed.length>1)issues.push('TOO_MANY_QUESTIONS');
  if(!/measure|baseline|track|record|observe|monitor|compare|progress/i.test(text))issues.push('MISSING_MEASUREMENT');
  if(!/you|owner|responsib|agree|consent|approve|permission/i.test(text))issues.push('MISSING_AGENCY');
  const wordCount=text.trim()?text.trim().split(/\s+/u).length:0;
