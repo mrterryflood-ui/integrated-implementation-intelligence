@@ -1,7 +1,8 @@
-/** A warning that approval is unknown is not an assertion of exemption. */
+/** Preserve approval uncertainty and genuine warnings; reject asserted exemptions. */
 export function assertsApprovalExemption(sentence:string):boolean{
- const s=sentence.toLowerCase();
  const approval='(?:ethics (?:reviews?|approvals?)|(?:external |institutional )?approvals?|consents?|permissions?)';
- if(/\b(?:do not|don't|never|must not|cannot|can't|should not)\b.{0,70}\b(?:assume|claim|say|state|act|proceed)\b/.test(s))return false;
- return new RegExp('\\b(?:without (?:requiring|needing) |does not require |do not require |need not obtain )'+approval).test(s)||new RegExp('\\bno '+approval+'(?: is| are)? (?:needed|required|necessary)\\b').test(s);
+ return sentence.toLowerCase().split(/[;,]|\bbut\b|\bhowever\b/).some(clause=>{
+  if(/\b(?:do not|don't|never|must not|cannot|can't|should not)\s+(?:ever\s+)?(?:assume|claim|say|state|act|proceed|collect|record|share|upload|send|process|use|recruit|publish)\b/.test(clause))return false;
+  return new RegExp('\\b(?:without (?:(?:requiring|needing) )?|does not require |do not require |need not obtain )'+approval).test(clause)||new RegExp('\\bno '+approval+'(?: is| are)? (?:needed|required|necessary)\\b').test(clause);
+ });
 }
