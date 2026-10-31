@@ -34,7 +34,7 @@ test("actual deliberation invokes separate research, primary and challenge passe
 });
 test("failure prevents fabricated council consensus",async()=>{
  const result=await convene({prompt:"How can our organization improve?",count:4,redCount:3,selected:[],redSelected:[],depth:"Standard"},{research:async()=>({sources:[],status:"UNAVAILABLE"}),infer:async()=>({ok:false,text:"",error:"offline"})});
- assert.equal(result.state,"INCOMPLETE");
+ assert.equal(result.state,"EVIDENCE_INSUFFICIENT");
  assert.ok(result.error?.includes("incomplete"));
 });
 
@@ -62,7 +62,7 @@ test("AI inference fallback uses an allowed model and records actual response pr
    const model=JSON.parse(String(opts?.body||"{}")).model;
    attempts.push(model);
    if(attempts.length===1)return new Response(JSON.stringify({error:{code:"no_providers_available"}}),{status:403});
-   return new Response(JSON.stringify({model:"nvidia/nemotron-3.5-lightning-free",choices:[{message:{content:"A cautious preliminary answer."}}]}),{status:200});
+   return new Response(JSON.stringify({model:"nvidia/nemotron-3.5-lightning-free",choices:[{finish_reason:"stop",message:{content:"A cautious preliminary answer."}}]}),{status:200});
   };
   const result=await infer("Test evidence","A short question", "google/gemini-3.5-flash-lite",fetcher as typeof fetch);
   assert.equal(result.ok,true);
@@ -78,7 +78,7 @@ test("free-model beta is explicitly non-independent and uses one real model call
  try{
   let calls=0;
   const result=await convene({prompt:"How should a clinic test its scheduling prototype?",count:5,redCount:3,selected:[],redSelected:[],depth:"Deep"},{
-   research:async()=>({sources:[],status:"NO_RESULTS"}),
+   research:async()=>({sources:[{id:"S1",title:"Synthetic study",url:"https://example.org/study",doi:null,year:2024,abstract:"A prototype needs a local evaluation; this is a test fixture."}],status:"ABSTRACT_AND_METADATA"}),
    infer:async()=>{calls++;return {ok:true,text:"Pilot: measure baseline, errors, user completion and uncertainty.",model:"nvidia/nemotron-3.5-lightning-free"}}
   });
   assert.equal(calls,1);

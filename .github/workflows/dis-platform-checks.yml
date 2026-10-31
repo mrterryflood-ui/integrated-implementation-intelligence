@@ -44,3 +44,47 @@ jobs:
           path: apps/dis-platform/test-results/decision-contracts/
           if-no-files-found: ignore
           retention-days: 14
+
+  candidate-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    defaults:
+      run:
+        working-directory: apps/dis-platform
+    env:
+      VERCEL_ENV: production
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
+      - run: npx playwright install --with-deps chromium webkit
+      - name: Build exact candidate with private identity intentionally unavailable
+        run: npm run build
+      - name: Run real candidate Chromium and iPhone WebKit journeys
+        run: |
+          npm run start -- --hostname 127.0.0.1 --port 3000 > /tmp/dis-candidate.log 2>&1 &
+          SERVER_PID=$!
+          trap 'kill "$SERVER_PID" 2>/dev/null || true' EXIT
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:3000/ > /dev/null; then break; fi
+            sleep 1
+          done
+          node tests/e2e/public-site.mjs
+          node tests/e2e/ecosystem-planning.mjs
+        env:
+          DIS_E2E_BASE_URL: http://127.0.0.1:3000
+          DIS_E2E_ARTIFACT_DIR: test-results/dis-candidate-browser
+      - name: Retain candidate-browser receipts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dis-candidate-browser-${{ github.run_id }}-${{ github.run_attempt }}
+          path: apps/dis-platform/test-results/dis-candidate-browser/
+          if-no-files-found: ignore
+          retention-days: 14

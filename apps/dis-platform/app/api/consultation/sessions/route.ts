@@ -1,3 +1,4 @@
+import {readBoundedOfficeRequest,preserveDraftExportArtifacts} from '../../../../lib/consultation-export-artifacts';
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {sanitizeIntake} from "../../../../lib/consultation";
@@ -23,8 +24,8 @@ export async function GET(req:Request){try{
  }catch{return bad()}}
 export async function POST(req:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
- if(Number(req.headers.get("content-length")||0)>180000)return Response.json({error:"Payload too large"},{status:413});
- const body=await req.json(),workspaceId=String(body.workspaceId||""),mode=body.mode==="general"?"general":"startup";
+ if(Number(req.headers.get("content-length")||0)>240000)return Response.json({error:"Payload too large"},{status:413});
+ const body:any=await readBoundedOfficeRequest(req,240000),workspaceId=String(body.workspaceId||""),mode=body.mode==="general"?"general":"startup";
  const intake=sanitizeIntake(body.intake&&typeof body.intake==="object"?body.intake:{});
  if(!UUID.test(workspaceId)||intake.mission.length<8)return Response.json({error:"Invalid workspace or problem"},{status:400});
  const pkg=buildPackage(intake,mode);
@@ -37,18 +38,20 @@ export async function POST(req:Request){try{
  }catch{return bad()}}
 export async function PATCH(req:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
- if(Number(req.headers.get("content-length")||0)>180000)return Response.json({error:"Payload too large"},{status:413});
- const body=await req.json(),id=String(body.id||""),version=Number(body.version);
+ if(Number(req.headers.get("content-length")||0)>240000)return Response.json({error:"Payload too large"},{status:413});
+ const body:any=await readBoundedOfficeRequest(req,240000),id=String(body.id||""),version=Number(body.version);
  if(!UUID.test(id)||!Number.isInteger(version)||version<1)return Response.json({error:"Invalid session revision"},{status:400});
  if(!validSlides(body.slides))return Response.json({error:"Provide twelve valid editable slides"},{status:400});
  const artifacts=Array.isArray(body.artifacts)?body.artifacts:[];
- if(artifacts.length>20||!artifacts.every((a:any)=>a&&typeof a.id==="string"&&typeof a.title==="string"&&a.title.length<180&&typeof a.body==="string"&&a.body.length<=17000))return Response.json({error:"Invalid document payload"},{status:400});
+ let draftArtifacts;try{draftArtifacts=preserveDraftExportArtifacts(buildPackage(sanitizeIntake({mission:"Validate retained draft documents."}),"general"),artifacts).documents}catch{return Response.json({error:"Invalid or oversized draft document payload"},{status:400})}
  const research=body.research&&typeof body.research==="object"?body.research:{};
  if(JSON.stringify(research).length>65000)return Response.json({error:"Research evidence exceeds limit"},{status:413});
+ const updatedIntake=body.intake&&typeof body.intake==="object"?{...sanitizeIntake(body.intake),mode:body.intake.mode==="general"?"general":"startup"}:null;
+ if(updatedIntake&&updatedIntake.mission.length<8)return Response.json({error:"A valid current mission is required"},{status:400});
  const reviewStatus=["DRAFT","REVIEWED","APPROVED"].includes(body.reviewStatus)?body.reviewStatus:"DRAFT";
  const result=await ctx.sql.transaction([
   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
-  ctx.sql`UPDATE dis_consult_sessions SET artifacts=${JSON.stringify(artifacts)}::jsonb,slides=${JSON.stringify(body.slides)}::jsonb,research=${JSON.stringify(research)}::jsonb,review_status=${reviewStatus},updated_at=now(),version=version+1 WHERE id=${id} AND version=${version} RETURNING id,version,review_status,updated_at`
+  ctx.sql`UPDATE dis_consult_sessions SET intake=COALESCE(${updatedIntake?JSON.stringify(updatedIntake):null}::jsonb,intake),artifacts=${JSON.stringify(draftArtifacts)}::jsonb,slides=${JSON.stringify(body.slides)}::jsonb,research=${JSON.stringify(research)}::jsonb,review_status=${reviewStatus},updated_at=now(),version=version+1 WHERE id=${id} AND version=${version} RETURNING id,version,review_status,updated_at`
  ]);
  return result[1]?.length?Response.json({session:result[1][0]}):Response.json({error:"Revision conflict, access denied, or session not found"},{status:409});
  }catch{return bad()}}
