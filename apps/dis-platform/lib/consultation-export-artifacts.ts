@@ -11,7 +11,7 @@ export function preserveDraftExportArtifacts(pkg:ConsultationPackage,value:unkno
   if(typeof v.id!=='string'||!/^[-a-z0-9]{1,80}$/.test(v.id)||ids.has(v.id)||typeof v.title!=='string'||!v.title.trim()||v.title.length>250||typeof v.body!=='string'||v.body.length>90000||v.note!==undefined&&(typeof v.note!=='string'||v.note.length>1500))throw Error('Invalid or oversized draft document.');
   ids.add(v.id);bytes+=new TextEncoder().encode(v.id+v.title+v.body+(v.note||'')).byteLength;
   if(bytes>LIMIT)throw Error('Combined draft documents exceed the export size limit.');
-  return{id:v.id,title:v.title,body:v.body,validation:'DRAFT',note:'Client-supplied or edited draft. Export preserves its text; this is not independent evidence verification, approval, compliance certification or completed implementation.'+(v.note?' Original note (unverified): '+v.note:'')};
+  return{id:v.id,title:v.title,body:v.body,validation:'DRAFT',note:'Client-supplied or edited draft. Export preserves its text; this is not independent evidence verification, approval, compliance certification or completed implementation.'};
  });
  return {...pkg,documents,quality:{...pkg.quality,grade:'DRAFT / GATES OPEN',knownGaps:[...pkg.quality.knownGaps,'Exported document content is client-supplied or edited; review claims, sources and approval independently.']}};
 }

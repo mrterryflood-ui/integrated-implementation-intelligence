@@ -1,3 +1,4 @@
+import {lensFit} from './collaboration-policy';
 export type CouncilMember={id:string,name:string,domain:string,lens:string,era:"historical"|"modern",group:string};
 export const MEMBERS:CouncilMember[]=[
 ["ibn-al-haytham","Ibn al-Haytham","Scientific inquiry","Question observations, experiments and causal inference","historical","Science"],
@@ -70,7 +71,7 @@ export function selectCouncil(prompt:string,count:number,selected:string[]=[],re
  const unique=new Map(MEMBERS.map(m=>[m.id,m]));
  const explicit=[...new Set(selected)].map(id=>unique.get(id)).filter((m):m is CouncilMember=>!!m);
  const pool=[...unique.values()].filter(m=>!explicit.some(x=>x.id===m.id));
- const score=(m:CouncilMember)=>{const terms=WORDS[m.group]||[];let s=terms.filter(t=>words.includes(t)).length*5; if(red&&DEFAULT_RED.includes(m.id))s+=20; if(m.id==="socrates"||m.id==="angie-jones")s+=2;return s};
+ const score=(m:CouncilMember)=>lensFit(m,prompt)+(red&&m.id==='socrates'?1:0);
  pool.sort((a,b)=>score(b)-score(a)||a.name.localeCompare(b.name));
  return [...explicit,...pool].slice(0,n);
 }
