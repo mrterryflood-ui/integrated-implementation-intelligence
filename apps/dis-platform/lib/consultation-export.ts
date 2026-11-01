@@ -1,9 +1,11 @@
 import pptxgen from "pptxgenjs";
 import {Document,Packer,Paragraph,TextRun,HeadingLevel,AlignmentType} from "docx";
 import type {ConsultationPackage} from "./consultation-package";
+import {normalizeExportIntelligence,normalizeExportSlides} from './consultation-export-sources';
 const NAVY="11283C",DEEP="071E2D",GOLD="CBAE77",CREAM="F6F3EA",INK="17324B",PALE="EFF4F6";
 const shrink=(value:string,max=200)=>value.trim().slice(0,max);
 export async function exportPptx(pkg:ConsultationPackage,theme:"midnight"|"forest"|"slate"="midnight"):Promise<Buffer>{
+ normalizeExportSlides(pkg.slides,normalizeExportIntelligence(pkg.intelligence));
  const palette=theme==="forest"?{deep:"0C2E2A",navy:"143B34",gold:"D6B980"}:theme==="slate"?{deep:"1F293B",navy:"263248",gold:"97BBDF"}:{deep:DEEP,navy:NAVY,gold:GOLD};
  const pptx=new pptxgen();
  pptx.layout="LAYOUT_WIDE";
@@ -39,6 +41,7 @@ export async function exportPptx(pkg:ConsultationPackage,theme:"midnight"|"fores
 }
 const rich=(txt:string)=>new Paragraph({children:[new TextRun({text:txt,color:INK,size:21})],spacing:{after:130,line:280}});
 export async function exportDocx(pkg:ConsultationPackage):Promise<Buffer>{
+ normalizeExportSlides(pkg.slides,normalizeExportIntelligence(pkg.intelligence));
  const children:Paragraph[]=[
   new Paragraph({text:"DYNAMIC INTELLIGENCE",heading:HeadingLevel.TITLE,spacing:{after:150}}),
   new Paragraph({text:"CONSULTATION & IMPLEMENTATION PACKAGE",heading:HeadingLevel.HEADING_1,spacing:{after:180}}),

@@ -1,3 +1,4 @@
+import {OPERATING_CONTRACT_RECEIPT} from '../../../lib/operating-contract';
 import {withCouncilEvidenceSnapshot} from '../../../lib/council-evidence-snapshot';
 import {runGroundedCouncil,validateCouncilEngagement} from '../../../lib/ecosystem/council-handoff';
 import {readBoundedOfficeRequest} from '../../../lib/consultation-export-artifacts';
@@ -12,7 +13,7 @@ import {MEMBERS,selectCouncil,councilBrief,DEFAULT_RED} from "../../../lib/counc
 import {convene} from "../../../lib/council-engine";
 export const runtime="nodejs";
 export const maxDuration=120;
-export async function GET(){const oidc=await getVercelOidcToken().then(()=>true).catch(()=>false);return NextResponse.json({members:[...new Map(MEMBERS.map(m=>[m.id,m])).values()],defaultRed:DEFAULT_RED,runtime:{model:process.env.AI_GATEWAY_MODEL||null,gatewayConfigured:Boolean(process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||oidc)},notice:"Gateway connectivity requires live authenticated POST verification"})}
+export async function GET(){const oidc=await getVercelOidcToken().then(()=>true).catch(()=>false);return NextResponse.json({operatingContract:OPERATING_CONTRACT_RECEIPT,members:[...new Map(MEMBERS.map(m=>[m.id,m])).values()],defaultRed:DEFAULT_RED,runtime:{model:process.env.AI_GATEWAY_MODEL||null,gatewayConfigured:Boolean(process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||oidc)},notice:"Gateway connectivity requires live authenticated POST verification"})}
 export async function POST(req:Request){
  if(productionIdentityBlocked(process.env))return NextResponse.json({error:"Private identity not released"},{status:503});
  const origin=req.headers.get("origin");if(origin){try{if(new URL(origin).origin!==new URL(req.url).origin)return NextResponse.json({error:"Origin mismatch"},{status:403})}catch{return NextResponse.json({error:"Invalid origin"},{status:403})}}
@@ -22,6 +23,7 @@ export async function POST(req:Request){
  let conversation;try{conversation=sanitizeConversation(body.conversation)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Invalid conversation"},{status:400})}
  let engagement;
  if(body.providedEvidence!==undefined||body.evidence!==undefined)return NextResponse.json({error:'Browser-supplied source text is not accepted at the council boundary.'},{status:400});
+ if(['sourceReceipts','engagementAssurance','operatingContract'].some(key=>body[key]!==undefined))return NextResponse.json({error:'Browser-supplied acceptance assertions are not accepted at the council boundary.'},{status:400});
  if(body.ecosystemEngagement!==undefined&&body.ecosystemEngagement!==null){try{engagement=validateCouncilEngagement(body.ecosystemEngagement,prompt,body.allowEcosystemEvidenceTransfer)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Invalid ecosystem context'},{status:400})}}
  const isCustom=body.selectionMode==="custom";
  const challengeEnabled=body.challengeEnabled!==false;

@@ -2,9 +2,9 @@ name: DIS authenticated platform typecheck
 on:
   push:
     branches: [main, "dis/**"]
-    paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
+    paths: ['apps/dis-platform/**', 'docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md', '.github/workflows/dis-platform-checks.yml']
   pull_request:
-    paths: ['apps/dis-platform/**', '.github/workflows/dis-platform-checks.yml']
+    paths: ['apps/dis-platform/**', 'docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md', '.github/workflows/dis-platform-checks.yml']
   workflow_dispatch:
   schedule:
     - cron: '17 8 * * *'
@@ -77,6 +77,7 @@ jobs:
           done
           node tests/e2e/public-site.mjs
           node tests/e2e/ecosystem-planning.mjs
+          node tests/e2e/operating-contract.mjs
         env:
           DIS_E2E_BASE_URL: http://127.0.0.1:3000
           DIS_E2E_ARTIFACT_DIR: test-results/dis-candidate-browser

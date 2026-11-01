@@ -1,10 +1,11 @@
+import {OPERATING_CONTRACT_RECEIPT,withOperatingContract} from './operating-contract';
 import type {EvidenceSource} from './evidence-integrity';
 import {convene as executeCouncil,research,infer,citationAudit} from './council-runtime';
 import {selectAnswerEvidence,releaseConcerns,looksLikePrivateRecord,safeBoundaryReply,ANSWER_RELEASE_RULES} from './answer-release-policy';
 import {sanitizeConversation} from './conversation-context';
 import {reviewAnswer} from './answer-quality';
 export {research,infer,reconstruct,citationAudit,parseActionPlan} from './council-runtime';
-export async function convene(input:Parameters<typeof executeCouncil>[0]&{providedEvidence?:EvidenceSource[];evidenceCoverage?:string[]},deps={research,infer}){
+async function conveneInternal(input:Parameters<typeof executeCouncil>[0]&{providedEvidence?:EvidenceSource[];evidenceCoverage?:string[]},deps={research,infer}){
  const history=sanitizeConversation(input.conversation);
  const base={primary:[],red:[],sources:[],retrieval:'NOT_RUN',quality:null,deliberation:undefined,actionPlan:null,callStatuses:undefined,citations:undefined,modelProvenance:undefined,limitations:'Generated drafts are not independently verified advice or completed implementation.'};
  const combined=[input.prompt,...history.map(t=>t.content)].join('\n');
@@ -28,4 +29,14 @@ export async function convene(input:Parameters<typeof executeCouncil>[0]&{provid
  const remaining=correction.ok?releaseConcerns(correction.text,input.prompt,sources):['REVISION_FAILED'];
  if(remaining.length)return {...result,state:'ANSWER_WITHHELD',deliberation:undefined,actionPlan:null,notice:safeBoundaryReply('quality'),error:'Draft did not clear the bounded release checks.',quality:null,release:{state:'WITHHELD',issues:remaining,originalIssues:issues,revisionCalls:1,independentlyVerified:false}};
  return {...result,state:'REVISED_DRAFT_REVIEW_REQUIRED',citations:citationAudit(correction.text,sources),actionPlan:null,deliberation:{primaryA:'Superseded candidate withheld after release review.',primaryB:'Superseded candidate withheld after release review.',challenge:'Automated review is not independent scientific validation.',synthesis:correction.text},quality:reviewAnswer(correction.text,input.prompt,sources),release:{state:'DRAFT_REVIEW_REQUIRED',issues:[],originalIssues:issues,revisionCalls:1,revisionModel:correction.model||null,independentlyVerified:false}};
+}
+
+/** Bind every council strand and bounded repair to the same versioned contract. */
+export async function convene(input:Parameters<typeof conveneInternal>[0],deps={research,infer}){
+ let inferenceInvocationCount=0;
+ const result=await conveneInternal(input,{...deps,infer:(system,prompt,model)=>{
+  inferenceInvocationCount++;
+  return deps.infer(withOperatingContract(system),prompt,model);
+ }});
+ return {...result,operatingContract:{...OPERATING_CONTRACT_RECEIPT,inferenceInvocationCount}};
 }

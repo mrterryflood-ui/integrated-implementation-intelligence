@@ -1,3 +1,4 @@
+import {withOperatingContract} from './operating-contract';
 import {conversationContext,sanitizeConversation,type ConversationTurn} from './conversation-context';
 import {reviewAnswer} from './answer-quality';
 import {COLLABORATION_RULES,conversationalTask} from './collaboration-policy';
@@ -34,7 +35,7 @@ export async function infer(system:string,prompt:string,modelOverride?:string,fe
  try{
   for(let i=0;i<attempts.length;i++){
    const selected=attempts[i];
-   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:2400,reasoning:{effort:"none"},messages:[{role:"system",content:instructions+"\n"+system+"\n"+COLLABORATION_RULES},{role:"user",content:prompt}]})});
+   const res=await fetcher("https://ai-gateway.vercel.sh/v1/chat/completions",{method:"POST",signal:controller.signal,headers:{"content-type":"application/json",Authorization:"Bearer "+token},body:JSON.stringify({model:selected,max_completion_tokens:2400,reasoning:{effort:"none"},messages:[{role:"system",content:instructions+"\n"+withOperatingContract(system)+"\n"+COLLABORATION_RULES},{role:"user",content:prompt}]})});
    if(!res.ok){
     const detail:any=await res.json().catch(()=>({}));
     const value=detail?.error?.code||detail?.code||detail?.error?.type||"unknown";

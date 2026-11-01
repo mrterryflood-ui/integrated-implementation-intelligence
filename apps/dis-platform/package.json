@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "tsx scripts/run-evaluation-entry.ts && next build",
     "start": "next start",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "node scripts/sync-operating-contract.mjs --check && tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "next": "^16.0.0",

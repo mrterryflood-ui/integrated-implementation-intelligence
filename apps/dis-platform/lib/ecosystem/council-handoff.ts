@@ -1,3 +1,4 @@
+import {councilEngagementAssurance} from '../council-engagement-assurance';
 import {createHash} from 'node:crypto';
 import {convene,research,infer} from '../council-engine';
 import {looksLikePrivateRecord} from '../answer-release-policy';
@@ -38,5 +39,5 @@ export async function runGroundedCouncil(input:Parameters<typeof convene>[0],eng
  const sources=(report.sources||[]) as EvidenceSource[];
  const register=sourceRegister(sources,result);
  const answer=report.deliberation?.synthesis||'';
- return {...report,ecosystem:{...result,councilState:answer?'DRAFT_REVIEW_REQUIRED':'INCOMPLETE'},intelligence:register,evidenceHandoff:{state:answer?'USED_IN_DRAFT':'NO_RELEASED_SYNTHESIS',sourceIds:sources.map(s=>s.id),receiptHash:result.receiptHash,inputSourceHash:createHash('sha256').update(JSON.stringify(sources)).digest('hex'),sourceRefresh:'RETRIEVED_SERVER_SIDE_FOR_THIS_RUN',providedPlatformRecords:providedEvidence.length,omittedPlatformRecordIds:result.items.filter((_,i)=>!providedEvidence.some(s=>s.id==='E'+(i+1))).map(s=>s.id),independentClaimVerification:false,modelWeightsChanged:false}};
+ return {...report,engagementAssurance:councilEngagementAssurance(report,input.prompt),ecosystem:{...result,councilState:answer?'DRAFT_REVIEW_REQUIRED':'INCOMPLETE'},intelligence:register,evidenceHandoff:{state:answer?'USED_IN_DRAFT':'NO_RELEASED_SYNTHESIS',sourceIds:sources.map(s=>s.id),receiptHash:result.receiptHash,inputSourceHash:createHash('sha256').update(JSON.stringify(sources)).digest('hex'),sourceRefresh:'RETRIEVED_SERVER_SIDE_FOR_THIS_RUN',providedPlatformRecords:providedEvidence.length,omittedPlatformRecordIds:result.items.filter((_,i)=>!providedEvidence.some(s=>s.id==='E'+(i+1))).map(s=>s.id),independentClaimVerification:false,modelWeightsChanged:false}};
 }
