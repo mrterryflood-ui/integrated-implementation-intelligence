@@ -1,5 +1,9 @@
 # Enterprise agent operating contract
 
+## IRON-ENG-001 — mandatory engineering acceptance, November 1, 2026
+
+Before every platform/build change, read `docs/engineering/IRON-ENG-001.md` (v1.0.0). It applies across the portfolio, including every delegated agent. Carry its policy version/digest, exact revision, scope, acceptance tests and evidence into each handoff. Supersede older directions requiring Cursor/Bugbot, incomplete main-branch pushes, or completion without durable end-to-end acceptance. Use provider-independent GitHub/internal audits and Vercel review where configured; skipped/neutral/quota-limited checks are not approval. The supplied receipt-consistency validator is not an authenticity oracle or a substitute for executed tests. Record adoption per repository and agent; do not claim global rollout from this file alone.
+
 This repository is the canonical authority for Integrated Implementation Intelligence (III) and the enterprise operating doctrine of Dr. Terry D. Flood. Before changing code, policy, evidence, proposals, funding records, or product claims, read:
 
 1. `platform-doctrine/SKILL.md`;
@@ -28,7 +32,7 @@ Before ANY externally visible correspondence or client-facing assertion, read an
 
 ## Engineering gates
 
-Before proposing merge: inspect current head, active branches/PRs and deployment consequences; identify reuse/extend/new/not-touching/environment facts; run zero-error typecheck, relevant behavioral tests, affected-layer checks, security/privacy/tenancy checks, and independent exact-head review. Do not weaken a test to make a change pass. Merge is not deployment.
+Before proposing merge: inspect current head, active branches/PRs and deployment consequences; identify reuse/extend/new/not-touching/environment facts; run zero-error typecheck, relevant behavioral tests, affected-layer checks, security/privacy/tenancy checks, and independent exact-head review. Do not weaken a test to make a change pass. Merge is not deployment. Apply IRON-ENG-001 to persistence, recovery, actual recipient behavior and documentation parity; no unresolved load-bearing gap can be labeled complete.
 
 ## Proposal and funding gates
 
