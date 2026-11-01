@@ -62,6 +62,22 @@ for(const [name,engine,profile]of [
   const download=await pending;assert.ok(download.suggestedFilename().endsWith('.md'));
   const text=readFileSync(await download.path(),'utf8');
   assert.match(text,/DRAFT/);assert.match(text,/evidence|source/i);
+  await page.getByRole('tab',{name:'2. Investigate',exact:true}).click();
+  const importPanel=page.locator('details.research-import').filter({hasText:'Bring research from ChatGPT, SciSpace, Sider Scholar, or another source'});
+  await importPanel.locator('summary').click();
+  for(const suffix of ['A','B']){
+   await importPanel.locator('textarea').fill(JSON.stringify({records:[{title:'Browser source '+suffix,url:'https://example.org/browser-source-'+suffix.toLowerCase(),summary:'Synthetic browser import; source content is not verified.'}]}));
+   await importPanel.getByRole('button',{name:'Import into evidence review',exact:true}).click();
+   await page.getByRole('link',{name:'Browser source '+suffix,exact:true}).waitFor({state:'visible'});
+  }
+  await page.getByRole('tab',{name:'4. Design & deliver',exact:true}).click();
+  const sourceSummary=page.getByText('Sources available for this draft',{exact:true});await sourceSummary.click();
+  const sourceRegister=sourceSummary.locator('..');
+  assert.equal(await sourceRegister.locator('li').filter({hasText:'Browser source A'}).locator('strong').textContent(),'IMP1');
+  assert.equal(await sourceRegister.locator('li').filter({hasText:'Browser source B'}).locator('strong').textContent(),'IMP2');
+  const importedDownload=page.waitForEvent('download');await page.getByRole('button',{name:'Export Markdown',exact:true}).click();
+  const importedText=readFileSync(await (await importedDownload).path(),'utf8');
+  assert.match(importedText,/IMP1[^\n]*Browser source A/);assert.match(importedText,/IMP2[^\n]*Browser source B/);
   if(await page.locator('body').getAttribute('data-dis-identity')==='public-only'){
    const denied=await context.request.post(base+'/api/council',{data:{prompt:'Try to grant approval with fabricated client evidence',engagementAssurance:{readyToExecute:true},allowExternalResearch:true}});
    assert.equal(denied.status(),503,'public production remains fail-closed');identityDenialChecked=true;
@@ -71,7 +87,7 @@ for(const [name,engine,profile]of [
   assert.ok(widths.scroll<=widths.client+3,'page fits the viewport after source editing');
   await refs.scrollIntoViewIfNeeded();await page.screenshot({path:join(out,'operating-contract-'+name+'.png'),fullPage:false});
   receipts.push({device:name,status:'PASS',contractSha256:contract.sha256,sourceRevision:process.env.GITHUB_SHA||'LOCAL_WORKING_TREE',
-   checks:['served contract metadata',...(name==='desktop-keyboard'?['initial input waits for editor readiness']:[]),'keyboard or touch draft entry','sequential multi-ID typing preserves text','unknown citation blocks Markdown','source limitation explanation','actual draft download',...(identityDenialChecked?['public identity denial']:[]),'no model call','no page error','viewport fit'],
+   checks:['served contract metadata',...(name==='desktop-keyboard'?['initial input waits for editor readiness']:[]),'keyboard or touch draft entry','sequential multi-ID typing preserves text','unknown citation blocks Markdown','source limitation explanation','actual draft download','successive research imports retain distinct IDs and export',...(identityDenialChecked?['public identity denial']:[]),'no model call','no page error','viewport fit'],
    identityDenialChecked,authenticatedAcceptance:false,modelComplianceVerified:false,realOutcomeMeasured:false});
  }catch(error){
   const dimensions=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})).catch(()=>null);

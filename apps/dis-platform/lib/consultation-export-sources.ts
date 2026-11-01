@@ -40,7 +40,7 @@ export function normalizeExportSlides(value:unknown,intelligence:IntelligenceBun
  if(!Array.isArray(value)||value.length!==12||!value.every(validSlide))throw Error('Invalid slide design or source citation.');
  const allowed=new Set(intelligence?.records.map(source=>source.id)||[]);
  for(const slide of value){
-  const inline=[slide.title,slide.kicker,...slide.bullets,slide.notes].join('\n').match(/\[[SE]\d+\]/g)||[];
+  const inline=[slide.title,slide.kicker,...slide.bullets,slide.notes].join('\n').match(/\[(?:[SE]|IMP)\d+\]/g)||[];
   const cited=[...slide.sourceIds,...inline.map(id=>id.slice(1,-1))];
   if(cited.some(id=>!allowed.has(id)))throw Error('Slide '+slide.id+' cites a source absent from its source register. Reconcile the draft and source register before exporting.');
  }

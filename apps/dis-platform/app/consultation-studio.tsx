@@ -10,6 +10,7 @@ import {sanitizeIntake,type Intake} from "../lib/consultation";
 import {findConsultationFocus,type ConsultationFocusArea} from "../lib/consultation-focus";
 import {buildPackage,renderPackageMarkdown,type ConsultationPackage,type SlideSpec} from "../lib/consultation-package";
 import type {IntelligenceBundle,IntelligenceRecord} from "../lib/consultation-research";
+import {importResearchBundle} from '../lib/consultation-research-import';
 type Space={id:string,title:string};
 type Saved={id:string,title:string,version:number,review_status:string};
 const label:Record<keyof Intake,string>={
@@ -147,19 +148,8 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
   setIntel(result);generate(result,councilReport);setStatus(result.records.length+" source records collected. Eligibility, competitive fit and individual claims still require verification.");setTab("Investigate");
  }catch(e){setError(e instanceof Error?e.message:"Research failed")}finally{setWorking(false)}};
  const importResearch=()=>{try{
-  if(importJson.length>65000)throw Error("Research bundle is too large (65 KB maximum).");
-  const parsed=JSON.parse(importJson);
-  const supplied=Array.isArray(parsed)?parsed:parsed&&Array.isArray(parsed.records)?parsed.records:null;
-  if(!supplied||supplied.length>60)throw Error("Paste JSON with up to 60 entries in a records array.");
-  const types=new Set(["SCHOLARLY","OPEN_GRANT","PAST_AWARD","LANDSCAPE_LEAD","TECHNICAL_REPORT","REGULATION"]);
-  const now=new Date().toISOString();
-  const records=supplied.flatMap((record:unknown,i:number)=>{if(!record||typeof record!=="object")return [];const r=record as Record<string,unknown>;
-   if(typeof r.title!=="string"||typeof r.url!=="string"||!/^https:\/\/[^\s]+$/.test(r.url)||r.url.length>500)return [];
-   return [{id:"IMP"+(i+1),kind:typeof r.kind==="string"&&types.has(r.kind)?r.kind as IntelligenceRecord["kind"]:"LANDSCAPE_LEAD" as const,title:r.title.slice(0,250),summary:typeof r.summary==="string"?r.summary.slice(0,500):"Imported source lead; content not independently verified.",source:typeof r.source==="string"?r.source.slice(0,90):"User-supplied research",url:r.url.slice(0,500),retrievedAt:now,sourceStatus:"DISCOVERY_ONLY" as const}];
-  });
-  if(!records.length)throw Error("No valid HTTPS source records were found.");
-  const combined:IntelligenceBundle={query:"User-approved imported research",retrievedAt:now,records:[...(intel?.records||[]),...records].slice(0,80),errors:intel?.errors||[],coverage:{...(intel?.coverage||{}),userImport:"USER_PROVIDED_UNVERIFIED"},researchStandard:"Imported records remain discovery leads even if ChatGPT or another tool described them as authoritative. Verify official source text, dates, fit and claim-level support independently."};
-  setIntel(combined);generate(combined,councilReport);setStatus("Imported "+records.length+" source lead(s) with unverified provenance. Review originals before making claims.");setError("");setImportJson("");
+  const {bundle:combined,importedCount}=importResearchBundle(importJson,intel);
+  setIntel(combined);generate(combined,councilReport);setStatus("Imported "+importedCount+" source lead(s) with unverified provenance. Review originals before making claims.");setError("");setImportJson("");
  }catch(e){setError(e instanceof Error?e.message:"Invalid research JSON")}};
  const verifyOpportunity=async(rec:IntelligenceRecord)=>{setError("");setOpportunity(null);const m=rec.url.match(/search-results-detail\/(\d+)/);if(!m){setError("This record does not have an official Grants.gov opportunity ID.");return}
  setWorking(true);try{const response=await fetch("/api/consultation/opportunity",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({opportunityId:Number(m[1])})});const j=await response.json();if(!response.ok)throw Error(j.error||"Official details unavailable");setOpportunity(j)}catch(e){setError(e instanceof Error?e.message:"Verification failed")}finally{setWorking(false)}};

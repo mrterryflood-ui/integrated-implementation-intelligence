@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import JSZip from 'jszip';
 import {normalizeExportIntelligence,normalizeExportSlides} from '../lib/consultation-export-sources';
-import {buildPackage,type SlideSpec} from '../lib/consultation-package';
+import {buildPackage,renderPackageMarkdown,type SlideSpec} from '../lib/consultation-package';
 import {sanitizeIntake} from '../lib/consultation';
 import {exportDocx,exportPptx} from '../lib/consultation-export';
 
@@ -107,4 +107,27 @@ test('direct serializers preserve source identity when the source register is re
  assert.ok(slide.includes('Evidence leads: E9, S1'));
  assert.deepEqual(pkg.intelligence!.records.map(r=>r.id),['S1','E9']);
  assert.deepEqual(pkg.slides[0].sourceIds,['E9','S1']);
+});
+
+test('inline imported-source citations cannot bypass Markdown, Word or PowerPoint gates',async()=>{
+ const intelligence=normalizeExportIntelligence({records:[source('IMP1','REGISTERED IMPORT')]});
+ const pkg=buildPackage(sanitizeIntake({mission:'Review imported source evidence before implementation.'}),'general',intelligence);
+ pkg.slides[0].sourceIds=[];pkg.slides[0].notes='An unsupported claim [IMP999].';
+ assert.throws(()=>renderPackageMarkdown(pkg),/absent from its source register/);
+ await assert.rejects(()=>exportDocx(pkg),/absent from its source register/);
+ await assert.rejects(()=>exportPptx(pkg),/absent from its source register/);
+});
+
+test('valid imported citations and ordinary bracket prose remain exportable in every format',async()=>{
+ const intelligence=normalizeExportIntelligence({records:[source('IMP1','REGISTERED IMPORT')]});
+ const pkg=buildPackage(sanitizeIntake({mission:'Review imported source evidence before implementation.'}),'general',intelligence);
+ pkg.slides[0].sourceIds=[];pkg.slides[0].notes='Review [IMP1]. [RESEARCH REQUIRED] [DRAFT] [NEXT STEP]';
+ assert.ok(renderPackageMarkdown(pkg).includes(pkg.slides[0].notes));
+ const docx=await JSZip.loadAsync(await exportDocx(pkg));
+ const document=await docx.file('word/document.xml')!.async('string');
+ assert.ok(document.includes(pkg.slides[0].notes));
+ const pptx=await JSZip.loadAsync(await exportPptx(pkg));
+ const notes=await pptx.file('ppt/notesSlides/notesSlide1.xml')!.async('string');
+ assert.ok(notes.includes('[IMP1]'));
+ assert.ok(notes.includes('[RESEARCH REQUIRED]'));
 });
