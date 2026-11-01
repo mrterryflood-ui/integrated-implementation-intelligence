@@ -7,3 +7,10 @@ test('source missing or conflicting blocks confident proposal',()=>{for(const st
 test('missing discipline, remedy or citations blocks proposal',()=>{assert.equal(assessEngagement({...base,domainReviews:[{discipline:'security',required:true,reviewedBy:'NOT_REVIEWED'}]}).readyToPropose,false);assert.equal(assessEngagement({...base,gaps:[{...base.gaps[0],acceptanceTest:''}]}).readyToPropose,false);assert.equal(assessEngagement({...base,artifacts:[{kind:'brief',sourceIds:[],reviewed:false}]}).readyToPropose,false)});
 test('human approval alone does not prove execution or impact',()=>{const r=assessEngagement({...base,humanApproval:true});assert.equal(r.readyToExecute,true);assert.equal(r.measured,false)});
 test('external SME prospects never imply employment',()=>{const p=missingExpertProspectus(base.domainReviews);assert.equal(p.length,1);assert.match(p[0].warning,/not a claim/);assert.equal(missingExpertProspectus([{discipline:'stats',required:true,reviewedBy:'VERIFIED_HUMAN'}]).length,0)});
+
+test('invented or uninspected source IDs cannot establish proposal readiness',()=>{
+ const invented=assessEngagement({...base,artifacts:[{kind:'brief',sourceIds:['fabricated-source'],reviewed:false}]});
+ assert.equal(invented.readyToPropose,false);
+ const secondary=assessEngagement({...base,sourceReceipts:[...base.sourceReceipts,{sourceId:'secondary',origin:'aggregator',revisionOrDate:'today',status:'SECONDARY_ONLY',claims:['unverified']}],artifacts:[{kind:'brief',sourceIds:['secondary'],reviewed:false}]});
+ assert.equal(secondary.readyToPropose,false);
+});

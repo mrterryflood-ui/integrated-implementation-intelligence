@@ -26,7 +26,8 @@ export function assessEngagement(input:EngagementAcceptance){
  if(input.sourceReceipts.some(r=>r.status==='CONFLICTED'||r.status==='MISSING'))blockers.push('Unresolved source conflict or missing evidence.');
  if(input.domainReviews.some(r=>r.required&&r.reviewedBy==='NOT_REVIEWED'))blockers.push('Required discipline has not reviewed the work.');
  if(input.gaps.some(g=>!g.closureAction||!g.owner||!g.acceptanceTest))blockers.push('Gap lacks an owner, remedy or acceptance test.');
- if(!input.artifacts.length||input.artifacts.some(a=>!a.sourceIds.length))blockers.push('Stakeholder deliverables lack source traceability.');
+ const known=new Set(input.sourceReceipts.filter(r=>r.status==='SOURCE_INSPECTED').map(r=>r.sourceId));
+ if(!input.artifacts.length||input.artifacts.some(a=>!a.sourceIds.length||a.sourceIds.some(id=>!known.has(id))))blockers.push('Stakeholder deliverables cite missing or uninspected sources.');
  const readyToPropose=blockers.length===0;
  const readyToExecute=readyToPropose&&input.humanApproval;
  const measured=readyToExecute&&input.executionReceipt&&input.measurementBaseline&&input.outcomeReceipt;
