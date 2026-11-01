@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {requiresSourceInspection,sourceInspectionBlock} from '../lib/ecosystem/source-first-gate';
+test('specific owned application audit requires exact-source discovery',()=>{const q='Evaluate the platform I built after Jeremiah sent the VA opportunity';assert.equal(requiresSourceInspection(q),true);assert.equal(sourceInspectionBlock(q)?.state,'SOURCE_INSPECTION_REQUIRED')});
+test('portfolio knowledge cannot stand in for source inspection',()=>{const q='Review my application and tell me its gaps';assert.equal(sourceInspectionBlock(q,{repository:'mrterryflood-ui/VAtool',revision:'main',inspected:true})?.state,'SOURCE_INSPECTION_REQUIRED')});
+test('only server-inspected immutable revision satisfies identity evidence',()=>{const q='Audit the platform I built';assert.equal(sourceInspectionBlock(q,{repository:'mrterryflood-ui/VAtool',revision:'a'.repeat(40),inspected:true}),null)});
+test('general planning and unrelated questions do not trigger code gate',()=>{for(const q of ['How should a city plan its CEDS?','What is a software common data model?','Research VA AI evaluation methods'])assert.equal(sourceInspectionBlock(q),null)});
