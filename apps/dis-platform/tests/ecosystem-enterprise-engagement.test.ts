@@ -75,9 +75,11 @@ test('unreviewed deliverables remain drafts even when approval and outcome flags
  assert.match(result.executionBlockers.join(' '),/deliverables have not completed review/);
 });
 
-test('reviewed and approved metadata can progress only with all three measurement receipts',()=>{
+test('reviewed and approved legacy flags cannot substitute for structured completion evidence',()=>{
  const reviewed={...base,artifacts:base.artifacts.map(a=>({...a,reviewed:true})),humanApproval:true,executionReceipt:true,measurementBaseline:true,outcomeReceipt:true};
- assert.equal(assessEngagement(reviewed).status,'OUTCOME_EVIDENCED');
+ assert.equal(assessEngagement(reviewed).status,'APPROVED_FOR_BOUNDED_EXECUTION');
+ assert.equal(assessEngagement(reviewed).measured,false);
+ assert.match(assessEngagement(reviewed).completion.blockers.join(' '),/independently verified remediation/);
  for(const field of ['executionReceipt','measurementBaseline','outcomeReceipt']){
   assert.equal(assessEngagement({...reviewed,[field]:false}).measured,false);
  }

@@ -37,14 +37,15 @@ export function councilEngagementAssurance(report:CouncilReport,question:string)
    owner:'Human decision owner; named reviewer to be assigned',
    acceptanceTest:'Every material claim resolves to an inspected source and the stated local decision.'}],
   artifacts:synthesis?[{kind:'council-synthesis',sourceIds:citations,reviewed:false}]:[],
+  outcome:{state:'PENDING',reason:'This council run has not implemented a change or observed its outcome.',owner:'',reviewOn:''},
   humanApproval:false,executionReceipt:false,measurementBaseline:false,outcomeReceipt:false
  };
  return {...assessEngagement(acceptance),
   sourceCount:sources.length,sourceReview:'DISCOVERY_EXCERPTS_ONLY' as const,
   operatingContract:report.operatingContract||null,
   expertProspectus:missingExpertProspectus(domainReviews),
-  nextAction:'Inspect the original sources with the decision owner, resolve the evidence gaps, then review the proposed action and measures.',
-  limits:'This draft does not establish full-text verification, actual human expertise, permission to act or measured impact.'
+  nextAction:'Inspect the original sources with the decision owner. Assign each remedy and measurement follow-up to an owner and review date; independently check the change and its downstream result before closing the gap.',
+  limits:'This draft does not establish full-text verification, actual human expertise, permission to act or measured impact. Prepared, sent, received and read require separate matching receipts; no delivery is inferred from this council response.'
  };
 }
 

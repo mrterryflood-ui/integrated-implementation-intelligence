@@ -5,7 +5,7 @@ import {POST} from '../app/api/council/route';
 test('actual council handler rejects browser-supplied evidence and readiness before auth or inference',async()=>{
  const previous=process.env.VERCEL_ENV;process.env.VERCEL_ENV='preview';
  try{
-  for(const key of ['providedEvidence','evidence','sourceReceipts','engagementAssurance','operatingContract']){
+  for(const key of ['providedEvidence','evidence','sourceReceipts','engagementAssurance','operatingContract','completion','outcome','delivery','improvements']){
    const response=await POST(new Request('https://example.test/api/council',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({prompt:'Evaluate a synthetic implementation example',[key]:{readyToExecute:true,status:'SOURCE_INSPECTED'}})}));
    assert.equal(response.status,400,key+' must not be trusted');
    assert.match((await response.json()).error,/Browser-supplied/);

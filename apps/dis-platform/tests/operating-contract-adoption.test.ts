@@ -97,12 +97,16 @@ for(const scenario of scenarios)test(scenario.name+': discovery stays a draft an
   const report=withCouncilEvidenceSnapshot(result,scenario.question),a=report.engagementAssurance;
   assert.equal(a.sourceReview,'DISCOVERY_EXCERPTS_ONLY');assert.equal(a.readyToPropose,false);
   assert.equal(a.readyToExecute,false);assert.equal(a.measured,false);
+  assert.equal(a.completion.state,'VERIFICATION_PENDING');
+  assert.equal(a.completion.outcomeState,'PENDING');
+  assert.equal(a.completion.delivery[0].observedState,'DRAFT');
   assert.ok(a.expertProspectus.length>0);assert.ok(a.blockers.length>0);
   assert.ok(report.intelligence.records.every(s=>s.sourceStatus==='DISCOVERY_ONLY'));
   const intake=sanitizeIntake({mission:scenario.question,audience:scenario.audience});
   const initial=retainCouncilDraft(null,intake,'general',report.intelligence,report);
   assert.match(renderPackageMarkdown(initial),/Evidence review and next decision/);
   assert.match(renderPackageMarkdown(initial),/not authorization to act/);
+  assert.match(renderPackageMarkdown(initial),/prepared draft does not prove that it was sent, received or read/);
   const previous=buildPackage(intake,'general');previous.documents[0].body='User-authored draft retained';
   const retained=retainCouncilDraft(previous,intake,'general',report.intelligence,report);
   assert.equal(retained.documents[0].body,'User-authored draft retained');
@@ -112,10 +116,12 @@ for(const scenario of scenarios)test(scenario.name+': discovery stays a draft an
   const xml=await zip.file('word/document.xml')!.async('string');
   assert.match(xml,/Evidence review and next decision/);assert.ok(xml.includes(a.operatingContract!.sha256));
   assert.match(xml,/original-source appraisal remains open/);
+  assert.match(xml,/Outcome measurement is pending/);
+  assert.match(xml,/prepared draft does not prove that it was sent, received or read/);
   receipts.push({scenario:scenario.name,status:a.status,readyToExecute:a.readyToExecute,measured:a.measured,contractSha256:a.operatingContract!.sha256});
  }finally{restore()}
 });
-test('inspected test fixtures can advance only after review; a source regression reopens the gate',()=>{
+test('inspected fixtures still need completion evidence after review; source regression reopens the gate',()=>{
  for(const scenario of scenarios){
   const fixture:EngagementAcceptance={assignment:scenario.question,stakeholders:[scenario.audience],
    sourceReceipts:[{sourceId:'fixture-source',origin:'Synthetic regression fixture, not real-world evidence',revisionOrDate:'2026-11-01',status:'SOURCE_INSPECTED',claims:['This fixture exercises acceptance logic only.']}],
@@ -125,7 +131,8 @@ test('inspected test fixtures can advance only after review; a source regression
   assert.equal(assessEngagement(fixture).readyToPropose,true);
   assert.equal(assessEngagement(fixture).readyToExecute,false);
   const reviewed={...fixture,artifacts:[{...fixture.artifacts[0],reviewed:true}]};
-  assert.equal(assessEngagement(reviewed).status,'OUTCOME_EVIDENCED');
+  assert.equal(assessEngagement(reviewed).status,'APPROVED_FOR_BOUNDED_EXECUTION');
+  assert.equal(assessEngagement(reviewed).measured,false);
   const regressed={...reviewed,sourceReceipts:[{...reviewed.sourceReceipts[0],status:'CONFLICTED' as const}]};
   assert.equal(assessEngagement(regressed).readyToExecute,false);assert.equal(assessEngagement(regressed).measured,false);
  }
