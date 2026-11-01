@@ -23,7 +23,7 @@ export async function POST(req:Request){
  let conversation;try{conversation=sanitizeConversation(body.conversation)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Invalid conversation"},{status:400})}
  let engagement;
  if(body.providedEvidence!==undefined||body.evidence!==undefined)return NextResponse.json({error:'Browser-supplied source text is not accepted at the council boundary.'},{status:400});
- if(['sourceReceipts','engagementAssurance','operatingContract'].some(key=>body[key]!==undefined))return NextResponse.json({error:'Browser-supplied acceptance assertions are not accepted at the council boundary.'},{status:400});
+ if(['sourceReceipts','engagementAssurance','operatingContract','completion','outcome','delivery','improvements'].some(key=>body[key]!==undefined))return NextResponse.json({error:'Browser-supplied acceptance assertions are not accepted at the council boundary.'},{status:400});
  if(body.ecosystemEngagement!==undefined&&body.ecosystemEngagement!==null){try{engagement=validateCouncilEngagement(body.ecosystemEngagement,prompt,body.allowEcosystemEvidenceTransfer)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Invalid ecosystem context'},{status:400})}}
  const isCustom=body.selectionMode==="custom";
  const challengeEnabled=body.challengeEnabled!==false;

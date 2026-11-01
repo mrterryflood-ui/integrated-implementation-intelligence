@@ -19,6 +19,8 @@ export function buildPackage(intake:Intake,mode:'startup'|'general'='startup',in
    'This is a preliminary draft. It is not authorization to act or evidence of improved outcomes.',
    'Source review: discovery excerpts only; original-source appraisal remains open.',
    'Review gaps:\n'+gaps.map(x=>'- '+x).join('\n'),
+   'Improvement and delivery follow-through: pending. A prepared draft does not prove that it was sent, received or read.',
+   ...(a.completion?['Completion evidence still needed:\n'+a.completion.blockers.map(x=>'- '+x).join('\n')]:[]),
    'Next step: '+a.nextAction,
    'Limits: '+a.limits,
    a.operatingContract?'Operating standard: '+a.operatingContract.version+'; content SHA-256: '+a.operatingContract.sha256:'Operating-standard loading receipt not established.'
