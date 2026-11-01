@@ -29,9 +29,12 @@ for(const [name,engine]of [['chromium',chromium],['iphone-webkit',webkit]]){
   assert.ok(nameBox&&stateBox&&countyBox&&panelBox,'geographic fields have rendered geometry');
   assert.ok(stateBox.y>=nameBox.y+nameBox.height+8&&countyBox.y>=stateBox.y+stateBox.height+8,'field labels and controls remain in distinct vertically spaced rows');
   for(const box of [nameBox,stateBox,countyBox])assert.ok(box.x>=panelBox.x&&box.x+box.width<=panelBox.x+panelBox.width,'field stays inside panel');
-  const pending=page.waitForResponse(r=>r.url().endsWith('/api/mcp')&&r.request().method()==='POST');
-  await panel.getByRole('button',{name:'Show the capability plan'}).click();
-  const response=await pending,body=await response.json();
+  assert.equal(await mission.inputValue(),'Assess community impact, CEDS alignment and economic development funding.','early input survives editor initialization');
+  const [response]=await Promise.all([
+   page.waitForResponse(r=>r.url().endsWith('/api/mcp')&&r.request().method()==='POST'),
+   panel.getByRole('button',{name:'Show the capability plan'}).click()
+  ]);
+  const body=await response.json();
   assert.equal(response.status(),200);const plan=JSON.parse(body.result.content[0].text);
   assert.equal(plan.state,'PLAN_ONLY');assert.equal(plan.networkRequests,0);assert.equal(plan.question,null);
   for(const id of ['community','civic','funding','business','research'])assert.ok(plan.selected.some(c=>c.platformId===id),id+' coverage');
@@ -51,7 +54,7 @@ for(const [name,engine]of [['chromium',chromium],['iphone-webkit',webkit]]){
   // This long-form studio can exceed browser full-page image limits. Capture
   // the tested panel's viewport without changing any functional assertions.
   await page.screenshot({path:join(out,'ecosystem-'+name+'.png'),fullPage:false});
-  receipts.push({engine:name,sourceRevision:process.env.GITHUB_SHA||'local-working-tree',state:'PUBLIC_PLANNING_AND_IDENTITY_DENIAL_PASSED',privateSignedInAcceptance:false,partnerRoundTrip:false,observedAt:new Date().toISOString(),checks:13,screenshotScope:'tested-panel-viewport',pageDimensions});
+  receipts.push({engine:name,sourceRevision:process.env.GITHUB_SHA||'local-working-tree',state:'PUBLIC_PLANNING_AND_IDENTITY_DENIAL_PASSED',privateSignedInAcceptance:false,partnerRoundTrip:false,observedAt:new Date().toISOString(),checks:14,screenshotScope:'tested-panel-viewport',pageDimensions});
  }catch(error){receipts.push({engine:name,state:'FAILED',error:error instanceof Error?error.message:String(error),pageErrors:errors,pendingRequests:[...pendingRequests].map(u=>{const v=new URL(u);return v.origin+v.pathname}),observedAt:new Date().toISOString()});await page?.screenshot({path:join(out,'ecosystem-'+name+'-failure.png'),fullPage:false}).catch(()=>{});throw error;}
  finally{writeFileSync(join(out,'ecosystem-planning-receipts.json'),JSON.stringify(receipts,null,2));await context?.close();await browser.close();}
 }
