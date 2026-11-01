@@ -37,3 +37,7 @@ Use the chain `Signal → Official source → Mechanism → Eligibility → Enti
 ## Known source limitation
 
 The workspace-reported consolidated eleven-skill bundle has not yet been copied into this repository and verified byte-for-byte. Do not reconstruct or claim it is present. Until it is supplied, this repository's current doctrine and the two enterprise operating records above control, with missing or conflicting instructions reported in `Limits`.
+
+## GPT sessions and delegated agents — source-first behavioral contract
+
+For every agent operating in this repository, also load `docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md`. It is a cross-domain MAP–GAP reasoning and delivery discipline, not merely a UI or code checklist. Source-first discovery, meaningful council challenge, human-directed autonomy, stakeholder-ready deliverables, five-pillar UX review, and honest release receipts apply to every engagement. A repository contract cannot automatically govern unrelated ChatGPT sessions or agents that have not loaded it; confirm adoption through actual tests.
