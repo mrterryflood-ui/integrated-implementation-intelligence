@@ -1,3 +1,4 @@
+import {sourceInspectionBlock} from '../../../lib/ecosystem/source-first-gate';
 import {withCouncilEvidenceSnapshot} from '../../../lib/council-evidence-snapshot';
 import {runGroundedCouncil,validateCouncilEngagement} from '../../../lib/ecosystem/council-handoff';
 import {readBoundedOfficeRequest} from '../../../lib/consultation-export-artifacts';
@@ -19,6 +20,8 @@ export async function POST(req:Request){
  let body:any;try{body=await readBoundedOfficeRequest(req,32000)}catch{return NextResponse.json({error:"Invalid JSON"},{status:400})}
  const prompt=typeof body.prompt==="string"?body.prompt.trim():"";
  if(prompt.length<5||prompt.length>3000)return NextResponse.json({error:"Question must be 5–3000 characters"},{status:400});
+ const inspection=sourceInspectionBlock(prompt);
+ if(inspection)return NextResponse.json(inspection,{status:409,headers:{'Cache-Control':'no-store'}});
  let conversation;try{conversation=sanitizeConversation(body.conversation)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:"Invalid conversation"},{status:400})}
  let engagement;
  if(body.providedEvidence!==undefined||body.evidence!==undefined)return NextResponse.json({error:'Browser-supplied source text is not accepted at the council boundary.'},{status:400});
