@@ -9,6 +9,7 @@ import hashlib
 import json
 import re
 import sys
+import unicodedata
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -24,10 +25,28 @@ REV = re.compile(r'^[a-f0-9]{40}$')
 DIGEST = re.compile(r'^[a-f0-9]{64}$')
 STAGES = ('candidate', 'deployed')
 
+def principal(value: Any) -> str | None:
+    """Normalize supplied stable principal IDs; this does not authenticate them."""
+    if not isinstance(value, str) or not value.strip() or len(value) > 200:
+        return None
+    normalized = unicodedata.normalize('NFKC', value).strip().casefold()
+    if not normalized or any(unicodedata.category(c).startswith('C') for c in normalized):
+        return None
+    return ' '.join(normalized.split())
+
 def timestamp(value: Any) -> datetime | None:
-    if not isinstance(value, str) or not re.fullmatch(
-        r'\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?(?:Z|[+-]\d{2}:\d{2})', value
-    ):
+    if not isinstance(value, str):
+        return None
+    match = re.fullmatch(
+        r'(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,6})?(?:Z|[+-](\d{2}):(\d{2}))', value
+    )
+    if not match:
+        return None
+    # Explicit bounds preserve the contract across Python runtime versions.
+    _, _, _, hour, minute, second, offset_hour, offset_minute = match.groups()
+    if int(hour) > 23 or int(minute) > 59 or int(second) > 59:
+        return None
+    if (offset_hour is not None and int(offset_hour) > 23) or (offset_minute is not None and int(offset_minute) > 59):
         return None
     try:
         parsed = datetime.fromisoformat(value.replace('Z', '+00:00'))
@@ -48,8 +67,8 @@ def validate(manifest: Any, root: Path, expected_revision: str, stage: str = 'ca
         errors.append('Manifest revision does not match expected candidate')
     if manifest.get('stage') != stage:
         errors.append('Manifest stage does not match requested gate')
-    builder = manifest.get('builder')
-    if not isinstance(builder, str) or not builder.strip():
+    builder = principal(manifest.get('builder'))
+    if builder is None:
         errors.append('Builder identity required')
     requirements = manifest.get('requirements')
     if not isinstance(requirements, list) or not requirements or len(requirements) > 1000:
@@ -88,10 +107,10 @@ def validate(manifest: Any, root: Path, expected_revision: str, stage: str = 'ca
             if name in ('requirements', 'security_privacy', 'independent_review', 'documentation_claims', 'deployment'):
                 errors.append(f'{name}: cannot be omitted')
             rationale = c.get('rationale')
-            approver = c.get('reviewedBy')
+            approver = principal(c.get('reviewedBy'))
             if not isinstance(rationale, str) or len(rationale.strip()) < 20:
                 errors.append(f'{name}: substantive applicability rationale required')
-            if not isinstance(approver, str) or not approver.strip() or approver == builder:
+            if approver is None or approver == builder:
                 errors.append(f'{name}: distinct applicability reviewer required')
         elif result != 'passed':
             errors.append(f'{name}: check did not pass')
@@ -125,12 +144,12 @@ def validate(manifest: Any, root: Path, expected_revision: str, stage: str = 'ca
             except (OSError, ValueError, RuntimeError):
                 errors.append(f'{name}: unreadable artifact')
         if name == 'independent_review':
-            reviewer = c.get('reviewer')
-            if not isinstance(reviewer, str) or not reviewer.strip() or reviewer == builder:
+            reviewer = principal(c.get('reviewer'))
+            if reviewer is None or reviewer == builder:
                 errors.append('independent_review: distinct reviewer required')
             if c.get('criticalOpen') != 0 or isinstance(c.get('criticalOpen'), bool) or c.get('highOpen') != 0 or isinstance(c.get('highOpen'), bool):
                 errors.append('independent_review: unresolved or unknown critical/high findings')
-            if str(c.get('provider', '')).casefold() in ('cursor', 'cursor bugbot', 'bugbot'):
+            if principal(c.get('provider')) in ('cursor', 'cursor bugbot', 'bugbot'):
                 errors.append('independent_review: retired provider cannot satisfy new audit contract')
         if name == 'deployment':
             if c.get('mode') != 'live' or c.get('deployedRevision') != expected_revision:

@@ -65,4 +65,20 @@ class ReceiptGateTests(unittest.TestCase):
     def test_requirement_duplicates_and_no_traceability_fail(self):
         self.m['requirements'].append(copy.deepcopy(self.m['requirements'][0]));self.assertTrue(self.validate())
         self.m['requirements']=self.m['requirements'][:1];self.m['requirements'][0]['tests']=[];self.assertTrue(self.validate())
+    def test_whitespace_and_case_cannot_create_a_distinct_reviewer(self):
+        for same in [' fixture-builder', 'fixture-builder ', 'FIXTURE-BUILDER', '  Fixture-Builder  ']:
+            m=copy.deepcopy(self.m);m['checks']['independent_review']['reviewer']=same;self.assertTrue(self.validate(m))
+            m=copy.deepcopy(self.m);m['builder']=same;m['checks']['independent_review']['reviewer']='fixture-builder';self.assertTrue(self.validate(m))
+    def test_self_approved_omission_is_rejected_after_normalization(self):
+        self.m['checks']['persistence_migrations'].update(result='not_applicable',rationale='Documentation-only change with no database impact.',reviewedBy='  FIXTURE-BUILDER  ')
+        self.assertTrue(self.validate())
+    def test_controls_cannot_disguise_principal(self):
+        for invalid in ['reviewer\x00', 'reviewer\u200b', 'reviewer\nother']:
+            self.m['checks']['independent_review']['reviewer']=invalid;self.assertTrue(self.validate())
+    def test_runtime_independent_time_bounds(self):
+        for value in ['2026-11-01T24:00:00Z','2026-11-01T23:60:00Z','2026-11-01T23:59:60Z','2026-11-01T23:00:00+24:00','2026-11-01T23:00:00+00:60']:
+            self.assertIsNone(gate.timestamp(value),value)
+        self.assertIsNotNone(gate.timestamp('2028-02-29T23:59:59+05:30'))
+    def test_provider_whitespace_cannot_revive_retired_provider(self):
+        self.m['checks']['independent_review']['provider']='  Cursor Bugbot  ';self.assertTrue(self.validate())
 if __name__=='__main__':unittest.main()
