@@ -54,6 +54,7 @@ test('wrong contracts, contradictory counts, duplicated identities, and missing 
   (x:any)=>{x.needs[0].gap={fake:true}},
   (x:any)=>{x.nodes[0].implementation='IMPLEMENTED_PRODUCTION'},
   (x:any)=>{x.nodes[0].id='a secret bad ID'},
+  (x:any)=>{x.nodes[1].id=x.nodes[0].id},
   (x:any)=>{x.hasAnyLiveEvidence='green'},
  ];
  for(const f of mutate){const v:any=fixture();f(v);assert.throws(()=>projectAtlasPublicComposition(v));}
