@@ -35,6 +35,14 @@ test('malformed Office archive with hidden additional central entries is rejecte
  assert.ok(eocd>0);const count=altered.readUInt16LE(eocd+10);
  altered.writeUInt16LE(count-1,eocd+10);altered.writeUInt16LE(count-1,eocd+8);
  assert.throws(()=>inspectOfficeZip(altered),/directory count or size/);
+ // An attacker can also understate both the entry count and total central-directory
+ // byte size. The remaining uninspected entry must not reach a downstream parser.
+ const understated=Buffer.from(good);const directoryOffset=understated.readUInt32LE(eocd+16);
+ let cursor=directoryOffset;const centralLengths:number[]=[];
+ for(let j=0;j<count;j++){assert.equal(understated.readUInt32LE(cursor),0x02014b50);const length=46+understated.readUInt16LE(cursor+28)+understated.readUInt16LE(cursor+30)+understated.readUInt16LE(cursor+32);centralLengths.push(length);cursor+=length;}
+ understated.writeUInt16LE(count-1,eocd+10);understated.writeUInt16LE(count-1,eocd+8);
+ understated.writeUInt32LE(understated.readUInt32LE(eocd+12)-centralLengths.at(-1)!,eocd+12);
+ assert.throws(()=>inspectOfficeZip(understated),/Archive exceeds safe extraction bounds/);
 });
 test('verified primary Clerk email is required; secondary/unverified identities cannot claim an invitation',()=>{
  const user={primaryEmailAddressId:'a',emailAddresses:[{id:'a',emailAddress:'Andre.Patterson@100blackmenaustin.org',verification:{status:'verified'}},{id:'b',emailAddress:'other@example.com',verification:{status:'verified'}}]};

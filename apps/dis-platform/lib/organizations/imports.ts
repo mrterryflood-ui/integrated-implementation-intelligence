@@ -10,7 +10,7 @@ export function inspectOfficeZip(buffer:Buffer){
  let end=-1;for(let i=buffer.length-22;i>=Math.max(0,buffer.length-65557);i--)if(buffer.readUInt32LE(i)===0x06054b50){end=i;break;}
  if(end<0)throw new OrganizationError('Invalid Office archive');
  const count=buffer.readUInt16LE(end+10),offset=buffer.readUInt32LE(end+16),size=buffer.readUInt32LE(end+12);
- if(count===65535||count>2500||offset===0xffffffff||offset+size>end||offset<0)throw new OrganizationError('Archive exceeds safe extraction bounds');
+ if(count===65535||count>2500||offset===0xffffffff||offset+size!==end||offset<0)throw new OrganizationError('Archive exceeds safe extraction bounds');
  let p=offset,total=0;const names:string[]=[];
  for(let n=0;n<count;n++){
   if(p+46>end||buffer.readUInt32LE(p)!==0x02014b50)throw new OrganizationError('Malformed Office archive');
