@@ -1,4 +1,5 @@
 "use client";
+import {consultationCouncilQuestion} from "../lib/consultation-question";
 import CouncilReadiness from './council-readiness';
 import KnowledgeMap from "./knowledge-map";
 import {retainCouncilDraft,resumeEngagement,engagementGeography} from '../lib/ecosystem/continuity';
@@ -154,7 +155,7 @@ export default function ConsultationStudio({privateReady=false}:{privateReady?:b
  const verifyOpportunity=async(rec:IntelligenceRecord)=>{setError("");setOpportunity(null);const m=rec.url.match(/search-results-detail\/(\d+)/);if(!m){setError("This record does not have an official Grants.gov opportunity ID.");return}
  setWorking(true);try{const response=await fetch("/api/consultation/opportunity",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({opportunityId:Number(m[1])})});const j=await response.json();if(!response.ok)throw Error(j.error||"Official details unavailable");setOpportunity(j)}catch(e){setError(e instanceof Error?e.message:"Verification failed")}finally{setWorking(false)}};
  const debate=async()=>{if(ecosystemContext&&!allowEcosystemCouncil){setError('Approve public/aggregate source transfer to the council before continuing.');return}if(!allowCouncil){setError("Give separate permission before sending your question for external council analysis.");return}const revision=++reviewRevisionRef.current;councilRequestRef.current?.abort();const councilController=new AbortController();councilRequestRef.current=councilController;setWorking(true);setParallaxReport(null);setStatus("Conducting primary analysis, challenge and synthesis…");setError("");
- try{const q=[intake.mission,intake.audience,intake.organization,intake.stage,intake.alternatives,intake.traction,intake.desiredOutcome].filter(Boolean).join("\n");
+ try{const q=consultationCouncilQuestion(intake);
   const response=await fetch("/api/council",{method:"POST",signal:councilController.signal,headers:{"content-type":"application/json"},body:JSON.stringify({prompt:q,count:6,redCount:4,depth:"Deep",selectionMode:"auto",challengeEnabled:true,allowExternalResearch:true,...(ecosystemContext?{ecosystemEngagement:{...ecosystemContext,externalConsent:true},allowEcosystemEvidenceTransfer:allowEcosystemCouncil}:{})})});
   const report=await response.json();if(councilController.signal.aborted || revision!==reviewRevisionRef.current)return;if(!response.ok)throw Error(report.error||"Council unavailable");
   setCouncilReport(report);const currentIntel=report.intelligence||intel;if(report.intelligence)setIntel(report.intelligence);setPkg(previous=>retainCouncilDraft(previous&&previous.intake.mission===intake.mission?previous:null,sanitizeIntake(intake),mode,currentIntel,report));setTab("Council review");
