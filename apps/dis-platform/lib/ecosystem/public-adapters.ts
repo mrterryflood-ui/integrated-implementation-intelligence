@@ -1,5 +1,6 @@
 import {NetworkBudget,asRecord,boundedText,publicHttps} from './transport';
 import {ContractError,emptyReceipt,type Capability,type CapabilityReceipt,type EngagementInput,type EvidenceItem} from './contracts';
+import {readAtlasPublicComposition} from './atlas-public-adapter';
 const CENSUS='https://api.census.gov',THRIVE='https://thrivingcommunitiesforall.com';
 const item=(id:string,title:string,summary:string,url:string,source:string,referencePeriod:string|null,geography:string,data:Record<string,unknown>):EvidenceItem=>({id,title,summary,url,source,retrievedAt:new Date().toISOString(),referencePeriod,geography,status:'SOURCE_REPORTED_NOT_CLAIM_VERIFIED',data});
 function failStatus(status:number){if(status!==200)throw new ContractError(status===401?'AUTHENTICATION_REQUIRED':status===403?'SCOPE_DENIED':'UPSTREAM_HTTP_'+status,'Public source returned HTTP '+status+'.');}
@@ -43,4 +44,4 @@ async function countyHistory(cap:Capability,input:EngagementInput,budget:Network
  }
  return{...result,state:items.length?'RETURNED':'EMPTY_SOURCE_RESULT',finishedAt:new Date().toISOString(),requestCount:budget.requests-before,httpStatus:wire.status,sourceUrl:url.href,responseSha256:wire.sha256,items,reason:items.length?'The owning platform returned public county-level Census history using its own integration.':'No usable source observations were returned; missing data is not zero.',limitations:['No provider credential was received or copied by DIS.','County results cannot substitute for city or Census-ZCTA estimates.','The endpoint omits sampling margins of error; precise significance claims are unavailable.','Model projections, counterfactuals and suggested effect magnitudes were excluded.']};
 }
-export async function runPublicAdapter(cap:Capability,input:EngagementInput,budget:NetworkBudget){if(cap.id==='community-county-history')return countyHistory(cap,input,budget);if(cap.id==='ceds-framework'||cap.id==='ceds-regional-context')return ceds(cap,input,budget);throw new ContractError('ADAPTER_UNAVAILABLE','No reviewed public adapter is bound to this capability.');}
+export async function runPublicAdapter(cap:Capability,input:EngagementInput,budget:NetworkBudget){if(cap.id==='continuity-and-emergency-intelligence')return readAtlasPublicComposition(cap,budget);if(cap.id==='community-county-history')return countyHistory(cap,input,budget);if(cap.id==='ceds-framework'||cap.id==='ceds-regional-context')return ceds(cap,input,budget);throw new ContractError('ADAPTER_UNAVAILABLE','No reviewed public adapter is bound to this capability.');}
