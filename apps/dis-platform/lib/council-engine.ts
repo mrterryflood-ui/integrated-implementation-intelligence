@@ -14,7 +14,7 @@ async function conveneInternal(input:Parameters<typeof executeCouncil>[0]&{provi
  const provided=(input.providedEvidence||[]).filter(s=>s.evidenceKind==='PLATFORM_PUBLIC_EXCERPT'&&/^E\d+$/.test(s.id)&&s.abstract&&!s.abstractTruncated);
  if(provided.some(s=>looksLikePrivateRecord(s.abstract||'')))return {...base,state:'PRIVATE_RECORD_INPUT_BLOCKED',error:'Potentially private source content withheld.',release:{state:'WITHHELD',issues:['PRIVATE_RECORD_INPUT'],revisionCalls:0,independentlyVerified:false}};
  const found=await deps.research(original?original.slice(0,150)+' '+input.prompt.slice(0,80):input.prompt);
- const sources=[...selectAnswerEvidence(found.sources,4),...provided.slice(0,12)];
+ const sources=[...selectAnswerEvidence(found.sources,6),...provided.slice(0,12)];
  if(!sources.length)return {...base,state:'EVIDENCE_INSUFFICIENT',retrieval:found.status,notice:safeBoundaryReply('evidence'),error:'Evidence-based deliberation incomplete: no eligible selected source excerpts.',release:{state:'WITHHELD',issues:['NO_SELECTED_ABSTRACTS'],revisionCalls:0,independentlyVerified:false}};
  const coverage=JSON.stringify({kind:'SERVER_REPORTED_CAPABILITY_COVERAGE',states:(input.evidenceCoverage||[]).slice(0,16),rule:'Unavailable, denied, invalid and empty responses are gaps, not evidence of absence or zero. Do not claim comprehensive coverage.'});
  const executed=await executeCouncil(input,{research:async()=>({...found,sources}),infer:(system,prompt,model)=>deps.infer(system+'\n'+ANSWER_RELEASE_RULES,prompt+'\n'+coverage,model)});
