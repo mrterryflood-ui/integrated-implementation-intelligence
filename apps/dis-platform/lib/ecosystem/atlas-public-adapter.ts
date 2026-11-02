@@ -65,9 +65,12 @@ export function projectAtlasPublicComposition(value:unknown):AtlasPublicProjecti
   throw new ContractError('ATLAS_MISSING_REQUIREMENTS','The reviewed source is missing the required hazard and weather inputs.');
  const rawNodes=list(root.nodes,'NODES',40);
  let codePresent=0,declarationOnly=0;
+ const nodeIds=new Set<string>();
  for(const entry of rawNodes){
   const node=asRecord(entry);
   if(typeof node.id!=='string'||!SAFE_ID.test(node.id))throw new ContractError('ATLAS_INVALID_NODE','The public source returned a malformed interface identity.');
+  if(nodeIds.has(node.id))throw new ContractError('ATLAS_DUPLICATE_NODE','A repeated public interface identity cannot inflate either implementation count.');
+  nodeIds.add(node.id);
   if(node.implementation==='CODE_PRESENT')codePresent++;
   else if(node.implementation==='DECLARATION_ONLY')declarationOnly++;
   else throw new ContractError('ATLAS_INVALID_NODE','The public source returned an unrecognized implementation state.');
