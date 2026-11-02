@@ -135,7 +135,7 @@ CREATE POLICY dis_upload_add ON dis_organization_uploads FOR INSERT WITH CHECK(d
 CREATE POLICY dis_upload_update ON dis_organization_uploads FOR UPDATE USING(dis_organization_role(organization_id) IS NOT NULL AND owner_subject=current_setting('dis.subject_id',true));
 -- Aggregate quota is bounded to the actor's organization; reveals no private filenames or contents.
 CREATE FUNCTION dis_org_storage_usage(p_org uuid) RETURNS bigint LANGUAGE sql STABLE SECURITY DEFINER SET search_path='' AS $$
- SELECT CASE WHEN public.dis_organization_role(p_org) IS NOT NULL THEN COALESCE(sum(GREATEST(expected_bytes,COALESCE(actual_bytes,0))) FILTER(WHERE status<>'DELETED'),0)::bigint ELSE NULL END FROM public.dis_organization_uploads WHERE organization_id=p_org
+ SELECT CASE WHEN public.dis_organization_role(p_org) IS NOT NULL THEN COALESCE(sum(GREATEST(expected_bytes,COALESCE(actual_bytes,0))) FILTER(WHERE status<>'DELETED' AND NOT (status='REJECTED' AND actual_bytes IS NULL)),0)::bigint ELSE NULL END FROM public.dis_organization_uploads WHERE organization_id=p_org
 $$;
 REVOKE ALL ON FUNCTION dis_org_storage_usage(uuid) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION dis_organization_role(uuid),dis_org_storage_usage(uuid) TO dis_app_safe;

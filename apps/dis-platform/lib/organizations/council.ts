@@ -58,3 +58,12 @@ export async function finishOrganizationCouncil(db:Queryable,actor:string,org:st
  const receipt=await storeCouncilReceipt(db,org,actor,{targetId:execution.job.target_id,targetVersion:execution.job.target_version,targetTitle:execution.context.target.title,targetDigest:execution.context.target.digest,transferHash:execution.job.transfer_hash,request:execution.job.request.payload,result,sourceManifest:execution.context.sourceManifest,reviewScope:execution.job.request.section,stale:current.version!==execution.job.target_version||current.digest!==execution.context.target.digest,reviewedAt:new Date().toISOString(),approvalGranted:false});
  await db.query("UPDATE dis_organization_review_jobs SET state=$1,receipt_id=$2 WHERE id=$3 AND state='CLAIMED'",[result.deliberation?.synthesis?'COMPLETED':'FAILED',receipt.id,id]);return receipt;
 }
+
+/** Use the organization’s actual question and context for discovery, never the transfer manifest preamble. */
+export function organizationCouncilResearchQuery(payload:{target?:{title?:string};stakeholderProposal?:{sections?:Record<string,string>}}){
+ const sections=payload?.stakeholderProposal?.sections||{};
+ const pieces=[sections.question,sections.scope,sections.gaps,sections.funding,payload?.target?.title].filter(x=>typeof x==='string'&&x.trim());
+ const query=pieces.join(' ').replace(/\s+/g,' ').trim();
+ if(query.length<8)throw new OrganizationError('The proposal needs a research question or scope before Council discovery');
+ return query.slice(0,900);
+}

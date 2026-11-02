@@ -26,6 +26,7 @@ export function inspectOfficeZip(buffer:Buffer){
   if(/\.(xml|rels)$/i.test(name)&&/<!DOCTYPE|<!ENTITY/i.test(decoded.toString('utf8')))throw new OrganizationError('XML entity declarations require separate review');
   names.push(name);p+=46+nameLen+extraLen+commentLen;
  }
+ if(p!==offset+size)throw new OrganizationError('The Office directory count or size is inconsistent; refuse uninspected entries');
  if(new Set(names).size!==names.length)throw new OrganizationError('Duplicate archive entries');
  return{names,expandedBytes:total};
 }
