@@ -1,0 +1,4 @@
+export const PLANNING_SCHEMA='dis.planning.report.v1';
+export const PLANNING_SECTIONS=[['question','Question and decision'],['scope','Population, place and scope'],['assets','Strengths and resources'],['gaps','Needs and gaps'],['evidence','Evidence and sources'],['outcomes','Outcomes and logic model'],['options','Options and alternatives'],['recommendation','Recommendation'],['implementation','Implementation, LOO and LOE'],['measures','SMART objectives and measures'],['resources','People, time and full costs'],['risks','Risks and safeguards'],['dissent','Reservations and minority views'],['questions','Open questions'],['funding','Funding and sustainment'],['pilot','Pilot and evaluation']] as const;
+export type SectionId=typeof PLANNING_SECTIONS[number][0];
+export type PlanningReport={schemaVersion:typeof PLANNING_SCHEMA;title:string;sections:Record<SectionId,string>};

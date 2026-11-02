@@ -30,6 +30,7 @@
     "@types/pdf-parse": "^1.1.4",
     "tsx": "^4.20.6",
     "jszip": "^3.10.1",
-    "@types/leaflet": "^1.9.21"
+    "@types/leaflet": "^1.9.21",
+    "@electric-sql/pglite": "0.5.14"
   }
 }

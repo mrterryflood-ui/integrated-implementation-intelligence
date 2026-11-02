@@ -6,6 +6,7 @@ const protectedPages = createRouteMatcher(["/workspace(.*)"]);
 const privateRoutes = createRouteMatcher([
   "/workspace(.*)",
   "/api/workspaces(.*)",
+  "/api/organizations(.*)",
   "/api/documents(.*)",
   "/api/cases(.*)",
   "/api/consultation/sessions(.*)",

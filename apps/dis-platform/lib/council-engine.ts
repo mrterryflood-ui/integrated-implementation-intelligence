@@ -11,7 +11,7 @@ async function conveneInternal(input:Parameters<typeof executeCouncil>[0]&{provi
  const combined=[input.prompt,...history.map(t=>t.content)].join('\n');
  if(looksLikePrivateRecord(combined))return {...base,state:'PRIVATE_RECORD_INPUT_BLOCKED',notice:safeBoundaryReply('privacy'),error:'Remove real record content before external research.',release:{state:'WITHHELD',issues:['PRIVATE_RECORD_INPUT'],revisionCalls:0,independentlyVerified:false}};
  const original=history.find(t=>t.role==='user')?.content;
- const provided=(input.providedEvidence||[]).filter(s=>s.evidenceKind==='PLATFORM_PUBLIC_EXCERPT'&&/^E\d+$/.test(s.id)&&s.abstract&&!s.abstractTruncated);
+ const provided=(input.providedEvidence||[]).filter(s=>(s.evidenceKind==='PLATFORM_PUBLIC_EXCERPT'||s.evidenceKind==='PRIMARY_PUBLIC_DOCUMENT'&&/^[a-f0-9]{64}$/.test(s.receiptHash||'')&&Boolean(s.retrievedAt&&Number.isFinite(Date.parse(s.retrievedAt))))&&/^E\d+$/.test(s.id)&&s.abstract&&!s.abstractTruncated);
  if(provided.some(s=>looksLikePrivateRecord(s.abstract||'')))return {...base,state:'PRIVATE_RECORD_INPUT_BLOCKED',error:'Potentially private source content withheld.',release:{state:'WITHHELD',issues:['PRIVATE_RECORD_INPUT'],revisionCalls:0,independentlyVerified:false}};
  const found=await deps.research(original?original.slice(0,150)+' '+input.prompt.slice(0,80):input.prompt);
  const sources=[...selectAnswerEvidence(found.sources,6),...provided.slice(0,12)];
