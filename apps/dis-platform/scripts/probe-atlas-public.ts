@@ -31,6 +31,7 @@ async function one(){
   record.failed++;record.failureCodes.push(e instanceof Error?e.name+':'+e.message.slice(0,120):'UNKNOWN_FAILURE');
  }
 }
+async function main(){
 for(let i=0;i<count;i+=concurrency){
  await Promise.all(Array.from({length:Math.min(concurrency,count-i)},()=>one()));
  if(i+concurrency<count)await new Promise(resolve=>setTimeout(resolve,500));
@@ -41,3 +42,10 @@ record.finishedAt=new Date().toISOString();save();
 const output={...record,responseHashes:record.responseHashes.length?{count:record.responseHashes.length,unique:new Set(record.responseHashes).size}:[]};
 console.log('DIS_ATLAS_PUBLIC_WITNESS='+JSON.stringify(output));
 if(record.passed!==count||record.failed!==0||record.p95Ms===null||record.p95Ms>7000)process.exitCode=1;
+}
+void main().catch(error=>{
+ record.finishedAt=new Date().toISOString();
+ record.failed=Math.max(1,record.failed);
+ record.failureCodes.push(error instanceof Error?error.name+':'+error.message.slice(0,120):'UNEXPECTED_WITNESS_ERROR');
+ save();process.exitCode=1;
+});
