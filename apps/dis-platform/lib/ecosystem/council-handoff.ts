@@ -21,8 +21,9 @@ export function councilEvidence(result:EngagementResult):EvidenceSource[]{
 export function validateCouncilEngagement(value:unknown,prompt:string,consent:unknown):EngagementInput{
  if(consent!==true)throw new ContractError('EVIDENCE_CONSENT_REQUIRED','Approve transfer of the public/aggregate evidence to council model providers.');
  const e=parseEngagement(value);
- if(!e.externalConsent)throw new ContractError('EVIDENCE_CONSENT_REQUIRED','External specialist retrieval consent is required.');
- if(e.problem.trim()!==prompt.trim())throw new ContractError('CONTEXT_MISMATCH','The specialist question must match the current council question.');
+ if(!e.externalConsent)throw new ContractError('EVIDENCE_CONSENT_REQUIRED','External specialist retrieval requires consent.');
+ if(!prompt.trim().startsWith(e.problem))throw new ContractError('STALE_ENGAGEMENT','The source engagement no longer matches the question. Refresh the capability plan.');
+ const plan=planEngagement(e);if(plan.question)throw new ContractError('CONTEXT_REQUIRED',plan.question);
  return e;
 }
 export function sourceRegister(sources:EvidenceSource[],result:EngagementResult):IntelligenceBundle{
