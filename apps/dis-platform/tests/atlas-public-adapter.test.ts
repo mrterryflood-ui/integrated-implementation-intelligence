@@ -20,7 +20,7 @@ const json=(data:unknown,status=200,headers:Record<string,string>={'content-type
 test('explicit ATLAS public catalog is bound to the existing defense capability without a credential or write action',()=>{
  assert.equal(capability.transport,'PUBLIC_JSON');assert.equal(capability.endpoint,ATLAS_PUBLIC_COMPOSITION_URL);
  assert.equal(capability.requiresGeography,false);assert.equal(capability.dataClass,'PUBLIC_AGGREGATE');
- const plan=planEngagement({problem:'Assess ATLAS emergency continuity and hazard readiness for a program office.',audience:'Program evaluator',domains:['defense'],geography:{kind:'unspecified'},externalConsent:true});
+ const plan=planEngagement({problem:'Assess ATLAS emergency continuity integration for a program office.',audience:'Program evaluator',domains:['defense'],geography:{kind:'unspecified'},externalConsent:true});
  assert.equal(plan.question,null);assert.ok(plan.selected.some(x=>x.id===capability.id));
 });
 test('source projections never imply operational acceptance even when the upstream boasts it',()=>{
