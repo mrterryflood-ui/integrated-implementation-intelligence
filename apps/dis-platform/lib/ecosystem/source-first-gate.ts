@@ -14,3 +14,9 @@ export function sourceInspectionBlock(prompt:string,serverSource?:{repository:st
  reason:'A code-level assessment of the named owned platform requires inspection of that exact application. No portfolio substitute, inferred feature or council conclusion is authorized.',
  required:['Resolve the canonical application identity from connected app/repository inventory','Inspect exact serving source revision, implementation, tests and runtime','Map source-backed capabilities to the original stakeholder communication','Record verified, simulated, missing and untested separately','Then convene independent challenge and provide remediation with acceptance tests']};
 }
+
+/** Sanitized user history establishes context, never inspection or approval. Assistant assertions cannot establish ownership. */
+export function sourceInspectionBlockForConversation(prompt:string,history:readonly {role:'user'|'assistant';content:string}[]){
+ const context=[...history.filter(t=>t.role==='user').map(t=>t.content),prompt].join('\n').replace(/\s+/g,' ');
+ return sourceInspectionBlock(context);
+}

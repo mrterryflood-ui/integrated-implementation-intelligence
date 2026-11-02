@@ -3,10 +3,14 @@ import {createHash} from 'node:crypto';
 import {convene,infer} from '../lib/council-engine';
 import {integratedCouncilResearch} from '../lib/integrated-research';
 const MODEL='nvidia/nemotron-3.5-lightning-free';
+export function planningReviewAuthorized(env:Record<string,string|undefined>,now=Date.now()):boolean{
+ const sha=env.VERCEL_GIT_COMMIT_SHA||'',deadline=Number(env.DIS_PLAN_REVIEW_DEADLINE);
+ return Number.isSafeInteger(now)&&Number.isSafeInteger(deadline)&&deadline>now&&deadline<=now+900000&&env.VERCEL_ENV==='preview'&&env.VERCEL_PROJECT_ID==='prj_LVFxxat2yPL4kKgzB2xDNqaVlXAT'&&env.DIS_PLAN_REVIEW_ENABLE==='owner-approved-preview'&&env.DIS_PLAN_REVIEW_SHA===sha&&/^[a-f0-9]{40}$/.test(sha);
+}
 /** Owner-authorized public-source review of this build. No personal records, email or production writes. */
 export async function runPlanningReview(){
  const sha=process.env.VERCEL_GIT_COMMIT_SHA||'',deadline=Number(process.env.DIS_PLAN_REVIEW_DEADLINE||0),dir='public/dis-evaluation/planning';
- if(process.env.VERCEL_ENV!=='preview'||process.env.VERCEL_PROJECT_ID!=='prj_LVFxxat2yPL4kKgzB2xDNqaVlXAT'||process.env.DIS_PLAN_REVIEW_ENABLE!=='owner-approved-preview'||process.env.DIS_PLAN_REVIEW_SHA!==sha||!/^[a-f0-9]{40}$/.test(sha)||deadline<=Date.now()||deadline>Date.now()+900000){console.log('DIS_PLAN_REVIEW_NOT_AUTHORIZED');return;}
+ if(!planningReviewAuthorized(process.env)){console.log('DIS_PLAN_REVIEW_NOT_AUTHORIZED');return;}
  mkdirSync(dir,{recursive:true});const startedAt=new Date().toISOString(),calls:any[]=[],sources:any[]=[];let stop='';
  const save=(result:unknown)=>{const receipt={sha,startedAt,finishedAt:new Date().toISOString(),mode:'LIVE_PROVIDER_ATTEMPT_PUBLIC_INPUT_ONLY',calls,sources,stop,result,independentHumanReview:false,productionUploadTested:false,emailSent:false};writeFileSync(dir+'/receipt.json',JSON.stringify(receipt,null,2));console.log('DIS_PLAN_REVIEW_RECEIPT '+JSON.stringify({sha,calls:calls.length,normalCompletions:calls.filter(x=>x.status===200&&x.finish==='stop').length,stop,state:(result as any)?.state||'NOT_RUN'}));};
  try{
