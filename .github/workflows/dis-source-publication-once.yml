@@ -1,0 +1,52 @@
+name: Publish verified DIS source candidate only
+on:
+  push:
+    branches: ['control/dis-source-publication-20261102']
+permissions:
+  contents: write
+jobs:
+  preserve:
+    if: github.repository == 'mrterryflood-ui/integrated-implementation-intelligence' && github.ref == 'refs/heads/control/dis-source-publication-20261102'
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - name: Verify bounded source package and create review branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: python
+        run: |
+          import os,json,gzip,hashlib,urllib.request,urllib.error,pathlib
+          repo='mrterryflood-ui/integrated-implementation-intelligence'
+          base='adca1af286ec4d1296f8a24fedc5b7ef0b3adc98'
+          tree='ab3716de13c3aeb2ffc8847543db9e8b6ee6a53d'
+          target='dis/organization-workflow-repair-20261102'
+          url='https://sb-3ex1uyp59ex0.vercel.run/3cc8532cefd10f03f11dfd76c1411df52b4ff6fb0327313e.json.gz'
+          expected='e607a0c68cec91826bead9b47e6da604e416c8e24f7b90dcac8559b415311e28'
+          class NoRedirect(urllib.request.HTTPRedirectHandler):
+            def redirect_request(self,*args,**kwargs): raise RuntimeError('Redirect refused')
+          opener=urllib.request.build_opener(NoRedirect())
+          with opener.open(url,timeout=30) as r: raw=r.read(100001)
+          assert len(raw)==50777 and hashlib.sha256(raw).hexdigest()==expected,'Package identity mismatch'
+          decoded=gzip.decompress(raw); assert len(decoded)<1000000
+          data=json.loads(decoded);assert data['base']==base and len(data['files'])==27
+          entries=[];paths=set()
+          for item in data['files']:
+            p=item['path'];content=item['content'];parts=pathlib.PurePosixPath(p).parts
+            assert p not in paths and not p.startswith('/') and '..' not in parts
+            assert p.startswith(('apps/dis-platform/','docs/dis/evidence/'))
+            assert not any(x in p for x in ['.env','node_modules','.next','package-lock','.github'])
+            assert isinstance(content,str) and len(content.encode())<150000
+            assert hashlib.sha256(content.encode()).hexdigest()==item['sha256']
+            paths.add(p)
+          token=os.environ['GH_TOKEN']
+          def api(path,value):
+            req=urllib.request.Request('https://api.github.com/repos/'+repo+'/'+path,data=json.dumps(value).encode(),headers={'Authorization':'Bearer '+token,'Content-Type':'application/json','Accept':'application/vnd.github+json'},method='POST')
+            with opener.open(req,timeout=30) as r:return json.load(r)
+          for item in data['files']:
+            blob=api('git/blobs',{'content':item['content'],'encoding':'utf-8'})
+            entries.append({'path':item['path'],'mode':'100644','type':'blob','sha':blob['sha']})
+          newtree=api('git/trees',{'base_tree':tree,'tree':entries})
+          commit=api('git/commits',{'message':'feat(DIS): organization planning workflow, private original archives and recurring council\n\nSource package verified byte-for-byte against local candidate '+data['sourceCommit']+'. No invitations, email or production migration. Review and acceptance required.','tree':newtree['sha'],'parents':[base]})
+          api('git/refs',{'ref':'refs/heads/'+target,'sha':commit['sha']})
+          print(json.dumps({'branch':target,'commit':commit['sha'],'tree':newtree['sha'],'files':len(entries),'packageSha256':expected,'sourceCommit':data['sourceCommit']}))
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as f:f.write('Published review candidate '+commit['sha']+' from '+str(len(entries))+' hash-verified files. No main, production, credentials or email changes.\n')
