@@ -1,4 +1,6 @@
 import "./home.css";
+import "./planning/planning.css";
+import PersistentSearch from "./persistent-search";
 import {ClerkProvider} from "@clerk/nextjs";
 import {productionIdentityBlocked} from "../lib/release-gates";
 import type {ReactNode} from "react";
@@ -15,5 +17,5 @@ export default function Layout({children}:{children:ReactNode}){
  // When the owner provisions a real live key pair and redeploys, ClerkProvider
  // is restored without disabling the private-route/tenant authorization gates.
  const identityBlocked=productionIdentityBlocked(process.env);
- return <html lang="en"><body data-dis-identity={identityBlocked?"public-only":"clerk-enabled"} style={{fontFamily:"system-ui",margin:0,background:"#f6f8fc",color:"#1b3048"}}>{identityBlocked?children:<ClerkProvider>{children}</ClerkProvider>}</body></html>;
+ return <html lang="en"><body data-dis-identity={identityBlocked?"public-only":"clerk-enabled"} style={{fontFamily:"system-ui",margin:0,background:"#f6f8fc",color:"#1b3048"}}>{identityBlocked?<><PersistentSearch/>{children}</>:<ClerkProvider><PersistentSearch/>{children}</ClerkProvider>}</body></html>;
 }
