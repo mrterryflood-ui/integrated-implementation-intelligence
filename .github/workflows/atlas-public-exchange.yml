@@ -1,0 +1,50 @@
+name: DIS ↔ ATLAS public metadata and bounded stress witness
+on:
+  pull_request:
+    paths:
+      - 'apps/dis-platform/lib/ecosystem/atlas-public-adapter.ts'
+      - 'apps/dis-platform/lib/ecosystem/catalog.ts'
+      - 'apps/dis-platform/lib/ecosystem/public-adapters.ts'
+      - 'apps/dis-platform/scripts/probe-atlas-public.ts'
+      - '.github/workflows/atlas-public-exchange.yml'
+  push:
+    branches: [main, "dis/**"]
+    paths:
+      - 'apps/dis-platform/lib/ecosystem/atlas-public-adapter.ts'
+      - 'apps/dis-platform/lib/ecosystem/catalog.ts'
+      - 'apps/dis-platform/lib/ecosystem/public-adapters.ts'
+      - 'apps/dis-platform/scripts/probe-atlas-public.ts'
+      - '.github/workflows/atlas-public-exchange.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: dis-atlas-public-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  public-read-only-witness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    defaults:
+      run:
+        working-directory: apps/dis-platform
+    env:
+      ATLAS_PUBLIC_STRESS: '1'
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: npm install --no-audit --no-fund
+      - name: Execute one real source origin with a bounded read-only load
+        run: npx tsx scripts/probe-atlas-public.ts
+      - name: Preserve full-fidelity acceptance or failure receipt
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dis-atlas-public-exchange-${{ github.run_id }}-${{ github.run_attempt }}
+          path: apps/dis-platform/test-results/atlas-public-exchange/receipt.json
+          if-no-files-found: warn
+          retention-days: 30
