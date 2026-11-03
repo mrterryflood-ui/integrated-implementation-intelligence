@@ -32,3 +32,24 @@ npm run build
 The GitHub workflow `.github/workflows/dis-platform-checks.yml` runs typecheck and unit tests on the exact branch. Vercel provides independent build and deployment receipts. Neon write/tenant checks belong only in an isolated validation branch until explicitly released.
 
 A build or passing test does not replace real-user acceptance, independent scientific validity, or authorization to operate.
+
+## Runtime configuration and independence
+
+The Next.js app uses Node.js 22 and its `dev`, `build`, and `start` scripts; `start` serves the completed `build`. The public preview can build and serve without private credentials. Missing integrations remain unavailable or blocked; they are not replaced with guessed endpoints or successful evidence. `.env.example` lists variable names only.
+
+| Capability | Configuration and remaining prerequisite |
+|---|---|
+| Private identity | `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY` and `CLERK_SECRET_KEY`; production private access requires the matching live Clerk pair and verified sign-in. |
+| Durable workspace | `DIS_DATABASE_URL`; requires the reviewed PostgreSQL schema and restricted application role with tenant RLS. |
+| Private files | `BLOB_READ_WRITE_TOKEN`; requires the existing private object-storage integration. Uploads remain restricted pending scanning and lifecycle acceptance. |
+| AI Gateway | `AI_GATEWAY_API_KEY` for non-Vercel hosting, or the host-provided `VERCEL_OIDC_TOKEN`; `AI_GATEWAY_MODEL` is an optional model selection. Missing authentication leaves inference unavailable. |
+| RPLICE | `RPLICE_API_KEY` and, for methodology reads, `DIS_RPLICE_METHODS_READ_KEY`; requires the existing scoped service and consent. |
+| Cross-platform services | `DIS_ECOSYSTEM_SERVICE_BINDINGS` and, for the Business MCP reader, `DIS_BUSINESS_MCP_RESOURCE_TOKEN`. The internal service path also requires its exact reviewed production binding and host-issued workload identity. Do not supply a new endpoint or substitute another source. |
+
+`VERCEL_ENV`, `VERCEL_PROJECT_ID`, and `VERCEL_OIDC_TOKEN` are host-provided values, not portable credentials to copy between deployments. The internal workload connector is intentionally limited to its reviewed production identity; it is unavailable on other hosts until an independently approved identity contract exists. Preview evaluations are opt-in through `DIS_PLAN_REVIEW_ENABLE`, `DIS_EVAL_ENABLE`, `DIS_EVAL_MODE`, and `DIS_EVAL_APPROVED_SHA`, and require the exact approved revision and host-issued identity; the normal build leaves them inactive. GitHub Actions owns the scheduled checks; the app has no Replit scheduler or runtime job.
+
+There is no Replit SDK, `REPLIT_*` runtime setting, Replit-origin endpoint, or Replit start/build command in either app. The funding lane's existing Replit publisher designation is authority metadata only: funding remains explicitly unbound until its approved serving contract is verified. That metadata is not a requirement for this app's build or start and must not be replaced by an inferred endpoint.
+
+The sibling `apps/dis-web` app has static pages and serverless API handlers, no package install/build/start scripts, and its own `node --test tests/*.test.mjs` checks. Its APIs perform read-only public scholarly and GitHub lookups. Sign-in is not active and its SQL schema is not connected to durable application storage. Its API handlers require a host that supports the existing function convention; this does not establish cross-host deployment acceptance.
+
+These facts establish source-level runtime independence from Replit, not full infrastructure independence. Production identity, persistence, private storage, AI access, partner credentials, migration/restart behavior, and host-specific connector acceptance remain separate prerequisites.
