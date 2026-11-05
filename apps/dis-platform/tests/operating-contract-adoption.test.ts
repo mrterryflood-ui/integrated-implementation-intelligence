@@ -172,3 +172,22 @@ test('record bounded behavioral-adoption receipts without claiming field outcome
   },null,2));
  }
 });
+
+
+test("GPT operating contract codifies proportionate temporal and multifactor decision assurance",()=>{
+  const text=DIS_OPERATING_CONTRACT.text;
+  assert.equal(DIS_OPERATING_CONTRACT.version,"2026-11-05.1");
+  for(const phrase of [
+    "Understand the car before chasing it",
+    "Match each instrument to its phenomenon",
+    "Triangulate without false independence",
+    "Track four independent kinds of change",
+    "Plan action, reaction, counteraction and transformation",
+    "Steward before and after success",
+    "Keep authority, evidence and perspectives distinct",
+    "Make the learning loop observable",
+    "never proof of truth",
+    "do not turn a simple factual request into an elaborate committee exercise"
+  ])assert.ok(text.includes(phrase),"missing reasoning invariant: "+phrase);
+  assert.ok(text.includes("not a calibrated universal truth"));
+});
