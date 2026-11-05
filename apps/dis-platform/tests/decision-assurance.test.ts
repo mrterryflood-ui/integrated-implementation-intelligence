@@ -132,3 +132,13 @@ test("adequate warning time cannot be inferred from a partly insufficient interv
   assert.ok(r.findings.some(x=>x.code==="TRIGGER_LEAD_TIME_UNCERTAIN"));
   assert.ok(!r.findings.some(x=>x.code==="TRIGGER_TOO_LATE"));
 });
+
+test("post-success responsibilities must be planned before success, not only after it",()=>{
+  const base=SYNTHETIC_CASES.find(x=>x.id==="L02")!;
+  const r=auditDecisionPacket({...base,stewardship:{initiativePlanned:true,milestoneReached:false,accountableOwner:"",sustainedResources:false,fidelityPlan:false}});
+  assert.ok(r.findings.some(x=>x.code==="POST_SUCCESS_PLAN_MISSING"));
+  assert.equal(r.state,"HOLD_UNSUPPORTED_CLAIM");
+  const planned=auditDecisionPacket({...base,stewardship:{initiativePlanned:true,milestoneReached:false,accountableOwner:"Program steward",sustainedResources:true,fidelityPlan:true}});
+  assert.ok(!planned.findings.some(x=>x.code==="POST_SUCCESS_PLAN_MISSING"));
+  assert.equal(planned.actionAuthorized,false);
+});
