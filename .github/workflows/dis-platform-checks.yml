@@ -47,6 +47,10 @@ jobs:
 
   candidate-browser:
     runs-on: ubuntu-latest
+    # Browsers and system dependencies are preinstalled in this official pinned image;
+    # avoid repeated apt/browser installation and the prior cancelled runner gate.
+    container:
+      image: mcr.microsoft.com/playwright:v1.56.1-noble
     timeout-minutes: 18
     defaults:
       run:
@@ -63,7 +67,7 @@ jobs:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
-      - run: npx playwright install --with-deps chromium webkit
+      - run: node -e 'const { chromium, webkit } = require("playwright"); if (!chromium || !webkit) process.exit(1)'
       - name: Build exact candidate with private identity intentionally unavailable
         run: npm run build
       - name: Run real candidate Chromium and iPhone WebKit journeys
