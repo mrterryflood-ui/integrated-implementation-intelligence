@@ -18,6 +18,10 @@ export function buildPackage(intake:Intake,mode:'startup'|'general'='startup',in
   pkg.documents.push({id:'engagement-assurance',title:'Evidence review and next decision',body:[
    'This is a preliminary draft. It is not authorization to act or evidence of improved outcomes.',
    'Source review: discovery excerpts only; original-source appraisal remains open.',
+   'Federated DIS evidence check: '+a.evidenceMesh.reviewedRecordCount+' source record(s) checked for declared provenance; '+a.evidenceMesh.issues.length+' metadata warning(s). Zero independent measurements were verified by this check.',
+   'Source triangulation and comparability: '+a.evidenceMesh.operatingRule,
+   'Source issues requiring review:\n'+(a.evidenceMesh.issues.length?a.evidenceMesh.issues.map(x=>'- '+x.code+' ['+x.sourceIds.join(', ')+']: '+x.explanation+' Next: '+x.nextCheck).join('\n'):'- No machine-detected source metadata conflicts. This is not a finding that source claims are verified.'),
+   'Fit-for-purpose decision: '+a.evidenceMesh.nextDecision,
    'Review gaps:\n'+gaps.map(x=>'- '+x).join('\n'),
    'Improvement and delivery follow-through: pending. A prepared draft does not prove that it was sent, received or read.',
    ...(a.completion?['Completion evidence still needed:\n'+a.completion.blockers.map(x=>'- '+x).join('\n')]:[]),

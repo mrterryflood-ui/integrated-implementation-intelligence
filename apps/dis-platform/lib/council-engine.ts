@@ -1,4 +1,5 @@
 import {OPERATING_CONTRACT_RECEIPT,withOperatingContract} from './operating-contract';
+import {assessEvidenceMesh} from './council-evidence-mesh';
 import type {EvidenceSource} from './evidence-integrity';
 import {convene as executeCouncil,research,infer,citationAudit} from './council-runtime';
 import {selectAnswerEvidence,releaseConcerns,looksLikePrivateRecord,safeBoundaryReply,ANSWER_RELEASE_RULES} from './answer-release-policy';
@@ -16,7 +17,13 @@ async function conveneInternal(input:Parameters<typeof executeCouncil>[0]&{provi
  const found=await deps.research(original?original.slice(0,150)+' '+input.prompt.slice(0,80):input.prompt);
  const sources=[...selectAnswerEvidence(found.sources,6),...provided.slice(0,12)];
  if(!sources.length)return {...base,state:'EVIDENCE_INSUFFICIENT',retrieval:found.status,notice:safeBoundaryReply('evidence'),error:'Evidence-based deliberation incomplete: no eligible selected source excerpts.',release:{state:'WITHHELD',issues:['NO_SELECTED_ABSTRACTS'],revisionCalls:0,independentlyVerified:false}};
- const coverage=JSON.stringify({kind:'SERVER_REPORTED_CAPABILITY_COVERAGE',states:(input.evidenceCoverage||[]).slice(0,16),rule:'Unavailable, denied, invalid and empty responses are gaps, not evidence of absence or zero. Do not claim comprehensive coverage.'});
+ const mesh=assessEvidenceMesh(sources,new Date().toISOString());
+ // Server-side metadata challenge is reused across the five Council strands;
+ // it does not add a provider call or claim independent scientific validation.
+ const compactMesh={kind:'DIS_SOURCE_MESH_PREFLIGHT',sourceRecords:mesh.sourceRecordCount,sourceIndependence:'NOT_ESTABLISHED',instrumentValidity:'NOT_ESTABLISHED',actionAuthorized:false,
+  issues:mesh.issues.slice(0,12).map(x=>({code:x.code,sourceIds:x.sourceIds.slice(0,12),severity:x.severity})),
+  rule:'Multiple links, lenses and personas are not independent measurements. Do not pool non-comparable constructs, periods, geography or instruments. Each issue requires human source inspection; a lack of flags is not proof of correct inference.'};
+ const coverage=JSON.stringify({kind:'SERVER_REPORTED_CAPABILITY_COVERAGE',states:(input.evidenceCoverage||[]).slice(0,16),sourceMesh:compactMesh,rule:'Unavailable, denied, invalid and empty responses are gaps, not evidence of absence or zero. Do not claim comprehensive coverage.'});
  const executed=await executeCouncil(input,{research:async()=>({...found,sources}),infer:(system,prompt,model)=>deps.infer(system+'\n'+ANSWER_RELEASE_RULES,prompt+'\n'+coverage,model)});
  const result={...executed,callStatuses:executed.callStatuses?.map(x=>({ok:x.ok,error:'error' in x?x.error:undefined,model:'model' in x?x.model:undefined}))};
  const text=result.deliberation?.synthesis||'';

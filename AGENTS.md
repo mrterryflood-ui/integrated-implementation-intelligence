@@ -30,6 +30,10 @@ Before ANY externally visible correspondence or client-facing assertion, read an
 - Keep customer and partner records tenant-isolated. Never reuse confidential evidence, pricing, proposal language, partner commitments, or eligibility conclusions across clients without authorization and renewed verification.
 - Record every material unit as `Before → Changed → Why → Proof → Limits`, including owner, next action, review date, rollback, and evidence-completion rung.
 
+## Federated evidence mesh and dynamic decision assurance
+
+For material multi-source decisions, load `docs/dis/FEDERATED-EVIDENCE-AND-DECISION-STANDARD.md` alongside the existing GPT operating contract. Reuse `apps/dis-platform/lib/council-evidence-mesh.ts` for server-side source URL/DOI provenance and temporal/scope audit; use `apps/dis-platform/lib/decision-assurance.ts` only for properly structured, decision-specific claims. Do not transform an agency source inventory into live measurements or count repeated displays as independent confirmation. Distinguish observation, source report, model, synthetic scenario, persona prompt, and actual human testimony. The Council must surface these limitations in its UI and decision artifacts. This instruction applies only to agents that load this repository contract; it does not modify ChatGPT-wide model system prompts. Prove adoption by exact-head behavioral tests, not by the presence of this text alone.
+
 ## Engineering gates
 
 Before proposing merge: inspect current head, active branches/PRs and deployment consequences; identify reuse/extend/new/not-touching/environment facts; run zero-error typecheck, relevant behavioral tests, affected-layer checks, security/privacy/tenancy checks, and independent exact-head review. Do not weaken a test to make a change pass. Merge is not deployment. Apply IRON-ENG-001 to persistence, recovery, actual recipient behavior and documentation parity; no unresolved load-bearing gap can be labeled complete.
