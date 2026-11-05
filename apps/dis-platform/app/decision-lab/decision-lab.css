@@ -1,0 +1,75 @@
+/* DIS Decision Assurance Lab — research-stage, accessible local evidence review */
+.assurance-lab{--ink:#17334a;--muted:#53687a;--accent:#087a78;--line:#d9e4e8;--surface:#fff;max-width:1360px;margin:0 auto;padding:36px clamp(16px,4vw,58px) 80px;color:var(--ink);line-height:1.5}
+.assurance-lab *{box-sizing:border-box}
+.assurance-header{padding:12px 0 26px}
+.assurance-back{display:inline-flex;color:var(--accent);font-weight:650;font-size:14px;text-decoration:none;margin:0 0 24px}
+.assurance-back:hover{text-decoration:underline}
+.assurance-kicker,.assurance-overline{display:block;color:var(--accent);font-size:12px;letter-spacing:.10em;font-weight:800;margin:0 0 8px}
+.assurance-header h1{font-size:clamp(30px,4.2vw,55px);line-height:1.10;letter-spacing:-.035em;max-width:950px;margin:6px 0 16px}
+.assurance-header>p{font-size:clamp(15px,1.5vw,19px);max-width:880px;color:var(--muted);margin:0 0 22px}
+.assurance-notice{border:1px solid #98b7bc;border-left:4px solid var(--accent);background:#f0f7f6;border-radius:10px;padding:14px 17px;font-size:14px;max-width:1110px}
+.assurance-notice strong{display:block;font-size:12px;letter-spacing:.04em;margin-bottom:4px}
+.assurance-columns{display:grid;grid-template-columns:minmax(0,1.03fr) minmax(0,.97fr);gap:22px;align-items:start}
+.assurance-panel{min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:17px;padding:24px;box-shadow:0 8px 26px rgba(27,53,73,.04)}
+.assurance-panel h2{font-size:21px;line-height:1.25;letter-spacing:-.02em;margin:0 0 15px}
+.assurance-section-head{display:flex;gap:12px;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+.assurance-section-head h2{margin-bottom:0}
+.assurance-subhead{margin:32px 0 16px;padding-top:24px;border-top:1px solid var(--line)}
+.assurance-field{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:650;color:#40596d;margin:0 0 16px}
+.assurance-field input,.assurance-field textarea,.assurance-field select{font:inherit;font-weight:400;font-size:14px;color:var(--ink);background:#fff;border:1px solid #b9cbd0;border-radius:8px;width:100%;padding:10px 11px;min-height:40px;min-width:0}
+.assurance-field input:focus,.assurance-field textarea:focus,.assurance-field select:focus{outline:3px solid rgba(8,122,120,.2);border-color:var(--accent)}
+.assurance-field output{display:block;font-size:14px;color:#16334a;font-weight:500;word-break:break-word}
+.assurance-description{font-size:14px;font-weight:400;color:#465f72;margin:2px 0 10px}
+.assurance-action-secondary{display:inline-flex;align-items:center;justify-content:center;background:#f0f6f7;color:#14616b;border:1px solid #b8d1d3;border-radius:8px;padding:9px 12px;font-size:13px;font-weight:700;cursor:pointer;max-width:100%;margin-bottom:12px}
+.assurance-action-secondary:hover:not(:disabled){background:#e0f0ef}
+.assurance-action-secondary:disabled{opacity:.45;cursor:not-allowed}
+.assurance-source{margin:0 0 12px;border:1px solid var(--line);border-radius:12px;padding:15px;background:#fbfcfd}
+.assurance-source-heading{display:flex;gap:12px;justify-content:space-between;align-items:baseline;margin-bottom:12px;font-size:14px}
+.assurance-source-heading strong{min-width:0;overflow-wrap:anywhere}
+.assurance-source-heading span{color:#647b89;font-size:11px;font-weight:700;flex-shrink:0}
+.assurance-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0}
+.assurance-facts div{min-width:0}
+.assurance-facts dt{font-size:11px;font-weight:700;text-transform:uppercase;color:#728291;letter-spacing:.03em}
+.assurance-facts dd{font-size:12px;margin:4px 0 0;color:#223b4c;overflow-wrap:anywhere}
+.assurance-source-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.assurance-source-grid .assurance-field{font-size:12px;margin-bottom:12px}
+.assurance-source-grid input{font-size:13px;min-height:38px;padding:8px}
+.assurance-source-actions{display:flex;gap:16px;justify-content:space-between;align-items:center;font-size:12px;color:#4d6474}
+.assurance-source-actions label,.assurance-checkbox{display:flex;gap:9px;align-items:flex-start;margin:8px 0;font-size:13px;color:#41596b;cursor:pointer}
+.assurance-source-actions input,.assurance-checkbox input{width:16px;height:16px;flex:0 0 auto;accent-color:var(--accent)}
+.assurance-text-button{border:0;color:#8a3b31;background:transparent;cursor:pointer;text-decoration:underline;white-space:nowrap}
+.assurance-custom-controls{border-top:1px solid var(--line);padding-top:20px;margin-top:10px}
+.assurance-details{border:1px solid var(--line);border-radius:9px;padding:12px;margin-top:15px;background:#fbfcfd}
+.assurance-details summary{font-size:14px;color:#1f4f5f;font-weight:700;cursor:pointer}
+.assurance-details[open] summary{margin-bottom:18px}
+.assurance-three-inputs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.assurance-three-inputs label{font-size:11px;font-weight:500;display:block}
+.assurance-three-inputs input{margin-top:4px}
+.assurance-status{display:flex;flex-direction:column;gap:5px;background:#faf7f3;border:1px solid #ddc6b7;border-left:4px solid #a85d38;border-radius:11px;padding:17px;margin:0 0 18px}
+.assurance-status[data-state="review"]{background:#f1f7f6;border-color:#bbd5d1;border-left-color:var(--accent)}
+.assurance-status strong{font-size:18px}
+.assurance-status span{font-size:13px;color:#4a606e}
+.assurance-finding-list{display:grid;gap:11px}
+.assurance-finding{border:1px solid var(--line);background:#fbfcfe;border-radius:11px;padding:14px}
+.assurance-finding-head{display:flex;gap:10px;align-items:baseline;justify-content:space-between}
+.assurance-finding-head strong{font-size:15px}
+.assurance-finding-head small{font-size:10px;color:#985235;font-weight:800;letter-spacing:.06em}
+.assurance-finding p{font-size:13px;color:#4a6071;margin:8px 0}
+.assurance-finding p.assurance-next{color:#244f52}
+.assurance-finding-code{font-size:10px;letter-spacing:.05em;color:#7c8c96}
+.assurance-age-list{display:grid;gap:7px}
+.assurance-age-list>div{display:grid;grid-template-columns:1fr 1.7fr 1.5fr;gap:6px;align-items:center;border-bottom:1px solid #e8edef;padding:8px 0;font-size:12px}
+.assurance-age-list span{color:#697a88;overflow-wrap:anywhere}
+.assurance-age-list strong{font-size:12px;font-weight:650;overflow-wrap:anywhere}
+.assurance-age-list small{font-size:11px;color:#647987;overflow-wrap:anywhere}
+.assurance-lenses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:10px 0}
+.assurance-lenses>div{border:1px solid var(--line);border-radius:9px;background:#fbfcfd;padding:12px}
+.assurance-lenses strong{font-size:13px}
+.assurance-lenses p{margin:6px 0 0;color:#546b7a;font-size:12px}
+.assurance-temporal{margin:0 0 18px;padding-left:22px;color:#40596b;font-size:13px}
+.assurance-temporal li{margin:8px 0;padding-left:2px}
+.assurance-limitations{margin-top:12px;background:#f8f9fa;border-left:3px solid #b4c5cb;padding:10px}
+.assurance-footer{font-size:12px;text-align:center;color:#637b88;margin-top:36px;border-top:1px solid var(--line);padding-top:20px}
+@media (max-width:900px){.assurance-columns{grid-template-columns:1fr}.assurance-lab{padding-top:18px}.assurance-panel{padding:18px}.assurance-header h1{font-size:clamp(28px,8vw,42px)}}
+@media (max-width:520px){.assurance-source-grid,.assurance-facts,.assurance-lenses{grid-template-columns:1fr}.assurance-three-inputs{grid-template-columns:1fr}.assurance-age-list>div{grid-template-columns:1fr 1.3fr}.assurance-age-list small{grid-column:2}.assurance-section-head{flex-wrap:wrap}.assurance-source-actions{flex-wrap:wrap}}
+@media (prefers-reduced-motion:reduce){.assurance-lab *{scroll-behavior:auto!important;transition:none!important}}
