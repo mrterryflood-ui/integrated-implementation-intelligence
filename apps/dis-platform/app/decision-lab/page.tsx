@@ -140,6 +140,7 @@ export default function DecisionAssuranceLab(){
               ["codingRulesChanged","Reporting or coding rules changed"],
               ["beneficiaryOutcomeMeasured","An appropriate beneficiary outcome was measured"]
             ] as const).map(([key,label])=><label className="assurance-checkbox" key={key}><input type="checkbox" checked={Boolean(source.outcome?.[key])} onChange={e=>updateOutcome(key,e.target.checked)}/>{label}</label>)}
+            <label className="assurance-checkbox"><input type="checkbox" checked={Boolean(source.stewardship?.initiativePlanned)} onChange={e=>updateSteward("initiativePlanned",e.target.checked)}/> The initiative is being planned and will create ongoing obligations</label>
             <label className="assurance-checkbox"><input type="checkbox" checked={Boolean(source.stewardship?.milestoneReached)} onChange={e=>updateSteward("milestoneReached",e.target.checked)}/> Initial milestone achieved</label>
             <label className="assurance-field"><span>Accountable post-success owner</span><input value={source.stewardship?.accountableOwner||""} onChange={e=>updateSteward("accountableOwner",e.target.value)}/></label>
             <label className="assurance-checkbox"><input type="checkbox" checked={Boolean(source.stewardship?.sustainedResources)} onChange={e=>updateSteward("sustainedResources",e.target.checked)}/> Ongoing resources committed</label>
