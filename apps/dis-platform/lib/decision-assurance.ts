@@ -46,6 +46,7 @@ export type DecisionPacket = {
     codingRulesChanged?: boolean;
   };
   stewardship?: {
+    initiativePlanned?: boolean;
     milestoneReached?: boolean;
     accountableOwner?: string;
     sustainedResources?: boolean;
@@ -195,9 +196,12 @@ export function auditDecisionPacket(p: DecisionPacket): DecisionAudit {
     if (o.interventionChangedIndicator && !o.physicalOutcomeVerified)
       add("PHYSICAL_OUTCOME_UNVERIFIED","REVIEW","Observed proxy movement is not target change","The relevant independent condition was not demonstrated to improve.","Obtain fit-for-purpose direct measurement of the target condition.");
   }
-  if (p.stewardship?.milestoneReached &&
-      (!p.stewardship.accountableOwner || !p.stewardship.sustainedResources || !p.stewardship.fidelityPlan))
-    add("SUCCESS_NOT_SUSTAINMENT","HOLD","Milestone is not sustained impact","Achievement lacks confirmed ownership, future resources or fidelity monitoring.","Assign accountable owner, renewal capacity, follow-up assessment and an exit/transition path.");
+  if (p.stewardship && (p.stewardship.initiativePlanned || p.stewardship.milestoneReached) &&
+      (!p.stewardship.accountableOwner || !p.stewardship.sustainedResources || !p.stewardship.fidelityPlan)) {
+    if (p.stewardship.milestoneReached)
+      add("SUCCESS_NOT_SUSTAINMENT","HOLD","Milestone is not sustained impact","Achievement lacks confirmed ownership, future resources or fidelity monitoring.","Assign accountable owner, renewal capacity, follow-up assessment and an exit/transition path.");
+    else add("POST_SUCCESS_PLAN_MISSING","HOLD","No plan for the day after success","The proposed initiative lacks continuing ownership, resourcing or fidelity monitoring before achievement.","Specify an accountable successor, resource plan, follow-up outcomes and an authorized exit path before declaring the pursuit ready.");
+  }
   if (p.objective && (p.objective.contextChanged || p.objective.stakeholderPreferencesChanged) && !p.objective.reviewed)
     add("REOPEN_OBJECTIVE","HOLD","Original objective needs explicit reconsideration","Changed circumstances or stakeholder priorities may invalidate the original success metric.","Conduct an authorized goal and values review before optimizing the old target.");
   if (p.informationValue && p.informationValue.claimedNumber!==undefined) {
