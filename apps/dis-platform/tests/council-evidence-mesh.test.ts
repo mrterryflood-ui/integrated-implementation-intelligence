@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {assessEvidenceMesh} from '../lib/council-evidence-mesh';
 import {councilEngagementAssurance} from '../lib/council-engagement-assurance';
+import {convene} from '../lib/council-engine';
 import {buildPackage,renderPackageMarkdown} from '../lib/consultation-package';
 import {sanitizeIntake} from '../lib/consultation';
 import type {EvidenceSource} from '../lib/evidence-integrity';
@@ -111,4 +112,36 @@ test('Council UI actually exposes mesh checks and limitations rather than leavin
   assert.match(ui,/Federated evidence assurance/);
   assert.match(ui,/independent measurements, causal effects/);
   assert.match(ui,/Source-level provenance/);
+});
+
+
+test('real Council inference strands receive server-computed duplicate-source and time-scope challenge',async()=>{
+  const old=process.env.AI_GATEWAY_MODEL;
+  process.env.AI_GATEWAY_MODEL='synthetic-no-provider';
+  const prompts:string[]=[];
+  try{
+    const first=source('S1',{url:'https://evidence.example.test/shared',referencePeriod:'2020',geography:'Travis County, TX'});
+    const second=source('S2',{url:'https://evidence.example.test/shared',referencePeriod:'2024',geography:'Bexar County, TX'});
+    const result=await convene({prompt:'Analyze a multi-jurisdiction public-service decision',count:4,redCount:2,selected:[],redSelected:[],depth:'Standard'},{
+      research:async()=>({sources:[first,second],status:'ABSTRACT_AND_METADATA'}),
+      infer:async(_system,prompt)=>{
+        prompts.push(prompt);
+        return{ok:true,text:prompt.includes('Return ONLY a JSON object')?
+          JSON.stringify({tasks:[{title:'Audit source lineage',success:'Source linkage inspected'}],metrics:[]}):
+          'The sources may be duplicated and geographically different. Original-source validation is necessary [S1].',model:'synthetic-no-provider'};
+      }
+    });
+    assert.equal(prompts.length,5);
+    for(const prompt of prompts){
+      assert.match(prompt,/DIS_SOURCE_MESH_PREFLIGHT/);
+      assert.match(prompt,/DUPLICATED_SOURCE_REFERENCE/);
+      assert.match(prompt,/REFERENCE_PERIODS_DIFFER/);
+      assert.match(prompt,/GEOGRAPHIES_DIFFER/);
+      assert.match(prompt,/NOT_ESTABLISHED/);
+    }
+    assert.equal(result.operatingContract.inferenceInvocationCount,5);
+    assert.equal(result.operatingContract.behaviorVerified,false);
+  }finally{
+    if(old===undefined)delete process.env.AI_GATEWAY_MODEL;else process.env.AI_GATEWAY_MODEL=old;
+  }
 });
