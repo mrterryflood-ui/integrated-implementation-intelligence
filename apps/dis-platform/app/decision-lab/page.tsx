@@ -44,7 +44,7 @@ export default function DecisionAssuranceLab(){
   const updateObservation=(id:string,key:keyof EvidenceObservation,value:string|boolean|number)=>{
     edit(p=>({...p,observations:p.observations.map(o=>o.id===id?({...o,[key]:value}):o)}));
   };
-  const addObservation=()=>edit(p=>({...p,observations:[...p.observations,emptyObservation(p.observations.length+1)].map((o,i)=>({...o,id:"source-"+(i+1)}))}));
+  const addObservation=()=>edit(p=>{const observations=[...p.observations,emptyObservation(p.observations.length+1)].map((o,i)=>({...o,id:"source-"+(i+1)}));return {...p,observations,comparison:p.comparison?{...p.comparison,ids:observations.map(o=>o.id)}:undefined};});
   const removeObservation=(id:string)=>edit(p=>({...p,observations:p.observations.filter(o=>o.id!==id).map((o,i)=>({...o,id:"source-"+(i+1)})),comparison:undefined}));
   const selectComparison=(kind:string)=>edit(p=>({
     ...p,comparison:kind==="NONE"?undefined:{
