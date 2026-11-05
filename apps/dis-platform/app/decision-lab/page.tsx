@@ -97,6 +97,10 @@ export default function DecisionAssuranceLab(){
               <span>{labels[key]}</span><input value={String(o[key]||"")} onChange={e=>updateObservation(o.id,key,e.target.value)} placeholder={labels[key]}/>
             </label>)}
           </div>
+          <div className="assurance-source-grid">
+            <label className="assurance-field"><span>Evidence class</span><select value={o.kind} onChange={e=>updateObservation(o.id,"kind",e.target.value)}><option value="MEASURED">Measured observation</option><option value="SOURCE_REPORTED">Source-reported claim</option><option value="SCENARIO">Hypothetical scenario</option><option value="PERSONA">Conceptual persona prompt</option></select></label>
+            <label className="assurance-field"><span>Evidence validity window, minutes (optional)</span><input type="number" min="0" value={o.maxAgeMinutes??""} onChange={e=>updateObservation(o.id,"maxAgeMinutes",e.target.value===""?"":Number(e.target.value))} placeholder="Only if domain evidence supports a limit"/></label>
+          </div>
           <div className="assurance-source-actions">
             <label><input type="checkbox" checked={Boolean(o.validated)} onChange={e=>updateObservation(o.id,"validated",e.target.checked)} /> Validation record supplied (user-declared only)</label>
             <button className="assurance-text-button" onClick={()=>removeObservation(o.id)}>Remove</button>
