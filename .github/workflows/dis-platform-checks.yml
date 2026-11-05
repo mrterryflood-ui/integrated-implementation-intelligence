@@ -76,6 +76,7 @@ jobs:
             sleep 1
           done
           node tests/e2e/public-site.mjs
+          node tests/e2e/decision-lab.mjs
           node tests/e2e/ecosystem-planning.mjs
           node tests/e2e/operating-contract.mjs
         env:
