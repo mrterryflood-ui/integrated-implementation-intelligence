@@ -108,7 +108,7 @@ export const LENSES: readonly Lens[] = [
 ];
 
 const validTime = (v: string): number | null => {
-  if (!v || !/^\d{4}-\d{2}-\d{2}T/.test(v)) return null;
+  if (!v || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/i.test(v)) return null;
   const n = Date.parse(v);
   return Number.isFinite(n) ? n : null;
 };
@@ -128,6 +128,8 @@ export function auditDecisionPacket(p: DecisionPacket): DecisionAudit {
   for (const o of p.observations) {
     if (!o.id || identifiers.has(o.id)) add("OBSERVATION_ID_INVALID","HOLD","Observation identity ambiguous","Every observation must have a distinct, nonblank identifier.","Correct identities before associating or comparing data.");
     identifiers.add(o.id);
+    if (![o.origin,o.construct,o.unit,o.scope].every(value=>typeof value==="string" && value.trim().length>0))
+      add("EVIDENCE_METADATA_MISSING","HOLD","Essential evidence metadata absent","Origin, construct, unit and scope are required to interpret a comparison.","Describe the phenomenon and its source before drawing conclusions.");
     const observed = validTime(o.observedAt), received = validTime(o.receivedAt);
     if (observed === null || received === null) add("OBSERVATION_TIME_UNVERIFIED","HOLD","Observation times need verification","An observation or receipt time is missing or invalid.","Record when measured and when received with compatible clocks.");
     if (observed !== null && received !== null && observed > received) add("TIMESTAMP_ORDER_INVALID","HOLD","Timestamps conflict","Receipt precedes the claimed observation time.","Check clock synchronization and source timestamps.");
@@ -139,9 +141,10 @@ export function auditDecisionPacket(p: DecisionPacket): DecisionAudit {
     if (freshness==="EXCEEDS_DECLARED_WINDOW") add("STALE_FOR_DECISION","HOLD","Evidence exceeds its declared validity window","An observation is older than its explicitly defined fit-for-purpose limit.","Seek an updated observation or justify a new window with domain evidence.");
     reviews.push({id:o.id,ageMinutes,freshness,kind:o.kind});
   }
-  const byId=new Map(p.observations.map(x=>[x.id,x]));
+  const byId=new Map<string,EvidenceObservation>(p.observations.map(x=>[x.id,x] as const));
   const observations = p.comparison ? p.comparison.ids.map(id=>byId.get(id)).filter((v):v is EvidenceObservation=>v!==undefined):[];
   if (p.comparison) {
+    if (p.comparison.intent!=="LATEST_CLAIM" && observations.length<2) add("INSUFFICIENT_COMPARISON","HOLD","Not enough compatible inputs","A comparison or corroboration claim requires at least two observations.","Acquire an appropriate additional source or present one source without corroboration.");
     if (observations.length !== p.comparison.ids.length || observations.length === 0) add("COMPARISON_INPUT_MISSING","HOLD","Comparison inputs incomplete","Some requested observation identifiers are missing.","Reconcile the source records before any derived comparison.");
     const constructs = new Set(observations.map(o=>normalized(o.construct)));
     const units = new Set(observations.map(o=>normalized(o.unit)));
@@ -161,6 +164,8 @@ export function auditDecisionPacket(p: DecisionPacket): DecisionAudit {
       }
       if (observations.some(o=>o.validated!==true)) add("MEASUREMENT_VALIDITY_UNVERIFIED","REVIEW","Instrument validation is unverified","At least one input lacks a fit-for-use validation record.","Check calibration, study design, measurement uncertainty and intended scope.");
     }
+    if (p.comparison.intent==="LATEST_CLAIM" && !p.comparison.claimedScope?.trim())
+      add("CLAIM_SCOPE_UNSPECIFIED","REVIEW","Current-state location not established","A latest-state claim has no declared target scope.","Identify the actual location or population of the claim.");
     if (p.comparison.intent==="LATEST_CLAIM" && p.comparison.claimedScope &&
         observations.some(o=>normalized(o.scope)!==normalized(p.comparison!.claimedScope!)))
       add("SCOPE_MISATTRIBUTION","HOLD","Observation assigned to the wrong scope","A report relabels an observation from another place or population as current local evidence.","Separate measurement location from the destination display or narrative.");
@@ -201,7 +206,7 @@ export function auditDecisionPacket(p: DecisionPacket): DecisionAudit {
       add("UNSUPPORTED_INFORMATION_VALUE","HOLD","Value-of-information claim is unsupported","A numeric expected research value requires stated options, consequences, probability model, study design and relevant costs of delay.","Treat the value as unverified and compare study, pilot, delay and reversal options.");
   }
   if (p.observations.length===0)
-    add("NO_OBSERVED_EVIDENCE","REVIEW","No observational evidence supplied","The request may be a useful hypothesis, but it has no current measured source.","Define the decision question and acquire suitable authorized evidence.");
+    add("NO_OBSERVED_EVIDENCE","HOLD","No observational evidence supplied","The request may be a useful hypothesis, but it has no current measured source.","Define the decision question and acquire suitable authorized evidence.");
   const independentPrompts=LENSES.map(x=>({...x}));
   return {
     schemaVersion:"dis-decision-assurance-research-v1",
