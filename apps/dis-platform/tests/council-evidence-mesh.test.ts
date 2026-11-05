@@ -124,9 +124,9 @@ test('real Council inference strands receive server-computed duplicate-source an
     const second=source('S2',{url:'https://evidence.example.test/shared',referencePeriod:'2024',geography:'Bexar County, TX'});
     const result=await convene({prompt:'Analyze a multi-jurisdiction public-service decision',count:4,redCount:2,selected:[],redSelected:[],depth:'Standard'},{
       research:async()=>({sources:[first,second],status:'ABSTRACT_AND_METADATA'}),
-      infer:async(_system,prompt)=>{
+      infer:async(system,prompt)=>{
         prompts.push(prompt);
-        return{ok:true,text:prompt.includes('Return ONLY a JSON object')?
+        return{ok:true,text:system.includes('Return ONLY a JSON object')?
           JSON.stringify({tasks:[{title:'Audit source lineage',success:'Source linkage inspected'}],metrics:[]}):
           'The sources may be duplicated and geographically different. Original-source validation is necessary [S1].',model:'synthetic-no-provider'};
       }
