@@ -20,6 +20,14 @@ export type Hypothesis = {
   predictedObservations:string[];
   disconfirmingObservations:string[];
   alternativesConsidered:string[];
+  /** No automated elimination: even a cited counterexample needs source, scope and entailment review. */
+  proposedExclusion?: {
+    status:"NOT_EXCLUDED"|"EXCLUDE_IN_DEFINED_SCOPE";
+    evidenceIds:string[];
+    distinguishingObservation:string;
+    applicableScope:string;
+    limitations:string[];
+  };
 };
 export type InstrumentRecord = {
   id:string;name:string;construct:string;unit:string;
@@ -45,6 +53,16 @@ export type Inquiry = {
   intendedUse:string;decisionOwner:string;
   targetPopulation:string;targetOutcome:string;
   systemContext:string;
+  /** Defines what is being investigated and which observation can separate explanations.
+   * This is an open-world search, not a demand to choose from a predefined list.
+   */
+  searchFrame?:{
+    phenomenon:string;
+    constructsToDistinguish:string[];
+    discriminatingObservation:string;
+    scopeAndBoundaries:string;
+    unresolvedPossibilities:string[];
+  };
   hypotheses:Hypothesis[];
   instruments:InstrumentRecord[];
   evidence:StudyEvidence[];
@@ -82,6 +100,8 @@ export type MethodAssessment = {
     actionAuthorized:false;
     clinicalRecommendationAuthorized:false;
     studyEffectEstablished:false;
+    allPossibleExplanationsConsidered:false;
+    automatedHypothesisEliminationAuthorized:false;
   };
 };
 
@@ -91,14 +111,15 @@ const isTime=(s:string|null):number|null=>{
 };
 const norm=(s:string)=>s.trim().toLowerCase().replace(/\s+/g," ");
 export const METHOD_QUESTIONS=Object.freeze([
+  "What exactly are we searching for, and what is the phenomenon rather than the indicator that happens to be available?",
   "What exact decision and beneficiary outcome are at stake, and what would change if the answer were different?",
   "Which explanations could produce the same observation, including measurement error, selection, confounding, reporting incentives, or system feedback?",
-  "For each candidate explanation, what distinct observation would support it—and what would refute it?",
-  "What does each instrument truly measure? What important parts of the phenomenon does it leave unmeasured?",
+  "For each candidate explanation, what distinct observation would support it—and what would refute it? Could the apparently impossible still reflect a wrong instrument or incomplete search?",
+  "What does each instrument truly measure? What important parts of the phenomenon does it leave unmeasured? How will we check the instrument's error and fit for the question?",
   "Are the samples, population, units, time window and reference standard fit for the intended use?",
   "Do observations share a publisher, original instrument, study cohort, or model? Where are uncertainties correlated?",
   "Does the evidence show a mechanism, an association, a prediction, a causal effect, or a patient/beneficiary outcome?",
-  "What comparator, study design, uncertainty analysis and independent replication are necessary before claiming improvement?",
+  "What comparator, study design, uncertainty analysis and independent replication are necessary before claiming improvement? What unconsidered alternative could explain the result?",
   "Who could be harmed or excluded, how would the system respond to the intervention, and when must the conclusion be re-examined?",
   "What must be owned, resourced, verified, maintained, adapted, or stopped the day after the initial objective is achieved?"
 ] as const);
@@ -127,6 +148,15 @@ export function investigateMethod(input:Inquiry):MethodAssessment{
   ] as const)if(!value?.trim())push(id,"QUESTION","INVESTIGATE",[],
     "An essential part of the inquiry's intended use, context, decision ownership or measured end state is unspecified.",
     "Who needs this answer, for what decision, under what conditions, and what outcome would matter?");
+  if(!input.searchFrame?.phenomenon.trim()||!input.searchFrame?.constructsToDistinguish.length||
+      !input.searchFrame?.discriminatingObservation.trim()||!input.searchFrame?.scopeAndBoundaries.trim())
+    push("SEARCH_FRAME_INCOMPLETE","QUESTION","INVESTIGATE",[],
+      "The investigation has not established what underlying phenomenon is sought, what its instruments should distinguish, or its search boundaries.",
+      "What are we seeking to explain, not merely to measure, and what observable result would discriminate among explanations?");
+  if(!input.searchFrame?.unresolvedPossibilities.length)
+    push("OPEN_WORLD_UNKNOWN","EXPLANATIONS","INVESTIGATE",[],
+      "No unresolved or unconsidered possibilities have been recorded; excluding named explanations cannot prove the others are exhaustive.",
+      "What have we not yet considered, and what finding would require reopening our search?");
   if(!input.hypotheses.length)push("NO_ALTERNATIVE_EXPLANATIONS","EXPLANATIONS","INVESTIGATE",[],
     "The inquiry does not enumerate plausible competing explanations.",
     "What else—including bias, measurement change and natural variation—could generate these observations?");
@@ -141,6 +171,28 @@ export function investigateMethod(input:Inquiry):MethodAssessment{
     if(!h.alternativesConsidered.length)push("ONE_STORY_ONLY","EXPLANATIONS","INVESTIGATE",[h.id],
       "Only one explanatory story is being assessed without competing models.",
       "What other account is compatible with the observed data?");
+  }
+  const evidenceIds=new Set(input.evidence.map(e=>e.id));
+  const evidenceById=new Map(input.evidence.map(e=>[e.id,e] as const));
+  for(const h of input.hypotheses){
+    const e=h.proposedExclusion;
+    if(!e||e.status!=="EXCLUDE_IN_DEFINED_SCOPE")continue;
+    const unlinked=e.evidenceIds.length===0||e.evidenceIds.some(id=>!evidenceIds.has(id));
+    const untested=e.evidenceIds.some(id=>{
+      const record=evidenceById.get(id);
+      if(!record||record.kind==="MECHANISTIC"||record.instrumentIds.length===0)return true;
+      return record.instrumentIds.some(instrumentId=>{
+        const instrument=input.instruments.find(i=>i.id===instrumentId);
+        return !instrument||instrument.kind==="SCENARIO"||instrument.kind==="PERSONA_PROMPT";
+      });
+    });
+    if(unlinked||untested||!e.distinguishingObservation.trim()||!e.applicableScope.trim()||!e.limitations.length)
+      push("UNSUPPORTED_HYPOTHESIS_EXCLUSION","EXPLANATIONS","HOLD_INFERENCE",[h.id],
+        "An explanation was proposed for elimination without a traceable, real-world discriminating observation, bounded scope and documented limitations.",
+        "Which evidence directly contradicts this explanation, and can the apparent contradiction arise from measurement error, different population, or missing context?");
+    else push("EXCLUSION_REQUIRES_ADJUDICATION","EXPLANATIONS","INVESTIGATE",[h.id],
+      "The proposed exclusion is source-linked and scoped, but document linkage does not independently establish that the hypothesis is impossible.",
+      "Did an independent reviewer test actual entailment, data quality, sampling and remaining alternative explanations?");
   }
   if(input.instruments.length===0)push("INSTRUMENT_SELECTION_NOT_EXPLAINED","INSTRUMENTS","INVESTIGATE",[],
     "No instrument or evidence source has been specified.",
@@ -248,7 +300,8 @@ export function investigateMethod(input:Inquiry):MethodAssessment{
     evidenceLevels:{
       sourceReportsAreUnverified:true,mechanismsAreNotClinicalEffects:true,
       documentChecksAreNotIndependentValidation:true,noUniversalConfidenceScore:true,
-      actionAuthorized:false,clinicalRecommendationAuthorized:false,studyEffectEstablished:false
+      actionAuthorized:false,clinicalRecommendationAuthorized:false,studyEffectEstablished:false,
+      allPossibleExplanationsConsidered:false,automatedHypothesisEliminationAuthorized:false
     }
   };
 }
