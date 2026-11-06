@@ -140,7 +140,7 @@ test("no city-specific numbers, EBI transfer, or partner commitments are implied
   assert.equal(w.acceptance.stagesActuallyCompleted,0);
   assert.equal(w.crossSiteTransport.automaticReplicationAuthorized,false);
   assert.equal(w.crossSiteTransport.localEffectsKnown,false);
-  assert.equal(w.crossSiteTransport.originalCoreFunction,"Core causal function has not been established for an intervention.");
+  assert.match(w.crossSiteTransport.originalCoreFunction,/original action mechanism and invariant core function have not been established/i);
   assert.ok(w.logicModel.smartObjectives.every(x=>x.target==="NOT_PRESET"));
 });
 
