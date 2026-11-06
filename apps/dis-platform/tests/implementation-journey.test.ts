@@ -7,7 +7,7 @@ import {buildImplementationJourney,compareEBIAcrossSites,PHASE_TITLES,type Workf
 
 const design=()=>buildImplementationJourney(buildResearchProgram(jacksonCancerCase("colorectal")));
 const ids:WorkflowPhase[]=[
-  "ORIENT","EVIDENCE","POPULATION","CAUSES","COMMUNITY","SALP",
+  "STELLAR_1","ORIENT","EVIDENCE","POPULATION","CAUSES","COMMUNITY","SALP",
   "EBI_FIT","LOGIC","GOVERNANCE","PLAN","PILOT","IMPLEMENT",
   "MONITOR","EVALUATE","ADAPT","COMMUNICATE","TRANSLATE","SCALE","SUSTAIN"
 ];
@@ -16,7 +16,7 @@ test("research-to-implementation covers all phases with no invented implementati
   const w=design();
   assert.equal(w.schemaVersion,"dis-implementation-journey-v1");
   assert.deepEqual(w.nodes.map(x=>x.id),ids);
-  assert.equal(w.nodes.length,19);
+  assert.equal(w.nodes.length,20);
   assert.deepEqual(w.acceptance,{
     stagesActuallyCompleted:0,independentOutcomeVerified:false,localCausalEffectsEstablished:false,
     realPilotExecuted:false,partnersCommitted:false,patientDataProcessed:false,
@@ -34,7 +34,7 @@ test("research-to-implementation covers all phases with no invented implementati
       assert.ok(g.artifact.length>10&&g.acceptance.length>20&&g.ownerRole.length>7&&g.reviewerRole.length>7);
     }
   }
-  assert.equal(w.currentRecommendedPhase,"ORIENT");
+  assert.equal(w.currentRecommendedPhase,"STELLAR_1");
 });
 
 test("SALP maps systemic anchors and leverage, power and implementation fidelity without claiming causality",()=>{
@@ -126,7 +126,7 @@ test("participation, collaboration, communications and evidence translation have
 test("ordered next actions are feasible investigative assignments, not authorized implementation",()=>{
   const w=design();
   assert.equal(w.nextActions.length,5);
-  assert.equal(w.nextActions[0].action,"Problem, mission and end state");
+  assert.equal(w.nextActions[0].action,"STELLAR 1 — fact finding, mission and environment");
   assert.ok(w.nextActions.every(x=>x.ownerRole&&x.proofNeeded));
   assert.equal(w.acceptance.realPilotExecuted,false);
   assert.equal(w.acceptance.externalCommunicationAuthorized,false);
@@ -136,7 +136,7 @@ test("ordered next actions are feasible investigative assignments, not authorize
 test("no city-specific numbers, EBI transfer, or partner commitments are implied for custom problem",()=>{
   const p=buildResearchProgram(unsourcedResearchCase("How can we improve access to disability services?","Houston, Texas"));
   const w=buildImplementationJourney(p,"Jackson, Mississippi");
-  assert.equal(w.nodes.length,19);
+  assert.equal(w.nodes.length,20);
   assert.equal(w.acceptance.stagesActuallyCompleted,0);
   assert.equal(w.crossSiteTransport.automaticReplicationAuthorized,false);
   assert.equal(w.crossSiteTransport.localEffectsKnown,false);
@@ -147,7 +147,7 @@ test("no city-specific numbers, EBI transfer, or partner commitments are implied
 test("the actual research UI consumes workflow, SALP and Houston context gate without network calls",()=>{
   const page=readFileSync("app/research-program/page.tsx","utf8");
   const css=readFileSync("app/research-program/research-program.css","utf8");
-  assert.match(page,/buildImplementationJourney\(program,destination\)/);
+  assert.match(page,/buildImplementationJourney\(program,destination,stellarOverrides\)/);
   assert.match(page,/Full DIS lifecycle/);
   assert.match(page,/Transfer to Houston/);
   assert.match(page,/Structural Anchor and Leverage Protocol/);
