@@ -1,3 +1,4 @@
+import {ALL_STAGE_URBAN_RURAL_CONTEXT,NATIONAL_RACE_CONTEXT_2018_2022,NATIONAL_CANCER_CONTEXT_SOURCE} from "../../../lib/national-three-cancer-context";
 "use client";
 import {useMemo,useState} from "react";
 import Link from "next/link";
@@ -58,7 +59,15 @@ export default function NationalCancerThreeSite(){
   </div>
   <p style={{fontSize:12}}>{sorted.length} of 50 states shown. Average annual counts are preserved in the source package; no subgroup, geographic or suppressed cell has been imputed.</p>
  </section>
- <section style={{border:"1px solid #d1dbe1",padding:16,borderRadius:10}}>
+ <section style={{padding:16,border:"1px solid #d1dbe1",borderRadius:10,margin:"16px 0"}}>
+ <h2>National demographic and rural–urban cross-check</h2>
+ <p>Independent ACS analysis of all-stage incidence, <b>2018–2022</b> (SEER-based study covering roughly 36.7% of the U.S. population). Do not pool this with the 2019–2023 late-stage table or interpret group rates as individual traits.</p>
+ <div style={{overflowX:"auto"}}><table style={{width:"100%",minWidth:610,textAlign:"center"}}><thead><tr><th style={{textAlign:"left"}}>Cancer</th><th>Large metro</th><th>Nonmetro</th><th>Non-Hisp White</th><th>Non-Hisp Black</th></tr></thead>
+ <tbody>{types.map(t=><tr key={t.key}><th scope="row" style={{textAlign:"left"}}>{t.label}</th><td>{ALL_STAGE_URBAN_RURAL_CONTEXT[t.key].largeMetro.toFixed(1)}</td><td>{ALL_STAGE_URBAN_RURAL_CONTEXT[t.key].nonMetro.toFixed(1)}</td><td>{NATIONAL_RACE_CONTEXT_2018_2022[t.key].whiteNonHispanic.toFixed(1)}</td><td>{NATIONAL_RACE_CONTEXT_2018_2022[t.key].blackNonHispanic.toFixed(1)}</td></tr>)}</tbody></table></div>
+ <p><b>Interpretation:</b> Lung and colorectal incidence are higher in nonmetro communities; female breast incidence is lower. This disease-specific contrast argues against a single universal mechanism. The combined-sex lung racial comparison masks opposing male and female contrasts. Examine lived experience, social systems, environmental dose and cancer biology together.</p>
+ <a href={NATIONAL_CANCER_CONTEXT_SOURCE.url} target="_blank" rel="noreferrer">American Cancer Society published disparities research and methods</a>
+ </section>
+  <section style={{border:"1px solid #d1dbe1",padding:16,borderRadius:10}}>
   <h2>Follow the evidence across systems</h2>
   <p><b>Designed:</b> prevent new cancer; characterize exposures and inherited risk; offer appropriate early diagnosis. <b>Operational:</b> three types of cancer differ in exposures, biology, detection and screening eligibility. <b>Experienced:</b> race, income, employment, insurance, housing and historical exposures can create very different lived pathways within each state.</p>
   <p><b>Unanswered:</b> Does cross-cancer risk co-vary within age-, race-, insurance- and deprivation-matched counties? Do historical smoking and secondhand smoke, occupational carcinogens, water/air exposures, food/metabolic conditions or care systems explain spatial differences? Was the residence at diagnosis also the exposure residence 10–30 years earlier?</p>
