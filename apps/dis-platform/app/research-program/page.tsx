@@ -221,7 +221,7 @@ export default function ResearchProgramStudio(){
           </div>)}
         </article>)}
         <h3>SALP: systemic anchors, leverage points, governance and fidelity</h3>
-        <p>SALP is used here as <strong>Systemic Anchors and Leverage Points</strong>. Its RPLICE sequence is <strong>{journey.systemicModel.rPliceSequence.join(" → ")}</strong>. These are research-method stages, not evidence that an actual community system has been changed.</p>
+        <p>SALP is used here as <strong>Structural Anchor and Leverage Protocol</strong>. Its RPLICE sequence is <strong>{journey.systemicModel.rPliceSequence.join(" → ")}</strong>. These are research-method stages, not evidence that an actual community system has been changed.</p>
         <div className="rp-card-grid">
           <article className="rp-card"><h4>What must be investigated?</h4><ul>{journey.systemicModel.leverageQuestions.map(q=><li key={q}>{q}</li>)}</ul></article>
           <article className="rp-card"><h4>Power, institutions and adoption</h4><ul>{journey.systemicModel.powerAndIncentiveQuestions.map(q=><li key={q}>{q}</li>)}</ul></article>
