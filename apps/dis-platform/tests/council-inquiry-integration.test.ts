@@ -47,7 +47,7 @@ test('source-reported platform excerpt stays distinct from empirical instrument'
 test('decision time requires explicit timezone and no default historical revision is fabricated',()=>{
   assert.throws(()=>reviewCouncilInquiry('Any inquiry?',[], '2026-11-06T14:00:00'),/time zone/);
   const r=reviewCouncilInquiry('Any inquiry?',[],asOf);
-  assert.equal(r.decisionAsOf,asOf);
+  assert.equal(r.decisionAsOf,new Date(asOf).toISOString());
   assert.equal(r.assessment.state,'METHOD_REVIEW_REQUIRED');
 });
 test('the actual Council adds instrument-fit and causal-discrimination questions to each of its existing inference strands',async()=>{
