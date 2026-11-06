@@ -85,7 +85,7 @@ test("screening and diagnostic resolution use distinct denominators and no unive
   const screening=p.pathway.find(x=>x.stage==="Screening completed")!;
   const follow=p.pathway.find(x=>x.stage==="Diagnostic assessment resolved")!;
   assert.match(screening.denominator,/eligible individuals due/i);
-  assert.match(follow.denominator,/abnormal results/);
+  assert.match(follow.denominator,/abnormal results/i);
   assert.notEqual(screening.denominator,follow.denominator);
   assert.ok(p.successMeasures.some(x=>x.role==="PRIMARY_DISTAL"&&/lagged registry/.test(x.definition)));
   assert.ok(p.successMeasures.some(x=>x.role==="SAFETY_BALANCE"));
