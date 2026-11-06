@@ -3,6 +3,7 @@ import type {EvidenceSource} from './evidence-integrity';
 import {MEMBERS} from './council';
 import {OPERATING_CONTRACT_RECEIPT} from './operating-contract';
 import {assessEvidenceMesh} from './council-evidence-mesh';
+import {reviewCouncilInquiry} from './council-inquiry-bridge';
 
 type CouncilReport={
  sources?:EvidenceSource[];
@@ -43,6 +44,7 @@ export function councilEngagementAssurance(report:CouncilReport,question:string)
  };
  return {...assessEngagement(acceptance),
   evidenceMesh:assessEvidenceMesh(sources,new Date().toISOString()),
+  inquiryMethod:reviewCouncilInquiry(question,sources,new Date().toISOString()),
   sourceCount:sources.length,sourceReview:'DISCOVERY_EXCERPTS_ONLY' as const,
   operatingContract:report.operatingContract||null,
   expertProspectus:missingExpertProspectus(domainReviews),
