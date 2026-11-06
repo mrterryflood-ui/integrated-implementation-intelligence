@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "tsx scripts/run-evaluation-entry.ts && next build",
+    "build": "node scripts/sync-federated-standard.mjs --check && tsx scripts/run-evaluation-entry.ts && next build",
     "start": "next start",
-    "test": "node scripts/sync-operating-contract.mjs --check && tsx --test tests/*.test.ts"
+    "test": "node scripts/sync-operating-contract.mjs --check && node scripts/sync-federated-standard.mjs --check && tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "next": "^16.0.0",
