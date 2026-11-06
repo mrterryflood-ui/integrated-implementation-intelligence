@@ -1,5 +1,5 @@
 import {NextResponse} from 'next/server';
-import {publicAgentStandard} from '../../../lib/public-agent-standard';
+import {publicAgentStandard} from '../../../../lib/public-agent-standard';
 
 export const runtime='nodejs';
 export const dynamic='force-static';
