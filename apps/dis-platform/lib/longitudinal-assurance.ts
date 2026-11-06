@@ -232,6 +232,8 @@ export type CheckpointMeasure={
   construct:string;unit:string;population:string;
   baseline:number|null;observed:number|null;
   denominator:number|null;
+  /** Balancing-measure direction must be independently specified, not inferred from the number. */
+  higherMeansWorse?:boolean;
   sourceId:string;originalLineage:string;
   observedAt:string;receivedAt:string;
   comparator:string|null;
@@ -306,6 +308,8 @@ export function reviewLongitudinalCheckpoint(program:ResearchProgram,input:Check
       add("TIMESTAMP_UNVERIFIED","Measurement/receipt times are missing or invalid.","Check event, receipt, as-of time and source clock separately.");
     else if(event>receipt||receipt>asOf)
       add("TIME_ORDER_INVALID","A future observation, retroactive receipt or clock conflict was detected.","Reconstruct what was knowable when the decision was made.");
+    if(m.role==="BALANCING_HARM"&&m.higherMeansWorse===undefined)
+      add("BALANCING_DIRECTION_UNSPECIFIED","Harm metric direction has not been defined; no direction of benefit or harm may be inferred.","Prespecify construct, harmful direction, clinical/operational threshold and measurement range.");
     if((m.role==="BENEFICIARY_OUTCOME"||m.role==="BALANCING_HARM")&&!m.comparator?.trim())
       add("NO_COUNTERFACTUAL","A declared beneficiary result lacks a comparison or counterfactual.","Use a defensible comparator and causal design; pre/post alone does not establish effect.");
   }
@@ -334,7 +338,7 @@ export function reviewLongitudinalCheckpoint(program:ResearchProgram,input:Check
     if(a.coreFunctionAffected)
       add("CORE_FUNCTION_REVALIDATION","A proposed change affects the hypothesized intervention core function.","Stop automatic adoption and seek independent causal/mechanism and safety reassessment.");
   }
-  const safety=input.reportedPath==="UNINTENDED_HARM"||input.measures.some(m=>m.role==="BALANCING_HARM"&&m.observed!==null&&m.baseline!==null&&m.observed>m.baseline);
+  const safety=input.reportedPath==="UNINTENDED_HARM"||input.measures.some(m=>m.role==="BALANCING_HARM"&&m.higherMeansWorse===true&&m.observed!==null&&m.baseline!==null&&m.observed>m.baseline);
   if(safety)add("SAFETY_SIGNAL_REQUIRES_HUMAN","A potential harm is reported; the model cannot diagnose causality or delay existing response.","Escalate immediately to appropriate authorized clinical, agency or operational safety personnel.");
   const scenario=buildLongitudinalAssurance(program).cases.find(x=>x.path===input.reportedPath);
   return{
