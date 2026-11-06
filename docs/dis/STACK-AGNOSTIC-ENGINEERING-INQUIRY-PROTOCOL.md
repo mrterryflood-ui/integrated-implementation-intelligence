@@ -5,6 +5,8 @@
 
 ## Governing principle
 
+**Diagnose before coding.** Select and test competing explanations before prescribing a tool, stack, rewrite, or fix. Preserve the possibility that the apparent failure is a measurement defect or that the problem itself has been framed incorrectly.
+
 **Investigate the system before choosing the code. Validate what is measured before claiming improvement. Preserve an open world of alternative explanations.**
 
 The protocol is independent of programming language, framework, cloud vendor, hosting platform, database, AI provider, user interface, and application domain. It is not *standards-free*: the actual owner must select context-specific security, safety, accessibility, legal and quality controls and provide evidence they were met. Every phase scales to risk and reversibility; a harmless typo correction is not treated like a clinical triage algorithm or national warning system.
