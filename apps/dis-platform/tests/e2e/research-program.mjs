@@ -31,7 +31,7 @@ for(const [label,engine,device] of [
   await page.getByText("Hypothetical referral clinic").last().waitFor();
   await page.getByRole("combobox",{name:"To"}).selectOption("S1");
   await page.getByRole("button",{name:"Add unverified relationship"}).click();
-  await page.getByText(/declared hops 1|not independently established/i).first().waitFor().catch(()=>{});
+  await page.getByText("not independently established",{exact:true}).first().waitFor();
   await page.getByRole("button",{name:"Population and measures"}).click();
   const site=page.getByRole("combobox",{name:"Cancer site / analysis"});
   await page.getByText("30.4",{exact:true}).waitFor();
@@ -58,11 +58,11 @@ for(const [label,engine,device] of [
   await page.getByText("20",{exact:true}).first().waitFor();
   await page.getByRole("combobox",{name:"Rehearse a possible result (not a recorded outcome)"}).selectOption("SUCCESS");
   await page.getByText(/What happens tomorrow when demand/i).first().waitFor();
-  await page.getByText(/Approved sustainment budget/i).count();
+
   await page.getByRole("combobox",{name:"Rehearse a possible result (not a recorded outcome)"}).selectOption("FAILURE");
   await page.getByText(/Did the intervention fail to reach people/i).first().waitFor();
   await page.getByRole("button",{name:"Transfer to Houston"}).click();
-  await page.getByText("HOLD_PENDING_LOCAL_ADAPTATION_AND_VALIDATION",{exact:false}).count();
+  await page.getByText(/hold pending local adaptation and validation/i).waitFor();
   const project=page.getByRole("combobox",{name:"Research scenario"});
   await project.selectOption("custom");
   await page.getByRole("textbox",{name:"Your research/implementation question"}).fill("How can a city improve access to public services?");
