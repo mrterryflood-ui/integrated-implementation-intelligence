@@ -144,6 +144,6 @@ test("source catalogue retains original public authority and historical reportin
   assert.ok(p.dataSources.some(s=>s.id==="cdc-places"&&s.kind==="MODELED_ESTIMATE"&&s.prohibitedUse.includes("effect")));
   assert.ok(p.dataSources.some(s=>s.id==="hrsa-uds"&&s.granularity.includes("State")));
   assert.ok(p.dataSources.every(s=>s.url.startsWith("https://")));
-  assert.ok(p.dataSources.every(s=>s.connection!=="LIVE_CONNECTED"));
+  assert.ok(p.dataSources.every(s=>s.connection==="CURATED_REFERENCE_ONLY"||s.connection==="AUTHORIZED_EXCHANGE_NOT_CONNECTED"));
   assert.ok(p.interpretationGuardrails.some(x=>x.toLowerCase().includes("site")));
 });
