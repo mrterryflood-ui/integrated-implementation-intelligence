@@ -82,6 +82,37 @@ for(const [label,engine,device] of [
   assert.deepEqual(errors,[],"no unexpected runtime client errors");
   assert.deepEqual(writes,[],"no external mutations or model calls from local research studio");
   await page.screenshot({path:join(out,"research-program-"+label+".png"),fullPage:false});
+  // Six-condition annual trajectory browser contract: pooled years rejected,
+  // only explicit test fixtures generate a descriptive result.
+  const six=await page.goto(base+"/research-program/six-conditions",{waitUntil:"domcontentloaded",timeout:45000});
+  assert.equal(six?.status(),200);
+  await page.getByRole("heading",{name:/Six conditions, three focal states/}).waitFor();
+  await page.getByRole("heading",{name:/ChainWeb: test actual disease trajectories/}).waitFor();
+  await page.getByRole("status").getByText(/no annual observations/).waitFor();
+  const annualInput=page.getByRole("textbox",{name:"Annual public aggregate observations JSON"});
+  const fixture=year=>({
+   condition:"COLORECTAL_CANCER",geography:"Mississippi",geographyLevel:"STATE",
+   measure:"ALL_STAGE_INCIDENCE",periodStartYear:year,periodEndYear:year,
+   value:10+(year-2018),reporting:"OBSERVED",unit:"PER_100K",
+   sourceId:"cdc-uscs",sourceVersion:"BROWSER_TEST_SYNTHETIC_ONLY",
+   populationDefinition:"Resident population age adjusted to 2000 US",
+   numeratorDefinition:"Incident colorectal cancer diagnoses",
+   denominatorDefinition:"State resident population per 100000",
+   sex:"ALL",raceEthnicity:"All races and ethnicities",
+   ageStandard:"2000 US standard",stageDefinition:"ALL STAGES",
+   ascertainment:"Browser fixture, not a real registry extract"
+  });
+  await annualInput.fill(JSON.stringify([{...fixture(2019),periodEndYear:2023}]));
+  await page.getByRole("button",{name:"Assess series and comparability"}).click();
+  await page.getByText(/pooled multi-year values cannot be relabeled/).waitFor();
+  await annualInput.fill(JSON.stringify([2018,2019,2020,2021,2022].map(fixture)));
+  await page.getByRole("button",{name:"Assess series and comparability"}).click();
+  await page.getByRole("status").getByText(/descriptive only/).waitFor();
+  await page.getByRole("cell",{name:"1",exact:true}).waitFor();
+  assert.deepEqual(errors,[],"six-condition panel has no browser runtime errors");
+  assert.deepEqual(writes,[],"six-condition preflight never sends methods, records or mutations");
+  await page.screenshot({path:join(out,"six-condition-trajectory-"+label+".png"),fullPage:false});
+  console.log("PASS DIS six-condition trajectory "+label+": browser preflight, pooled-year rejection, five-year descriptive fixture, no external calls");
   console.log("PASS DIS research-to-implementation "+label+": sourced cancer splits, drivers, evaluation, custom unknowns, no network mutations");
  }finally{await context.close();await browser.close();}
 }
