@@ -1,4 +1,5 @@
 "use client";
+import {FOCAL_THREE_CANCER_COUNTIES} from "../../../lib/focal-three-cancer-counties";
 import {ALL_STAGE_URBAN_RURAL_CONTEXT,NATIONAL_RACE_CONTEXT_2018_2022,NATIONAL_CANCER_CONTEXT_SOURCE} from "../../../lib/national-three-cancer-context";
 import {useMemo,useState} from "react";
 import Link from "next/link";
@@ -38,6 +39,12 @@ export default function NationalCancerThreeSite(){
   </table>
   <p style={{fontSize:12}}>The breast cancer population rate denominator is female-only. Do not compare absolute rate sizes between female breast and both-sex cancer populations as though denominators were identical.</p>
  </div>
+ <section style={{border:"1px solid #d1dbe1",borderRadius:10,padding:16,margin:"16px 0"}}>
+ <h2>Return to the focal counties, on a single consistent 2018–2022 period</h2><p><b>Every cell is a separate source-checked county cancer measure:</b> age-adjusted late-stage incidence per 100,000 / percentage among diagnosed cases late-stage. Jackson and Houston refer to county proxies; Denver is a Colorado county comparator, not Colorado state.</p>
+ <div style={{overflowX:"auto"}}><table style={{width:"100%",minWidth:640,borderCollapse:"collapse",fontSize:13}}><thead><tr><th style={{textAlign:"left"}}>Cancer</th>{FOCAL_THREE_CANCER_COUNTIES.map(s=><th scope="col" key={s.fips}>{s.county}</th>)}</tr></thead><tbody>{types.map(t=><tr key={t.key}><th scope="row" style={{textAlign:"left",padding:7}}>{t.label}</th>{FOCAL_THREE_CANCER_COUNTIES.map(s=><td style={{textAlign:"center",padding:7}} key={s.fips}><a target="_blank" rel="noreferrer" href={s.cancers[t.key].source}>{s.cancers[t.key].rate.toFixed(1)} per 100k / {s.cancers[t.key].lateStageShare.toFixed(1)}%</a></td>)}</tr>)}</tbody></table></div>
+ <p>Compared with Colorado/Denver, Hinds has much greater colorectal, lung and female breast late-stage incidence, but the magnitude differs by cancer. The similar colorectal stage fractions persist locally and do not establish similar incidence or cause. The nine original NCI county-source links are available by selecting each cell.</p>
+ <p><a href="https://www.gis.cancer.gov/canceratlas/" target="_blank" rel="noreferrer">Open NCI Cancer Atlas official GIS, tables and CSV exports</a> · <a href="https://ephtracking.cdc.gov/" target="_blank" rel="noreferrer">CDC Environmental Public Health Tracking</a></p>
+ </section>
  <section style={{border:"1px solid #d1dbe1",borderRadius:10,padding:16,margin:"16px 0"}}>
   <h2>National pattern across 50 states</h2>
   <p>Rate correlation, colorectal–lung: <b>{pearsonNationalCancerCorrelation("colorectal","lung","lateStageIncidencePer100k").toFixed(3)}</b>; colorectal–breast: <b>{pearsonNationalCancerCorrelation("colorectal","breast","lateStageIncidencePer100k").toFixed(3)}</b>. Case-share correlation, colorectal–lung: <b>{pearsonNationalCancerCorrelation("colorectal","lung","lateStageSharePercent").toFixed(3)}</b>. These unadjusted ecological correlations do not establish causes.</p>
