@@ -6,8 +6,32 @@ import {assemble} from "../../../lib/council-assembly";
 import {sanitizeIntake} from "../../../lib/consultation";
 import {buildPackage} from "../../../lib/consultation-package";
 import {FEDERAL_REGISTRY} from "../../../lib/federal-sources";
+import {assessStellarOne} from "../../../lib/stellar-one";
+import {buildResearchProgram} from "../../../lib/research-program";
+import {jacksonCancerCase,unsourcedResearchCase} from "../../../lib/jackson-cancer-case";
+import {buildImplementationJourney} from "../../../lib/implementation-journey";
+import {proposeRpliceHandoff} from "../../../lib/rplice-implementation-handoff";
 export const runtime="nodejs";
 const toolList=[
+
+ {name:"dis_stellar_one",description:"Run STELLAR 1: what, for whom, what outcome, where, duration, counterfactual, center of inquiry, history, stakeholders, demographic dimensions and missing environmental/chain evidence. Read-only, source-unverified and no operational authority.",annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:true},inputSchema:{type:"object",properties:{
+  problem:{type:"string",minLength:8,maxLength:1200},
+  whatDoing:{type:"string",maxLength:500},forWhom:{type:"string",maxLength:500},
+  understandOrDeliver:{type:"string",maxLength:500},where:{type:"string",maxLength:500},
+  howLong:{type:"string",maxLength:500},intendedChange:{type:"string",maxLength:500},
+  counterfactual:{type:"string",maxLength:500},centerOfInquiry:{type:"string",maxLength:500},
+  stakeholders:{type:"array",items:{type:"string"},maxItems:12},
+  demographicDimensions:{type:"array",items:{type:"string"},maxItems:12},
+  historicalContext:{type:"array",items:{type:"string"},maxItems:12},
+  perspectives:{type:"array",items:{type:"string"},maxItems:12}
+ },required:["problem"],additionalProperties:false}},
+ {name:"dis_research_implementation_blueprint",description:"Generate a bounded source-qualified research-to-implementation plan: STELLAR 1, evidence/population/causal gaps, 20 stage gates, RPLICE SALP handoff proposal, SMART logic model, success/failure rehearsals, outcomes and cross-site transport review. Public reference case or generic unsourced question; does not perform original research, contact RPLICE or authorize action.",annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:true},inputSchema:{type:"object",properties:{
+  problem:{type:"string",minLength:8,maxLength:1200},population:{type:"string",maxLength:160},
+  destination:{type:"string",maxLength:160},
+  example:{type:"string",enum:["generic","jackson-cancer"]},
+  cancerSite:{type:"string",enum:["colorectal","breast","general"]}
+ },required:["problem"],additionalProperties:false}},
+
  {name:'dis_ecosystem_plan',description:'Plan the relevant owned-platform contributions for a stakeholder question, show technical gaps and ask at most one geographic clarification. No network calls, private data access or execution.',annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false},inputSchema:{type:'object',properties:{problem:{type:'string',minLength:8,maxLength:1200},audience:{type:'string',maxLength:180},geography:{type:'object'},domains:{type:'array',items:{type:'string'},maxItems:14}},required:['problem'],additionalProperties:false}},
  {name:"dis_consultation_plan",description:"Create a preliminary DIS consultation plan with draft artifact titles, questions and verified-versus-unknown status. Does NOT save user data, browse private accounts or make any external commitment.",annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false},inputSchema:{type:"object",properties:{problem:{type:"string",description:"The question or problem to address, 8-1200 characters"},organization:{type:"string"},audience:{type:"string"},stage:{type:"string"},geography:{type:"string"},mode:{type:"string",enum:["startup","general"]}},required:["problem"],additionalProperties:false}},
  {name:"dis_select_council",description:"Assemble educational intellectual lenses by topic, with an optional separately selected red team. This is NOT actual human expert participation or a finished AI deliberation.",annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false},inputSchema:{type:"object",properties:{question:{type:"string",minLength:5,maxLength:600},count:{type:"integer",minimum:2,maximum:12},redCount:{type:"integer",minimum:2,maximum:12},selectedIds:{type:"array",items:{type:"string"},maxItems:12}},required:["question"],additionalProperties:false}},
@@ -35,7 +59,30 @@ export async function dispatch(body:any){
  }
  if(schema.required?.some(key=>!(key in args)))return err(id,-32602,"Required argument missing");
  let answer:unknown;
- if(name==='dis_ecosystem_plan'){
+ if(name==="dis_stellar_one"){
+  answer=assessStellarOne({question:args.problem,
+    whatDoing:args.whatDoing,forWhom:args.forWhom,understandOrDeliver:args.understandOrDeliver,
+    where:args.where,howLong:args.howLong,intendedChange:args.intendedChange,
+    counterfactual:args.counterfactual,centerOfInquiry:args.centerOfInquiry,
+    stakeholders:args.stakeholders,demographicDimensions:args.demographicDimensions,
+    historicalContext:args.historicalContext,perspectives:args.perspectives});
+ }else if(name==="dis_research_implementation_blueprint"){
+  const example=args.example==="jackson-cancer";
+  const site=args.cancerSite==="breast"?"breast":args.cancerSite==="general"?"general":"colorectal";
+  const spec=example?jacksonCancerCase(site):unsourcedResearchCase(args.problem,args.population||"Population and place not yet specified");
+  spec.question=args.problem;
+  const program=buildResearchProgram(spec);
+  const journey=buildImplementationJourney(program,args.destination||"Destination not yet specified");
+  const handoff=proposeRpliceHandoff(program,journey);
+  answer={schemaVersion:"dis-research-implementation-mcp-v1",
+    state:"LOCAL_DRAFT_NOT_SCIENTIFICALLY_VALIDATED",
+    sourceStatus:program.sourceReviewStatus,
+    study:program,journey,rpliceMethodHandoff:handoff,
+    externalCalls:0,individualRecordsAccessed:0,clinicalActions:0,
+    declaredOutcomesVerified:0,projectStageCompletions:0,
+    nextStep:"Review STELLAR 1 unresolved facts, obtain appropriate original evidence, collaborator authorization and human implementation owner before pilot execution.",
+    warning:"No live RPLICE method was invoked, no agency or clinical authority granted, no result or causal effect established. A source catalog is not a verified integration."};
+ }else if(name==='dis_ecosystem_plan'){
   try{answer=publicPlan({...args,externalConsent:false})}catch(e){return err(id,-32602,e instanceof ContractError?e.message:'Invalid engagement');}
  }else if(name==="dis_consultation_plan"){
   const problem=(args.problem||"").trim();
