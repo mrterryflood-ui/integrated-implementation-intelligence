@@ -208,19 +208,50 @@ export function compareEBIAcrossSites(
     recommendation:"Do not copy implementation form from the original site into the destination. Run a new DIS ORIENT→MAP→GAP→SALP→EBI_FIT cycle, preserving tested core mechanisms only where justified and prospectively evaluating adaptation."
   };
 }
+function compareGenericAcrossSites(sourceSite:string,destinationSite:string,question:string):TransportabilityReview{
+ const test=(dimension:string,requiredComparison:string):SiteTransferCheck=>({
+   dimension,jacksonEvidence:"No source-site implementation outcome is independently verified; original problem: "+question.slice(0,180),
+   destinationEvidence:"NOT OBSERVED — no authorized destination source",
+   state:"UNVERIFIED_IN_DESTINATION",requiredComparison
+ });
+ return{
+   sourceSite,destinationSite,candidateEbi:"No evaluated transferable intervention specified",
+   originalCoreFunction:"The original action mechanism and invariant core function have not been established.",
+   adaptableDeliveryForms:[
+     "User journey, interface, language, logistics and staffing may differ when a core mechanism is validated.",
+     "No copied implementation is approved solely on the basis of another organization's results."
+   ],
+   tests:[
+     test("Original problem and intended beneficiary","Re-evaluate decision, meaningful outcome and end user at destination."),
+     test("Macro policy and resources","Compare policy obligations, capacity, local costs, labor and incentives."),
+     test("Local context and stakeholder needs","Independently measure site context and affected user experience."),
+     test("Technology and system interfaces","Audit identity, data rights, upstream APIs, dependencies, failures and access."),
+     test("Mechanism and core function","Verify mechanism, what must stay invariant, and what may adapt."),
+     test("Evidence quality and comparator","Define independent source lineage, baseline, control and harmful effects."),
+     test("Authority, safety and sustainment","Confirm local approvals, owners, staffing, budgets and rollback.")
+   ],
+   decision:"HOLD_PENDING_LOCAL_ADAPTATION_AND_VALIDATION",
+   automaticReplicationAuthorized:false,exactCopiedInterventionIsEvidenceBasedForDestination:false,
+   localEffectsKnown:false,reviewerSignoffObtained:false,
+   recommendation:"New destination must independently map evidence, users, instrument fit, systems, mechanisms, resources and governance; compare with competent current practice before adopting."
+ };
+}
+
 function smart(program:ResearchProgram):SmartObjective[]{
+  const cancerCase=program.caseId.startsWith("jackson-ms-late-stage-");
   return program.successMeasures.map((s,i)=>({
     id:"SMART-"+(i+1),specific:s.name,
     measurable:s.definition,
     achievable:"REQUIRES_LOCAL_RESOURCE_AND_BASELINE_CHECK",
-    relevant:"Reduce preventable delay and inequity without substituting proxy measures for patient benefit.",
+    relevant:cancerCase?"Reduce preventable delay and inequity without substituting proxy measures for patient benefit.":"Improve the stated real-world outcome without substituting a convenient proxy or unmeasured assumption.",
     timeBound:"TO_BE_SET_AFTER_MEASUREMENT_AND_STAKEHOLDER_AGREEMENT",
     baseline:"NOT_VERIFIED_FOR_TARGET_SITE",target:"NOT_PRESET",
-    sourceAndDenominator:s.definition,ownerRole:i===0?"Cancer registry/independent epidemiologist":"Local implementation and evaluation owners",
-    balancingMeasure:"Unintended harms, unequal reach, added workload, inappropriate screening, unnecessary procedures and cost"
+    sourceAndDenominator:s.definition,ownerRole:i===0?(cancerCase?"Cancer registry/independent epidemiologist":"Independent measurement owner"):"Local implementation and evaluation owners",
+    balancingMeasure:cancerCase?"Unintended harms, unequal reach, added workload, inappropriate screening, unnecessary procedures and cost":"Unintended harms, unequal access, additional operational burden, privacy/security, hidden costs and ecosystem changes"
   }));
 }
 export function buildImplementationJourney(program:ResearchProgram,destinationSite="Houston, Texas"):FullImplementationFlow{
+  const cancerCase=program.caseId.startsWith("jackson-ms-late-stage-");
   const nodes=(Object.keys(PHASE_TITLES) as WorkflowPhase[]).map(id=>step(
     id,PHASE_TITLES[id],
     purposes[id].join(" · "),descriptions[id],purposes[id],requirements[id]
@@ -232,7 +263,7 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
     identifiedAnchors:[],
     leverageQuestions:[
       "Which durable policies, reimbursement incentives, workforce limitations, relationships or referral practices anchor existing outcomes?",
-      "Where does the patient and organizational pathway demonstrate an independently measured avoidable failure?",
+      "Where does the human, organizational or clinical pathway demonstrate an independently measured avoidable failure?",
       "Which smallest feasible change alters the mechanism without destabilizing safe care?",
       "What new feedback, incentives, burden or inequity may the intervention create?",
       "What observation distinguishes leverage-point success from gaming or measurement artifact?"
@@ -241,13 +272,13 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
       "Who controls resources, data, workflow priorities and approvals?",
       "Whose lived experience and community priorities differ from the designed program?",
       "Which organizations could benefit, be harmed or resist change?",
-      "Are incentives aligned with completed diagnostic resolution rather than screening activity alone?"
+      "Are incentives aligned with verified end-state outcomes rather than activity volume or a convenient proxy?"
     ],
     fidelityMeasures:["Reach and eligibility","Delivered dose and intended core function","Implementation quality and deviation logs",
       "Stakeholder engagement","Undesired effects and structural drift","Observed functional outcomes against comparator"],
     forecastAnalytics:"PROPOSED_NOT_VALIDATED",mechanismsVerified:false,authorityRequired:true
   };
-  const logicModel:LogicModel={
+  const logicModel:LogicModel=cancerCase?{
     assumptions:[
       "The stated problem is measurable in its correctly defined population, with valid source geography.",
       "The EBI's theoretical mechanism matches a locally demonstrated determinant; this is NOT yet established.",
@@ -269,9 +300,28 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
     unintendedEffects:["Over-screening","Inappropriate or delayed referrals","False reassurance","Privacy leakage",
       "Excess navigator workload","Inequitable access","Mistaken ecological attribution"],
     smartObjectives:smart(program)
+  }:{
+    assumptions:[
+      "The actual phenomenon and user outcome are independently measurable.",
+      "Macro policy, regional context, local organization and individual experience are neither interchangeable nor automatically causal.",
+      "The intended mechanism and core functions must be validated in this specific system.",
+      "Stakeholder authority, data rights, budget and adverse-effect monitoring must be established before execution."
+    ],
+    inputs:["Actual system and source inventory","Authorized stakeholders and affected users",
+      "Measured baseline, alternative explanation and independent reviewer","Budget, capacity, permissions and operating owner"],
+    activities:["Whole-system macro-to-micro map","Competing explanation and source/measurement audit",
+      "Stakeholder co-design and reversible test","Independent comparison and monitoring","Explicit adaptation and learning"],
+    outputs:["Documented legitimate sources and constraints","Defined eligible user/workflow population",
+      "Versioned design and implemented change receipts","Completed real user tasks and acknowledged effects"],
+    shortTerm:["Valid problem and source characterization","Fewer unverified assumptions and better instrument selection"],
+    intermediate:["Improved workflow fidelity, task completion and access with no disproportionate harms"],
+    longTerm:["Meaningful, independently verified and sustainable user/system benefit","Adaptation to other contexts only after new fit assessment"],
+    unintendedEffects:["Increased cost and workload","Lost privacy, trust, data rights or accessibility",
+      "False confidence from dashboards or synthetic tests","Duplicated infrastructure, vendor lock-in and fragile dependencies"],
+    smartObjectives:smart(program)
   };
   const source=program.population.targetName;
-  const crossSiteTransport=compareEBIAcrossSites(program.strategies[0],source,destinationSite);
+  const crossSiteTransport=cancerCase?compareEBIAcrossSites(program.strategies[0],source,destinationSite):compareGenericAcrossSites(source,destinationSite,program.question);
   const nextActions=nodes.slice(0,5).map(x=>({
     action:x.title,ownerRole:x.gates[0].ownerRole,proofNeeded:x.gates[0].artifact+" — "+x.gates[0].acceptance
   }));
@@ -280,13 +330,17 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
     caseId:program.caseId,question:program.question,site:source,
     researchState:"DRAFT_DESIGN_WITH_GAPS",currentRecommendedPhase:"ORIENT",
     nodes,systemicModel,logicModel,crossSiteTransport,
-    communicationTracks:[
+    communicationTracks:cancerCase?[
       {audience:"Affected communities and patient representatives",purpose:"Co-create problem framing, accessible information and decisions",feedback:"Consent-based listening sessions, comprehension and dissent",approval:"NOT_OBTAINED"},
       {audience:"Clinic/health system and navigators",purpose:"Align clinical pathways, safe care and operational workload",feedback:"Workflow and capacity review with clinical oversight",approval:"NOT_OBTAINED"},
       {audience:"Registry/data and academic reviewers",purpose:"Clarify original sources, study validity, outcomes and uncertainty",feedback:"Independent methods critique and correction log",approval:"NOT_OBTAINED"},
       {audience:"Funders/public health and policymakers",purpose:"Explain defensible outcomes, cost and limits without vendor claims",feedback:"Approved briefing, actual receipt and follow-up",approval:"NOT_OBTAINED"}
+    ]:[
+      {audience:"Affected users and organizations",purpose:"Co-define desired outcome and burden",feedback:"Consent-based accessible dialogue, independent challenge and corrections",approval:"NOT_OBTAINED"},
+      {audience:"System owners and delivery staff",purpose:"Align interfaces, support capacity and implementation",feedback:"Owner-reviewed requirements, integration rehearsal and incident response",approval:"NOT_OBTAINED"},
+      {audience:"Funders, governance and reviewers",purpose:"Explain evidence, costs, limits and outcome measurement",feedback:"Authorized report, real receipt and open questions",approval:"NOT_OBTAINED"}
     ],
-    collaborationRoles:[
+    collaborationRoles:cancerCase?[
       {role:"Community co-investigator",responsibility:"Represent experienced reality, consent, priorities and unintended harms",participationState:"NOT_CONFIRMED"},
       {role:"Clinical pathway owner",responsibility:"Confirm appropriate eligibility, diagnostic safety, referral and clinical scope",participationState:"NOT_CONFIRMED"},
       {role:"Registry epidemiologist",responsibility:"Verify incidence/stage numerator, denominator, geography, suppression and period",participationState:"NOT_CONFIRMED"},
@@ -294,6 +348,13 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
       {role:"Data/privacy custodian",responsibility:"Approve lawful data use, tenant/participant protection and provenance",participationState:"NOT_CONFIRMED"},
       {role:"Independent evaluator",responsibility:"Design comparator, measures, adjudication and interpretation",participationState:"NOT_CONFIRMED"},
       {role:"Program sponsor and steward",responsibility:"Authorize resources, implementation, monitoring, handoff, scale and retirement",participationState:"NOT_CONFIRMED"}
+    ]:[
+      {role:"Affected user representatives",responsibility:"Define experienced reality, consequences and meaningful improvements",participationState:"NOT_CONFIRMED"},
+      {role:"System and source owners",responsibility:"Validate interfaces, permissions, reliability and original data provenance",participationState:"NOT_CONFIRMED"},
+      {role:"Implementation lead",responsibility:"Coordinate dependencies, budget, training, rollout and reversibility",participationState:"NOT_CONFIRMED"},
+      {role:"Independent evaluator",responsibility:"Test alternative causes, outcome instrument validity and comparison",participationState:"NOT_CONFIRMED"},
+      {role:"Policy, privacy and security owner",responsibility:"Authorize data use, risk boundaries, consent and security",participationState:"NOT_CONFIRMED"},
+      {role:"Successor/steward",responsibility:"Monitor benefits, drift, maintenance, adaptation and retirement",participationState:"NOT_CONFIRMED"}
     ],
     learningLoop:[
       "ORIENT: reopen the phenomenon, mission and stakeholder outcomes whenever evidence conflicts with design.",
