@@ -8,9 +8,10 @@
  * problem nor automatically portable to a second geography.
  */
 import type {ResearchProgram,StrategyCandidate} from "./research-program";
+import {assessStellarOne,type StellarOneAssessment,type StellarOneInput} from "./stellar-one";
 
 export type WorkflowPhase=
-  "ORIENT"|"EVIDENCE"|"POPULATION"|"CAUSES"|"COMMUNITY"|"SALP"|
+  "STELLAR_1"|"ORIENT"|"EVIDENCE"|"POPULATION"|"CAUSES"|"COMMUNITY"|"SALP"|
   "EBI_FIT"|"LOGIC"|"GOVERNANCE"|"PLAN"|"PILOT"|"IMPLEMENT"|
   "MONITOR"|"EVALUATE"|"ADAPT"|"COMMUNICATE"|"TRANSLATE"|
   "SCALE"|"SUSTAIN";
@@ -69,6 +70,7 @@ export type FullImplementationFlow={
   caseId:string;question:string;site:string;
   researchState:"DRAFT_DESIGN_WITH_GAPS";
   currentRecommendedPhase:WorkflowPhase;
+  stellarOne:StellarOneAssessment;
   nodes:WorkflowNode[];
   systemicModel:SALPModel;logicModel:LogicModel;
   crossSiteTransport:TransportabilityReview;
@@ -90,6 +92,7 @@ const step=(id:WorkflowPhase,title:string,intent:string,why:string,outputs:strin
   id,title,intent,why,outputs,gates,status:"NOT_EXECUTED_EVIDENCE_REQUIRED",claimOfCompletion:false,actionAuthorized:false
 });
 export const PHASE_TITLES:Record<WorkflowPhase,string>={
+ STELLAR_1:"STELLAR 1 — fact finding, mission and environment",
  ORIENT:"Problem, mission and end state",EVIDENCE:"Research and critical evidence",
  POPULATION:"Population, context and equity map",CAUSES:"Competing causes and measurement",
  COMMUNITY:"Co-design, participation and engagement",SALP:"SALP systems anchors and leverage",
@@ -102,6 +105,7 @@ export const PHASE_TITLES:Record<WorkflowPhase,string>={
  SUSTAIN:"Sustain, hand off and re-map"
 };
 const requirements:Record<WorkflowPhase,EvidenceGate[]>={
+ STELLAR_1:[g("MISSION_CONTEXT","What are we doing, for whom, to understand or deliver what, where, for how long, and to change what compared with which counterfactual?","STELLAR 1 mission, fact and context declaration","Mission owner and community co-investigators","Explicit mission questions, people, duration, intended outcomes, contextual systems and competent-practice alternative; unknowns and unverified evidence preserved","Independent methods, lived-experience and systems reviewers")],
  ORIENT:[g("MISSION","What decision, problem, place, users and unintended risks matter?","Problem charter and observed baseline","Mission sponsor","Verified scope, beneficiary and outcome plus documented alternatives","Community and evaluation leads")],
  EVIDENCE:[g("APPRAISAL","Which original studies, contrary findings and source limitations apply?","Critical evidence register with risk of bias","Evidence reviewer","Original source methods inspected; not just search counts or vendor abstracts","Independent methodology reviewer")],
  POPULATION:[g("STRATA","Who is in the actual population and which denominators are appropriate?","Geospatial and subgroup availability map","Epidemiologist","Case definitions, suppression, inclusion, geography, demographic gaps documented","Registry and community representatives")],
@@ -123,6 +127,7 @@ const requirements:Record<WorkflowPhase,EvidenceGate[]>={
  SUSTAIN:[g("STEWARDSHIP","Who owns post-success capability and what triggers retirement or change?","Stewardship, funding, maintenance and re-map decision","Sustainment sponsor","Resources, succession, monitoring, long-term harms and feedback checkpoints accepted","Affected parties and successor owner")]
 };
 const descriptions:Record<WorkflowPhase,string>={
+ STELLAR_1:"Map the actual question and its center before researching favored interventions; track stakeholders, demographics, history, relationships, intersections and parallel chains.",
  ORIENT:"Diagnose the mission before looking for a favored solution.",
  EVIDENCE:"Triangulate original research and contrary evidence, not repeated headlines.",
  POPULATION:"Avoid county-to-city inference and invented group-specific outcomes.",
@@ -144,6 +149,7 @@ const descriptions:Record<WorkflowPhase,string>={
  SUSTAIN:"Plan the day after success, successor and revision across a ten-year horizon."
 };
 const purposes:Record<WorkflowPhase,string[]>={
+ STELLAR_1:["What / for whom / understand-deliver / where / for how long / intended change / counterfactual","Environmental chain map: center, distance, intersections and parallel paths","Stakeholder, demographic, historical and perspective source gaps"],
  ORIENT:["Mission statement","Designed, operational and experienced realities"],
  EVIDENCE:["Evidence crosswalk","Null and contradictory evidence register"],
  POPULATION:["Population strata and case-mix map","Missing/suppressed cells log"],
@@ -250,8 +256,20 @@ function smart(program:ResearchProgram):SmartObjective[]{
     balancingMeasure:cancerCase?"Unintended harms, unequal reach, added workload, inappropriate screening, unnecessary procedures and cost":"Unintended harms, unequal access, additional operational burden, privacy/security, hidden costs and ecosystem changes"
   }));
 }
-export function buildImplementationJourney(program:ResearchProgram,destinationSite="Houston, Texas"):FullImplementationFlow{
+export function buildImplementationJourney(program:ResearchProgram,destinationSite="Houston, Texas",stellarInput?:Partial<StellarOneInput>):FullImplementationFlow{
   const cancerCase=program.caseId.startsWith("jackson-ms-late-stage-");
+  const stellarOne=assessStellarOne({
+    question:program.question,
+    whatDoing:"Investigate the reported problem and possible action (proposed research task)",
+    forWhom:program.population.targetName,
+    understandOrDeliver:program.question,
+    where:program.population.targetName,
+    intendedChange:program.question,
+    centerOfInquiry:program.site==="general"?"Unconfirmed phenomenon of the research question":"Late-stage cancer diagnosis and its diagnostic pathway",
+    demographicDimensions:program.strata.map(s=>s.dimension+" — "+s.availability),
+    historicalContext:program.indicators.slice(0,5).map(x=>x.label+": "+x.period+" ("+x.geography+")"),
+    ...stellarInput
+  });
   const nodes=(Object.keys(PHASE_TITLES) as WorkflowPhase[]).map(id=>step(
     id,PHASE_TITLES[id],
     purposes[id].join(" · "),descriptions[id],purposes[id],requirements[id]
@@ -328,8 +346,8 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
   return {
     schemaVersion:"dis-implementation-journey-v1",
     caseId:program.caseId,question:program.question,site:source,
-    researchState:"DRAFT_DESIGN_WITH_GAPS",currentRecommendedPhase:"ORIENT",
-    nodes,systemicModel,logicModel,crossSiteTransport,
+    researchState:"DRAFT_DESIGN_WITH_GAPS",currentRecommendedPhase:"STELLAR_1",
+    nodes,stellarOne,systemicModel,logicModel,crossSiteTransport,
     communicationTracks:cancerCase?[
       {audience:"Affected communities and patient representatives",purpose:"Co-create problem framing, accessible information and decisions",feedback:"Consent-based listening sessions, comprehension and dissent",approval:"NOT_OBTAINED"},
       {audience:"Clinic/health system and navigators",purpose:"Align clinical pathways, safe care and operational workload",feedback:"Workflow and capacity review with clinical oversight",approval:"NOT_OBTAINED"},
