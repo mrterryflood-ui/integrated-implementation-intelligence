@@ -25,8 +25,8 @@ export type WorkflowNode={
   claimOfCompletion:false;actionAuthorized:false;
 };
 export type SALPModel={
-  method:"SYSTEMIC_ANCHORS_AND_LEVERAGE_POINTS";
-  establishedInterpretation:"Systemic Anchors and Leverage Points (SALP)";
+  method:"STRUCTURAL_ANCHOR_AND_LEVERAGE_PROTOCOL";
+  establishedInterpretation:"Structural Anchor and Leverage Protocol (SALP)";
   rPliceSequence:readonly ["Recognize","Position","Leverage","Integrate","Consolidate"];
   identifiedAnchors:string[];leverageQuestions:string[];
   powerAndIncentiveQuestions:string[];fidelityMeasures:string[];
@@ -257,8 +257,8 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
     purposes[id].join(" · "),descriptions[id],purposes[id],requirements[id]
   ));
   const systemicModel:SALPModel={
-    method:"SYSTEMIC_ANCHORS_AND_LEVERAGE_POINTS",
-    establishedInterpretation:"Systemic Anchors and Leverage Points (SALP)",
+    method:"STRUCTURAL_ANCHOR_AND_LEVERAGE_PROTOCOL",
+    establishedInterpretation:"Structural Anchor and Leverage Protocol (SALP)",
     rPliceSequence:["Recognize","Position","Leverage","Integrate","Consolidate"],
     identifiedAnchors:[],
     leverageQuestions:[
