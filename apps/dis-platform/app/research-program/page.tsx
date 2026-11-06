@@ -3,15 +3,18 @@ import {useMemo,useState} from "react";
 import Link from "next/link";
 import {buildResearchProgram,type SiteKey} from "../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../lib/jackson-cancer-case";
+import {buildImplementationJourney} from "../../lib/implementation-journey";
 import "./research-program.css";
 
-type Pane="population"|"contributors"|"implementation"|"evaluation"|"sources";
+type Pane="population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport";
 const PANES:{id:Pane;label:string}[]=[
   {id:"population",label:"Population and measures"},
   {id:"contributors",label:"Competing explanations"},
   {id:"implementation",label:"Implementation pathway"},
   {id:"evaluation",label:"Evaluate and adapt"},
-  {id:"sources",label:"Sources and limits"}
+  {id:"sources",label:"Sources and limits"},
+  {id:"lifecycle",label:"Full DIS lifecycle"},
+  {id:"transport",label:"Transfer to Houston"}
 ];
 const access:Record<string,string>={
   MEASURED_IN_CASE_BASELINE:"Historical aggregate only",
@@ -24,9 +27,12 @@ export default function ResearchProgramStudio(){
   const [question,setQuestion]=useState("How can we prevent late-stage cancer diagnosis?");
   const [target,setTarget]=useState("Jackson, Mississippi");
   const [pane,setPane]=useState<Pane>("population");
+  const [destination,setDestination]=useState("Houston, Texas");
+  const [phase,setPhase]=useState("ORIENT");
   const [copyStatus,setCopyStatus]=useState("");
   const caseSpec=useMemo(()=>mode==="jackson"?jacksonCancerCase(site):unsourcedResearchCase(question,target),[mode,site,question,target]);
   const program=useMemo(()=>buildResearchProgram(caseSpec),[caseSpec]);
+  const journey=useMemo(()=>buildImplementationJourney(program,destination),[program,destination]);
   const copy=async(kind:"markdown"|"json")=>{
     let output="";
     if(kind==="json")output=JSON.stringify(program,null,2);
@@ -50,6 +56,21 @@ export default function ResearchProgramStudio(){
       "## Evaluation",
       program.comparisonDesign,
       ...program.successMeasures.map(s=>"- "+s.role+" "+s.name+": "+s.definition+"; "+s.cadence),
+      "## End-to-end DIS implementation lifecycle",
+      ...journey.nodes.map(n=>"- "+n.id+": "+n.title+"\n  Intent: "+n.why+"\n  Outputs: "+n.outputs.join("; ")+"\n  Acceptance conditions: "+n.gates.map(g=>g.artifact+"; owner "+g.ownerRole+"; reviewer "+g.reviewerRole+"; "+g.acceptance).join(" | ")+"\n  State: "+n.status+" — NOT independently verified"),
+      "## SALP systemic anchors and leverage points",
+      ...journey.systemicModel.leverageQuestions.map(q=>"- "+q),
+      "## SMART theory of change and logic model",
+      "Inputs: "+journey.logicModel.inputs.join("; "),
+      "Activities: "+journey.logicModel.activities.join("; "),
+      "Outputs: "+journey.logicModel.outputs.join("; "),
+      "Short term: "+journey.logicModel.shortTerm.join("; "),
+      "Intermediate: "+journey.logicModel.intermediate.join("; "),
+      "Long term: "+journey.logicModel.longTerm.join("; "),
+      ...journey.logicModel.smartObjectives.map(x=>"- "+x.id+": "+x.specific+"\n  Measure: "+x.measurable+"\n  Baseline: "+x.baseline+"\n  Target: "+x.target+"\n  Owner: "+x.ownerRole),
+      "## Cross-site transportability (not automatic replication)",
+      "Destination: "+journey.crossSiteTransport.destinationSite,
+      ...journey.crossSiteTransport.tests.map(t=>"- "+t.dimension+": "+t.requiredComparison+" — "+t.state),
       "## Unresolved gaps and prohibited inferences",
       ...program.issues.map(x=>"- "+x.code+": "+x.finding+" Required: "+x.nextEvidence),
       "## Limitations",...program.interpretationGuardrails.map(s=>"- "+s),
@@ -178,6 +199,66 @@ export default function ResearchProgramStudio(){
         </article>):<p>No sources have been retrieved or connected for this custom question.</p>}</div>
         <h3>What this program does not establish</h3>
         <ul className="rp-issues">{program.interpretationGuardrails.map(s=><li key={s}>{s}</li>)}</ul>
+      </section>}
+      {pane==="lifecycle"&&<section aria-label="DIS full implementation lifecycle" className="rp-content">
+        <h3>Stage-gated research, implementation, translation and scale-up</h3>
+        <p>The sequence below is generated from the case. Each phase defines what to investigate, the work product, responsible role and acceptance requirement. <strong>No stage is reported executed until an independent record and authorized human approval exist.</strong></p>
+        <div className="rp-overview">
+          <div><span>Configured phases</span><strong>{journey.nodes.length}</strong></div>
+          <div><span>Actual completed</span><strong>{journey.acceptance.stagesActuallyCompleted}</strong></div>
+          <div><span>Next phase</span><strong>{journey.currentRecommendedPhase}</strong></div>
+          <div><span>Human sign-offs</span><strong>Not yet obtained</strong></div>
+        </div>
+        <div className="rp-stage-grid">{journey.nodes.map((node,i)=><button key={node.id} type="button" className={phase===node.id?"rp-stage active":"rp-stage"} aria-pressed={phase===node.id} onClick={()=>setPhase(node.id)}><small>{String(i+1).padStart(2,"0")}</small><strong>{node.title}</strong><span>{node.status.replaceAll("_"," ").toLowerCase()}</span></button>)}</div>
+        {journey.nodes.filter(n=>n.id===phase).map(node=><article key={node.id} className="rp-focus">
+          <span className="rp-small-code">STAGE {node.id} · NO ACTION AUTHORIZED</span><h4>{node.title}</h4>
+          <p>{node.why}</p><p><b>Required outputs:</b> {node.outputs.join("; ")}</p>
+          {node.gates.map(g=><div key={g.id} className="rp-stage-gate"><strong>{g.question}</strong>
+            <p><b>Evidence artifact:</b> {g.artifact}</p>
+            <p><b>Delivery owner:</b> {g.ownerRole} · <b>Independent reviewer:</b> {g.reviewerRole}</p>
+            <p><b>Closure:</b> {g.acceptance}</p>
+            <small>No externally verified proof or owner acceptance recorded in this case.</small>
+          </div>)}
+        </article>)}
+        <h3>SALP: systemic anchors, leverage points, governance and fidelity</h3>
+        <p>SALP is used here as <strong>Systemic Anchors and Leverage Points</strong>. Its RPLICE sequence is <strong>{journey.systemicModel.rPliceSequence.join(" → ")}</strong>. These are research-method stages, not evidence that an actual community system has been changed.</p>
+        <div className="rp-card-grid">
+          <article className="rp-card"><h4>What must be investigated?</h4><ul>{journey.systemicModel.leverageQuestions.map(q=><li key={q}>{q}</li>)}</ul></article>
+          <article className="rp-card"><h4>Power, institutions and adoption</h4><ul>{journey.systemicModel.powerAndIncentiveQuestions.map(q=><li key={q}>{q}</li>)}</ul></article>
+        </div>
+        <h3>SMART logic model — draft outcomes, not invented targets</h3>
+        <div className="rp-model">
+          {([["Inputs",journey.logicModel.inputs],["Activities",journey.logicModel.activities],["Outputs",journey.logicModel.outputs],["Short term",journey.logicModel.shortTerm],["Intermediate",journey.logicModel.intermediate],["Long term",journey.logicModel.longTerm],["Potential harms",journey.logicModel.unintendedEffects]] as const).map(([name,items])=><article key={name}><strong>{name}</strong><ul>{items.map(x=><li key={x}>{x}</li>)}</ul></article>)}
+        </div>
+        <h4>SMART objective development — baselines, targets and timelines require evidence</h4>
+        <div className="rp-card-grid">{journey.logicModel.smartObjectives.map(x=><article key={x.id} className="rp-card">
+          <span className="rp-small-code">{x.id}</span><h4>{x.specific}</h4><p>{x.measurable}</p>
+          <p><b>Target:</b> {x.target} · <b>Baseline:</b> {x.baseline}</p>
+          <p><b>Time:</b> {x.timeBound.replaceAll("_"," ").toLowerCase()}</p>
+          <p><b>Owner role:</b> {x.ownerRole}</p><p><b>Safety/balance:</b> {x.balancingMeasure}</p>
+        </article>)}</div>
+        <h3>Participation, collaboration and communications</h3>
+        <div className="rp-table-wrap"><table><thead><tr><th>Role</th><th>Accountability</th><th>Participation</th></tr></thead><tbody>{journey.collaborationRoles.map(x=><tr key={x.role}><td>{x.role}</td><td>{x.responsibility}</td><td>{x.participationState.replaceAll("_"," ").toLowerCase()}</td></tr>)}</tbody></table></div>
+        <div className="rp-card-grid">{journey.communicationTracks.map(x=><article className="rp-card" key={x.audience}><h4>{x.audience}</h4><p>{x.purpose}</p><p><b>Feedback:</b> {x.feedback}</p><p><b>Authorization:</b> Not obtained; no messages sent</p></article>)}</div>
+        <h3>Adaptive learning and sustainment</h3><ol>{journey.learningLoop.map(x=><li key={x}>{x}</li>)}</ol>
+      </section>}
+      {pane==="transport"&&<section aria-label="Cross-site EBI transferability" className="rp-content">
+        <h3>Same EBI name ≠ demonstrated benefit in a different city</h3>
+        <p>Before applying an intervention from Jackson to Houston, DIS rechecks the actual local mechanism, population, service capacity and implementation environment. These inputs are currently <strong>not measured for the destination</strong>.</p>
+        <label className="rp-field"><span>Proposed destination (no data automatically retrieved)</span>
+          <input value={destination} maxLength={120} onChange={e=>setDestination(e.target.value)} placeholder="Houston, Texas"/>
+        </label>
+        <div className="rp-warning"><strong>Transfer decision:</strong> {journey.crossSiteTransport.decision.replaceAll("_"," ").toLowerCase()}. No automatic copying, agency contact, clinical recommendation or scale-up is authorized.</div>
+        <p><strong>Candidate:</strong> {journey.crossSiteTransport.candidateEbi}</p>
+        <p><strong>Core function under test:</strong> {journey.crossSiteTransport.originalCoreFunction}</p>
+        <h4>Context checks before a local pilot</h4>
+        <div className="rp-table-wrap"><table><thead><tr><th>Dimension</th><th>Source-site knowledge</th><th>Destination validation needed</th><th>Status</th></tr></thead><tbody>
+          {journey.crossSiteTransport.tests.map(t=><tr key={t.dimension}><td><strong>{t.dimension}</strong></td><td>{t.jacksonEvidence}</td><td>{t.requiredComparison}</td><td>{t.state.replaceAll("_"," ").toLowerCase()}</td></tr>)}
+        </tbody></table></div>
+        <h4>Adapt form, protect mechanism, independently evaluate results</h4>
+        <ul>{journey.crossSiteTransport.adaptableDeliveryForms.map(x=><li key={x}>{x}</li>)}</ul>
+        <p>{journey.crossSiteTransport.recommendation}</p>
+        <p className="rp-subtle">No Houston city or Harris County cancer rates are generated from the Jackson sources. Each site requires fresh source, population, causal and delivery checks before conclusions or action.</p>
       </section>}
     </section>
     <footer className="rp-footer">
