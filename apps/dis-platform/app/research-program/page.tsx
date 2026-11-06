@@ -113,7 +113,7 @@ export default function ResearchProgramStudio(){
       <div className="rp-kicker">DIS · RESEARCH TO IMPLEMENTATION</div>
       <h1>Understand the population. Investigate the causes. Test what works.</h1>
       <p>An evidence-first workflow for turning a public-health question into a structured, testable research and implementation program. Not a clinical decision system or an automatic causal diagnosis.</p>
-      <p><Link href="/research-program/exposome">Explore environmental exposures, cancer incidence and GIS research →</Link></p>
+      <p><Link href="/research-program/exposome">Explore environmental exposures, cancer incidence and GIS research →</Link> <span> · </span><Link href="/research-program/national-cancers">Compare three cancers across all 50 states →</Link></p>
       <div className="rp-warning" role="note"><strong>Research-stage program · Public aggregate evidence only.</strong> Local causes, patient outcomes, clinical decisions, and improved late-stage detection have not been established by this demonstration. Do not enter protected information.</div>
     </header>
     <section className="rp-case" aria-label="Research question and geography">
