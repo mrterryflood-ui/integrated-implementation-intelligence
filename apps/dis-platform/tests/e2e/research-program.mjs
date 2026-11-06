@@ -61,6 +61,13 @@ for(const [label,engine,device] of [
 
   await page.getByRole("combobox",{name:"Rehearse a possible result (not a recorded outcome)"}).selectOption("FAILURE");
   await page.getByText(/Did the intervention fail to reach people/i).first().waitFor();
+  // A reported outcome is never accepted without an actual source/denominator and owner.
+  await page.getByRole("button",{name:"Review checkpoint evidence locally"}).click();
+  await page.getByText(/NO ACTUAL MEASURES/i).first().waitFor();
+  await page.getByText(/Core-function change executed:/i).waitFor();
+  await page.getByRole("combobox",{name:"Reported checkpoint outcome"}).selectOption("UNINTENDED_HARM");
+  await page.getByRole("button",{name:"Review checkpoint evidence locally"}).click();
+  await page.getByText(/SAFETY SIGNAL REQUIRES HUMAN/i).first().waitFor();
   await page.getByRole("button",{name:"Transfer to Houston"}).click();
   await page.getByText(/hold pending local adaptation and validation/i).waitFor();
   const project=page.getByRole("combobox",{name:"Research scenario"});
