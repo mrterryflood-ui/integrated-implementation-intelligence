@@ -89,6 +89,27 @@ for(const [name,engine,profile]of [
    await importPanel.getByRole('button',{name:'Import into evidence review',exact:true}).click();
    await page.getByRole('link',{name:'Browser source '+suffix,exact:true}).waitFor({state:'visible'});
   }
+  // The method studio is attached to the existing Council journey and runs
+  // entirely in the client; no external AI consent, login, or research transfer.
+  await page.getByRole('tab',{name:'3. Council review',exact:true}).click();
+  const methodPanel=page.locator('[data-testid="dis-inquiry-workflow"]');
+  await methodPanel.locator('summary').first().click();
+  await methodPanel.getByRole('heading',{name:/DIS Inquiry Method Studio/}).waitFor();
+  await methodPanel.getByRole('button',{name:'Assess investigation method locally'}).click();
+  const methodResult=methodPanel.getByRole('region',{name:'DIS method assessment'});
+  await methodResult.waitFor({state:'visible'});
+  await methodResult.getByText(/No claim is independently validated or authorized/).waitFor();
+  const question=methodPanel.locator('details.research-import').first();
+  await question.locator('summary').click();
+  await methodPanel.getByLabel('The underlying phenomenon, not a convenient indicator').fill('Synthetic phenomenon: service access, not a billing count');
+  await methodPanel.getByLabel('Unconsidered or unresolved possibilities (one per line)').fill('Unknown causes remain; a missing signal is not proof of absence');
+  const hypotheses=methodPanel.locator('details.research-import').nth(1);
+  await hypotheses.locator('summary').click();
+  await methodPanel.getByLabel('Explanation 1',{exact:true}).fill('An apparent change may reflect case-mix and coding');
+  await methodPanel.getByLabel('Falsifier 1 — observation that challenges it').fill('Independent coding review shows identical case definitions');
+  await methodPanel.getByRole('button',{name:'Add competing explanation'}).click();
+  await methodPanel.getByLabel('Explanation 2',{exact:true}).fill('A real access change may have occurred');
+  await methodResult.getByText(/No claim is independently validated or authorized/).waitFor();
   await page.getByRole('tab',{name:'4. Design & deliver',exact:true}).click();
   const sourceSummary=page.getByText('Sources available for this draft',{exact:true});await sourceSummary.click();
   const sourceRegister=sourceSummary.locator('..');
@@ -106,7 +127,7 @@ for(const [name,engine,profile]of [
   assert.ok(widths.scroll<=widths.client+3,'page fits the viewport after source editing');
   await refs.scrollIntoViewIfNeeded();await page.screenshot({path:join(out,'operating-contract-'+name+'.png'),fullPage:false});
   receipts.push({device:name,status:'PASS',contractSha256:contract.sha256,sourceRevision:process.env.GITHUB_SHA||'LOCAL_WORKING_TREE',
-   checks:['served contract metadata','public standard retrieved with two verified SHA-256 documents',...(name==='desktop-keyboard'?['initial input waits for editor readiness']:[]),'keyboard or touch draft entry','sequential multi-ID typing preserves text','unknown citation blocks Markdown','source limitation explanation','actual draft download','successive research imports retain distinct IDs and export',...(identityDenialChecked?['public identity denial']:[]),'no model call','no page error','viewport fit'],
+   checks:['served contract metadata','public standard retrieved with two verified SHA-256 documents',...(name==='desktop-keyboard'?['initial input waits for editor readiness']:[]),'keyboard or touch draft entry','sequential multi-ID typing preserves text','unknown citation blocks Markdown','source limitation explanation','actual draft download','successive research imports retain distinct IDs and export','local inquiry method and competing-explanation editor exercised',...(identityDenialChecked?['public identity denial']:[]),'no model call','no page error','viewport fit'],
    identityDenialChecked,authenticatedAcceptance:false,modelComplianceVerified:false,realOutcomeMeasured:false});
  }catch(error){
   const dimensions=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})).catch(()=>null);
