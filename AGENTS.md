@@ -36,7 +36,7 @@ For material multi-source decisions, load `docs/dis/FEDERATED-EVIDENCE-AND-DECIS
 
 ## Shared, retrievable DIS standard for authorized agents
 
-The read-only discovery endpoint `GET https://dis-authenticated-platform.vercel.app/api/dis/standard` publishes two canonical public standards, with versions, SHA-256 hashes and exact content. The owner-controlled adoption process is `docs/dis/EXTERNAL-AGENT-ADOPTION-PROTOCOL.md`. A consumer MUST independently verify a pinned expected digest, choose an authorized instruction-loading mechanism, and record exact-revision behavioral tests and a per-agent receipt before claiming adoption. This endpoint does **not** change ChatGPT's global system prompt, Memory, any outside tenant or agent that has not explicitly integrated it. Do not weaken private data, security or consequence authority in the name of interoperability.
+The read-only discovery endpoint `GET https://dis-authenticated-platform.vercel.app/api/dis/standard` publishes three canonical public standards, including the stack-agnostic engineering protocol, with versions, SHA-256 hashes and exact content. The owner-controlled adoption process is `docs/dis/EXTERNAL-AGENT-ADOPTION-PROTOCOL.md`. A consumer MUST independently verify a pinned expected digest, choose an authorized instruction-loading mechanism, and record exact-revision behavioral tests and a per-agent receipt before claiming adoption. This endpoint does **not** change ChatGPT's global system prompt, Memory, any outside tenant or agent that has not explicitly integrated it. Do not weaken private data, security or consequence authority in the name of interoperability.
 
 ## Stack-agnostic engineering inquiry — diagnose before coding
 
