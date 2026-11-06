@@ -9,7 +9,7 @@ const sha=(s:string)=>createHash('sha256').update(s,'utf8').digest('hex');
 test('public standard points to canonical GitHub sources and validates exact UTF-8 text hashes',()=>{
   const m=publicAgentStandard();
   assert.equal(m.schemaVersion,'dis-agent-standard-manifest-v1');
-  assert.equal(m.documents.length,2);
+  assert.equal(m.documents.length,3);
   assert.equal(m.governingScope,'PUBLIC_DOCUMENTS_ONLY');
   assert.equal(m.publication,'SERVER_VERIFIED_CONTENT_COPY');
   assert.equal(m.behaviorVerified,false);
@@ -24,6 +24,7 @@ test('public standard points to canonical GitHub sources and validates exact UTF
   }
   assert.equal(m.documents[0].version,'2026-11-05.1');
   assert.equal(m.documents[1].version,'1.0');
+  assert.equal(m.documents[2].version,'0.1.0');
 });
 test('manifest makes no claim of global ChatGPT memory/system edit or automatic adoption',()=>{
   const m=publicAgentStandard();
@@ -45,7 +46,7 @@ test('GET serves public only, immutable source integrity metadata and no false v
   const body=await response.json();
   assert.equal(body.behaviorVerified,false);
   assert.equal(body.otherAgentsAdopted,false);
-  assert.equal(body.documents.length,2);
+  assert.equal(body.documents.length,3);
   assert.equal(response.headers.get('x-dis-standard-sha256'),body.documents[0].sha256);
   assert.equal(response.headers.get('x-dis-standard-version'),body.documents[0].version);
   for(const doc of body.documents)assert.equal(sha(doc.content),doc.sha256);
@@ -67,4 +68,9 @@ test('existing Council standard and public shared manifest agree without redefin
   assert.match(f.content,/federated/i);
   assert.match(f.content,/Do not conflate|count repeated|duplicate/i);
   assert.match(f.content,/Human authorization/);
+  const engineering=manifest.documents[2];
+  assert.equal(engineering.id,'dis-stack-agnostic-engineering');
+  assert.match(engineering.content,/diagnose before coding/i);
+  assert.match(engineering.content,/IRON-ENG-001/);
+  assert.match(engineering.content,/independent and adversarial/i);
 });

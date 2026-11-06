@@ -7,9 +7,10 @@
 import {createHash} from 'node:crypto';
 import {DIS_OPERATING_CONTRACT} from './generated/dis-operating-contract';
 import {DIS_FEDERATED_STANDARD} from './generated/dis-federated-standard';
+import {DIS_ENGINEERING_STANDARD} from './generated/dis-engineering-standard';
 
 export type PublicStandardDocument={
-  id:'dis-gpt-operating-contract'|'dis-federated-evidence-standard';
+  id:'dis-gpt-operating-contract'|'dis-federated-evidence-standard'|'dis-stack-agnostic-engineering';
   version:string;sourcePath:string;sha256:string;content:string;
   contentType:'text/markdown';
 };
@@ -27,17 +28,23 @@ export function publicAgentStandard(){
     sha256:digest(DIS_FEDERATED_STANDARD.text),
     content:DIS_FEDERATED_STANDARD.text,contentType:'text/markdown'
   };
+  const engineering:PublicStandardDocument={
+    id:'dis-stack-agnostic-engineering',version:DIS_ENGINEERING_STANDARD.version,
+    sourcePath:DIS_ENGINEERING_STANDARD.sourcePath,
+    sha256:digest(DIS_ENGINEERING_STANDARD.text),
+    content:DIS_ENGINEERING_STANDARD.text,contentType:'text/markdown'
+  };
   if(digest(operating.content)!==operating.sha256)
     throw new Error('DIS standard integrity check failed; no policy manifest may be served.');
   return {
     schemaVersion:'dis-agent-standard-manifest-v1' as const,
-    standard:'DIS · Dynamic / Diagnostic Implementation Science — federated evidence and decision assurance',
+    standard:'DIS · Dynamic / Diagnostic Implementation Science — federated evidence, inquiry, and engineering assurance',
     governingScope:'PUBLIC_DOCUMENTS_ONLY' as const,
     publication:'SERVER_VERIFIED_CONTENT_COPY' as const,
     behaviorVerified:false as const,
     otherAgentsAdopted:false as const,
     userPermissionOrOperationalAuthorityGranted:false as const,
-    appliesWhen:'Consequential multi-source research, planning, implementation, governance, product decisions and review of uncertain or shifting measures; proportionate to stakes.',
+    appliesWhen:'Consequential multi-source research, planning, implementation, app development, code release, governance, and review of uncertain or shifting measures; proportionate to stakes.',
     usePolicy:[
       'Obtain the expected SHA-256 from an independently trusted source and compare it with the hash of each downloaded document. A digest returned in the same HTTP response alone does not authenticate the server.',
       'Explicitly adopt each document in an agent integration controlled by its authorized owner. Merely fetching a document does not change an agent system prompt, ChatGPT memory, or application behavior.',
@@ -45,7 +52,7 @@ export function publicAgentStandard(){
       'Trace requested decision to fit-for-purpose measurements, compatible geography/time, source independence, uncertainty, counterfactuals, unintended consequences and day-after-success stewardship.',
       'Document the applied document ID/version/digest, exact consuming application/revision, independent tests, permission, observed output, limitations and rollback before reporting adoption.'
     ],
-    documents:[operating,federation],
+    documents:[operating,federation,engineering],
     verification:{
       algorithm:'SHA-256',
       formula:'sha256(exact UTF-8 content bytes) for each documents[].content',
@@ -55,7 +62,7 @@ export function publicAgentStandard(){
     adoption:{
       status:'PUBLISHED_FOR_AUTHORIZED_CONSUMERS_NOT_AUTO_INSTALLED',
       required:['Choose a compatible agent with an authorized owner','Verify each source digest against an independently trusted pin',
-        'Load both documents into that agent using its supported instructions mechanism',
+        'Load the relevant documents into that agent using its supported instructions mechanism',
         'Test with known good and conflicting evidence, duplicated sources, invalid metrics, safety and human-authority cases',
         'Record an exact consumer application commit/receipt; monitor and re-approve later revisions']
     },

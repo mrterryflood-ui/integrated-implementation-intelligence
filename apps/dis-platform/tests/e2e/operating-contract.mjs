@@ -37,7 +37,7 @@ for(const [name,engine,profile]of [
   assert.equal(external.status(),200,'shared agent standard has a stable read-only route');
   const publicManifest=await external.json();
   assert.equal(publicManifest.schemaVersion,'dis-agent-standard-manifest-v1');
-  assert.equal(publicManifest.documents.length,2);
+  assert.equal(publicManifest.documents.length,3);
   assert.equal(publicManifest.otherAgentsAdopted,false);
   assert.equal(publicManifest.behaviorVerified,false);
   assert.equal(publicManifest.documents[0].version,contract.version);
@@ -48,6 +48,8 @@ for(const [name,engine,profile]of [
   }
   const federation=readFileSync(new URL('../../../../docs/dis/FEDERATED-EVIDENCE-AND-DECISION-STANDARD.md',import.meta.url),'utf8');
   assert.equal(publicManifest.documents[1].content,federation,'second public standard is canonical');
+  const engineering=readFileSync(new URL('../../../../docs/dis/STACK-AGNOSTIC-ENGINEERING-INQUIRY-PROTOCOL.md',import.meta.url),'utf8');
+  assert.equal(publicManifest.documents[2].content,engineering,'third engineering method standard is canonical');
 
   const response=await page.goto(base+'/?focus=research-universities#consult',{waitUntil:name==='desktop-keyboard'?'commit':'domcontentloaded'});
   assert.equal(response?.status(),200);
