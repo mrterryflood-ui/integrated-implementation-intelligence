@@ -16,18 +16,24 @@ export type DddResult = {
 };
 export function assessDDD(rows:readonly DddCell[]=[]):DddResult {
   const missing:string[]=[];const keys=new Map<string,DddCell>();
-  for(const r of rows){
+  const valid:DddCell[]=[];
+  for(const candidate of rows){
+    const r=candidate as DddCell|null;
+    if(!r||typeof r!=="object"||typeof r.treatment!=="boolean"||typeof r.post!=="boolean"||
+        typeof r.focusGroup!=="boolean"||!Number.isFinite(r.value)||!Number.isInteger(r.n)||r.n<=0||
+        typeof r.unit!=="string"||!r.unit.trim()||typeof r.populationDefinition!=="string"||!r.populationDefinition.trim()){
+      missing.push("Each DDD cell requires boolean dimensions, finite observed value, positive sample count, defined unit and population.");
+      continue;
+    }
     const k=[Number(r.treatment),Number(r.post),Number(r.focusGroup)].join("");
     if(keys.has(k))missing.push("Duplicate DDD cell: "+k);
-    keys.set(k,r);
-    if(!Number.isFinite(r.value)||!Number.isInteger(r.n)||r.n<=0)
-      missing.push("Each DDD cell must have an observed finite value and positive sample count.");
+    keys.set(k,r);valid.push(r);
   }
   for(let t=0;t<2;t++)for(let p=0;p<2;p++)for(let g=0;g<2;g++)
     if(!keys.has(""+t+p+g))missing.push("Missing treatment="+t+", post="+p+", focus="+g);
-  const units=new Set(rows.map(x=>x.unit)),populations=new Set(rows.map(x=>x.populationDefinition));
-  if(units.size!==1||![...units][0]?.trim())missing.push("Common measurement unit not established.");
-  if(populations.size!==1||![...populations][0]?.trim())missing.push("Comparable population frame not established.");
+  const units=new Set(valid.map(x=>x.unit)),populations=new Set(valid.map(x=>x.populationDefinition));
+  if(units.size!==1||!([...units][0]?.trim()))missing.push("Common measurement unit not established.");
+  if(populations.size!==1||!([...populations][0]?.trim()))missing.push("Comparable population frame not established.");
   if(missing.length)return{status:"INSUFFICIENT_PANEL",estimate:null,unit:null,missing,
     interpretation:"County cross-sections and hypotheses do not provide a valid DDD estimate. Require a treatment/comparator, pre/post periods and a subgroup split."};
   const change=(t:number,g:number)=>keys.get(""+t+1+g)!.value-keys.get(""+t+0+g)!.value;
