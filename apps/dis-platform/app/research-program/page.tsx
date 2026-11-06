@@ -109,7 +109,7 @@ export default function ResearchProgramStudio(){
   };
   return <main className="rp-root">
     <header className="rp-head">
-      <Link className="rp-back" href="/">← Dynamic Intelligence</Link>
+      <Link className="rp-back" href="/">← Dynamic Intelligence</Link> <Link href="/population-health-atlas">Population Health GIS · National county comparisons</Link>
       <div className="rp-kicker">DIS · RESEARCH TO IMPLEMENTATION</div>
       <h1>Understand the population. Investigate the causes. Test what works.</h1>
       <p>An evidence-first workflow for turning a public-health question into a structured, testable research and implementation program. Not a clinical decision system or an automatic causal diagnosis.</p>
@@ -329,7 +329,7 @@ export default function ResearchProgramStudio(){
       <div className="rp-buttons">
         <button type="button" onClick={()=>void copy("markdown")}>Copy research and implementation brief</button>
         <button type="button" onClick={()=>void copy("json")}>Copy structured research case</button>
-        <Link href="/#consult">Continue in DIS Council</Link>
+        <Link href="/#consult">Continue in DIS Council</Link><Link href="/population-health-atlas">Inspect cancer prevention and environmental context in GIS</Link>
       </div>
       <p role="status">{copyStatus}</p>
       <p className="rp-subtle">No source calls, accounts, model requests, database writes or clinical actions are made by this demonstration. Publicly reported aggregate observations and investigation hypotheses remain separate.</p>
