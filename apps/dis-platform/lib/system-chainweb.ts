@@ -271,8 +271,9 @@ const crossGeneric:(domain:"BUSINESS"|"SOFTWARE"|"GENERAL")=>Array<WebNode>=(dom
     "What comparator, denominator, instrument, timeframe and adverse outcome establish meaningful improvement?")
 ];
 export function buildChainweb(program:ResearchProgram,domain:"HEALTH"|"BUSINESS"|"SOFTWARE"|"GENERAL"="HEALTH",targetOverride?:string):Chainweb{
-  const nodes=domain==="HEALTH"?jacksonNodes(program):crossGeneric(domain==="GENERAL"?"GENERAL":domain);
-  const edges=domain==="HEALTH"?JACKSON_EDGES:[
+  const sourceBoundJackson=domain==="HEALTH"&&program.caseId.startsWith("jackson-ms-late-stage-");
+  const nodes=sourceBoundJackson?jacksonNodes(program):crossGeneric(domain==="SOFTWARE"?"SOFTWARE":domain==="BUSINESS"?"BUSINESS":"GENERAL");
+  const edges=sourceBoundJackson?JACKSON_EDGES:[
     edge("D1","macro-conditions","system-ecosystem","External rules may influence opportunities and operating constraints.",
       "Compare policies and actual business/software changes with dated controls.",
       "Vendor, finance or organization changes may matter more.","Policy history and environment logs"),
@@ -316,15 +317,21 @@ export function buildChainweb(program:ResearchProgram,domain:"HEALTH"|"BUSINESS"
       contextTransferVerified:false,universalRiskOrReadinessScore:false},
     socialSystems:{observed,reported,hypothesized,unmeasured,
       openCrossSystemQuestions:edges.length,verifiedCausalEdges:0},
-    spatialWarnings:[
+    spatialWarnings:sourceBoundJackson?[
       "Hinds County cancer measures cannot be assigned to Jackson city, a census tract, a household or a person.",
       "Jackson city economic/violence aggregates cannot be assigned to Hinds County cancer cases as individual exposures.",
       "Different spatial units, denominators and source instruments require a validated join and aggregation protocol."
+    ]:[
+      "No local-source observations were supplied for this question; do not borrow another city, organization, sector or population baseline.",
+      "Establish original geographic, user, organizational and market/technology boundaries before inference."
     ],
-    temporalWarnings:[
+    temporalWarnings:sourceBoundJackson?[
       "The NCI late-stage cancer observations are historical (2018–2022), whereas ACS context is 2020–2024 and 2025 violence reports cover a different time window.",
       "Temporal co-occurrence or a cross-sectional cluster is insufficient to establish a causal direction; violence and diagnosis changes may have distinct drivers.",
       "Publisher reports of Jackson homicides disagree on the 2025 total (74 vs 75). Resolve source jurisdiction, classification, coverage and reporting dates before any precise comparison."
+    ]:[
+      "Observation time, source retrieval time, policy period and relevant decision time have not been independently established.",
+      "Causal influence, direction and timing require direct, matched and validated evidence."
     ],
     questions:[
       "Which connections are directly observed, which are established in other populations, and which are local hypotheses?",
