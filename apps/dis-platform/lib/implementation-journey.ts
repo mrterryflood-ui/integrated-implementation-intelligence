@@ -9,6 +9,7 @@
  */
 import type {ResearchProgram,StrategyCandidate} from "./research-program";
 import {assessStellarOne,type StellarOneAssessment,type StellarOneInput} from "./stellar-one";
+import {buildLongitudinalAssurance,type SustainmentAssurance} from "./longitudinal-assurance";
 
 export type WorkflowPhase=
   "STELLAR_1"|"ORIENT"|"EVIDENCE"|"POPULATION"|"CAUSES"|"COMMUNITY"|"SALP"|
@@ -71,6 +72,7 @@ export type FullImplementationFlow={
   researchState:"DRAFT_DESIGN_WITH_GAPS";
   currentRecommendedPhase:WorkflowPhase;
   stellarOne:StellarOneAssessment;
+  longitudinal:SustainmentAssurance;
   nodes:WorkflowNode[];
   systemicModel:SALPModel;logicModel:LogicModel;
   crossSiteTransport:TransportabilityReview;
@@ -274,6 +276,7 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
     id,PHASE_TITLES[id],
     purposes[id].join(" · "),descriptions[id],purposes[id],requirements[id]
   ));
+  const longitudinal=buildLongitudinalAssurance(program);
   const systemicModel:SALPModel={
     method:"STRUCTURAL_ANCHOR_AND_LEVERAGE_PROTOCOL",
     establishedInterpretation:"Structural Anchor and Leverage Protocol (SALP)",
@@ -347,7 +350,7 @@ export function buildImplementationJourney(program:ResearchProgram,destinationSi
     schemaVersion:"dis-implementation-journey-v1",
     caseId:program.caseId,question:program.question,site:source,
     researchState:"DRAFT_DESIGN_WITH_GAPS",currentRecommendedPhase:"STELLAR_1",
-    nodes,stellarOne,systemicModel,logicModel,crossSiteTransport,
+    nodes,stellarOne,longitudinal,systemicModel,logicModel,crossSiteTransport,
     communicationTracks:cancerCase?[
       {audience:"Affected communities and patient representatives",purpose:"Co-create problem framing, accessible information and decisions",feedback:"Consent-based listening sessions, comprehension and dissent",approval:"NOT_OBTAINED"},
       {audience:"Clinic/health system and navigators",purpose:"Align clinical pathways, safe care and operational workload",feedback:"Workflow and capacity review with clinical oversight",approval:"NOT_OBTAINED"},
