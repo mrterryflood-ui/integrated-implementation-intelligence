@@ -8,6 +8,7 @@ import StellarOnePanel from "../stellar-one-panel";
 import WholeSystemPanel from "./whole-system-panel";
 import LongitudinalCheckpointPanel from "../longitudinal-checkpoint-panel";
 import type {StellarOneInput} from "../../lib/stellar-one";
+import {RPLICE_HIL_METHODS,buildChainMethodSelection,type RpliceHilMethodId} from "../../lib/chain-method-selection";
 import "./research-program.css";
 
 type Pane="stellar"|"population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport"|"hil";
@@ -38,12 +39,16 @@ export default function ResearchProgramStudio(){
   const [phase,setPhase]=useState("STELLAR_1");
   const [rehearsal,setRehearsal]=useState("SUCCESS");
   const [copyStatus,setCopyStatus]=useState("");
+  const [hilMethods,setHilMethods]=useState<RpliceHilMethodId[]>([]);
+  const toggleMethod=(id:RpliceHilMethodId)=>setHilMethods(previous=>
+    previous.includes(id)?previous.filter(x=>x!==id):[...previous,id]);
   const caseSpec=useMemo(()=>mode==="jackson"?jacksonCancerCase(site):unsourcedResearchCase(question,target),[mode,site,question,target]);
   const program=useMemo(()=>buildResearchProgram(caseSpec),[caseSpec]);
   const journey=useMemo(()=>buildImplementationJourney(program,destination,stellarOverrides),[program,destination,stellarOverrides]);
+  const methodSelection=useMemo(()=>buildChainMethodSelection(journey,hilMethods),[journey,hilMethods]);
   const copy=async(kind:"markdown"|"json")=>{
     let output="";
-    if(kind==="json")output=JSON.stringify({program,journey,provenance:"RESEARCH_DESIGN_NOT_FIELD_VALIDATED",approval:"NOT_AUTHORIZED"},null,2);
+    if(kind==="json")output=JSON.stringify({program,journey,methodSelection,provenance:"RESEARCH_DESIGN_NOT_FIELD_VALIDATED",approval:"NOT_AUTHORIZED"},null,2);
     else output=[
       "# DIS Research-to-Implementation — DRAFT / NOT VALIDATED",
       "Question: "+program.question,
@@ -76,6 +81,15 @@ export default function ResearchProgramStudio(){
       ...journey.stellarOne.questions.map(x=>"- "+x.code+": "+x.question+"; proof "+x.proofNeeded),
       "## End-to-end DIS implementation lifecycle",
       ...journey.nodes.map(n=>"- "+n.id+": "+n.title+"\n  Intent: "+n.why+"\n  Outputs: "+n.outputs.join("; ")+"\n  Acceptance conditions: "+n.gates.map(g=>g.artifact+"; owner "+g.ownerRole+"; reviewer "+g.reviewerRole+"; "+g.acceptance).join(" | ")+"\n  State: "+n.status+" — NOT independently verified"),
+      "## HIL-selected RPLICE methods and connected chain-web",
+      "Human-declared selection, not execution, institutional consent or intervention approval: "+methodSelection.state,
+      ...methodSelection.selectedMethods.map(m=>"- "+m.label+" — RPLICE owns "+(m.mcpTool||"specialist appraisal; no confirmed MCP execution method")+"; scope: "+m.chainQuestion+"; evidence requirements: "+m.stageEvidence.map(g=>g.phase+" / "+g.artifact).join(" | ")),
+      "Chain center: "+(methodSelection.chainWeb.center||"not independently confirmed"),
+      "Declared nodes: "+methodSelection.chainWeb.nodes.length+"; edges: "+methodSelection.chainWeb.edges.length+"; independently verified: "+methodSelection.chainWeb.verifiedEdges,
+      ...methodSelection.chainWeb.edges.map(e=>"- "+e.from+" "+e.relation+" "+e.to+" — source: "+(e.evidenceRef||"NOT VERIFIED")),
+      "Source and destination: "+methodSelection.chainWeb.sourceSite+" → "+methodSelection.chainWeb.destinationSite,
+      ...methodSelection.transport.requiredLocalComparisons.map(x=>"- Reassess "+x.dimension+": "+x.proofNeeded),
+      ...Object.entries(methodSelection.temporal).map(([period,question])=>"- "+period+": "+question),
       "## SALP systemic anchors and leverage points",
       ...journey.systemicModel.leverageQuestions.map(q=>"- "+q),
       "## SMART theory of change and logic model",
@@ -247,6 +261,37 @@ export default function ResearchProgramStudio(){
             <small>No externally verified proof or owner acceptance recorded in this case.</small>
           </div>)}
         </article>)}
+        <section className="rp-focus" aria-label="Human-selected RPLICE methodologies and chain-web context">
+          <h3>Human-in-the-loop method selection · connected chain web</h3>
+          <p>Choose RPLICE specialist approaches for the question and its surrounding system. Selection is yours; DIS recommends an evidence scope, not a mandatory method or an automatic HOLD. No private material is sent to RPLICE by this panel.</p>
+          <div className="rp-card-grid">{RPLICE_HIL_METHODS.map(method=><label className="rp-card" key={method.id}>
+            <span style={{display:"flex",alignItems:"flex-start",gap:9}}>
+              <input type="checkbox" checked={hilMethods.includes(method.id)} onChange={()=>toggleMethod(method.id)} aria-label={"Select "+method.label}/>
+              <strong>{method.label}</strong>
+            </span>
+            <p>{method.contextQuestion}</p>
+            <small>Relevant phases: {method.phases.join(" · ")}</small>
+          </label>)}</div>
+          <p role="status"><b>Method decision:</b> {methodSelection.state.replaceAll("_"," ").toLowerCase()} · {methodSelection.selectedMethods.length} selected. This is a local methodological choice, not a verified partner execution or approval to change operations.</p>
+          {methodSelection.selectedMethods.length>0&&<div className="rp-card-grid">{methodSelection.selectedMethods.map(m=><article className="rp-card" key={m.id}>
+            <h4>{m.label}</h4><p><b>Provider:</b> RPLICE · <b>Execution:</b> not attempted</p>
+            <p><b>Question across the chain:</b> {m.chainQuestion}</p>
+            <details><summary>Evidence needed at connected lifecycle stages</summary><ul>{m.stageEvidence.map((g,i)=><li key={g.phase+i}><strong>{g.phase}</strong> — {g.artifact}. Owner: {g.ownerRole}. Acceptance: {g.acceptance}</li>)}</ul></details>
+          </article>)}</div>}
+          <h4>Chain-web context before recommending action</h4>
+          <p><b>Center:</b> {methodSelection.chainWeb.center||"not verified"} · <b>Nodes:</b> {methodSelection.chainWeb.nodes.length} · <b>Declared edges:</b> {methodSelection.chainWeb.edges.length} · <b>Independently verified edges:</b> {methodSelection.chainWeb.verifiedEdges}. Map upstream, downstream, intersecting, parallel and apparently disconnected effects without converting associations into causes.</p>
+          <details><summary>Inspect declared chain connections and unmapped systems</summary>
+            <ul>{methodSelection.chainWeb.edges.map((e,i)=><li key={i}>{e.from} → {e.to}: {e.relation}. {e.evidenceRef?"Evidence lead: "+e.evidenceRef:"No independently verified relationship source"} {e.explanation||""}</li>)}</ul>
+            {methodSelection.chainWeb.edges.length===0&&<p>No evidence-backed chain edges supplied yet. A missing link is an investigation item, not proof of no relationship.</p>}
+            <p><b>Unmapped or parallel declared nodes:</b> {methodSelection.chainWeb.unresolvedNodes.join(", ")||"None declared; completeness is not established."}</p>
+          </details>
+          <h4>Reassess the chain before transfer to another setting</h4>
+          <p><b>{methodSelection.chainWeb.sourceSite} → {methodSelection.chainWeb.destinationSite}</b>: the same intervention label does not mean the system, mechanism, capacity, stakeholders or results are the same.</p>
+          <details><summary>Destination-specific evidence needed</summary><ul>{methodSelection.transport.requiredLocalComparisons.map(x=><li key={x.dimension}>{x.dimension}: {x.proofNeeded} ({x.state.replaceAll("_"," ").toLowerCase()})</li>)}</ul></details>
+          <h4>Temporal chain and second-order effects</h4>
+          <ol>{Object.entries(methodSelection.temporal).map(([period,question])=><li key={period}><strong>{period.replaceAll(/([A-Z])/g," $1")}:</strong> {question}</li>)}</ol>
+          <p className="rp-subtle">Method selection, analytical execution, evidence acceptance, participation and operational authorization are separate events. RPLICE owns its methods. Current state: no remote tool invocation, no clinical action, no signed approval and no verified chain causation.</p>
+        </section>
         <h3>SALP: systemic anchors, leverage points, governance and fidelity</h3>
         <p>SALP is used here as <strong>Structural Anchor and Leverage Protocol</strong>. Its RPLICE sequence is <strong>{journey.systemicModel.rPliceSequence.join(" → ")}</strong>. These are research-method stages, not evidence that an actual community system has been changed.</p>
         <div className="rp-card-grid">
