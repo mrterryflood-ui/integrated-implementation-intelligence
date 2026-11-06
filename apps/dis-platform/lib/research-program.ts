@@ -203,6 +203,7 @@ export function buildResearchProgram(spec:ResearchProgramSpec):ResearchProgram{
     comparisonDesign:isCancerCase?"Predefine cohort and outcome, then assess a feasible contemporaneous matched comparison, staggered pragmatic rollout, or authorized cluster assignment; address time trends, case mix, missingness, contamination, power, subgroup effects and cost. Descriptive pre/post is not causal proof.":"Define an outcome, baseline and estimand, choose an ethical matched, randomized, interrupted-time-series or other justified design; evaluate uncertainty, selection, incentives, context changes and unintended effects. Simple pre/post is not proof.",
     interpretationGuardrails:isCancerCase?[
       "City, county, metropolitan, ZIP and census-tract estimates must be mapped to original boundaries; do not relabel a Hinds County number as Jackson city.",
+      "Every cancer site needs its own stage definition, eligibility frame, original source methods, and separately validated clinical outcome; a site-specific effect must not be inferred from another cancer.",
       "Late-stage incidence and percentage of incident cancers diagnosed late are not interchangeable denominators.",
       "Breast, colorectal, cervical, prostate and lung cancers differ in screening eligibility, diagnostic pathways and stage definitions; never pool by convenience.",
       "A modeled PLACES screening estimate is not a directly observed screening count and is not suitable for detecting the effect of a local intervention.",
