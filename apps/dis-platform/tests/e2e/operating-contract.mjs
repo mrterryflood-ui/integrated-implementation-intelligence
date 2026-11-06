@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {createHash} from 'node:crypto';
 import {chromium,webkit,devices} from 'playwright';
 import {mkdirSync,readFileSync,writeFileSync} from 'node:fs';
 import {join} from 'node:path';
@@ -32,6 +33,22 @@ for(const [name,engine,profile]of [
   assert.equal(advertised.sha256,contract.sha256);assert.equal(advertised.version,contract.version);
   assert.equal(advertised.behaviorVerified,false,'loaded instructions must not claim observed compliance');
   assert.equal(advertised.text,undefined,'the public receipt does not return instruction text');
+  const external=await context.request.get(base+'/api/dis/standard');
+  assert.equal(external.status(),200,'shared agent standard has a stable read-only route');
+  const publicManifest=await external.json();
+  assert.equal(publicManifest.schemaVersion,'dis-agent-standard-manifest-v1');
+  assert.equal(publicManifest.documents.length,2);
+  assert.equal(publicManifest.otherAgentsAdopted,false);
+  assert.equal(publicManifest.behaviorVerified,false);
+  assert.equal(publicManifest.documents[0].version,contract.version);
+  assert.equal(publicManifest.documents[0].sha256,contract.sha256);
+  for(const doc of publicManifest.documents){
+   const digest=createHash('sha256').update(doc.content,'utf8').digest('hex');
+   assert.equal(digest,doc.sha256,'retrieved standard is byte-consistent');
+  }
+  const federation=readFileSync(new URL('../../../../docs/dis/FEDERATED-EVIDENCE-AND-DECISION-STANDARD.md',import.meta.url),'utf8');
+  assert.equal(publicManifest.documents[1].content,federation,'second public standard is canonical');
+
   const response=await page.goto(base+'/?focus=research-universities#consult',{waitUntil:name==='desktop-keyboard'?'commit':'domcontentloaded'});
   assert.equal(response?.status(),200);
   if(name==='desktop-keyboard'){
@@ -87,7 +104,7 @@ for(const [name,engine,profile]of [
   assert.ok(widths.scroll<=widths.client+3,'page fits the viewport after source editing');
   await refs.scrollIntoViewIfNeeded();await page.screenshot({path:join(out,'operating-contract-'+name+'.png'),fullPage:false});
   receipts.push({device:name,status:'PASS',contractSha256:contract.sha256,sourceRevision:process.env.GITHUB_SHA||'LOCAL_WORKING_TREE',
-   checks:['served contract metadata',...(name==='desktop-keyboard'?['initial input waits for editor readiness']:[]),'keyboard or touch draft entry','sequential multi-ID typing preserves text','unknown citation blocks Markdown','source limitation explanation','actual draft download','successive research imports retain distinct IDs and export',...(identityDenialChecked?['public identity denial']:[]),'no model call','no page error','viewport fit'],
+   checks:['served contract metadata','public standard retrieved with two verified SHA-256 documents',...(name==='desktop-keyboard'?['initial input waits for editor readiness']:[]),'keyboard or touch draft entry','sequential multi-ID typing preserves text','unknown citation blocks Markdown','source limitation explanation','actual draft download','successive research imports retain distinct IDs and export',...(identityDenialChecked?['public identity denial']:[]),'no model call','no page error','viewport fit'],
    identityDenialChecked,authenticatedAcceptance:false,modelComplianceVerified:false,realOutcomeMeasured:false});
  }catch(error){
   const dimensions=await page.evaluate(()=>({client:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth})).catch(()=>null);
