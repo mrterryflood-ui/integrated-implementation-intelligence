@@ -7,7 +7,13 @@ test("ChatGPT plugin MCP initializes and lists tools",async()=>{
  const init:any=await dispatch(request("initialize",{protocolVersion:"2025-06-18"}));
  assert.equal(init.result.serverInfo.name,"dynamic-intelligence-public");
  const list:any=await dispatch(request("tools/list"));
- assert.equal(list.result.tools.length,5);
+ const advertised=new Set(list.result.tools.map((t:any)=>t.name));
+ assert.deepEqual(advertised,new Set([
+   "dis_ecosystem_plan","dis_consultation_plan","dis_select_council",
+   "dis_available_sources","dis_handoff_template",
+   "dis_stellar_one","dis_research_implementation_blueprint"
+ ]));
+ assert.equal(list.result.tools.length,advertised.size);
  assert.ok(list.result.tools.every((t:any)=>t.annotations.readOnlyHint===true));
 });
 test("anonymous MCP never exposes private connector data or mutation tools",async()=>{
