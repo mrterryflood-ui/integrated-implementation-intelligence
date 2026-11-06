@@ -48,3 +48,34 @@ test("bridge refuses a remote response that silently claims validation or drops 
   const bad = async () => new Response(JSON.stringify({result:{state:"SCIENTIFICALLY_VALIDATED",displacement:[],asymmetry:[]}}),{status:200});
   await assert.rejects(compareRpliceParallax({stakeholders:perspectives},{RPLICE_API_KEY:key},bad as typeof fetch),/verifiable output metadata/);
 });
+
+
+test("selected SALP uses authenticated MCP and checks a deterministic provenance envelope", async()=>{
+ const {runSelectedRpliceMcp}=await import("../lib/rplice-adapter");
+ let seen:any;
+ const mock=async (url:RequestInfo|URL,init?:RequestInit)=>{
+  seen={url:String(url),headers:new Headers(init?.headers),body:JSON.parse(String(init?.body))};
+  return new Response(JSON.stringify({jsonrpc:"2.0",id:"dis-hil-selection",result:{
+   content:[{type:"text",text:JSON.stringify({result:{
+    anchors:[{name:"referral capacity",weight:4,sensitivity:3}],sensors:[],center_of_gravity:"referral capacity"
+   },provenance:{model:"deterministic",generated_at:"2026-11-06T12:00:00Z"}})}]}}),{status:200});
+ };
+ const input={method:"SALP" as const,scenario:"Improve care access in site",purpose:"Identify proposed constraints",
+   anchors:[{name:"referral capacity",weight:4,sensitivity:3}]};
+ const out=await runSelectedRpliceMcp(input,{RPLICE_API_KEY:"rplice_"+"a".repeat(64)},mock as typeof fetch);
+ assert.equal(seen.url,"https://www.bettersciencelab.com/api/v1/connect/mcp");
+ assert.equal(seen.body.params.name,"rplice_run_salp");
+ assert.equal(seen.body.params.arguments.anchors.length,1);
+ assert.equal(out.state,"HIL_SELECTED_PRELIMINARY_ANALYSIS");
+});
+test("selected methods fail closed on invalid anchors, absent credentials, or missing provenance",async()=>{
+ const {runSelectedRpliceMcp}=await import("../lib/rplice-adapter");
+ const input={method:"SALP" as const,scenario:"Improve care access in site",purpose:"Identify proposed constraints",
+  anchors:[{name:"Referral",weight:4,sensitivity:3}]};
+ await assert.rejects(runSelectedRpliceMcp(input,{RPLICE_API_KEY:""}),/credential/);
+ await assert.rejects(runSelectedRpliceMcp({...input,anchors:[{name:"bad",weight:18,sensitivity:9}]},
+  {RPLICE_API_KEY:"rplice_"+"a".repeat(64)}),/hypothetical anchors/);
+ const mock=async()=>new Response(JSON.stringify({result:{
+  content:[{type:"text",text:JSON.stringify({result:{anchors:[],sensors:[]}})}]}}),{status:200});
+ await assert.rejects(runSelectedRpliceMcp(input,{RPLICE_API_KEY:"rplice_"+"a".repeat(64)},mock as typeof fetch),/provenance/);
+});
