@@ -40,8 +40,8 @@ test("research-to-implementation covers all phases with no invented implementati
 test("SALP maps systemic anchors and leverage, power and implementation fidelity without claiming causality",()=>{
   const w=design();
   const salp=w.systemicModel;
-  assert.equal(salp.method,"SYSTEMIC_ANCHORS_AND_LEVERAGE_POINTS");
-  assert.match(salp.establishedInterpretation,/Systemic Anchors and Leverage Points/);
+  assert.equal(salp.method,"STRUCTURAL_ANCHOR_AND_LEVERAGE_PROTOCOL");
+  assert.match(salp.establishedInterpretation,/Structural Anchor and Leverage Protocol/);
   assert.deepEqual(salp.rPliceSequence,["Recognize","Position","Leverage","Integrate","Consolidate"]);
   assert.ok(salp.leverageQuestions.some(x=>/smallest feasible change/i.test(x)));
   assert.ok(salp.powerAndIncentiveQuestions.some(x=>/controls resources/i.test(x)));
@@ -150,7 +150,7 @@ test("the actual research UI consumes workflow, SALP and Houston context gate wi
   assert.match(page,/buildImplementationJourney\(program,destination\)/);
   assert.match(page,/Full DIS lifecycle/);
   assert.match(page,/Transfer to Houston/);
-  assert.match(page,/Systemic Anchors and Leverage Points/);
+  assert.match(page,/Structural Anchor and Leverage Protocol/);
   assert.match(page,/No externally verified proof/);
   assert.match(page,/journey\.crossSiteTransport\.tests/);
   assert.match(page,/journey\.logicModel\.smartObjectives/);
