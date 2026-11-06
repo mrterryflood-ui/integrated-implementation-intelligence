@@ -22,6 +22,17 @@ for(const [label,engine,device] of [
   await page.getByRole("heading",{name:/Understand the population. Investigate the causes./}).waitFor();
   await page.getByText("Research-stage program · Public aggregate evidence only.",{exact:false}).waitFor();
   await page.getByText("Hinds County only",{exact:true}).waitFor();
+  // The program must begin at STELLAR 1, not a preselected intervention.
+  await page.getByRole("heading",{name:/STELLAR 1 — begin with the question/}).waitFor();
+  await page.getByRole("textbox",{name:"For how long?"}).fill("Baseline period, pilot, after-success and successor reassessment");
+  await page.getByRole("textbox",{name:"Compared with what?"}).fill("Competent current diagnostic and screening pathways");
+  await page.getByRole("textbox",{name:"System or stakeholder name"}).fill("Hypothetical referral clinic");
+  await page.getByRole("button",{name:"Add candidate element"}).click();
+  await page.getByText("Hypothetical referral clinic").last().waitFor();
+  await page.getByRole("combobox",{name:"To"}).selectOption("S1");
+  await page.getByRole("button",{name:"Add unverified relationship"}).click();
+  await page.getByText(/declared hops 1|not independently established/i).first().waitFor().catch(()=>{});
+  await page.getByRole("button",{name:"Population and measures"}).click();
   const site=page.getByRole("combobox",{name:"Cancer site / analysis"});
   await page.getByText("30.4",{exact:true}).waitFor();
   await page.getByText("63.3",{exact:true}).waitFor();
@@ -42,6 +53,16 @@ for(const [label,engine,device] of [
   await page.getByText(/The published county proxy is not a validated estimate/).waitFor();
   await page.getByRole("button",{name:"Sources and limits"}).click();
   await page.getByText("CDC PLACES 2025 screening estimates").waitFor();
+  await page.getByRole("button",{name:"Full DIS lifecycle"}).click();
+  await page.getByRole("heading",{name:/Stage-gated research, implementation/}).waitFor();
+  await page.getByText("20",{exact:true}).first().waitFor();
+  await page.getByRole("combobox",{name:"Rehearse a possible result (not a recorded outcome)"}).selectOption("SUCCESS");
+  await page.getByText(/What happens tomorrow when demand/i).first().waitFor();
+  await page.getByText(/Approved sustainment budget/i).count();
+  await page.getByRole("combobox",{name:"Rehearse a possible result (not a recorded outcome)"}).selectOption("FAILURE");
+  await page.getByText(/Did the intervention fail to reach people/i).first().waitFor();
+  await page.getByRole("button",{name:"Transfer to Houston"}).click();
+  await page.getByText("HOLD_PENDING_LOCAL_ADAPTATION_AND_VALIDATION",{exact:false}).count();
   const project=page.getByRole("combobox",{name:"Research scenario"});
   await project.selectOption("custom");
   await page.getByRole("textbox",{name:"Your research/implementation question"}).fill("How can a city improve access to public services?");
