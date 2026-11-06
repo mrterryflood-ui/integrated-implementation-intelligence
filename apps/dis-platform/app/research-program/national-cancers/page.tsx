@@ -22,7 +22,7 @@ export default function NationalCancerThreeSite(){
  const values=focus.map(name=>NATIONAL_THREE_CANCER_ROWS.find(r=>r.geography===name)!);
  const useRate=metric==="lateStageIncidencePer100k";
  return <main style={{maxWidth:1220,margin:"0 auto",padding:"24px 16px",fontFamily:"system-ui,sans-serif",lineHeight:1.5}}>
- <p><Link href="/research-program">DIS Research Studio</Link> / <Link href="/research-program/exposome">Environmental GIS atlas</Link></p>
+ <p><Link href="/research-program">DIS Research Studio</Link> / <Link href="/research-program/exposome">Environmental GIS atlas</Link> · <Link href="/research-program/six-conditions">Compare women’s health and cancer research</Link></p>
  <p style={{letterSpacing:1.5,fontSize:12,textTransform:"uppercase"}}>DIS · National evidence-to-action lab</p>
  <h1>Compare three cancers. Challenge the common explanation.</h1>
  <p>This is a versioned national public-reference dataset of <b>50 states</b> with District of Columbia, Puerto Rico and a national reference row shown separately. This is not a current live connection or a demonstrated cause. The original publishers are NCI and CDC, not DIS or RPLICE.</p>
