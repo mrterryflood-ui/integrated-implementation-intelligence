@@ -117,7 +117,7 @@ export default function ResearchProgramStudio(){
         <div><div className="rp-kicker">01 · ORIENT</div><h2>What problem, population and disease?</h2></div>
       </div>
       <label className="rp-field"><span>Research scenario</span>
-        <select value={mode} onChange={e=>{setMode(e.target.value as "jackson"|"custom");setPane("population")}}>
+        <select value={mode} onChange={e=>{setMode(e.target.value as "jackson"|"custom");setPane("stellar")}}>
           <option value="jackson">Demonstration · Late-stage cancer, Jackson, Mississippi</option>
           <option value="custom">New question · methodological framework only (no retrieved statistics)</option>
         </select>
