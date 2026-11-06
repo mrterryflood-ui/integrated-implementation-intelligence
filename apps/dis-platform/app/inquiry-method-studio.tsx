@@ -1,5 +1,5 @@
 "use client";
-import {useMemo,useState} from "react";
+import {useEffect,useMemo,useState} from "react";
 import {investigateMethod,type Inquiry,type ClaimKind,type EvidenceKind} from "../lib/dis-inquire";
 
 /**
@@ -18,7 +18,6 @@ function Field({label,value,onChange,rows=1,placeholder}:{label:string;value:str
   </label>;
 }
 const lines=(s:string)=>s.split(/\n|;/).map(x=>x.trim()).filter(Boolean).slice(0,12);
-const update=(s:Record<string,string>,key:string,v:string)=>({...s,[key]:v});
 export default function InquiryMethodStudio({initialQuestion="",initialPopulation="",initialOutcome="",initialContext=""}:{
   initialQuestion?:string;initialPopulation?:string;initialOutcome?:string;initialContext?:string
 }){
@@ -27,12 +26,16 @@ export default function InquiryMethodStudio({initialQuestion="",initialPopulatio
     owner:"",population:initialPopulation,outcome:initialOutcome,context:initialContext,
     phenomenon:"",constructs:"",discrimination:"",scope:"",unknowns:"",
     action:"",existing:"",alternatives:"",harms:"",success:"",futureOwner:"",stopTrigger:"",
-    asOf:new Date().toISOString()
+    asOf:""
   });
   const [hyp,setHyp]=useState<HypForm[]>([newHyp()]);
   const [sources,setSources]=useState<SourceForm[]>([newSource()]);
   const [claim,setClaim]=useState({text:"",kind:"DESCRIPTIVE" as ClaimKind,target:"",population:"",comparator:"",identification:"",uncertainty:false,benefit:false,externalValidation:""});
   const [showReview,setShowReview]=useState(false);
+  const [copyStatus,setCopyStatus]=useState("");
+  // The timestamp is populated after hydration; server/client clocks cannot
+  // create inconsistent markup and the user may override decision-as-of time.
+  useEffect(()=>setMain(p=>p.asOf?p:{...p,asOf:new Date().toISOString()}),[]);
   const field=(key:keyof typeof main,value:string)=>{setMain(p=>({...p,[key]:value}));};
   const hfield=(i:number,key:keyof HypForm,value:string)=>setHyp(p=>p.map((x,j)=>i===j?{...x,[key]:value}:x));
   const sfield=(i:number,key:keyof SourceForm,value:string)=>setSources(p=>p.map((x,j)=>i===j?{...x,[key]:value}:x));
@@ -159,7 +162,8 @@ export default function InquiryMethodStudio({initialQuestion="",initialPopulatio
         <ol>{result.methodologicalQuestions.map(q=><li key={q}>{q}</li>)}</ol>
         <p>Open-world rule: elimination of listed explanations never certifies that all possible explanations have been considered.</p>
       </details>
-      <button type="button" onClick={()=>{const output=JSON.stringify({schema:"dis-inquiry-local-draft-v1",packet,assessment:result},null,2);void navigator.clipboard?.writeText(output);}}>Copy draft research-method record</button>
+      <button type="button" onClick={()=>{const output=JSON.stringify({schema:"dis-inquiry-local-draft-v1",packet,assessment:result},null,2);if(!navigator.clipboard){setCopyStatus("Clipboard access unavailable; no record was exported.");return;}void navigator.clipboard.writeText(output).then(()=>setCopyStatus("Draft research method record copied locally.")).catch(()=>setCopyStatus("Clipboard denied; no record was exported."));}}>Copy draft research-method record</button>
+      <p role="status">{copyStatus}</p>
       <p>Copying exports the supplied text to your clipboard. Do not copy or paste protected records into an uncontrolled destination.</p>
     </section>}
   </section>;
