@@ -22,13 +22,13 @@ export default async function Home(){
  return <div className="dis-home">
  <header className="site-nav">
  <Link href="/" className="brand"><span className="brand-mark">D·I</span><span>DYNAMIC INTELLIGENCE</span></Link>
- <nav aria-label="Main navigation"><a href="#approach">The approach</a><a href="#possibilities">Possibilities</a><a href="#consult">Consultation studio</a><a href="/realty-atlas">GIS Atlas</a><Link href="/integrations">Integrations</Link><Link href="/decision-lab">Decision lab (research)</Link><Link href="/research-program">Research programs</Link><a href="#council">Council studio</a></nav>
+ <nav aria-label="Main navigation"><a href="#approach">The approach</a><a href="#possibilities">Possibilities</a><a href="#consult">Consultation studio</a><a href="/realty-atlas">GIS Atlas</a><Link href="/integrations">Integrations</Link><Link href="/decision-lab">Decision lab (research)</Link><Link href="/research-program">Research programs</Link><Link href="/population-health-atlas">Population health GIS</Link><a href="#council">Council studio</a></nav>
  <div className="nav-actions">{identityBlocked?<span className="nav-sign" title={RELEASE_NOTICE}>Private workspace pending</span>:userId?<><Link href="/workspace">My knowledge</Link><UserButton/></>:<SignInButton mode="modal"><button className="nav-sign">Sign in</button></SignInButton>}<a href="#council" className="nav-start">Ask DIS</a></div>
  </header>
  <main><section className="hero">
  <div className="hero-content">{identityBlocked&&<p role="status" style={{fontSize:14,maxWidth:580}}>Public research preview is available. Private accounts and uploads are pending production identity verification.</p>}<span className="eyebrow">INTRODUCING A DIFFERENT WAY TO THINK</span><h1>What if your next <em>great idea</em> had a council behind it?</h1>
  <p>One question can change a life, a business, or an entire system. Dynamic Intelligence brings diverse reasoning perspectives together to help investigate it—and understand what to do next.</p>
- <div className="hero-actions"><a className="hero-primary" href="#council">Convene your council</a><Link href="/research-program">Explore a real research-to-implementation case</Link><a href="#approach">Discover the method ↓</a></div>
+ <div className="hero-actions"><a className="hero-primary" href="#council">Convene your council</a><Link href="/research-program">Explore a real research-to-implementation case</Link><Link href="/population-health-atlas">Compare population health evidence</Link><a href="#approach">Discover the method ↓</a></div>
  <div className="hero-proof">RESEARCH FIRST <span>·</span> CHALLENGE ASSUMPTIONS <span>·</span> ACT WITH EVIDENCE</div></div>
  <div className="hero-art" aria-hidden="true"><div className="orbit one"/><div className="orbit two"/><div className="orbit three"/><div className="core">DI</div><div className="orbital-label a">?</div><div className="orbital-label b">∑</div><div className="orbital-label c">↗</div><div className="orbital-label d">∞</div></div>
  </section>
