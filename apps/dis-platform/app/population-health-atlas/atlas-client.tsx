@@ -17,6 +17,7 @@ export default function PopulationHealthAtlas(){
  const [metric,setMetric]=useState<"rate"|"share">("rate");
  const [minimum,setMinimum]=useState(COMPARATOR_MIN_ANNUAL);
  const [showEcho,setShowEcho]=useState(false);
+ const [mapReady,setMapReady]=useState(false);
  const [status,setStatus]=useState("This map compares published aggregate observations. County pins are approximate city anchors, not county polygons.");
  const [showRisk,setShowRisk]=useState(true);
  const anchor=CURATED_COUNTIES.find(x=>x.id===anchorId)||CURATED_COUNTIES[0];
@@ -36,6 +37,7 @@ export default function PopulationHealthAtlas(){
      attribution:'© OpenStreetMap contributors. Cancer rates: NCI/CDC. ECHO: US EPA.',maxZoom:18
    }).addTo(map);
    markersRef.current=L.layerGroup().addTo(map);
+   setMapReady(true);
   };
   void init();
   return()=>{active=false;if(mapRef.current){mapRef.current.remove();mapRef.current=null;leafletRef.current=null;markersRef.current=null;echoOverlayRef.current=null;}};
@@ -61,7 +63,7 @@ export default function PopulationHealthAtlas(){
    point.bindTooltip(label);
    point.addTo(group);
   }
- },[shown,metric,disease,anchor.id]);
+ },[shown,metric,disease,anchor.id,mapReady]);
  useEffect(()=>{
   const map=mapRef.current,L=leafletRef.current;
   if(!map||!L)return;
@@ -80,7 +82,7 @@ export default function PopulationHealthAtlas(){
   update();
   map.on("moveend",update);
   return()=>{map.off("moveend",update);if(echoOverlayRef.current){map.removeLayer(echoOverlayRef.current);echoOverlayRef.current=null;}};
- },[showEcho,disease]);
+ },[showEcho,disease,mapReady]);
  return <main className="pha-root">
   <header className="pha-head">
    <Link href="/research-program">DIS Research Program</Link>
@@ -135,7 +137,7 @@ export default function PopulationHealthAtlas(){
    <h2>Large-county comparisons: similarity and divergence</h2>
    <p>Same 2018–2022 disease and staging definition, original NCI source by state. The table is restricted to observed counts, age-adjusted rates and reported stage percentages. No exposures or service-access differences are asserted by this table.</p>
    <div className="pha-tablewrap"><table><thead><tr><th>County</th><th>Late-stage rate (95% CI)</th><th>Share late</th><th>Annual late-stage cases</th><th>Open original source</th></tr></thead>
-    <tbody>{shown.sort((a,b)=>b.value-a.value).map(o=><tr key={o.id} data-anchor={o.id===anchor.id?"true":undefined}><td><button type="button" className="pha-linkbutton" onClick={()=>setAnchorId(o.id)}>{o.county}, {o.region}</button></td>
+    <tbody>{[...shown].sort((a,b)=>b.value-a.value).map(o=><tr key={o.id} data-anchor={o.id===anchor.id?"true":undefined}><td><button type="button" className="pha-linkbutton" onClick={()=>setAnchorId(o.id)}>{o.county}, {o.region}</button></td>
      <td>{fmt(o.value)} ({fmt(o.ciLow??0)}–{fmt(o.ciHigh??0)})</td><td>{fmt(o.lateStagePercent??0)}%</td><td>{fmt(o.averageAnnualCount??0)}</td>
      <td><a href={o.sourceUrl} target="_blank" rel="noreferrer">NCI registry table</a></td></tr>)}</tbody></table></div>
    <h3>Predeclared descriptive comparison with {anchor.county}</h3>
