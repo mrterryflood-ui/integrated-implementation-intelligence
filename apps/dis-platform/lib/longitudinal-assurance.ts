@@ -338,7 +338,7 @@ export function reviewLongitudinalCheckpoint(program:ResearchProgram,input:Check
     if(a.coreFunctionAffected)
       add("CORE_FUNCTION_REVALIDATION","A proposed change affects the hypothesized intervention core function.","Stop automatic adoption and seek independent causal/mechanism and safety reassessment.");
   }
-  const safety=input.reportedPath==="UNINTENDED_HARM"||input.measures.some(m=>m.role==="BALANCING_HARM"&&m.higherMeansWorse===true&&m.observed!==null&&m.baseline!==null&&m.observed>m.baseline);
+  const safety=input.reportedPath==="UNINTENDED_HARM"||input.measures.some(m=>m.role==="BALANCING_HARM"&&m.higherMeansWorse!==undefined&&m.observed!==null&&m.baseline!==null&&(m.higherMeansWorse?m.observed>m.baseline:m.observed<m.baseline));
   if(safety)add("SAFETY_SIGNAL_REQUIRES_HUMAN","A potential harm is reported; the model cannot diagnose causality or delay existing response.","Escalate immediately to appropriate authorized clinical, agency or operational safety personnel.");
   const scenario=buildLongitudinalAssurance(program).cases.find(x=>x.path===input.reportedPath);
   return{
