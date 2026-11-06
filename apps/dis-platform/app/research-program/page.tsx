@@ -4,10 +4,13 @@ import Link from "next/link";
 import {buildResearchProgram,type SiteKey} from "../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../lib/jackson-cancer-case";
 import {buildImplementationJourney} from "../../lib/implementation-journey";
+import StellarOnePanel from "../stellar-one-panel";
+import type {StellarOneInput} from "../../lib/stellar-one";
 import "./research-program.css";
 
-type Pane="population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport";
+type Pane="stellar"|"population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport";
 const PANES:{id:Pane;label:string}[]=[
+  {id:"stellar",label:"STELLAR 1 · Fact finding"},
   {id:"population",label:"Population and measures"},
   {id:"contributors",label:"Competing explanations"},
   {id:"implementation",label:"Implementation pathway"},
@@ -26,14 +29,15 @@ export default function ResearchProgramStudio(){
   const [site,setSite]=useState<SiteKey>("colorectal");
   const [question,setQuestion]=useState("How can we prevent late-stage cancer diagnosis?");
   const [target,setTarget]=useState("Jackson, Mississippi");
-  const [pane,setPane]=useState<Pane>("population");
+  const [pane,setPane]=useState<Pane>("stellar");
+  const [stellarOverrides,setStellarOverrides]=useState<Partial<StellarOneInput>>({});
   const [destination,setDestination]=useState("Houston, Texas");
   const [phase,setPhase]=useState("STELLAR_1");
   const [rehearsal,setRehearsal]=useState("SUCCESS");
   const [copyStatus,setCopyStatus]=useState("");
   const caseSpec=useMemo(()=>mode==="jackson"?jacksonCancerCase(site):unsourcedResearchCase(question,target),[mode,site,question,target]);
   const program=useMemo(()=>buildResearchProgram(caseSpec),[caseSpec]);
-  const journey=useMemo(()=>buildImplementationJourney(program,destination),[program,destination]);
+  const journey=useMemo(()=>buildImplementationJourney(program,destination,stellarOverrides),[program,destination,stellarOverrides]);
   const copy=async(kind:"markdown"|"json")=>{
     let output="";
     if(kind==="json")output=JSON.stringify({program,journey,provenance:"RESEARCH_DESIGN_NOT_FIELD_VALIDATED",approval:"NOT_AUTHORIZED"},null,2);
@@ -57,6 +61,16 @@ export default function ResearchProgramStudio(){
       "## Evaluation",
       program.comparisonDesign,
       ...program.successMeasures.map(s=>"- "+s.role+" "+s.name+": "+s.definition+"; "+s.cadence),
+      "## STELLAR 1 fact finding and chain/environment map",
+      "Question: "+journey.stellarOne.orientation.whatDoing,
+      "For whom: "+journey.stellarOne.orientation.forWhom,
+      "Understand or deliver: "+journey.stellarOne.orientation.understandOrDeliver,
+      "Where: "+journey.stellarOne.orientation.where,
+      "How long: "+journey.stellarOne.orientation.howLong,
+      "Intended change: "+journey.stellarOne.orientation.intendedChange,
+      "Counterfactual: "+journey.stellarOne.orientation.counterfactual,
+      ...journey.stellarOne.environment.nodes.map(x=>"- "+x.name+": declared hops "+(x.distanceFromCenter??"unmapped")+"; "+x.relationToCenter+"; validated "+x.relationshipValidation),
+      ...journey.stellarOne.questions.map(x=>"- "+x.code+": "+x.question+"; proof "+x.proofNeeded),
       "## End-to-end DIS implementation lifecycle",
       ...journey.nodes.map(n=>"- "+n.id+": "+n.title+"\n  Intent: "+n.why+"\n  Outputs: "+n.outputs.join("; ")+"\n  Acceptance conditions: "+n.gates.map(g=>g.artifact+"; owner "+g.ownerRole+"; reviewer "+g.reviewerRole+"; "+g.acceptance).join(" | ")+"\n  State: "+n.status+" — NOT independently verified"),
       "## SALP systemic anchors and leverage points",
@@ -139,6 +153,7 @@ export default function ResearchProgramStudio(){
         <span className="rp-counter">{program.issues.length} unresolved research or inference gaps</span>
       </div>
       <nav className="rp-tabs" aria-label="Research program sections">{PANES.map(t=><button key={t.id} type="button" aria-pressed={pane===t.id} onClick={()=>setPane(t.id)}>{t.label}</button>)}</nav>
+      {pane==="stellar"&&<StellarOnePanel review={journey.stellarOne} overrides={stellarOverrides} onChange={setStellarOverrides}/>}
       {pane==="population"&&<section aria-label="Population and indicators" className="rp-content">
         <h3>What is actually measured?</h3>
         <p>All numbers shown below originate from published historical county tables. The rate, the share of incident cancers that were late-stage, and the average annual count have different denominators.</p>
