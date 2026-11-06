@@ -5,6 +5,7 @@ import {buildResearchProgram,type SiteKey} from "../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../lib/jackson-cancer-case";
 import {buildImplementationJourney} from "../../lib/implementation-journey";
 import StellarOnePanel from "../stellar-one-panel";
+import LongitudinalCheckpointPanel from "../longitudinal-checkpoint-panel";
 import type {StellarOneInput} from "../../lib/stellar-one";
 import "./research-program.css";
 
@@ -298,6 +299,7 @@ export default function ResearchProgramStudio(){
         <h3>Succession, resourcing and sustaining the core</h3>
         <ul>{journey.longitudinal.ownerQuestions.map(q=><li key={q}>{q}</li>)}</ul>
         <p className="rp-subtle"><strong>Current truth:</strong> Observed outcomes, independently verified mechanisms, approved sustainment budget, successor acceptance and scale authorization are all absent. A successful pilot creates new responsibilities; it does not close the mission.</p>
+        <LongitudinalCheckpointPanel key={program.caseId} program={program}/>
         <h3>Adaptive learning and sustainment</h3><ol>{journey.learningLoop.map(x=><li key={x}>{x}</li>)}</ol>
       </section>}
       {pane==="transport"&&<section aria-label="Cross-site EBI transferability" className="rp-content">
