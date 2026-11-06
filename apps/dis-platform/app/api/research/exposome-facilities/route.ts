@@ -1,5 +1,5 @@
 /** Public-source EPA ECHO geospatial research adapter.
- * Only two bounded county identifiers are admitted. No patient-level data,
+ * Bounded FIPS county lookup is reusable across diseases. No patient-level data,
  * arbitrary URL proxy, inferential cancer attribution or secret is involved.
  */
 import {NextResponse} from "next/server";
@@ -29,15 +29,25 @@ function safeFeature(raw:unknown){
    county:text("FAC_COUNTY"),registryId:text("REGISTRY_ID",55),programIcon:text("FAC_MAP_ICON",28)}};
 }
 export async function GET(req:Request){
- const site=new URL(req.url).searchParams.get("county");
- if(site!=="hinds"&&site!=="harris")return NextResponse.json({error:"Choose a supported county."},{status:400});
- const county=COUNTIES[site as County];
+ const params=new URL(req.url).searchParams;
+ const site=params.get("county");
+ const named=(site==="hinds"||site==="harris")?COUNTIES[site as County]:null;
+ const rawFips=params.get("countyFips");
+ const fips=named?.fips||rawFips||"";
+ if(!/^[0-9]{5}$/.test(fips)||fips==="00000"||fips.slice(2)==="000")
+   return NextResponse.json({error:"Provide county=hinds/harris or a five-digit countyFips."},{status:400});
+ const countyLabel=named?.label||"County FIPS "+fips;
+ const rawOffset=params.get("offset")||"0";
+ if(!/^[0-9]{1,5}$/.test(rawOffset)||Number(rawOffset)>10000)
+   return NextResponse.json({error:"Invalid page offset."},{status:400});
+ const offset=Number(rawOffset);
  const query=new URL(SOURCE+"/query");
- query.searchParams.set("where","FAC_DERIVED_STCTY_FIPS='"+county.fips+"'");
+ query.searchParams.set("where","FAC_DERIVED_STCTY_FIPS='"+fips+"'");
  query.searchParams.set("outFields","FAC_NAME,FAC_CITY,FAC_STATE,FAC_COUNTY,REGISTRY_ID,FAC_MAP_ICON");
  query.searchParams.set("returnGeometry","true");
  query.searchParams.set("outSR","4326");
  query.searchParams.set("resultRecordCount","250");
+ query.searchParams.set("resultOffset",String(offset));
  query.searchParams.set("f","geojson");
  try{
   const res=await fetch(query.toString(),{signal:AbortSignal.timeout(10000),next:{revalidate:86400}});
@@ -50,7 +60,7 @@ export async function GET(req:Request){
   const found=(data as {features:unknown[]}).features;
   const features=found.slice(0,250).map(safeFeature).filter((x):x is NonNullable<typeof x>=>x!==null);
   return NextResponse.json({
-   schemaVersion:"dis-exposome-epa-v1",county:county.label,
+   schemaVersion:"dis-exposome-epa-v1",county:countyLabel,countyFips:fips,pageOffset:offset,nextOffset:found.length>=250?offset+250:null,
    source:SOURCE,sourceOwner:"U.S. EPA ECHO",sourceType:"REGULATED_FACILITY_LOCATION_NOT_EXPOSURE",
    sourcePeriod:"EPA current map service; check last refresh at original source",
    geometry:"POINT_LOCATION",facilityCountReturned:features.length,
