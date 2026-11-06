@@ -28,14 +28,15 @@ export default function ResearchProgramStudio(){
   const [target,setTarget]=useState("Jackson, Mississippi");
   const [pane,setPane]=useState<Pane>("population");
   const [destination,setDestination]=useState("Houston, Texas");
-  const [phase,setPhase]=useState("ORIENT");
+  const [phase,setPhase]=useState("STELLAR_1");
+  const [rehearsal,setRehearsal]=useState("SUCCESS");
   const [copyStatus,setCopyStatus]=useState("");
   const caseSpec=useMemo(()=>mode==="jackson"?jacksonCancerCase(site):unsourcedResearchCase(question,target),[mode,site,question,target]);
   const program=useMemo(()=>buildResearchProgram(caseSpec),[caseSpec]);
   const journey=useMemo(()=>buildImplementationJourney(program,destination),[program,destination]);
   const copy=async(kind:"markdown"|"json")=>{
     let output="";
-    if(kind==="json")output=JSON.stringify(program,null,2);
+    if(kind==="json")output=JSON.stringify({program,journey,provenance:"RESEARCH_DESIGN_NOT_FIELD_VALIDATED",approval:"NOT_AUTHORIZED"},null,2);
     else output=[
       "# DIS Research-to-Implementation — DRAFT / NOT VALIDATED",
       "Question: "+program.question,
@@ -68,6 +69,14 @@ export default function ResearchProgramStudio(){
       "Intermediate: "+journey.logicModel.intermediate.join("; "),
       "Long term: "+journey.logicModel.longTerm.join("; "),
       ...journey.logicModel.smartObjectives.map(x=>"- "+x.id+": "+x.specific+"\n  Measure: "+x.measurable+"\n  Baseline: "+x.baseline+"\n  Target: "+x.target+"\n  Owner: "+x.ownerRole),
+      "## Longitudinal success, partial success, failure, adverse harm and unknown rehearsals",
+      "Actual observed program outcome: "+journey.longitudinal.actualResult,
+      ...journey.longitudinal.cases.map(x=>"- "+x.path+" (scenario only)\n  Anticipate: "+x.leadingQuestions.join("; ")+"\n  Signals: "+x.earlySignals.join("; ")+"\n  Alternatives: "+x.alternativeExplanations.join("; ")+"\n  Responses to test: "+x.responsesToTest.join("; ")+"\n  Proof required: "+x.evidenceRequired.join("; ")),
+      "## Core fidelity, allowed adaptations, and the day after success",
+      "Hypothesized core: "+journey.longitudinal.coreFidelity.proposedCoreFunction,
+      ...journey.longitudinal.coreFidelity.invariantHypotheses.map(x=>"- Core-function hypothesis: "+x),
+      ...journey.longitudinal.coreFidelity.adaptableForms.map(x=>"- Potential adaptable form: "+x),
+      ...journey.longitudinal.triggers.map(x=>"- "+x.timeHorizon+": "+x.question+"\n  Evidence: "+x.evidenceInstrument+"\n  Owner: "+x.ownerRole+"\n  Response: "+x.actionIfConcern),
       "## Cross-site transportability (not automatic replication)",
       "Destination: "+journey.crossSiteTransport.destinationSite,
       ...journey.crossSiteTransport.tests.map(t=>"- "+t.dimension+": "+t.requiredComparison+" — "+t.state),
@@ -240,6 +249,40 @@ export default function ResearchProgramStudio(){
         <h3>Participation, collaboration and communications</h3>
         <div className="rp-table-wrap"><table><thead><tr><th>Role</th><th>Accountability</th><th>Participation</th></tr></thead><tbody>{journey.collaborationRoles.map(x=><tr key={x.role}><td>{x.role}</td><td>{x.responsibility}</td><td>{x.participationState.replaceAll("_"," ").toLowerCase()}</td></tr>)}</tbody></table></div>
         <div className="rp-card-grid">{journey.communicationTracks.map(x=><article className="rp-card" key={x.audience}><h4>{x.audience}</h4><p>{x.purpose}</p><p><b>Feedback:</b> {x.feedback}</p><p><b>Authorization:</b> Not obtained; no messages sent</p></article>)}</div>
+        <h3>Plan for what happens when the intervention fails, works partially, succeeds, or creates harm</h3>
+        <p>These are <strong>scenario rehearsals only</strong>, not predictions, observed results, or authorizations. A successful process milestone cannot automatically move the program to SCALE; an actual benefit requires independently reviewed outcomes and a renewed sustainment contract.</p>
+        <label className="rp-field"><span>Rehearse a possible result (not a recorded outcome)</span>
+          <select value={rehearsal} onChange={e=>setRehearsal(e.target.value)}>
+            {journey.longitudinal.cases.map(x=><option key={x.path} value={x.path}>{x.path.replaceAll("_"," ").toLowerCase()}</option>)}
+          </select>
+        </label>
+        {journey.longitudinal.cases.filter(x=>x.path===rehearsal).map(x=><article className="rp-focus" key={x.path}>
+          <span className="rp-small-code">{x.path.replaceAll("_"," ")} · HYPOTHETICAL, NOT OBSERVED</span>
+          <h4>Before declaring this outcome</h4><ul>{x.leadingQuestions.map(q=><li key={q}>{q}</li>)}</ul>
+          <h4>Possible warning signals</h4><ul>{x.earlySignals.map(q=><li key={q}>{q}</li>)}</ul>
+          <h4>Alternative explanations</h4><ul>{x.alternativeExplanations.map(q=><li key={q}>{q}</li>)}</ul>
+          <h4>Corrective actions to test—not automatically execute</h4><ul>{x.responsesToTest.map(q=><li key={q}>{q}</li>)}</ul>
+          <p><strong>Independent proof required:</strong> {x.evidenceRequired.join("; ")}</p>
+          <p><strong>Responsible roles:</strong> {x.responsibleRoles.join("; ")}</p>
+          <p><strong>Automatic conclusions and scale-up:</strong> Not authorized.</p>
+        </article>)}
+        <h3>Core function versus adaptable form</h3>
+        <div className="rp-warning"><strong>Proposed, not clinically or causally verified:</strong> {journey.longitudinal.coreFidelity.proposedCoreFunction}. The invariant function and permitted adaptations require independent validation and human authority.</div>
+        <div className="rp-card-grid">
+          <article className="rp-card"><h4>Core requirements to protect and validate</h4><ul>{journey.longitudinal.coreFidelity.invariantHypotheses.map(q=><li key={q}>{q}</li>)}</ul></article>
+          <article className="rp-card"><h4>Forms that might adapt</h4><ul>{journey.longitudinal.coreFidelity.adaptableForms.map(q=><li key={q}>{q}</li>)}</ul></article>
+        </div>
+        <h3>Longitudinal stewardship and transformation triggers</h3>
+        <div className="rp-timeline">{journey.longitudinal.triggers.map(t=><article key={t.id}>
+          <strong>{t.timeHorizon}</strong><div><h4>{t.question}</h4>
+          <p><b>Instrument:</b> {t.evidenceInstrument}</p><p><b>Counteraction:</b> {t.actionIfConcern}</p>
+          <p><b>Accountable role:</b> {t.ownerRole} · <b>Observed:</b> no</p></div>
+        </article>)}</div>
+        <h3>Cascading effects and other systems</h3>
+        <ul>{journey.longitudinal.systemIntersections.map(s=><li key={s}>{s}</li>)}</ul>
+        <h3>Succession, resourcing and sustaining the core</h3>
+        <ul>{journey.longitudinal.ownerQuestions.map(q=><li key={q}>{q}</li>)}</ul>
+        <p className="rp-subtle"><strong>Current truth:</strong> Observed outcomes, independently verified mechanisms, approved sustainment budget, successor acceptance and scale authorization are all absent. A successful pilot creates new responsibilities; it does not close the mission.</p>
         <h3>Adaptive learning and sustainment</h3><ol>{journey.learningLoop.map(x=><li key={x}>{x}</li>)}</ol>
       </section>}
       {pane==="transport"&&<section aria-label="Cross-site EBI transferability" className="rp-content">
