@@ -10,6 +10,13 @@ const baseline=():Inquiry=>({
   targetPopulation:'Synthetic outpatient service population',
   targetOutcome:'Missed appointments with material harm',
   systemContext:'Fictional quality-improvement service and human oversight',
+  searchFrame:{
+    phenomenon:'Why actual harmful missed appointments occur',
+    constructsToDistinguish:['Recorded appointment misses','Harm experienced'],
+    discriminatingObservation:'Independently adjudicated outcome and unchanged count definition',
+    scopeAndBoundaries:'Fictional sample under specified period',
+    unresolvedPossibilities:['Unmeasured access and scheduling effects']
+  },
   hypotheses:[
     {id:'h1',explanation:'Earlier communication might reduce missed appointments',
       predictedObservations:['Fewer missed appointments on a matched comparator'],
@@ -151,4 +158,54 @@ test('unreferenced claims are held for independent source and method inspection'
   const r=investigateMethod(x);
   assert.equal(r.state,'NOT_READY_FOR_CLAIM');
   assert.ok(codes(x).includes('EVIDENCE_LINK_MISSING'));
+});
+
+
+test('Holmes elimination never assumes the hypothesis list is exhaustive',()=>{
+  const x=baseline();
+  x.searchFrame!.unresolvedPossibilities=[];
+  const r=investigateMethod(x);
+  assert.ok(codes(x).includes('OPEN_WORLD_UNKNOWN'));
+  assert.equal(r.evidenceLevels.allPossibleExplanationsConsidered,false);
+  assert.equal(r.evidenceLevels.automatedHypothesisEliminationAuthorized,false);
+});
+test('what is being sought and what is being measured cannot be silently conflated',()=>{
+  const x=baseline();
+  x.searchFrame=undefined;
+  assert.ok(codes(x).includes('SEARCH_FRAME_INCOMPLETE'));
+  assert.ok(investigateMethod(x).methodologicalQuestions[0].includes('what is the phenomenon'));
+});
+test('a hypothesis is not eliminated because a hypothetical persona says so',()=>{
+  const x=baseline();
+  x.instruments[0].kind='PERSONA_PROMPT';
+  x.hypotheses[0].proposedExclusion={
+    status:'EXCLUDE_IN_DEFINED_SCOPE',evidenceIds:['e1'],
+    distinguishingObservation:'A fictional observation did not occur',
+    applicableScope:'Synthetic group',limitations:['Unmeasured alternatives']
+  };
+  const r=investigateMethod(x);
+  assert.equal(r.state,'NOT_READY_FOR_CLAIM');
+  assert.ok(codes(x).includes('UNSUPPORTED_HYPOTHESIS_EXCLUSION'));
+  assert.equal(r.evidenceLevels.automatedHypothesisEliminationAuthorized,false);
+});
+test('eliminating an explanation without linked evidence, scope, or limitations is held',()=>{
+  const x=baseline();
+  x.hypotheses[0].proposedExclusion={
+    status:'EXCLUDE_IN_DEFINED_SCOPE',evidenceIds:['unavailable'],
+    distinguishingObservation:'',applicableScope:'',limitations:[]
+  };
+  assert.ok(codes(x).includes('UNSUPPORTED_HYPOTHESIS_EXCLUSION'));
+});
+test('even well-described proposed elimination requires independent evidence adjudication',()=>{
+  const x=baseline();
+  x.hypotheses[0].proposedExclusion={
+    status:'EXCLUDE_IN_DEFINED_SCOPE',evidenceIds:['e1'],
+    distinguishingObservation:'Independently measured count remains unchanged',
+    applicableScope:'Fictional study population only',
+    limitations:['Small case series','Incomplete follow-up']
+  };
+  const r=investigateMethod(x);
+  assert.ok(r.findings.some(f=>f.id==='EXCLUSION_REQUIRES_ADJUDICATION'&&f.level==='INVESTIGATE'));
+  assert.equal(r.evidenceLevels.allPossibleExplanationsConsidered,false);
+  assert.equal(r.evidenceLevels.actionAuthorized,false);
 });
