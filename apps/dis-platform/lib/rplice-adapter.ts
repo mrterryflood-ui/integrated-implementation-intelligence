@@ -119,3 +119,50 @@ export async function compareRpliceParallax(
   return { ...payload, source: "RPLICE", factState: PARALLAX_EVIDENCE_STATE,
     assurance: "An operator-declared comparison is not verified human testimony, stakeholder agreement, causal evidence or independently validated outcome." };
 }
+
+
+/** HIL-selected stateless methods through RPLICE's existing authenticated MCP. */
+export type SpecialistChoice="SALP"|"CFIR"|"RE_AIM";
+export async function runSelectedRpliceMcp(
+ input:{method:SpecialistChoice;scenario:string;purpose:string;anchors?:Array<{name:string;weight:number;sensitivity:number}>},
+ env:RpliceBridgeEnv,fetcher:typeof fetch=fetch
+){
+ const origin=urlFromEnv(env),key=env.RPLICE_API_KEY?.trim()||"";
+ if(!/^rplice_[0-9a-f]{32,}$/i.test(key))throw new RpliceBridgeError(503,"RPLICE dedicated credential not configured.");
+ if(!["SALP","CFIR","RE_AIM"].includes(input.method))throw new RpliceBridgeError(400,"Unsupported specialist method.");
+ const scenario=tidy(input.scenario,1000),purpose=tidy(input.purpose,320);
+ if(scenario.length<8||purpose.length<8)throw new RpliceBridgeError(400,"Research question and analytical purpose required.");
+ const salp=input.method==="SALP";
+ const anchors=input.anchors||[];
+ if(salp&&(anchors.length<1||anchors.length>12||anchors.some(a=>
+    !a||!tidy(a.name,120)||!Number.isFinite(a.weight)||a.weight<0||a.weight>10||
+    !Number.isInteger(a.sensitivity)||a.sensitivity<1||a.sensitivity>5)))
+    throw new RpliceBridgeError(400,"Supply 1–12 named hypothetical anchors with priority 0–10 and sensitivity 1–5.");
+ const name=salp?"rplice_run_salp":"rplice_analyze_framework";
+ const args=salp?{anchors:anchors.map(a=>({name:tidy(a.name,120),weight:a.weight,sensitivity:a.sensitivity})),
+   context:{scenario,purpose,evidenceStatus:"OPERATOR_DECLARED_HYPOTHESIS"}}:
+   {frameworkId:input.method==="CFIR"?"cfir":"re-aim",context:{scenario,purpose}};
+ let res:Response;
+ try{res=await fetcher(origin+"/api/v1/connect/mcp",{
+   method:"POST",cache:"no-store",redirect:"error",signal:AbortSignal.timeout(12000),
+   headers:{Authorization:"Bearer "+key,"Content-Type":"application/json",
+     Accept:"application/json, text/event-stream","MCP-Protocol-Version":"2025-06-18"},
+   body:JSON.stringify({jsonrpc:"2.0",id:"dis-hil-selection",method:"tools/call",
+     params:{name,arguments:args}})
+ });}catch{throw new RpliceBridgeError(503,"RPLICE MCP transport unavailable.");}
+ if(!res.ok)throw new RpliceBridgeError(503,"RPLICE MCP unavailable; provider HTTP "+res.status);
+ const raw=await res.text();
+ if(raw.length>128000)throw new RpliceBridgeError(503,"RPLICE response exceeded bounded size.");
+ let payload:any,analysis:any;
+ try{
+  payload=JSON.parse(raw);
+  if(payload?.error||payload?.result?.isError)throw Error("MCP reported a method error");
+  analysis=JSON.parse(payload.result.content.find((c:any)=>c?.type==="text")?.text);
+ }catch{throw new RpliceBridgeError(503,"RPLICE MCP result was invalid or declined.");}
+ if(!analysis?.provenance?.generated_at||analysis.provenance.model!=="deterministic"||
+     !analysis.result||typeof analysis.result!=="object"||
+     (salp&&(!Array.isArray(analysis.result.anchors)||!Array.isArray(analysis.result.sensors))))
+    throw new RpliceBridgeError(503,"RPLICE MCP lacked required method provenance.");
+ return {method:input.method,tool:name,analysis,source:"RPLICE authenticated MCP",
+   state:"HIL_SELECTED_PRELIMINARY_ANALYSIS",assurance:"Analytical output only. Anchors, causal mechanisms, local fit and decisions require independent evidence."};
+}
