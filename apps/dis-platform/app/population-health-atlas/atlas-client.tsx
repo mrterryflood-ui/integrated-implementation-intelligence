@@ -2,7 +2,7 @@
 import {useEffect,useMemo,useRef,useState} from "react";
 import Link from "next/link";
 import {
- CURATED_COUNTIES,DISEASES,SOURCE_LINKS,COUNTERFACTUALS,COMPARATOR_MIN_ANNUAL,
+ CURATED_COUNTIES,CURATED_CONTEXT,DISEASES,SOURCE_LINKS,COUNTERFACTUALS,COMPARATOR_MIN_ANNUAL,
  comparisonCohort,evidenceGate,findSimilarStageShares,
  type DiseaseId,type HealthObservation
 } from "../../lib/population-health-atlas";
@@ -126,7 +126,16 @@ export default function PopulationHealthAtlas(){
       <article><small>Similar stage share</small><strong>{similar.length}</strong><span>large-county matches within ±1 percentage point</span></article>
      </div>
      <p>Matching share is descriptive only, not a validated statistical equivalence or shared etiology. The anchor remains visible even if its annual count falls below the comparator threshold.</p>
-     <h3>Primary prevention measurement gap</h3>
+     <h3>County population context (not a cancer cause)</h3>
+    <p>Current Census QuickFacts snapshots for Hinds and Harris counties come from different periods than the cancer registry. Race and ethnicity categories can overlap; these are contextual descriptors, not genetic causation.</p>
+    <div className="pha-tablewrap"><table><thead><tr><th>Context indicator</th><th>Hinds County</th><th>Harris County</th></tr></thead><tbody>
+      {CURATED_CONTEXT.hinds.map((x,i)=><tr key={x.id}><td>{x.label}<small style={{display:"block"}}>{x.period}</small></td>
+        <td>{x.unit.includes("dollars")?"$":""}{fmt(x.value)}{x.unit.includes("percent")?"%":""}</td>
+        <td>{x.unit.includes("dollars")?"$":""}{fmt(CURATED_CONTEXT.harris[i].value)}{x.unit.includes("percent")?"%":""}</td></tr>)}
+    </tbody></table></div>
+    <p><a href={CURATED_CONTEXT.hinds[0].sourceUrl} target="_blank" rel="noreferrer">Hinds Census QuickFacts</a> · <a href={CURATED_CONTEXT.harris[0].sourceUrl} target="_blank" rel="noreferrer">Harris Census QuickFacts</a></p>
+    <p>These contrasts should generate hypotheses and guide matched design, not justify attributing a county's disease rate to a racial group, income, insurance, or nearby facility.</p>
+    <h3>Primary prevention measurement gap</h3>
      <p>All-stage colorectal incidence, precancerous lesion data and environmental exposure histories have not been ingested into this curated view. Until present, no prevention effect can be calculated. <a href="https://gis.cancer.gov/canceratlas/" target="_blank" rel="noreferrer">Use NCI Cancer Atlas for original all-stage maps</a>.</p>
     </>:<p className="pha-alert">No valid condition-specific county observations are loaded. <a href={currentDisease.canonicalSource} target="_blank" rel="noreferrer">Open the official disease atlas</a> and verify population, measure, time and source before entering this evidence.</p>}
     <h3>Analytic classification</h3><p><strong>Designed:</strong> prevention and reliable care.</p><p><strong>Operational:</strong> observed service and exposure conditions still need verification.</p><p><strong>Experienced:</strong> no actual community testimony was inferred from a GIS layer.</p>
