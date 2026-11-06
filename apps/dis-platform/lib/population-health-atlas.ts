@@ -97,3 +97,37 @@ export const COUNTERFACTUALS=[
  {id:"precancer",label:"Precancer interception",design:"Evaluate age- and risk-appropriate screening, actual adenoma detection/removal and appropriate follow-up rather than only cancer deaths."},
  {id:"hybrid",label:"Prevention + navigation + accountable diagnostic closure",design:"Couple upstream environmental and behavioral risk reduction with safe detection and complete positive-test follow-up; audit costs, equity and harms."}
 ] as const;
+
+
+/** Source-specific environment descriptors. Do not assign individual exposures or infer cancer etiology from them. */
+export type ContextIndicator={
+ id:string;label:string;value:number;unit:string;period:string;sourceUrl:string;
+ provenance:"US_CENSUS_QUICKFACTS";interpretation:"AREA_LEVEL_CONTEXT_NOT_CAUSAL_EXPOSURE";
+};
+const quickfacts=(place:string)=>"https://www.census.gov/quickfacts/fact/table/"+place+"/PST045225";
+const context=(label:string,value:number,unit:string,period:string,place:string):ContextIndicator=>({
+ id:label.toLowerCase().replace(/[^a-z]+/g,"-"),label,value,unit,period,
+ sourceUrl:quickfacts(place),provenance:"US_CENSUS_QUICKFACTS",
+ interpretation:"AREA_LEVEL_CONTEXT_NOT_CAUSAL_EXPOSURE"
+});
+/** QuickFacts retrieved 2026-11-06; 2025 population snapshot and 2020-2024 or current stated QuickFacts periods are NOT cancer observation denominators. */
+export const CURATED_CONTEXT:Record<string,ContextIndicator[]>={
+ hinds:[
+  context("Residents (2025 estimate)",211888,"people","2025","hindscountymississippi"),
+  context("Age 65 and over",19.4,"percent","QuickFacts latest profile","hindscountymississippi"),
+  context("Black alone",70.4,"percent of population","QuickFacts latest profile","hindscountymississippi"),
+  context("Hispanic or Latino, any race",3.0,"percent of population","QuickFacts latest profile","hindscountymississippi"),
+  context("Median household income",49402,"2024 dollars","2020–2024","hindscountymississippi"),
+  context("Persons in poverty",22.2,"percent","QuickFacts latest county","hindscountymississippi"),
+  context("Without health insurance, under age 65",13.3,"percent of persons under 65","2020–2024 profile","hindscountymississippi")
+ ],
+ harris:[
+  context("Residents (2025 estimate)",5045026,"people","2025","harriscountytexas"),
+  context("Age 65 and over",13.1,"percent","QuickFacts latest profile","harriscountytexas"),
+  context("Black alone",20.5,"percent of population","QuickFacts latest profile","harriscountytexas"),
+  context("Hispanic or Latino, any race",46.1,"percent of population","QuickFacts latest profile","harriscountytexas"),
+  context("Median household income",74983,"2024 dollars","2020–2024","harriscountytexas"),
+  context("Persons in poverty",16.7,"percent","QuickFacts latest county","harriscountytexas"),
+  context("Without health insurance, under age 65",22.2,"percent of persons under 65","2020–2024 profile","harriscountytexas")
+ ]
+};
