@@ -21,3 +21,16 @@
 @media(max-width:850px){.rp-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.rp-overview{grid-template-columns:repeat(2,minmax(0,1fr))}.rp-card-grid{grid-template-columns:1fr}.rp-root{padding:20px 16px 60px}}
 @media(max-width:570px){.rp-head h1{font-size:32px}.rp-overview,.rp-stats{grid-template-columns:1fr}.rp-stat>span{min-height:0}.rp-section-top{display:block}.rp-counter{display:inline-flex;margin-top:12px}.rp-tabs{display:grid;grid-template-columns:1fr 1fr}.rp-tabs button{font-size:11px;padding:10px 5px}.rp-timeline article{grid-template-columns:1fr;gap:4px}}
 @media(prefers-reduced-motion:reduce){.rp-root *{scroll-behavior:auto!important;transition:none!important}}
+
+/* Stage-gated orchestration — accessible regardless of whether work is approved */
+.rp-stage-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:20px 0}
+.rp-stage{background:#f5f9fb;border:1px solid #bcd2dd;text-align:left;padding:12px;border-radius:10px;display:flex;flex-direction:column;gap:4px;align-items:start;min-width:0}
+.rp-stage:hover{background:#eaf4f6}.rp-stage.active,.rp-stage[aria-pressed="true"]{background:#e0f1ee;border:2px solid #137d7d}
+.rp-stage small{color:#08777e;font-weight:750}.rp-stage strong{font-size:13px;color:#213c4b;overflow-wrap:anywhere}.rp-stage span{font-size:10px;color:#5c7181}
+.rp-focus{border:1px solid #a2c8ce;border-left:5px solid #258c8a;background:#f7fbfb;border-radius:12px;padding:20px;margin:20px 0}
+.rp-focus h4{font-size:20px;margin:10px 0}.rp-focus p{font-size:13px;color:#395d6f}
+.rp-stage-gate{border-top:1px solid #bfd8db;margin-top:15px;padding-top:15px;font-size:13px}.rp-stage-gate small{color:#805339;font-weight:650}
+.rp-model{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}.rp-model article{border:1px solid #bfd4df;border-radius:11px;padding:14px;background:#f9fbfc;min-width:0}
+.rp-model strong{color:#0a6672;font-size:13px}.rp-model ul{padding-left:18px;margin:10px 0}.rp-model li{font-size:12px;color:#466273;margin-bottom:8px}
+@media(max-width:850px){.rp-stage-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.rp-model{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:570px){.rp-stage-grid{grid-template-columns:1fr 1fr}.rp-stage{padding:9px}.rp-stage strong{font-size:12px}.rp-model{grid-template-columns:1fr}}
