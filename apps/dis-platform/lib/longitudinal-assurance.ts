@@ -218,3 +218,135 @@ export function buildLongitudinalAssurance(program:ResearchProgram):SustainmentA
     learningCycle:"ORIENT_AUDIT_MAP_GAP_ALIGN_ACT_TRACK_ADAPT_SHARE_REMAP"
   };
 }
+
+
+/**
+ * Evidence-aware checkpoint interrogation. A submitted observation is a
+ * DECLARATION until independently verified by the owning institution.
+ * This routine never concludes the intervention caused a benefit or harm,
+ * and never issues public, clinical or operational instructions.
+ */
+export type CheckpointMeasure={
+  id:string;
+  role:"BENEFICIARY_OUTCOME"|"IMPLEMENTATION_FIDELITY"|"REACH"|"BALANCING_HARM"|"COST"|"OTHER";
+  construct:string;unit:string;population:string;
+  baseline:number|null;observed:number|null;
+  denominator:number|null;
+  sourceId:string;originalLineage:string;
+  observedAt:string;receivedAt:string;
+  comparator:string|null;
+  definitionVersion:string;
+  limitations:string[];
+};
+export type CheckpointEvidence={
+  caseId:string;asOf:string;
+  reportedPath:OutcomePath;
+  measures:CheckpointMeasure[];
+  proposedAdaptation?:{
+    coreFunctionAffected:boolean;
+    whatChanges:string;
+    reason:string;
+    owner:string;
+    reviewAfter:string;
+  };
+  ownerConfirmed:boolean;
+  successorConfirmed:boolean;
+  resourcingConfirmed:boolean;
+  stakeholderParticipationConfirmed:boolean;
+  outcomeIndependentReviewConfirmed:boolean;
+  adverseEffectsReviewed:boolean;
+  environmentChanged:boolean;
+  destinationTransferRequested:boolean;
+};
+export type CheckpointResult={
+  schemaVersion:"dis-longitudinal-checkpoint-v1";
+  caseId:string;
+  reportedPath:OutcomePath;
+  finding:"SAFETY_REVIEW_URGENT"|"EVIDENCE_INSUFFICIENT"|"HUMAN_ADJUDICATION_REQUIRED";
+  evidenceStatus:"DECLARATIONS_NOT_INDEPENDENTLY_VERIFIED";
+  causalBenefitEstablished:false;
+  realPilotValidated:false;
+  scaleAuthorized:false;
+  adaptationExecuted:false;
+  clinicalActionAuthorized:false;
+  reviewIssues:{code:string;explanation:string;requiredProof:string}[];
+  scenarioActions:string[];
+  recommendedNextReview:"OWNER_MUST_SET_EVIDENCE_VALID_WINDOW";
+  comparisonWithPriorCheckpoint:"NOT_AVAILABLE_WITHOUT_SIGNED_PREVIOUS_SNAPSHOT";
+};
+const checkedTime=(s:string)=>/^\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)$/i.test(s)
+  ?Date.parse(s):NaN;
+export function reviewLongitudinalCheckpoint(program:ResearchProgram,input:CheckpointEvidence):CheckpointResult{
+  const issues:CheckpointResult["reviewIssues"]=[];
+  const add=(code:string,explanation:string,requiredProof:string)=>{
+    if(!issues.some(x=>x.code===code))issues.push({code,explanation,requiredProof});
+  };
+  if(input.caseId!==program.caseId)add("CASE_MISMATCH","Checkpoint references another research case.","Match the source case ID, population and baseline protocol.");
+  const asOf=checkedTime(input.asOf);
+  if(!Number.isFinite(asOf))add("DECISION_TIME_INVALID","Decision time is invalid or missing timezone.","Use original recorded as-of time with explicit timezone.");
+  if(input.measures.length===0)add("NO_ACTUAL_MEASURES","No numeric outcome or implementation observations were supplied.","Identify the correct original measurement instruments, population, denominator and validation.");
+  if(input.measures.length>40)add("MEASUREMENT_CAP_EXCEEDED","Only a bounded subset may be inspected per checkpoint.","Split the period into versioned, owner-reviewed evidence batches.");
+  const lineage=new Map<string,string[]>();
+  const ids=new Set<string>();
+  for(const m of input.measures.slice(0,40)){
+    if(!m.id||ids.has(m.id))add("MEASURE_ID_DUPLICATED","Measurement identifiers are missing or duplicated.","Assign distinct source-bound observation IDs.");
+    ids.add(m.id);
+    const original=m.originalLineage.trim();
+    if(!original||!m.sourceId.trim())add("PROVENANCE_MISSING","Instrument or original source lineage is not defined.","Identify original owner, instrument, independent error sources and rights.");
+    else lineage.set(original,[...(lineage.get(original)||[]),m.id]);
+    if(!m.construct.trim()||!m.unit.trim()||!m.population.trim()||!m.definitionVersion.trim())
+      add("INSTRUMENT_UNSPECIFIED","Construct, unit, population or definition version is not specified.","Verify original measurement and definition changes before comparison.");
+    if(m.baseline===null||m.observed===null||!Number.isFinite(m.baseline)||!Number.isFinite(m.observed))
+      add("OUTCOME_NOT_MEASURED","Baseline and observed results are absent or invalid.","Report real observed and baseline values with uncertainty, never treat missing as zero.");
+    if(m.denominator!==null&&(!Number.isFinite(m.denominator)||m.denominator<=0))
+      add("DENOMINATOR_INVALID","Denominator is zero or invalid.","Confirm actual eligible or relevant observation population.");
+    if(m.limitations.length===0)add("LIMITATIONS_NOT_APPRAISED","Instrument limitations or errors have not been declared.","Review validity, range, error and missingness with the instrument owner.");
+    const event=checkedTime(m.observedAt),receipt=checkedTime(m.receivedAt);
+    if(!Number.isFinite(event)||!Number.isFinite(receipt)||!Number.isFinite(asOf))
+      add("TIMESTAMP_UNVERIFIED","Measurement/receipt times are missing or invalid.","Check event, receipt, as-of time and source clock separately.");
+    else if(event>receipt||receipt>asOf)
+      add("TIME_ORDER_INVALID","A future observation, retroactive receipt or clock conflict was detected.","Reconstruct what was knowable when the decision was made.");
+    if((m.role==="BENEFICIARY_OUTCOME"||m.role==="BALANCING_HARM")&&!m.comparator?.trim())
+      add("NO_COUNTERFACTUAL","A declared beneficiary result lacks a comparison or counterfactual.","Use a defensible comparator and causal design; pre/post alone does not establish effect.");
+  }
+  if([...lineage.values()].some(x=>x.length>1))
+    add("SHARED_SOURCE_LINEAGE","Some records share an original source; they are not independent confirmations.","Trace original publishers, instruments, cohorts and correlated errors.");
+  if(!input.measures.some(m=>m.role==="BENEFICIARY_OUTCOME"))
+    add("BENEFICIARY_OUTCOME_ABSENT","Only process or surrogate indicators were supplied.","Measure the actual intended beneficiary outcome using a valid population/period.");
+  if(!input.measures.some(m=>m.role==="IMPLEMENTATION_FIDELITY"))
+    add("FIDELITY_UNMEASURED","Core function and delivery fidelity were not measured.","Evaluate whether the intervention mechanism was delivered, at what dose and quality.");
+  if(!input.adverseEffectsReviewed)
+    add("HARMS_UNREVIEWED","Adverse or displaced downstream effects were not evaluated.","Independent safety, community, equity and burden review is required.");
+  if(!input.ownerConfirmed||!input.successorConfirmed||!input.resourcingConfirmed)
+    add("SUCCESS_STEWARDSHIP_UNCONFIRMED","Original and successor accountability or ongoing capacity is not confirmed.","Name and obtain acceptance from successor, budget owner and operational steward.");
+  if(!input.stakeholderParticipationConfirmed)
+    add("EXPERIENCED_REALITY_MISSING","Actual affected-user participation has not been documented.","Document consented stakeholder engagement, differences and dissent.");
+  if(!input.outcomeIndependentReviewConfirmed)
+    add("RESULT_NOT_INDEPENDENTLY_REVIEWED","A declared result was not independently adjudicated.","Obtain study-specific independent evaluation; report negative and unintended effects.");
+  if(input.environmentChanged)
+    add("ENVIRONMENT_CHANGED","Conditions changed since the original program frame.","Re-run STELLAR 1, MAP-GAP, instrument fit and stakeholder/authority review.");
+  if(input.destinationTransferRequested)
+    add("TRANSFER_REASSESSMENT_REQUIRED","Destination replication requested; source-site effects do not transfer automatically.","Evaluate local population, mechanism, resources, data, harms, clinical authority and suitable pilot.");
+  if(input.proposedAdaptation){
+    const a=input.proposedAdaptation;
+    if(!a.whatChanges.trim()||!a.reason.trim()||!a.owner.trim()||!a.reviewAfter.trim())
+      add("ADAPTATION_CONTRACT_INCOMPLETE","Proposed change has no sufficient owner, mechanism, reason or retest trigger.","Record what changed, why, who approved, fidelity risks and next measurement.");
+    if(a.coreFunctionAffected)
+      add("CORE_FUNCTION_REVALIDATION","A proposed change affects the hypothesized intervention core function.","Stop automatic adoption and seek independent causal/mechanism and safety reassessment.");
+  }
+  const safety=input.reportedPath==="UNINTENDED_HARM"||input.measures.some(m=>m.role==="BALANCING_HARM"&&m.observed!==null&&m.baseline!==null&&m.observed>m.baseline);
+  if(safety)add("SAFETY_SIGNAL_REQUIRES_HUMAN","A potential harm is reported; the model cannot diagnose causality or delay existing response.","Escalate immediately to appropriate authorized clinical, agency or operational safety personnel.");
+  const scenario=buildLongitudinalAssurance(program).cases.find(x=>x.path===input.reportedPath);
+  return{
+    schemaVersion:"dis-longitudinal-checkpoint-v1",caseId:program.caseId,
+    reportedPath:input.reportedPath,
+    finding:safety?"SAFETY_REVIEW_URGENT":issues.length?"EVIDENCE_INSUFFICIENT":"HUMAN_ADJUDICATION_REQUIRED",
+    evidenceStatus:"DECLARATIONS_NOT_INDEPENDENTLY_VERIFIED",
+    causalBenefitEstablished:false,realPilotValidated:false,scaleAuthorized:false,
+    adaptationExecuted:false,clinicalActionAuthorized:false,
+    reviewIssues:issues,
+    scenarioActions:scenario?.responsesToTest||[],
+    recommendedNextReview:"OWNER_MUST_SET_EVIDENCE_VALID_WINDOW",
+    comparisonWithPriorCheckpoint:"NOT_AVAILABLE_WITHOUT_SIGNED_PREVIOUS_SNAPSHOT"
+  };
+}
