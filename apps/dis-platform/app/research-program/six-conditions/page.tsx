@@ -1,4 +1,5 @@
 import Link from "next/link";
+import TrajectoryPanel from "./trajectory-panel";
 import {NATIONAL_THREE_CANCER_ROWS} from "../../../lib/national-three-cancer-reference";
 import {WOMENS_CONDITIONS,WOMENS_HEALTH_NCHS_SOURCE,STATE_WOMENS_CONDITION_STATUS,SIX_CONDITION_MEASUREMENT_RULES} from "../../../lib/six-condition-research";
 
@@ -40,6 +41,7 @@ export default function SixConditionResearch(){
    <p>Outcome hierarchy: fewer new disease cases where prevention is biologically feasible; clinically appropriate early detection, fewer avoidable delays, better quality of life, reduced inequity and long-term sustainment. Use HIL-selected RPLICE methods, a critical appraisal of each source's actual scope, and ethical, real stakeholder engagement. Record the counterfactual, resources, owners and future monitoring before claiming success.</p>
    <details><summary>Evidence incompatibility and protection rules</summary><ul>{SIX_CONDITION_MEASUREMENT_RULES.map(r=><li key={r}>{r}</li>)}</ul></details>
   </section>
+  <TrajectoryPanel/>
   <p style={{fontSize:12}}>Source-qualified research demonstrator, not a complete matched 6-condition state dataset, independent replication, clinical advice or authorized implementation program.</p>
  </main>;
 }
