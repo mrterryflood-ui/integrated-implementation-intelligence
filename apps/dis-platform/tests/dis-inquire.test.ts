@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
 import {investigateMethod,type Inquiry} from '../lib/dis-inquire';
 
 const baseline=():Inquiry=>({
@@ -208,4 +209,23 @@ test('even well-described proposed elimination requires independent evidence adj
   assert.ok(r.findings.some(f=>f.id==='EXCLUSION_REQUIRES_ADJUDICATION'&&f.level==='INVESTIGATE'));
   assert.equal(r.evidenceLevels.allPossibleExplanationsConsidered,false);
   assert.equal(r.evidenceLevels.actionAuthorized,false);
+});
+
+
+test('the stack-agnostic engineering protocol is linked, remains complementary to IRON-ENG, and preserves real test validity',()=>{
+ const doc=readFileSync(new URL('../../../docs/dis/STACK-AGNOSTIC-ENGINEERING-INQUIRY-PROTOCOL.md',import.meta.url),'utf8');
+ const rules=readFileSync(new URL('../../../AGENTS.md',import.meta.url),'utf8');
+ assert.match(doc,/Stack-Agnostic Engineering Inquiry and Release Protocol/);
+ assert.match(doc,/does NOT supersede.*IRON-ENG-001/);
+ for(const phrase of [
+  'Orient — phenomenon and problem','Audit — existing system','Diagnose — open-world explanations',
+  'Build the smallest vertical slice','Verify — independent and adversarial',
+  'Release and prove','Measure, adapt, hand off',
+  'instrument','negative','rollback','tenant','day after'
+ ])assert.ok(doc.toLowerCase().includes(phrase.toLowerCase()),"missing phase or scientific check: "+phrase);
+ assert.match(doc,/Merge ≠ deployment ≠ outcome/);
+ assert.match(doc,/What are we actually trying to observe/);
+ assert.match(doc,/unconsidered_possibilities/);
+ assert.match(rules,/STACK-AGNOSTIC-ENGINEERING-INQUIRY-PROTOCOL\.md/);
+ assert.match(rules,/No paid Copilot\/Replit agents without explicit authorization/);
 });
