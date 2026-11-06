@@ -5,11 +5,12 @@ import {buildResearchProgram,type SiteKey} from "../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../lib/jackson-cancer-case";
 import {buildImplementationJourney} from "../../lib/implementation-journey";
 import StellarOnePanel from "../stellar-one-panel";
+import WholeSystemPanel from "./whole-system-panel";
 import LongitudinalCheckpointPanel from "../longitudinal-checkpoint-panel";
 import type {StellarOneInput} from "../../lib/stellar-one";
 import "./research-program.css";
 
-type Pane="stellar"|"population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport";
+type Pane="stellar"|"population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport"|"hil";
 const PANES:{id:Pane;label:string}[]=[
   {id:"stellar",label:"STELLAR 1 · Fact finding"},
   {id:"population",label:"Population and measures"},
@@ -18,7 +19,8 @@ const PANES:{id:Pane;label:string}[]=[
   {id:"evaluation",label:"Evaluate and adapt"},
   {id:"sources",label:"Sources and limits"},
   {id:"lifecycle",label:"Full DIS lifecycle"},
-  {id:"transport",label:"Transfer to Houston"}
+  {id:"transport",label:"Transfer to Houston"},
+  {id:"hil",label:"HIL specialist & DDD"}
 ];
 const access:Record<string,string>={
   MEASURED_IN_CASE_BASELINE:"Historical aggregate only",
@@ -302,6 +304,7 @@ export default function ResearchProgramStudio(){
         <LongitudinalCheckpointPanel key={program.caseId} program={program}/>
         <h3>Adaptive learning and sustainment</h3><ol>{journey.learningLoop.map(x=><li key={x}>{x}</li>)}</ol>
       </section>}
+      {pane==="hil"&&<WholeSystemPanel program={program} journey={journey}/>}
       {pane==="transport"&&<section aria-label="Cross-site EBI transferability" className="rp-content">
         <h3>Same EBI name ≠ demonstrated benefit in a different city</h3>
         <p>Before applying an intervention from Jackson to Houston, DIS rechecks the actual local mechanism, population, service capacity and implementation environment. These inputs are currently <strong>not measured for the destination</strong>.</p>
