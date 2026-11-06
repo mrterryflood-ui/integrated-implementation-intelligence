@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {assessDDD,evaluateHIL,exerciseResearchToAction} from "../lib/whole-system-exercise";
-import {jacksonCancerCase} from "../lib/jackson-cancer-case";
+import {jacksonCancerCase,unsourcedResearchCase} from "../lib/jackson-cancer-case";
 import {buildResearchProgram} from "../lib/research-program";
 import {buildImplementationJourney} from "../lib/implementation-journey";
 test("cross-sectional comparison cannot masquerade as a DDD estimate",()=>{
@@ -39,10 +39,16 @@ test("real Jackson case traverses all existing lifecycle stages with truthful st
  assert.equal(run.finalState,"ANALYTICAL_END_TO_END_EXERCISE_COMPLETE_FIELD_OUTCOMES_UNKNOWN");
 });
 test("same engine works for an unrelated and unsourced mission",()=>{
- const p=buildResearchProgram({ ...jacksonCancerCase("colorectal"),
-  id:"workforce-case",question:"Improve youth workforce access",indicators:[],drivers:[],strategies:[],dataSources:[]});
+ const p=buildResearchProgram(unsourcedResearchCase("Improve youth workforce access, retain jobs and measure outcomes","Regional youth workforce program"));
  const j=buildImplementationJourney(p,"Different service district");
  const r=exerciseResearchToAction(p,j,{method:"NONE",humanSelected:false,explicitDataTransferConsent:false,intendedPurpose:"",decisionOwner:""});
  assert.equal(r.domainAgnostic,true);assert.equal(r.sourceEvidence.length,0);
  assert.equal(r.hil.state,"NO_HUMAN_SELECTION");
+});
+
+test("malformed imported DDD rows remain invalid and cannot crash the review",()=>{
+ const invalid=[null,{treatment:"yes",post:1,focusGroup:true,value:"x",n:0,unit:55,populationDefinition:null}] as any;
+ const r=assessDDD(invalid);
+ assert.equal(r.status,"INSUFFICIENT_PANEL");assert.equal(r.estimate,null);
+ assert.ok(r.missing.some(x=>x.includes("requires boolean")));
 });
