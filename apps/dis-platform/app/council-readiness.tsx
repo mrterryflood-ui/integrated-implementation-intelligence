@@ -3,10 +3,21 @@ import type {CouncilEngagementAssurance} from '../lib/council-engagement-assuran
 export default function CouncilReadiness({assurance}:{assurance?:CouncilEngagementAssurance|null}){
  if(!assurance)return null;
  const mesh=assurance.evidenceMesh;
+ const inquiry=assurance.inquiryMethod;
  return <section className="truth-note" aria-label="Council evidence and next steps">
   <h4>{assurance.readyToPropose?'Ready for your review':'Evidence review needed'}</h4>
   <p>Use this draft to investigate and discuss the decision. Original-source checks and accountable human review are still required before action. Outcome improvement has not been measured.</p>
   <p><strong>Next step:</strong> {assurance.nextAction}</p>
+  <section aria-label="Question-first scientific method review">
+   <h4>DIS Inquiry — how to investigate what the evidence really measures</h4>
+   <p>Preliminary method state: <strong>{inquiry.assessment.state.replaceAll('_',' ').toLowerCase()}</strong>.
+   {' '}{inquiry.assessment.findings.length} open methodological question(s), {inquiry.sourceLeadIds.length} bibliographic or source-reported lead(s).
+   No actual instruments, independent explanations, causal effects, or clinical outcomes were verified by this preflight.</p>
+   <details><summary>See research-method questions before drawing conclusions</summary>
+    <ol>{inquiry.assessment.methodologicalQuestions.slice(0,8).map(q=><li key={q}>{q}</li>)}</ol>
+    <p>{inquiry.explanation}</p>
+   </details>
+  </section>
   <section aria-label="Federated evidence assurance">
    <h4>DIS evidence mesh — what can these sources actually establish?</h4>
    <p>{mesh.reviewedRecordCount} source record(s) examined for declared origin, retrieval time, geographic scope and reference period. <strong>No independent measurements, causal effects, or cross-source comparisons are certified.</strong></p>
