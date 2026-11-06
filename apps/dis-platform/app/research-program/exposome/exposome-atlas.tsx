@@ -67,7 +67,7 @@ export default function ExposomeAtlas(){
  },[facilities,show]);
  const chosen=sites[site],arr=[...states].sort((a,b)=>b[metric]-a[metric]),max=Math.max(...arr.map(s=>s[metric]));
  return <main style={{maxWidth:1180,margin:"0 auto",padding:"24px 16px",fontFamily:"system-ui,sans-serif",color:"#1d3340",lineHeight:1.55}}>
-  <Link href="/research-program">← Research-to-Implementation Studio</Link>
+  <Link href="/research-program">← Research-to-Implementation Studio</Link> <span> · </span><Link href="/research-program/national-cancers">National comparison: colorectal, lung, breast (50 states)</Link>
   <p style={{letterSpacing:2,textTransform:"uppercase",fontSize:12}}>DIS · Exposome and primary prevention research</p>
   <h1>Locate the questions. Investigate exposures. Prevent disease.</h1>
   <p>This is a reusable place-based research atlas. It displays official EPA facility *locations* and published colorectal cancer aggregates. It does not infer individual exposure, risk, residence, industrial causation, or the effectiveness of a prevention program. Industrial sites, food establishments, genetics and care pathways must be investigated jointly, with competing explanations.</p>
