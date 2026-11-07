@@ -223,3 +223,26 @@ test("malformed panel array item and wrong data types fail bounded validation",(
   assert.equal(malformed.gate,"INSUFFICIENT_FOR_CAUSAL_ESTIMATE");
   assert.ok(malformed.gaps.some(x=>x.includes("invalid observation structure")));
 });
+
+test("NCI Colorado 2019-2023 release cannot be silently reconciled with Hinds 2018-2022",()=>{
+  const baseline=colorectalEvidenceAction().bridge.measures;
+  const candidate={
+    id:"co-mismatched-vintage",title:"Colorado late-stage colorectal county NCI release 2019-2023",
+    sourceUrl:"https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&graph=2&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=08&type=incd",
+    condition:"colorectal",construct:"LATE_STAGE_INCIDENCE",
+    geography:"Denver County, Colorado",
+    populationFrame:"Residents; both sexes, all ages, NCI latest release",
+    period:"2019-2023",
+    numeratorDefinition:baseline[0].indicator.numeratorDefinition,
+    denominatorDefinition:baseline[0].indicator.denominatorDefinition,
+    unit:baseline[0].indicator.unit,
+    methodVersion:"NCI 2019-2023 release; distinct vintage",
+    value:null
+  } as const;
+  const result=reviewCrossStudyMeasurements([candidate],baseline);
+  assert.equal(result.admitted.length,1);
+  assert.equal(result.links.length,3);
+  assert.ok(result.links.some(x=>x.baselineId==="CRC-LATE-INC"&&x.issues.some(i=>i.includes("Reporting window mismatch"))));
+  assert.equal(result.pooledEstimate,null);
+  assert.equal(result.originalMethodsVerified,false);
+});
