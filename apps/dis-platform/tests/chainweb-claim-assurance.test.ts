@@ -45,6 +45,11 @@ test("screening benefit cannot be restated as cancer mortality benefit",()=>{
  assert.equal(r.status,"REQUIRES_CORRECTION");
  assert.ok(r.claims[0].reasons.includes("CLAIMED_ENDPOINT_NOT_MEASURED"));
 });
+test("fabricated positive estimate with internally plausible interval is not in frozen reference",()=>{
+ const r=preflightChainwebResearchClaims([observed({difference:21.29,ci95:[19.1,24.2]})]);
+ assert.equal(r.status,"REQUIRES_CORRECTION");
+ assert.ok(r.claims[0].reasons.includes("NUMERICAL_RESULT_NOT_IN_CURATED_REFERENCE"));
+});
 test("zero effect and equivalence cannot be inferred from a nonsignificant confidence interval",()=>{
  for(const kind of ["NO_EFFECT","EQUIVALENT_EFFECT","BENEFICIAL_INTERVENTION_EFFECT"]){
   const r=preflightChainwebResearchClaims([observed({kind,difference:0.4,ci95:[-3.6,4.2]})]);
