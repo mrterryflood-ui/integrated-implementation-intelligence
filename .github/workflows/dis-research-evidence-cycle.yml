@@ -52,8 +52,38 @@ jobs:
           cmp research-results/analysis/results.json research-results/replay/results.json
           cmp research-results/analysis/national_original_extract.csv research-results/replay/national_original_extract.csv
           echo 'PASS: identical source snapshot produces byte-identical analytical results.'
-      - name: Audit ranking reversals for rounding and published rate interval overlap\n        run: python research/three_study_cycle/ranking_sensitivity.py --input research-results/analysis/national_original_extract.csv --out research-results/analysis/ranking_sensitivity.json\n      - name: Independently recompute originals and calibrate against NCHS published benchmarks
+      - name: Audit ranking reversals for rounding and published rate interval overlap
+        run: |
+          python - <<'PY'
+          import sys,pandas as pd
+          sys.path.insert(0,'research/three_study_cycle')
+          from reference_audit import STATES
+          d=pd.read_csv('research-results/analysis/national_original_extract.csv')
+          if d.geography.duplicated().any() or set(d.geography)!=STATES|{'United States','District of Columbia','Puerto Rico'}:
+              raise ValueError('Expected named 50-state frame plus US/DC/Puerto Rico')
+          d.loc[d.geography.isin(STATES)].to_csv('research-results/analysis/national_50_states.csv',index=False)
+          PY
+          python research/three_study_cycle/ranking_sensitivity.py --input research-results/analysis/national_50_states.csv --out research-results/analysis/ranking_sensitivity.json
+      - name: Independently recompute originals and calibrate against NCHS published benchmarks
         run: python research/three_study_cycle/reference_audit.py research-results --out research-results/reference-audit --compare-analysis research-results/analysis/results.json
+      - name: Exercise rival explanations and retain a reproducible investigation journal
+        run: |
+          python research/three_study_cycle/mechanism_sensitivity.py --input research-results --out research-results/mechanism-tests
+          python research/three_study_cycle/mechanism_sensitivity.py --input research-results --out research-results/mechanism-replay
+          cmp research-results/mechanism-tests/mechanism_sensitivity.json research-results/mechanism-replay/mechanism_sensitivity.json
+          cmp research-results/mechanism-tests/mechanism_journal.json research-results/mechanism-replay/mechanism_journal.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('research-results/mechanism-tests/mechanism_sensitivity.json').read_text())
+          r=json.loads(Path('research-results/analysis/ranking_sensitivity.json').read_text())
+          for c in ('colorectal','lung','breast'):
+              a=m['nci']['ranking_robustness'][c]
+              b=r['conditions'][c]
+              if a['reversed_pairs']!=b['point_reversals'] or a['reversed_pairs_robust_to_both_one_decimal_rounding_envelopes']!=b['rounding_stable_reversals']:
+                  raise ValueError('Raw-source/CSV ranking calculations disagree: '+c)
+          print('PASS: raw-source and existing ranking calculations agree; no causal identification.')
+          PY
       - name: Print bounded aggregate research result summary
         if: always()
         run: |
@@ -70,8 +100,15 @@ jobs:
               print('COUNTY_CONTRASTS',json.dumps(d['county_colorectal']['contrasts'],sort_keys=True))
               print('NATIONAL_CANCER_CORRELATIONS',json.dumps(d['national_cancer']['cross_cancer'],sort_keys=True))
               print('NSFG_OVERALL_CHECKS',json.dumps({k:{'point':v['literal_age_domain']['percent'],'point_matches':v['point_matches_published_rounding'],'se_matches':v['se_matches_published_rounding'],'eligible_age50_sensitivity':v['eligible_age50_sensitivity']['percent']} for k,v in d['nsfg']['estimates'].items()},sort_keys=True))
-              print('NSFG_DESCRIPTIVE_AGE_STANDARDIZED_CONTRASTS',json.dumps({k:v['contrast'] for k,v in d['nsfg']['equal_age_standardized_black_white'].items()},sort_keys=True))
               print('NO_CAUSAL_OR_FIELD_EFFECT_VERIFIED')
+          p=Path('research-results/mechanism-tests/mechanism_sensitivity.json')
+          if p.exists():
+              d=json.loads(p.read_text())
+              print('MECHANISM_TEST_STATUS',d['status'])
+              print('ROUNDING_ROBUST_REVERSALS',json.dumps({k:v['reversed_pairs_robust_to_both_one_decimal_rounding_envelopes'] for k,v in d['nci']['ranking_robustness'].items()},sort_keys=True))
+              print('ELIGIBLE_AGE_STANDARDIZED_CONTRASTS',json.dumps({k:v['contrast'] for k,v in d['survey']['standardizations']['primary_equal_three'].items()},sort_keys=True))
+          else:
+              print('MECHANISM_TESTS_NOT_COMPLETED')
           PY
       - name: Run bounded synthetic diagnosis-ascertainment stress test
         run: python research/three_study_cycle/ascertainment_stress.py --out research-results/simulations
@@ -96,6 +133,6 @@ jobs:
         if: always()
         run: |
           echo '## Original-source research cycle' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Read acquisition_receipt.json, verified_readiness.json, readiness.json and analysis/results.json. Job success, file integrity, source completeness, statistical reproduction, causal identification and beneficiary benefit are distinct.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Read acquisition_receipt.json, verified_readiness.json, readiness.json, analysis/results.json and mechanism-tests/mechanism_journal.json. Job success, file integrity, source completeness, statistical reproduction, causal identification and beneficiary benefit are distinct.' >> "$GITHUB_STEP_SUMMARY"
           echo 'The full source and executable package has a SHA-256 manifest. Archive each accepted cycle outside expiring CI storage before claiming durable research retention.' >> "$GITHUB_STEP_SUMMARY"
           echo 'No clinical action, private tenant access, external correspondence, paid agent, or production write is performed. No recurring schedule is enabled on this draft branch.' >> "$GITHUB_STEP_SUMMARY"

@@ -1,0 +1,24 @@
+# Mechanism-discrimination pass, November 7, 2026
+Internal exploratory research under IRON-ENG-001 v1.0.0. New evidence is computational, not causal or independently human-adjudicated. No external correspondence or clinical action.
+
+## Reuse and scope
+Extend the existing evidence cycle; reuse original-source admission and selector checks from reference_audit.py, preserve the concurrent ranking_sensitivity.py implementation and its tests, and cross-check its point/rounding counts against the direct-source follow-up. No second platform, new private datastore, paid agent, or production deployment. Source snapshot: run 42413771631, revision 6eef7c80, archive SHA-256 a3d6b8af1ce50b2e8aec93959178c65632ff43cd586d25facdd6df39abf36d95; all 44 manifest entries verified locally.
+
+## Exploratory questions and results
+- County: symmetric arithmetic factorization of the 6.0/100,000 late-stage rate difference gives 5.3480 to the all-stage-rate component and 0.6520 to the derived L/I multiplier component. This is NOT a causal allocation, preventable fraction, or substitution for the provider's crude case share. Underlying biological incidence is not identified.
+- Rounding: 421/449 colorectal, 425/442 lung and 315/340 breast reversed state pairs remain reversed throughout nearest-tenth rounding envelopes. Rate intervals alone cannot validate case-share uncertainty. Under the exploratory screen of disjoint rate intervals plus at least 5pp share gap, reversals are 21/162, 91/296 and 3/92 respectively; not joint significance tests or resource-allocation rankings.
+- Influence: removing any one state retains the colorectal-lung rate-versus-share Pearson difference, range 0.5027-0.6740. Excluding Mississippi/Texas/Colorado gives r=0.7294 for rates and 0.1383 for shares. No shared causal pathway is thereby established.
+- Age: with fixed equal three-band age weights, Black-minus-White ever-reported diagnosis contrasts are endometriosis -4.2501pp (unadjusted Taylor/t 95% CI -6.4795,-2.0208), PCOS -5.5406pp (-7.8252,-3.2559), fibroids +5.7990pp (2.1827,9.4152). Survey design df=60; Holm adjustment across the three primary conditions retains p<0.01. Six-band, pooled-age and literal-age-boundary sensitivities preserve direction. Coarse age composition alone is not a sufficient explanation under these tests, but within-band age/cohort, historical care, recognition and recall remain unresolved.
+- Item missingness: even adversarial missing-diagnosis assignments among observed respondents produce contrast bounds of -4.7280 to -3.7011pp, -6.0375 to -4.7136pp, and +5.3249 to +6.4920pp. Bounds are not sampling confidence intervals and do not address nonparticipants or misdiagnosis.
+
+## Verification and continuing operation
+Fifteen new tests exercise decomposition symmetry, rounding boundaries, ties, malformed data, survey zero-domain PSUs/covariance, singleton rejection, compositional examples, pooled-weight influence via numerical derivatives, missing-item bounds and multiple-testing correction. Before integration 63 affected research tests passed; full exact-head CI remains the acceptance source. The new analysis and machine-readable mechanism journal replay byte-identically. Both numerical implementations are assistant-authored, not an independent human review.
+
+The workflow retains an analysis-hash-bound investigation journal with questions, bounded conclusions, unknowns and next discriminating evidence. It does not claim an authenticated reviewer signed off, a durable case database accepted it, an intervention ran, or outcomes improved. Recurring scheduling, durable storage/restore, failed full-document acquisition and field evidence remain distinct open requirements.
+
+The concurrent ranking step was preserved but separated into real YAML lines; its CLI now receives an explicitly validated named 50-state projection rather than the 53-row US/DC/Puerto Rico-inclusive extract. Original rows remain retained. There is no silent exclusion of unknown geographies.
+
+## Next discriminating evidence
+County: age-specific all/late-stage rates, completeness and real diagnostic-resolution cohorts. National: matched age/sex panels, stage-share uncertainty/covariance and spatial/contextual alternatives. Women's health: condition-specific clinical ascertainment and time-aligned symptom/recognition/access histories. The NCHS report pairs ever diagnosis with characteristics measured at survey; current insurance/income cannot alone establish historical access at diagnosis.
+
+Source: Nugent CN, Lochner KA. NCHS Health E-Stat 121, July 2026. https://www.cdc.gov/nchs/data/hestat/hestat121.htm . New standardized contrasts are our exploratory computations, not attributed to the publication. The analysis plan was recorded before these new sensitivity calculations, but prior descriptive results were known; do not label this preregistered confirmation.
