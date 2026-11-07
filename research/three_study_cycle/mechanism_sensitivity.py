@@ -106,6 +106,19 @@ def ratio_influence(d,y,domain):
     return p,influence,int(valid.sum()),int((domain&~valid).sum())
 
 def standardized(d,outcome,bands,pooled=False):
+    # Validate the planned partition, not merely ages observed in this sample.
+    if not isinstance(bands,(list,tuple)) or not bands:
+        raise ValueError('A nonempty planned age partition is required')
+    next_age=20
+    for band in bands:
+        if not isinstance(band,(list,tuple)) or len(band)!=2 or any(type(v) is not int for v in band):
+            raise ValueError('Age band endpoints must be integer pairs')
+        lo,hi=band
+        if lo!=next_age or hi<lo or hi>50:
+            raise ValueError('Planned age bands overlap, leave a gap or exceed the domain')
+        next_age=hi+1
+    if bands[-1][1] not in (49,50):
+        raise ValueError('Declare the strict49 or screening-eligible50 boundary')
     age=d.AGER.to_numpy();race=d.HISPRACE2.to_numpy();y=d[outcome].to_numpy();w=d.WGT2022_2023.to_numpy(float)
     domain=(age>=20)&(age<=bands[-1][1]);masks=[domain&(age>=lo)&(age<=hi) for lo,hi in bands]
     if np.any(sum(m.astype(int) for m in masks)!=domain.astype(int)):raise ValueError('Age strata do not partition the analytic domain')
@@ -184,7 +197,7 @@ def execute(root,out):
             {'id':'ITEM_MISSINGNESS_ONLY','question':'Can assigning every missing diagnosis item adversarially reverse the contrasts?',
              'result':{c:{k:v for k,v in primary[c]['item_nonresponse_bounds'].items() if k!='groups'} for c in CONDITIONS},
              'interpretation':'Bounds apply only to missing items among sampled respondents; no inference about nonparticipants or misclassification.',
-             'next_evidence':'Survey nonparticipation, measurement-error and record-validation evidence.'}
+             'next_evidence':'Survey nonparticipation,measurement-error and record-validation evidence.'}
         ]}
     save(out/'mechanism_journal.json',verdicts)
     return result
