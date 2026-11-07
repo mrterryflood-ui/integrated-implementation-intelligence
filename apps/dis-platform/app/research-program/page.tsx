@@ -127,6 +127,7 @@ export default function ResearchProgramStudio(){
       <div className="rp-kicker">DIS · RESEARCH TO IMPLEMENTATION</div>
       <h1>Understand the population. Investigate the causes. Test what works.</h1>
       <p>An evidence-first workflow for turning a public-health question into a structured, testable research and implementation program. Not a clinical decision system or an automatic causal diagnosis.</p>
+      <p><Link href="/research-program/environmental">Build an environmental research case for EPA water reuse or NOAA hazard decisions</Link> · Proposed protocols, sources, comparisons and follow-through.</p>
       <p><Link href="/research-program/evidence-action">Open the evidence-to-action bridge: measurements, sources, counterfactuals and corrective verification</Link> · Bounded colorectal pilot; no effect established.</p>
       <p><Link href="/research-program/method-validation">Review ChainWeb method validation and published implementation evidence</Link> · Source-qualified research; method superiority not established.</p>
       <div className="rp-warning" role="note"><strong>Research-stage program · Public aggregate evidence only.</strong> Local causes, patient outcomes, clinical decisions, and improved late-stage detection have not been established by this demonstration. Do not enter protected information.</div>
@@ -383,3 +384,4 @@ export default function ResearchProgramStudio(){
     </footer>
   </main>;
 }
+

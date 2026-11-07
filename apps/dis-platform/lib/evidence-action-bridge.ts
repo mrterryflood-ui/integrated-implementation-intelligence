@@ -173,17 +173,18 @@ export function reviewEvidenceToAction(
     coreFunctionEvidence:"NOT_INDEPENDENTLY_VALIDATED_FOR_SITE" as const,
     state:"PROPOSED_NOT_AUTHORIZED" as const
   }));
-  if(!measures.some(x=>x.construct==="DISEASE_INCIDENCE"))
+  const cancerProgram=program.site==="colorectal"||program.site==="breast";
+  if(cancerProgram&&!measures.some(x=>x.construct==="DISEASE_INCIDENCE"))
     gaps.push(gap("all-stage-incidence","RESEARCH_REQUIRED",
       "Underlying disease occurrence is not measured by late-stage incidence or stage share.",
       "Cancer registry and epidemiology partners",
       "Obtain same-site all-stage incidence, population denominator, observation window and stage completeness."));
-  if(!measures.some(x=>x.construct==="SCREENING_COMPLETION"))
+  if(cancerProgram&&!measures.some(x=>x.construct==="SCREENING_COMPLETION"))
     gaps.push(gap("screening-denominator","RESEARCH_REQUIRED",
       "Eligibility-based screening completion is not locally measured.",
       "Clinic quality and public-health partners",
       "Secure authorized eligible-person and completion counts, dates and source-defined screening eligibility."));
-  if(!measures.some(x=>x.construct==="DIAGNOSTIC_FOLLOWUP"))
+  if(cancerProgram&&!measures.some(x=>x.construct==="DIAGNOSTIC_FOLLOWUP"))
     gaps.push(gap("diagnostic-resolution","RESEARCH_REQUIRED",
       "Abnormal-result diagnostic follow-up is not locally measured.",
       "Diagnostic pathway and navigator leads",
@@ -391,3 +392,4 @@ export function reviewCrossStudyMeasurements(input:unknown,base:readonly BoundMe
   return {status:"SOURCE_REPORTED_CANDIDATES_NOT_INDEPENDENTLY_VERIFIED",
     admitted,links,rejected,originalMethodsVerified:false,pooledEstimate:null};
 }
+

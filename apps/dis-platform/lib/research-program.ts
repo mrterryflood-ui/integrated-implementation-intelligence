@@ -170,7 +170,7 @@ export function buildResearchProgram(spec:ResearchProgramSpec):ResearchProgram{
     add("GEOGRAPHY_PROXY_NOT_CITY","BLOCK_PROGRAM_CLAIM","The published county proxy is not a validated estimate for the target municipality or individual neighborhoods.","Establish exact target geography, residence-based registry boundaries and population denominator before any city-level statistic.");
   if(isCancerCase&&spec.site==="general")
     add("NO_UNIVERSAL_STAGE_RATE","BLOCK_PROGRAM_CLAIM","Cancer sites differ in stage definitions, screening pathways and population denominators.","Choose site-specific cancer outcomes and compare stage measures only within compatible case definitions.");
-  if(!spec.indicators.length)add("NO_MEASURED_BASELINE","BLOCK_PROGRAM_CLAIM","No sourced population baseline is supplied.","Obtain official incidence/stage values for the exact site, geography, time and age/risk population, including suppression.");
+  if(!spec.indicators.length)add("NO_MEASURED_BASELINE","BLOCK_PROGRAM_CLAIM","No sourced baseline is supplied.",isCancerCase?"Obtain official incidence/stage values for the exact site, geography, time and age/risk population, including suppression.":"Obtain domain-appropriate original measurements, observation windows, denominators, calibration and data permissions before claiming a baseline or effect.");
   for(const metric of spec.indicators){
     if(metric.geography!==spec.population.proxyUnit)
       add("UNMATCHED_INDICATOR_GEOGRAPHY","BLOCK_PROGRAM_CLAIM","An indicator is labeled with a geography different from its declared analysis proxy.","Correct boundary, case residence and denominator before reporting it.");
@@ -216,3 +216,4 @@ export function buildResearchProgram(spec:ResearchProgramSpec):ResearchProgram{
     ]:GENERIC_GUARDRAILS
   };
 }
+
