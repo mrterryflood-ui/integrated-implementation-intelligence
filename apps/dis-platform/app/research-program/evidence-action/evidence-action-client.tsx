@@ -5,6 +5,7 @@ import {colorectalEvidenceAction} from "../../../lib/evidence-action-colorectal"
 import {reviewCounterfactual,reviewCorrectionReceipt,type CounterfactualAudit,
   type CounterfactualRequest,type CorrectionReceipt} from "../../../lib/evidence-action-bridge";
 import type {IntelligenceRecord} from "../../../lib/consultation-research";
+import CrossStudyPanel from "./cross-study-panel";
 
 const SYNTHETIC_PANEL:CounterfactualRequest={
   condition:"colorectal",construct:"LATE_STAGE_INCIDENCE",unit:"synthetic units, not a cancer rate",
@@ -126,6 +127,7 @@ export default function EvidenceActionClient(){
         <a href={x.url} target="_blank" rel="noreferrer">Inspect source</a>
       </article>)}</div>}
     </section>
+    <CrossStudyPanel baseline={bridge.measures}/>
     <section className="rp-program" aria-labelledby="mechanisms-heading">
       <h2 id="mechanisms-heading">3. Challenge the explanation before choosing the correction</h2>
       <p>Each explanation from the existing DIS research program retains its rival, a test that could distinguish them, the instrument needed, and a reviewer role. None is established as the cause of Hinds or Harris outcomes.</p>
