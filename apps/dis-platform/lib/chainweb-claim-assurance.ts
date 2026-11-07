@@ -17,6 +17,18 @@ export const CASE_SOURCE_REGISTRY=[
  {id:"PCOS24",source:"https://pubmed.ncbi.nlm.nih.gov/39394785/",design:"OBSERVATIONAL",endpoints:["REPORTED_DIAGNOSIS"]},
  {id:"FRAME26",source:"https://doi.org/10.1177/26334895251407338",design:"METHODS",endpoints:["METHOD_ADAPTATION"]},
 ] as const;
+/** Frozen selected-paper numerical comparisons. Matching is NOT publisher verification. */
+export const CURATED_CASE_CONTRASTS=[
+ {caseId:"NC24",endpoint:"SCREENING_COMPLETION",difference:20.29,ci95:[17.85,22.73]},
+ {caseId:"NC24",endpoint:"DIAGNOSTIC_COMPLETION",difference:24.3,ci95:[-2.13,50.74]},
+ {caseId:"US23",endpoint:"DIAGNOSTIC_COMPLETION",difference:8.5,ci95:[4.8,12]},
+ {caseId:"US23",endpoint:"DIAGNOSTIC_COMPLETION",difference:0.4,ci95:[-3.6,4.2]},
+ {caseId:"WA25",endpoint:"DIAGNOSTIC_COMPLETION",difference:13,ci95:[6.5,19.4]},
+ {caseId:"OR25",endpoint:"SCREENING_COMPLETION",difference:7.3,ci95:[5.3,9.2]},
+ {caseId:"CA26",endpoint:"SCREENING_COMPLETION",difference:10.8,ci95:[4.9,16.7]},
+ {caseId:"CA26",endpoint:"SCREENING_COMPLETION",difference:2.9,ci95:[-3.2,9.0]},
+ {caseId:"ALTA25",endpoint:"SCREENING_COMPLETION",difference:14.4,ci95:null},
+] as const;
 export type ResearchEndpoint="SCREENING_COMPLETION"|"DIAGNOSTIC_COMPLETION"|"MORTALITY"|"DISEASE_INCIDENCE"|"REPORTED_DIAGNOSIS"|"METHOD_ADAPTATION";
 export type ResearchClaimKind="DESCRIPTIVE_ENDPOINT"|"BENEFICIAL_INTERVENTION_EFFECT"|"NO_EFFECT"|"EQUIVALENT_EFFECT"|"MORTALITY_BENEFIT"|"CAUSAL_MECHANISM"|"CROSS_CONDITION_TRANSFER"|"INDEPENDENT_VALIDATION";
 export type ResearchClaimInput={
@@ -124,6 +136,14 @@ export function preflightChainwebResearchClaims(input:unknown):ClaimReviewReport
      reasons.push("INVALID_OR_MISSING_EFFECT_INTERVAL");
    else if(ci[0]<=0)reasons.push("EFFECT_INTERVAL_INCLUDES_NULL");
    if(!validText(raw.comparator))reasons.push("COMPARATOR_NOT_DECLARED");
+   const pinnedContrast=CURATED_CASE_CONTRASTS.some(entry=>
+     entry.caseId===caseId&&entry.endpoint===raw.observedEndpoint&&
+     typeof raw.difference==="number"&&Math.abs(raw.difference-entry.difference)<=0.02&&
+     Array.isArray(raw.ci95)&&entry.ci95!==null&&
+     Math.abs(Number(raw.ci95[0])-entry.ci95[0])<=0.02&&
+     Math.abs(Number(raw.ci95[1])-entry.ci95[1])<=0.02);
+   if(!pinnedContrast)reasons.push("NUMERICAL_RESULT_NOT_IN_CURATED_REFERENCE");
+
   }
   return {claimId:id,caseId,status:reasons.length?"REJECTED_UNSUPPORTED":"PROVISIONAL_REVIEW_CANDIDATE",
     reasons:[...new Set(reasons)],sourceState:"PINNED_CITATION_NOT_PUBLISHER_VERIFIED"};
