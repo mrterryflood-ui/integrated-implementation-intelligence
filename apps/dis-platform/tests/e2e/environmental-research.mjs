@@ -56,7 +56,8 @@ for(const [label,engine,device] of [
     const denial=await authResponse;
     assert.ok([401,503].includes(denial.status()),"Private workspaces fail closed without real identity");
     assert.equal(Array.isArray((await denial.json()).workspaces),false);
-    await page.getByRole("status").filter({hasText:/Sign in to choose your private workspace|Workspace service unavailable/}).waitFor();
+    const expectedDenial=denial.status()===401?"Sign in to choose your private workspace.":"Private workspace access is unavailable. Try again after service access is restored.";
+    await page.getByRole("status").filter({hasText:expectedDenial}).waitFor();
     const dims=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
     assert.ok(dims.scroll<=dims.client+3,"No horizontal viewport overflow "+JSON.stringify(dims));
     assert.deepEqual(errors,[],"No browser runtime errors");
