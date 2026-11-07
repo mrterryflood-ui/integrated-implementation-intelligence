@@ -187,3 +187,39 @@ test("generic multi-site program cannot relabel breast indicator as colorectal",
   assert.equal(result.measures.length,0);
   assert.ok(result.gaps.some(x=>x.id==="unmapped:BREAST-LATE-SHARE"));
 });
+
+test("adversarial panel cannot provide DID arithmetic without recognized outcome contract",()=>{
+  const absent=reviewCounterfactual({...panel,construct:undefined as unknown as CounterfactualRequest["construct"]});
+  const unknown=reviewCounterfactual({...panel,construct:"FAKE_SUCCESS_RATE" as CounterfactualRequest["construct"]});
+  assert.equal(absent.gate,"INSUFFICIENT_FOR_CAUSAL_ESTIMATE");
+  assert.equal(absent.rawDifferenceInDifferences,null);
+  assert.equal(unknown.gate,"INSUFFICIENT_FOR_CAUSAL_ESTIMATE");
+  assert.equal(unknown.rawDifferenceInDifferences,null);
+  assert.ok(absent.gaps.some(x=>x.includes("outcome construct")));
+});
+test("a string 'false' cannot impersonate three completed correction checks",()=>{
+  const action=colorectalEvidenceAction().bridge.corrections[0];
+  const base:CorrectionReceipt={
+    proposedActionId:action.id,deliveryRecordedAt:"2026-11-07T14:00:00Z",
+    sourceUrl:"https://example.org/receipts/fake",
+    eligibleDenominator:100,completedNumerator:50,
+    coreFunctionChecked:true,balancingHarmsReviewed:true,comparisonRecorded:true,
+    reviewerIdentity:"Claimed reviewer (not authenticated)"
+  };
+  const forged=reviewCorrectionReceipt(action,{
+    ...base,
+    coreFunctionChecked:"false" as unknown as boolean,
+    balancingHarmsReviewed:"false" as unknown as boolean,
+    comparisonRecorded:"false" as unknown as boolean
+  });
+  assert.equal(forged.provisionalCompleteness,false);
+  assert.equal(forged.problems.length,3);
+  assert.equal(forged.claimedOutcomeVerified,false);
+});
+test("malformed panel array item and wrong data types fail bounded validation",()=>{
+  const malformed=reviewCounterfactual({...panel,
+    treated:{...panel.treated,observations:[null as unknown as CounterfactualRequest["treated"]["observations"][0],
+      ...panel.treated.observations]}});
+  assert.equal(malformed.gate,"INSUFFICIENT_FOR_CAUSAL_ESTIMATE");
+  assert.ok(malformed.gaps.some(x=>x.includes("invalid observation structure")));
+});
