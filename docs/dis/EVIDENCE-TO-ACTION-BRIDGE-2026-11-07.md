@@ -1,9 +1,9 @@
 # DIS–RPLICE Evidence-to-Action Bridge — Engineering and Research Handoff
 **Date:** 2026-11-07  
-**State:** Review-branch implementation, not a completed empirical study, approved intervention, or production release.  
+**State:** Engineering bridge merged via PR #62 (merge commit `781b463f5dfa48af37e06010818ac202e72a09a8`); internal research protocol and outcome validation remain incomplete. Not an approved intervention or production-field verification.  
 **Authority:** IRON-ENG-001 v1.0.0; AGENTS.md; human-controlled DIS and RPLICE methodological and consequence authority.  
 **Baseline SHA:** `8f3a1bba5508fc8681f3347284c0d9f1fe7a5b43`  
-**Branch:** `feat/dis-evidence-to-action-bridge-20261107`  
+**Original implementation branch:** `feat/dis-evidence-to-action-bridge-20261107` (merged). **Current internal exercise:** `research/dis-internal-redteam-exercise-20261107`.  
 **Cost/security:** No Copilot or paid Replit agent; no protected patient records, new database, external communications, cross-tenant data, automatic RPLICE execution or public clinical recommendations.
 
 ## Before → Changed → Why
@@ -26,7 +26,7 @@ Added one explicitly limited vertical slice: **published measurement → typed c
 ## The original colorectal case and scientific boundaries
 The existing NCI historical **Hinds County, Mississippi** fixture for 2018–2022 reports **30.4 late-stage age-adjusted incidence per 100,000 annually (95% CI 27.3–33.8); 63.3% late-stage of staged incident colorectal cancers; and 76 average late-stage cases annually.** These values are neither Jackson city rates, current 2026 estimates, all-stage incidence, causal impacts, nor independent replications. They share lineage but differ in denominators. All values require independent source re-extraction before manuscript submission.
 
-Harris County, TX and a defined Colorado comparison geography are **unpopulated** in this bridge until genuinely comparable source-matched measurements are acquired. The unreconciled GIS work is in PRs #57 and #58. PR #60 evaluates whether ChainWeb adds incremental value beyond competent CFIR, PRISM/RE-AIM, FRAME-IS and other established methods; none demonstrates comparative superiority. We preserve those branches and do not silently merge their uncertain claims or evidence into the causal model.
+Harris County, TX and a defined Colorado comparison geography are **unpopulated** in this bridge until genuinely comparable source-matched measurements are acquired. The GIS work originated in PRs #57 and #58; verify their current merge state independently before treating those datasets as accepted. PR #60 evaluates whether ChainWeb adds incremental value beyond competent CFIR, PRISM/RE-AIM, FRAME-IS and other established methods; none demonstrates comparative superiority. We preserve those branches and do not silently merge their uncertain claims or evidence into the causal model.
 
 ## Research next: return to empirical inquiry
 1. **Reconstruct same-site measurements:** all-stage incidence and late-stage incidence, stage share, total cases, completeness, age/race/sex strata, geographic units, registry vintage, time series and uncertainty. Source each metric from authoritative registry releases rather than reverse-calculating all-stage incidence from incompatible adjusted and conditional values.
