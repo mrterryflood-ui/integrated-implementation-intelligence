@@ -60,7 +60,9 @@ const allowedEndpoints:readonly ResearchEndpoint[]=[
  "SCREENING_COMPLETION","DIAGNOSTIC_COMPLETION","MORTALITY","DISEASE_INCIDENCE","REPORTED_DIAGNOSIS","METHOD_ADAPTATION"
 ];
 const hasOwn=(x:Record<string,unknown>,key:string)=>Object.prototype.hasOwnProperty.call(x,key);
-const sensitiveKeys=new Set(["patientId","patientName","personId","medicalRecordNumber","ssn","dob","dateOfBirth","email","address"]);
+const sensitiveKeys=new Set(["patientid","patientname","personid","medicalrecordnumber","ssn","dob","dateofbirth","email","address"]);
+const allowedKeys=new Set(["claimId","caseId","sourceUrl","observedEndpoint","claimedEndpoint","kind","difference","ci95","comparator","reviewerId","claimedIndependent"]);
+const normalized=(value:string)=>value.toLowerCase().replace(/[^a-z]/g,"");
 const isObj=(x:unknown):x is Record<string,unknown>=>typeof x==="object"&&x!==null&&!Array.isArray(x);
 const validText=(v:unknown)=>typeof v==="string"&&v.trim().length>0&&v.length<=700;
 export function preflightChainwebResearchClaims(input:unknown):ClaimReviewReport{
@@ -86,7 +88,10 @@ export function preflightChainwebResearchClaims(input:unknown):ClaimReviewReport
   const reasons:string[]=[];
   if(!isObj(raw))return {claimId:"invalid-"+index,caseId:"UNKNOWN",
    status:"REJECTED_UNSUPPORTED" as const,reasons:["INVALID_CLAIM_SHAPE"],sourceState:"PINNED_CITATION_NOT_PUBLISHER_VERIFIED" as const};
-  for(const key of Object.keys(raw))if(sensitiveKeys.has(key))reasons.push("PERSON_LEVEL_FIELD_PROHIBITED");
+  for(const key of Object.keys(raw)){
+   if(sensitiveKeys.has(normalized(key)))reasons.push("PERSON_LEVEL_FIELD_PROHIBITED");
+   if(!allowedKeys.has(key))reasons.push("UNKNOWN_OR_UNSAFE_EVIDENCE_FIELD");
+  }
   const id=validText(raw.claimId)?String(raw.claimId).trim():"invalid-"+index;
   const caseId=validText(raw.caseId)?String(raw.caseId).trim():"UNKNOWN";
   const composite=caseId+"|"+id;
