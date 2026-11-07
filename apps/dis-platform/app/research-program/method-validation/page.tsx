@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ClaimReviewPanel from "./claim-review-panel";
 import {SELECTED_METHOD_CASES,evidencePreflight,effectClass,constructEqualEvidenceComparison} from "../../../lib/chainweb-method-validation";
 
 export const metadata={
@@ -53,6 +54,7 @@ export default function MethodValidationPage(){
      <p><a href={c.source} target="_blank" rel="noreferrer">Review original publication</a></p>
     </article>)}
   </section>
+  <ClaimReviewPanel/>
   <section aria-label="Research preservation and limits" style={{borderTop:"1px solid #d7e0e9",paddingTop:14}}>
    <h2>Research we preserve</h2><p>The six-condition cancer and women's-health study, three-setting comparative exercise, Hinds/Harris cancer burden work, STELLAR 1 and the 19-phase DIS workflow are separate evidence workstreams. The later state-equity application to HerHealth, Thriving Communities, and Mission Transition is retained but not represented as an approved clinical integration.</p>
    <p><strong>Decision:</strong> published-case fidelity preflight ready for independent verification; comparative superiority, actual beneficiary effect and cross-condition transfer all remain unproven. We do not convert successful software tests into human clinical outcomes.</p>
