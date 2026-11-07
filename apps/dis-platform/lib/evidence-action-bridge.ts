@@ -236,6 +236,7 @@ export function reviewCounterfactual(x:CounterfactualRequest):CounterfactualAudi
     if(!Array.isArray(arm.observations)){gaps.push(label+": observations missing.");return new Map<number,number>();}
     const values=new Map<number,number>();
     for(const p of arm.observations.slice(0,200)){
+      if(!p||typeof p!=="object"){gaps.push(label+": invalid observation structure.");continue;}
       if(!validYear(p.year)||seen.has(p.year)||!Number.isFinite(p.value)||p.value===null||
          !Number.isFinite(p.denominator)||p.denominator===null||p.denominator<=0){
         gaps.push(label+": duplicate year, invalid value or missing/zero eligible denominator.");
@@ -246,12 +247,12 @@ export function reviewCounterfactual(x:CounterfactualRequest):CounterfactualAudi
     if(arm.observations.length>200)gaps.push(label+": series exceeds bounded input.");
     return values;
   };
-  if(!x.condition?.trim()||!x.unit?.trim()||x.construct==="OTHER")
+  if(typeof x.condition!=="string"||!x.condition.trim()||typeof x.unit!=="string"||!x.unit.trim()||!validConstructs.includes(x.construct)||x.construct==="OTHER")
     gaps.push("Condition, exact outcome construct and unit are required.");
   if(!validYear(x.interventionYear as number))gaps.push("A dated intervention year is required.");
-  if(x.treated?.site&&x.comparator?.site&&canon(x.treated.site)===canon(x.comparator.site))
+  if(typeof x.treated?.site==="string"&&typeof x.comparator?.site==="string"&&canon(x.treated.site)===canon(x.comparator.site))
     gaps.push("Treated and comparison must be distinct units.");
-  if(x.treated?.populationFrame&&x.comparator?.populationFrame&&canon(x.treated.populationFrame)!==canon(x.comparator.populationFrame))
+  if(typeof x.treated?.populationFrame==="string"&&typeof x.comparator?.populationFrame==="string"&&canon(x.treated.populationFrame)!==canon(x.comparator.populationFrame))
     gaps.push("Population/eligibility frames differ.");
   for(const [value,label] of [
     [x.commonMeasurementVersion,"Common measurement/version"],[x.comparisonRationale,"Comparison rationale"],
@@ -298,10 +299,10 @@ export function reviewCorrectionReceipt(action:CorrectionProposal,receipt:Correc
     !Number.isInteger(receipt.completedNumerator)||receipt.completedNumerator<0||
     receipt.completedNumerator>receipt.eligibleDenominator)
     gaps.push("Valid completed and eligible denominators required.");
-  if(!receipt.coreFunctionChecked)gaps.push("Core intervention function not checked.");
-  if(!receipt.balancingHarmsReviewed)gaps.push("Adverse events, exclusion and burden not assessed.");
-  if(!receipt.comparisonRecorded)gaps.push("Credible comparison not recorded.");
-  if(!receipt.reviewerIdentity?.trim())gaps.push("Independent reviewer not identified.");
+  if(receipt.coreFunctionChecked!==true)gaps.push("Core intervention function not checked.");
+  if(receipt.balancingHarmsReviewed!==true)gaps.push("Adverse events, exclusion and burden not assessed.");
+  if(receipt.comparisonRecorded!==true)gaps.push("Credible comparison not recorded.");
+  if(typeof receipt.reviewerIdentity!=="string"||!receipt.reviewerIdentity.trim())gaps.push("Independent reviewer not identified.");
   return {actionId:action.id,provisionalCompleteness:gaps.length===0,
     problems:gaps,closure:"INDEPENDENT_EXTERNAL_VERIFICATION_REQUIRED" as const,
     claimedOutcomeVerified:false as const,actionAuthorized:false as const};
