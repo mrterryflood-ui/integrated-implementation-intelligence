@@ -87,7 +87,15 @@ export function buildEnvironmentalResearch(id:EnvironmentalStudy,leads:readonly 
 
 export type ReplayRecord={sourceId:string;lineageId:string;metric:string;unit:string;value:number|null;observedAt:string;availableAt:string;calibrationUntil:string;kind:"OBSERVED"|"MODELED"|"SYNTHETIC"};
 export type WaterReplayInput={decisionAt:string;requiredMetrics:string[];expectedUnits:Record<string,string>;records:ReplayRecord[]};
-const validDate=(x:unknown)=>typeof x==="string"&&/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(x)&&Number.isFinite(Date.parse(x));
+const validDate=(x:unknown)=>{
+ if(typeof x!=="string")return false;
+ const m=/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.\d{1,3})?(?:Z|([+-])(\d{2}):(\d{2}))$/.exec(x);
+ if(!m)return false;
+ const [year,month,day,hour,minute,second]=m.slice(1,7).map(Number);
+ const leap=year%4===0&&(year%100!==0||year%400===0);
+ const days=[31,leap?29:28,31,30,31,30,31,31,30,31,30,31];
+ return month>=1&&month<=12&&day>=1&&day<=days[month-1]&&hour<=23&&minute<=59&&second<=59&&(!m[7]||(Number(m[8])<=23&&Number(m[9])<=59))&&Number.isFinite(Date.parse(x));
+};
 /** Metadata/measurement admissibility only. Never infers contamination or safety. */
 export function reviewWaterReplay(input:unknown){
  if(!input||typeof input!=="object")throw Error("A bounded replay object is required");

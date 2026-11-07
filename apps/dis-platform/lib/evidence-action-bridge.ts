@@ -173,7 +173,7 @@ export function reviewEvidenceToAction(
     coreFunctionEvidence:"NOT_INDEPENDENTLY_VALIDATED_FOR_SITE" as const,
     state:"PROPOSED_NOT_AUTHORIZED" as const
   }));
-  const cancerProgram=program.site==="colorectal"||program.site==="breast";
+  const cancerProgram=program.site==="colorectal"||program.site==="breast"||program.caseId.startsWith("jackson-ms-late-stage-")||program.indicators.some(i=>i.site==="colorectal"||i.site==="breast");
   if(cancerProgram&&!measures.some(x=>x.construct==="DISEASE_INCIDENCE"))
     gaps.push(gap("all-stage-incidence","RESEARCH_REQUIRED",
       "Underlying disease occurrence is not measured by late-stage incidence or stage share.",

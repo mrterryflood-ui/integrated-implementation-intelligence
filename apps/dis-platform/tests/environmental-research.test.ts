@@ -1,6 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {buildEnvironmentalResearch,getEnvironmentalProtocol,exportEnvironmentalResearch,reviewWaterReplay,type WaterReplayInput} from "../lib/environmental-research";
+import {buildResearchProgram} from "../lib/research-program";
+import {jacksonCancerCase} from "../lib/jackson-cancer-case";
+import {reviewEvidenceToAction} from "../lib/evidence-action-bridge";
 import {colorectalEvidenceAction} from "../lib/evidence-action-colorectal";
 
 test("environmental cases reuse the bridge without inheriting colorectal assumptions",()=>{
@@ -9,6 +12,7 @@ test("environmental cases reuse the bridge without inheriting colorectal assumpt
   assert.equal(x.program.site,"general");assert.equal(x.bridge.measures.length,0);assert.equal(x.studyResults,"NOT_COLLECTED");
   assert.ok(!x.bridge.gaps.some(g=>["all-stage-incidence","screening-denominator","diagnostic-resolution"].includes(g.id)));
   assert.ok(!x.program.issues.find(g=>g.code==="NO_MEASURED_BASELINE")?.nextEvidence.includes("incidence/stage"));
+  assert.ok(!x.program.issues.find(g=>g.code==="OFFICIAL_SOURCE_MISSING")?.nextEvidence.includes("disease registry"));
   assert.ok(x.bridge.gaps.some(g=>g.id==="counterfactual-unverified"));assert.equal(x.bridge.correctiveActionAuthorized,false);
  }
  const crc=colorectalEvidenceAction();assert.ok(crc.bridge.gaps.some(g=>g.id==="all-stage-incidence"));
@@ -43,4 +47,17 @@ test("duplicates and multiple displays of one source never become independent co
 });
 test("malformed, oversized and ambiguous replay requests are rejected",()=>{
  for(const x of [null,{}, {...replay(),decisionAt:"2026-11-07 12:00"},{...replay(),records:Array(501).fill(replay().records[0])},{...replay(),requiredMetrics:["turbidity","turbidity"]}])assert.throws(()=>reviewWaterReplay(x));
+});
+
+test("general cancer comparison retains cancer-specific measurement gaps",()=>{
+ const bridge=reviewEvidenceToAction(buildResearchProgram(jacksonCancerCase("general")),[]);
+ for(const id of ["all-stage-incidence","screening-denominator","diagnostic-resolution"])assert.ok(bridge.gaps.some(g=>g.id===id));
+});
+test("invalid calendar and time values cannot become valid replay metadata",()=>{
+ const x=replay();x.decisionAt="2026-03-02T12:00:00Z";
+ for(const observedAt of ["2026-02-30T11:59:00Z","2026-02-29T11:59:00Z","2026-03-02T24:00:00Z","2026-03-02T11:59:60Z"]){
+  x.records[0].observedAt=observedAt;x.records[0].availableAt="2026-03-02T11:59:10Z";
+  const r=reviewWaterReplay(x);assert.equal(r.observedRecords,0);assert.ok(r.issues.some(i=>i.includes("timestamps")));
+ }
+ assert.throws(()=>reviewWaterReplay({...replay(),decisionAt:"2026-11-31T12:00:00Z"}));
 });
