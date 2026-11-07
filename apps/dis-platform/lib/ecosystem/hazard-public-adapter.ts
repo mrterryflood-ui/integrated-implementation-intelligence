@@ -4,6 +4,32 @@ import {NetworkBudget,asRecord,boundedText,publicHttps} from './transport';
 const ORIGIN='https://hazardaware.vercel.app';
 const PATH='/api/dis/hazards/location';
 const FRESHNESS=new Set(['FRESH','STALE','UNKNOWN','UNAVAILABLE','NOT_CONFIGURED','NOT_COVERED']);
+const POINT_LANES=[
+ ['NOAA / National Weather Service','OFFICIAL','https://api.weather.gov/alerts/active'],
+ ['NOAA / National Weather Service','FORECAST','https://api.weather.gov/'],
+ ['USFS / NIFC WFIGS','REPORTED','https://services3.arcgis.com/T4QMspbfLg3qTGWY/arcgis/rest/services/WFIGS_Incident_Locations_Current/FeatureServer/0/query'],
+ ['NOAA / National Weather Service','OFFICIAL','https://api.weather.gov/alerts/active'],
+ ['Copernicus CAMS via Open-Meteo','MODELED','https://air-quality-api.open-meteo.com/v1/air-quality'],
+ ['U.S. EPA AirNow','MEASURED','https://www.airnow.gov/'],
+] as const;
+const COUNTY_LANES=[
+ ['FEMA OpenFEMA','OFFICIAL / REPORTED','/api/open/v2/DisasterDeclarationsSummaries'],
+ ['FEMA OpenFEMA','OFFICIAL / REPORTED','/api/open/v2/PublicAssistanceFundedProjectsDetails'],
+ ['FEMA National Risk Index','REFERENCE / MODELED','/XG15cJAlne2vxtgt/arcgis/rest/services/National_Risk_Index_Counties/FeatureServer/0/query'],
+] as const;
+const STATE_USPS:Record<string,string>={
+ '01':'AL','02':'AK','04':'AZ','05':'AR','06':'CA','08':'CO','09':'CT','10':'DE','11':'DC','12':'FL','13':'GA','15':'HI','16':'ID','17':'IL','18':'IN','19':'IA','20':'KS','21':'KY','22':'LA','23':'ME','24':'MD','25':'MA','26':'MI','27':'MN','28':'MS','29':'MO','30':'MT','31':'NE','32':'NV','33':'NH','34':'NJ','35':'NM','36':'NY','37':'NC','38':'ND','39':'OH','40':'OK','41':'OR','42':'PA','44':'RI','45':'SC','46':'SD','47':'TN','48':'TX','49':'UT','50':'VT','51':'VA','53':'WA','54':'WV','55':'WI','56':'WY','72':'PR','78':'VI','69':'MP','66':'GU','60':'AS',
+};
+
+function expectedLane(row:Record<string,unknown>,index:number,point:boolean,fips?:string):boolean{
+ if(point){const lane=POINT_LANES[index];return !!lane&&row.publisher===lane[0]&&row.label===lane[1]&&row.source===lane[2];}
+ const lane=COUNTY_LANES[index];if(!lane||row.publisher!==lane[0]||row.label!==lane[1])return false;
+ const url=new URL(String(row.source));
+ if(index===2)return url.origin==='https://services.arcgis.com'&&url.pathname===lane[2]&&url.searchParams.get('where')===`STCOFIPS='${fips}'`;
+ if(url.origin!=='https://www.fema.gov'||url.pathname!==lane[2])return false;
+ const filter=url.searchParams.get('$filter');
+ return index===0?filter===`placeCode eq '99${fips?.slice(2)}' and state eq '${STATE_USPS[fips?.slice(0,2)||'']}'`:filter===`countyCode eq '${fips?.slice(2)}' and stateNumberCode eq '${fips?.slice(0,2)}'`;
+}
 
 /** HazardAware keeps its provider keys and raw signal acquisition. DIS receives only a
  * bounded, public projection with source labels; it never issues an operational alert. */
@@ -28,8 +54,8 @@ export async function readHazardPublicLocation(cap:Capability,input:EngagementIn
  const authority=asRecord(root.authority);
  if(authority.humanDecisionRequired!==true||authority.automatedAlerts!==false||authority.deviceControl!==false)throw new ContractError('INVALID_HAZARD_RESPONSE','The publisher did not preserve the human decision boundary.');
  const evidence=root.evidence.map(asRecord);
- for(const row of evidence)if(!publicHttps(row.source)||typeof row.publisher!=='string'||typeof row.label!=='string'||!FRESHNESS.has(String(row.freshness))||!validDate(row.retrievedAt)||
-  ['issuedAt','validFrom','validThrough','validAt'].some(key=>row[key]!=null&&!validDate(row[key])))throw new ContractError('INVALID_HAZARD_RESPONSE','A hazard evidence lane lacks source, time or freshness provenance.');
+ for(const [index,row] of evidence.entries())if(!publicHttps(row.source)||!expectedLane(row,index,point,g.countyFips)||!FRESHNESS.has(String(row.freshness))||!validDate(row.retrievedAt)||
+  ['observedAt','issuedAt','validFrom','validThrough','validAt'].some(key=>row[key]!=null&&!validDate(row[key])))throw new ContractError('INVALID_HAZARD_RESPONSE','A hazard evidence lane lacks its expected publisher, source, label, time or freshness provenance.');
  const signals=asRecord(root.signals),generatedAt=String(root.generatedAt);
  const responseAgeMs=Date.now()-Date.parse(generatedAt);
  if(responseAgeMs < -5*60_000)throw new ContractError('INVALID_HAZARD_RESPONSE','HazardAware response time is implausibly in the future.');
@@ -60,9 +86,10 @@ export async function readHazardPublicLocation(cap:Capability,input:EngagementIn
   if(Object.keys(signals).length){
    const declarations=asRecord(signals.declarations),assistance=asRecord(signals.publicAssistance),index=asRecord(signals.nationalRiskIndex);
    if(!Array.isArray(declarations.rows)||declarations.rows.length>20||!Array.isArray(assistance.projects)||assistance.projects.length>20)throw new ContractError('INVALID_HAZARD_RESPONSE','County records exceed the reviewed projection.');
+   if(index.status!=='live'||asRecord(index.county).countyFips!==g.countyFips)throw new ContractError('GEOGRAPHY_CONFLICT','The FEMA risk row does not verify the requested county.');
    if(declarations.status==='live')add('fema-declarations','FEMA county declaration history',`FEMA returned ${declarations.rows.length} declaration row(s) for ${location}; this is administrative history, not a current warning.`, 'FEMA OpenFEMA',0,{kind:'historical-declarations',count:declarations.rows.length});
    if(assistance.status==='live')add('fema-assistance','FEMA public assistance context',`FEMA returned ${assistance.projects.length} public assistance project row(s); an obligation is not necessarily an expenditure or completed repair.`, 'FEMA OpenFEMA',1,{kind:'administrative-projects',count:assistance.projects.length});
-   if(index.status==='live')add('fema-risk','FEMA National Risk Index reference',`The National Risk Index returned a modeled county reference for ${location}; it is not a current forecast or all-clear.`, 'FEMA National Risk Index',2,{kind:'modeled-reference',countyFips:g.countyFips});
+   add('fema-risk','FEMA National Risk Index reference',`The National Risk Index returned a modeled county reference for ${location}; it is not a current forecast or all-clear.`, 'FEMA National Risk Index',2,{kind:'modeled-reference',countyFips:g.countyFips});
   }
  }
  const limitations=[...root.limits.filter((v:unknown)=>typeof v==='string').map((v:string)=>v.slice(0,300)).slice(0,8),
