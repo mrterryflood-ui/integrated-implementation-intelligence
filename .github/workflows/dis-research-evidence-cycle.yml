@@ -56,7 +56,7 @@ jobs:
               print('NSFG_DESCRIPTIVE_AGE_STANDARDIZED_CONTRASTS',json.dumps({k:v['contrast'] for k,v in d['nsfg']['equal_age_standardized_black_white'].items()},sort_keys=True))
               print('NO_CAUSAL_OR_FIELD_EFFECT_VERIFIED')
           PY
-      - name: Classify acquisition completeness independently from job success
+      - name: Run bounded synthetic diagnosis-ascertainment stress test\n        run: python research/three_study_cycle/ascertainment_stress.py --out research-results/simulations\n      - name: Classify acquisition completeness independently from job success
         if: always()
         run: python research/three_study_cycle/readiness.py research-results
       - name: Bind executable code and complete evidence package
