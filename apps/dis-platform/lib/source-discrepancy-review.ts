@@ -15,7 +15,12 @@ export function sourceDiscrepancies(previous:readonly SourceCell[],candidate:rea
  }
  return out;
 }
+/** Source-label correction, 2026-11-07: these are different observation windows.
+ * The earlier candidate was incorrectly labeled 2018-2022 in our own ledger.
+ * These source-reported rows are not raw-byte snapshots or independently adjudicated records.
+ * A rendered-page creation date is not the observation window or registry submission.
+ */
 export const HARRIS_HISTORICAL_CONFLICT={
- previous:{id:"CRC-HARRIS-LATE-INC",sourceUrl:"https://statecancerprofiles.cancer.gov/incidencerates/index.php?statefips=48",sourceVersion:"Prior internal exercise, exact vintage unresolved",retrievedAt:"2026-11-07",period:"2018-2022",construct:"AGE_ADJUSTED_LATE_STAGE_INCIDENCE",geography:"Harris County TX",population:"All races, both sexes, all ages",value:23.3,unit:"per_100k"},
- candidate:{id:"CRC-HARRIS-LATE-INC",sourceUrl:"https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd",sourceVersion:"NCI public table, page created 2026-09-25",retrievedAt:"2026-11-07",period:"2018-2022",construct:"AGE_ADJUSTED_LATE_STAGE_INCIDENCE",geography:"Harris County TX",population:"All races, both sexes, all ages",value:23.9,unit:"per_100k"}
+ previous:{id:"CRC-HARRIS-LATE-INC",sourceUrl:"https://www.statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&race=00&ruralurban=0&sex=0&sortOrder=desc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",sourceVersion:"SEER November 2024 submission; retrieved table labels 2018-2022",retrievedAt:"2026-11-07",period:"2018-2022",construct:"AGE_ADJUSTED_LATE_STAGE_INCIDENCE",geography:"Harris County TX",population:"All races, both sexes, all ages",value:23.3,unit:"per_100k"},
+ candidate:{id:"CRC-HARRIS-LATE-INC",sourceUrl:"https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd",sourceVersion:"SEER November 2025 submission; retrieved table labels 2019-2023",retrievedAt:"2026-11-07",period:"2019-2023",construct:"AGE_ADJUSTED_LATE_STAGE_INCIDENCE",geography:"Harris County TX",population:"All races, both sexes, all ages",value:23.9,unit:"per_100k"}
 } satisfies {previous:SourceCell;candidate:SourceCell};
