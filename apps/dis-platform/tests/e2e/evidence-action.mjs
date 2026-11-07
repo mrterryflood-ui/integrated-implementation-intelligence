@@ -26,6 +26,11 @@ for(const [label,engine,device] of [
     await page.getByText("76 average cases per year").waitFor();
     await page.getByText("Safe to pool: no.",{exact:false}).first().waitFor();
     await page.getByText(/Harris County, Texas/).first().waitFor();
+    await page.getByRole("button",{name:"Load existing NCI exercise source"}).click();
+    await page.getByRole("button",{name:"Review cross-study measurements"}).click();
+    await page.getByRole("heading",{name:"Source report — not independently verified"}).waitFor();
+    await page.getByText(/Shared original-source lineage/).first().waitFor();
+    await page.getByText(/Pooled estimate: not allowed/).waitFor();
     await page.getByRole("button",{name:"Load synthetic teaching panel"}).click();
     await page.getByRole("button",{name:"Check counterfactual readiness"}).click();
     await page.getByText(/candidate for independent design review/i).first().waitFor();
