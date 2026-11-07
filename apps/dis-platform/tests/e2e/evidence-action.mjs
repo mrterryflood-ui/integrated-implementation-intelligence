@@ -56,8 +56,10 @@ for(const [label,engine,device] of [
     const authRequest=page.waitForResponse(r=>r.url().endsWith("/api/workspaces")&&r.request().method()==="GET");
     await page.getByRole("button",{name:"Load my private DIS workspaces"}).click();
     const authResponse=await authRequest;
-    assert.equal(authResponse.status(),401,"unauthenticated browser cannot load private research workspaces");
-    await page.getByText("Sign in to use private DIS casework.").waitFor();
+    assert.ok([401,503].includes(authResponse.status()),"private workspace must fail closed when unauthenticated or production identity is deliberately unavailable");
+    const denial=await authResponse.json();
+    assert.equal(Array.isArray(denial.workspaces),false,"denied response cannot expose private workspaces");
+    await page.getByText(/Sign in to use private DIS casework|Workspace service unavailable/).waitFor();
     const dims=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
     assert.ok(dims.scroll<=dims.client+3,"No horizontal viewport overflow "+JSON.stringify(dims));
     assert.deepEqual(errors,[],"No browser runtime errors");
