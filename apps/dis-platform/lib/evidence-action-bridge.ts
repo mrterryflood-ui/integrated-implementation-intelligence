@@ -136,7 +136,7 @@ export function reviewEvidenceToAction(
     const b=mapping.get(indicator.id);
     if(!b||!b.condition.trim()||b.construct==="OTHER"||!b.denominatorClass.trim()||
        !b.populationFrame.trim()||!b.methodVersion.trim()||
-       (program.site!=="general"&&b.condition!==program.site)){
+       b.condition!==indicator.site || (program.site!=="general"&&b.condition!==program.site)){
       gaps.push(gap("unmapped:"+indicator.id,"MEASUREMENT_BLOCK",
         "The measurement has no accepted condition-specific construct and denominator mapping.",
         "Epidemiology and measurement lead",
@@ -305,4 +305,88 @@ export function reviewCorrectionReceipt(action:CorrectionProposal,receipt:Correc
   return {actionId:action.id,provisionalCompleteness:gaps.length===0,
     problems:gaps,closure:"INDEPENDENT_EXTERNAL_VERIFICATION_REQUIRED" as const,
     claimedOutcomeVerified:false as const,actionAuthorized:false as const};
+}
+
+
+/**
+ * Cross-study evidence harmonization is deliberately *manual and transparent*.
+ * Search metadata supplies candidates. An analyst must transcribe the original
+ * study's definitions before this assessment can identify measurement gaps.
+ * This module never pretends that a pasted publication or value was verified.
+ */
+export type ExternalStudyMeasure={
+  id:string;title:string;sourceUrl:string;condition:string;construct:Construct;
+  geography:string;populationFrame:string;period:string;
+  numeratorDefinition:string;denominatorDefinition:string;
+  unit:string;methodVersion:string;
+  value:number|null;
+};
+export type CrossStudyLink={
+  studyId:string;baselineId:string;
+  relation:"SAME_PHENOMENON_DIFFERENT_MEASURE"|"SAME_CONSTRUCT_ALIGNMENT_UNVERIFIED";
+  issues:string[];
+  safeToPool:false;sourceIndependenceEstablished:false;causalityEstablished:false;
+};
+export type CrossStudyReview={
+  status:"SOURCE_REPORTED_CANDIDATES_NOT_INDEPENDENTLY_VERIFIED";
+  admitted:ExternalStudyMeasure[];
+  links:CrossStudyLink[];
+  rejected:{id:string;reasons:string[]}[];
+  originalMethodsVerified:false;
+  pooledEstimate:null;
+};
+const validConstructs:readonly Construct[]=[
+  "DISEASE_INCIDENCE","LATE_STAGE_INCIDENCE","LATE_STAGE_CASE_SHARE",
+  "LATE_STAGE_CASE_COUNT","SCREENING_COMPLETION","DIAGNOSTIC_FOLLOWUP","MORTALITY","OTHER"
+];
+export function reviewCrossStudyMeasurements(input:unknown,base:readonly BoundMeasure[]):CrossStudyReview{
+  if(!Array.isArray(input)||input.length>30)
+    return {status:"SOURCE_REPORTED_CANDIDATES_NOT_INDEPENDENTLY_VERIFIED",
+      admitted:[],links:[],rejected:[{id:"INPUT",reasons:["Expected an array of no more than 30 public, aggregate source records."]}],
+      originalMethodsVerified:false,pooledEstimate:null};
+  const admitted:ExternalStudyMeasure[]=[],links:CrossStudyLink[]=[],rejected:CrossStudyReview["rejected"]=[];
+  const ids=new Set<string>();
+  for(const [i,unknownItem] of input.entries()){
+    const item=unknownItem&&typeof unknownItem==="object"&&!Array.isArray(unknownItem)?unknownItem as Record<string,unknown>:{};
+    const id=typeof item.id==="string"?item.id:"row-"+(i+1);
+    const reasons:string[]=[];
+    if(!id.trim()||id.length>100||ids.has(id))reasons.push("Duplicate, missing or oversized indicator identifier.");
+    ids.add(id);
+    const mandatory=["title","sourceUrl","condition","geography","populationFrame","period","numeratorDefinition","denominatorDefinition","unit","methodVersion"] as const;
+    for(const name of mandatory)if(typeof item[name]!=="string"||!(item[name] as string).trim()||(item[name] as string).length>700)
+      reasons.push(name+" is missing or invalid.");
+    if(typeof item.sourceUrl!=="string"||!webUrl(item.sourceUrl))reasons.push("An actual HTTPS source location is required.");
+    if(typeof item.construct!=="string"||!validConstructs.includes(item.construct as Construct)||item.construct==="OTHER")
+      reasons.push("The original study construct must be explicitly classified.");
+    if(item.value!==null&&(typeof item.value!=="number"||!Number.isFinite(item.value)||item.value<0))
+      reasons.push("Value must be a nonnegative published aggregate or null when unknown.");
+    if(item.unit==="percent"&&typeof item.value==="number"&&item.value>100)
+      reasons.push("Percent cannot exceed 100.");
+    if(reasons.length){rejected.push({id,reasons});continue;}
+    const accepted=item as ExternalStudyMeasure;
+    admitted.push(accepted);
+    for(const m of base){
+      if(canon(accepted.condition)!==canon(m.condition))continue;
+      const issues:string[]=[];
+      if(accepted.construct!==m.construct)issues.push("Different outcome construct or ascertainment point.");
+      if(canon(accepted.unit)!==canon(m.indicator.unit))issues.push("Unit/standardization mismatch.");
+      if(canon(accepted.denominatorDefinition)!==canon(m.indicator.denominatorDefinition))
+        issues.push("Denominator/eligibility mismatch.");
+      if(canon(accepted.numeratorDefinition)!==canon(m.indicator.numeratorDefinition))
+        issues.push("Numerator or case definition mismatch.");
+      if(canon(accepted.geography)!==canon(m.indicator.geography))issues.push("Geographic boundary mismatch.");
+      if(canon(accepted.period)!==canon(m.indicator.period))issues.push("Reporting window mismatch.");
+      if(canon(accepted.methodVersion)!==canon(m.methodVersion))issues.push("Method and version not reconciled.");
+      if(canon(accepted.populationFrame)!==canon(m.populationFrame))issues.push("Population frame not reconciled.");
+      if(sourceIdentity(accepted.sourceUrl)===m.sourceLineage)
+        issues.push("Shared original-source lineage; not independent corroboration.");
+      if(!issues.length)issues.push("Matching declarations cannot authenticate a source or validate exchangeability.");
+      links.push({studyId:accepted.id,baselineId:m.id,
+        relation:accepted.construct===m.construct?
+          "SAME_CONSTRUCT_ALIGNMENT_UNVERIFIED":"SAME_PHENOMENON_DIFFERENT_MEASURE",
+        issues,safeToPool:false,sourceIndependenceEstablished:false,causalityEstablished:false});
+    }
+  }
+  return {status:"SOURCE_REPORTED_CANDIDATES_NOT_INDEPENDENTLY_VERIFIED",
+    admitted,links,rejected,originalMethodsVerified:false,pooledEstimate:null};
 }
