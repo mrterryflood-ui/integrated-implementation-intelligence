@@ -19,6 +19,11 @@ for(const [label,engine,device] of [["desktop",chromium,{viewport:{width:1280,he
   await page.getByRole("button",{name:"Load synthetic teaching panel"}).click();await page.getByRole("button",{name:"Check counterfactual readiness"}).click();
   await page.getByText(/candidate for independent design review/i).first().waitFor();await page.getByText(/Raw difference in differences: 1.000/i).waitFor();await page.getByText("Causal effect established: no.",{exact:false}).waitFor();
   const panel=page.getByRole("textbox",{name:/Bounded aggregate design JSON/});
+  const divergent=JSON.parse(await panel.inputValue());
+  [10,12,14].forEach((value,i)=>{divergent.treated.observations[i].value=value;divergent.comparator.observations[i].value=9;});
+  await panel.fill(JSON.stringify(divergent));await page.getByRole("button",{name:"Check counterfactual readiness"}).click();
+  await page.getByText(/Observed preperiod slopes: treated 2, comparison 0, gap 2/).waitFor();
+  await page.getByText(/descriptive diagnostics, not a statistical test or acceptance threshold/).waitFor();
   await panel.fill(JSON.stringify({condition:"colorectal",construct:"LATE_STAGE_INCIDENCE",unit:"synthetic",interventionYear:null,commonMeasurementVersion:"",treated:{site:"A",populationFrame:"A",observations:[{year:2020,value:1,denominator:10}]},comparator:{site:"B",populationFrame:"B",observations:[{year:2020,value:2,denominator:10}]},comparisonRationale:"",parallelTrendsEvidence:"",competingChangesEvidence:"",spilloverAssessment:"",independentReviewer:""}));
   await page.getByRole("button",{name:"Check counterfactual readiness"}).click();await page.getByText(/insufficient for causal estimate/i).first().waitFor();
   const receipt=page.getByRole("textbox",{name:/Aggregate delivery receipt JSON/});
