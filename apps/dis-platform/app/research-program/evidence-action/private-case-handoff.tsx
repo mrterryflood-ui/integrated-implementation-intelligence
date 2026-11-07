@@ -19,7 +19,7 @@ export default function PrivateCaseHandoff({program,bridge}:{program:ResearchPro
     try{
       const r=await fetch("/api/workspaces",{credentials:"same-origin",cache:"no-store"});
       const body=await r.json().catch(()=>({}));
-      if(!r.ok)throw Error(r.status===401?"Sign in to use private DIS casework.":String(body.error||"Workspace lookup unavailable."));
+      if(!r.ok)throw Error(r.status===401?"Sign in to use private DIS casework.":r.status===503?"Private workspace access is unavailable in this environment.":String(body.error||"Workspace lookup unavailable."));
       const list=Array.isArray(body.workspaces)?body.workspaces.filter((x:Workspace)=>
         x&&typeof x.title==="string"&&typeof x.id==="string"&&uuid.test(x.id)).slice(0,100):[];
       setWorkspaces(list);setLoaded(true);setChosen(list[0]?.id||"");
