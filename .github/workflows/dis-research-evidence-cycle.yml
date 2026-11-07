@@ -30,9 +30,22 @@ jobs:
         env:
           GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: python research/three_study_cycle/acquire.py --out research-results
+      - name: Reconcile and replay all three studies
+        run: |
+          python research/three_study_cycle/analyze.py --input research-results --out research-results/analysis
+          python research/three_study_cycle/analyze.py --input research-results --out research-results/replay
+          cmp research-results/analysis/results.json research-results/replay/results.json
+          cmp research-results/analysis/national_original_extract.csv research-results/replay/national_original_extract.csv
+          echo 'PASS: identical source snapshot produces byte-identical analytical results.'
       - name: Classify acquisition completeness independently from job success
         if: always()
         run: python research/three_study_cycle/readiness.py research-results
+      - name: Bind executable code and complete evidence package
+        if: always()
+        run: |
+          mkdir -p research-results/code
+          cp research/three_study_cycle/*.py research-results/code/
+          python -c "import pathlib,hashlib,json; p=pathlib.Path('research-results'); files={str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.rglob('*')) if f.is_file() and f.name!='CYCLE_MANIFEST_SHA256.json'}; (p/'CYCLE_MANIFEST_SHA256.json').write_text(json.dumps(files,indent=2)+'\n')"
       - name: Preserve exact source bytes, failures, definitions and calculated results
         if: always()
         uses: actions/upload-artifact@v4
@@ -45,5 +58,6 @@ jobs:
         if: always()
         run: |
           echo '## Original-source research cycle' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Read acquisition_receipt.json and nsfg_reproduction.json for per-source success/failure. A successful job does not certify the source, mechanisms, clinical effects or production acceptance.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Read acquisition_receipt.json, readiness.json and analysis/results.json. Workflow success, retained source bytes, statistical reproduction, causal identification and beneficiary benefit are separate states.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The full source and executable package has a SHA-256 manifest. Archive each accepted cycle outside expiring CI storage before claiming durable research retention.' >> "$GITHUB_STEP_SUMMARY"
           echo 'No clinical action, private tenant access, external correspondence, paid agent, or production write is performed. No recurring schedule is enabled on this draft branch.' >> "$GITHUB_STEP_SUMMARY"
