@@ -26,7 +26,7 @@ export default function MethodValidationPage(){
    <h2>What gets compared?</h2>
    <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(275px,1fr))",gap:12}}>
     <article style={{padding:15,border:"1px solid #bdcad6",borderRadius:10}}>
-     <h3>Competent comparator</h3><p>Updated CFIR, iterative PRISM–RE-AIM, FRAME-IS, epidemiologic reasoning, and real implementation-science practice. Analysts receive the same original evidence, time and eligible resources.</p>
+     <h3>Competent comparator</h3><p>Updated CFIR, iterative PRISM–RE-AIM, FRAME-IS, the 2026 learning-health-system improvement process, epidemiologic reasoning, and real implementation-science practice. Analysts receive the same original evidence, time and eligible resources.</p>
     </article>
     <article style={{padding:15,border:"1px solid #bdcad6",borderRadius:10}}>
      <h3>ChainWeb supplementation</h3><p>All comparator capabilities plus explicit evidence-linked cross-system nodes, rival explanations, mechanisms, owner/action/fidelity/outcome/retest traceability, and temporal stewardship. RPLICE methods remain human selected and are not executed by this page.</p>
