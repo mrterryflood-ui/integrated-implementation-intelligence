@@ -81,6 +81,30 @@ for(const [label,engine,device] of [
   assert.ok(dims.scroll<=dims.client+3,"no horizontal document overflow: "+JSON.stringify(dims));
   assert.deepEqual(errors,[],"no unexpected runtime client errors");
   assert.deepEqual(writes,[],"no external mutations or model calls from local research studio");
+  // ChainWeb independent method validation: public source-bound lab is reachable
+  // from this existing research journey. It never claims clinical or comparative success.
+  await page.getByRole("link",{name:/Review ChainWeb method validation/}).click();
+  await page.getByRole("heading",{name:"Does ChainWeb improve implementation decisions?"}).waitFor();
+  await page.getByText("Method-superiority evidence:",{exact:false}).waitFor();
+  await page.getByText("NC24: 12 NC FQHC delivery sites, centralized cancer-center operations").waitFor();
+  await page.getByText("Incremental navigation vs outreach").waitFor();
+  await page.getByText("16").first().waitFor();
+  // The actual claim gate, not only its library tests, must reject a forged source.
+  const claimEditor=page.getByRole("textbox",{name:"Research claim JSON"});
+  await claimEditor.fill(JSON.stringify([{
+    claimId:"NC24-forgery",caseId:"NC24",
+    sourceUrl:"https://doi.org/10.1001/jamanetworkopen.2024.46694",
+    observedEndpoint:"SCREENING_COMPLETION",claimedEndpoint:"SCREENING_COMPLETION",
+    kind:"BENEFICIAL_INTERVENTION_EFFECT",difference:20.29,
+    ci95:[17.85,22.73],comparator:"Usual care"
+  }]));
+  await page.getByRole("button",{name:"Check claim integrity"}).click();
+  await page.getByText(/source does not match curated reference/).waitFor();
+  await page.getByText(/always unverified/i).waitFor();
+  assert.deepEqual(errors,[],"no runtime errors in the method-validation lab");
+  assert.deepEqual(writes,[],"research method validation is read-only");
+  await page.screenshot({path:join(out,"chainweb-method-validation-"+label+".png"),fullPage:false});
+  await page.goBack({waitUntil:"domcontentloaded"});
   await page.screenshot({path:join(out,"research-program-"+label+".png"),fullPage:false});
   console.log("PASS DIS research-to-implementation "+label+": sourced cancer splits, drivers, evaluation, custom unknowns, no network mutations");
  }finally{await context.close();await browser.close();}
