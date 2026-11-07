@@ -130,7 +130,7 @@ export default function EvidenceActionClient(){
     </section>
     <CrossStudyPanel baseline={bridge.measures}/>
     <section className="rp-program" aria-labelledby="mechanisms-heading">
-      <h2 id="mechanisms-heading">3. Challenge the explanation before choosing the correction</h2>
+      <h2 id="mechanisms-heading">4. Challenge the explanation before choosing the correction</h2>
       <p>Each explanation from the existing DIS research program retains its rival, a test that could distinguish them, the instrument needed, and a reviewer role. None is established as the cause of Hinds or Harris outcomes.</p>
       <div className="rp-card-grid">{bridge.hypotheses.map(h=><article className="rp-card" key={h.id}>
         <p className="rp-small-code">{h.id} · LOCAL TEST NOT RUN</p>
@@ -143,7 +143,7 @@ export default function EvidenceActionClient(){
       </article>)}</div>
     </section>
     <section className="rp-program" aria-labelledby="causal-heading">
-      <h2 id="causal-heading">4. Audit a proposed counterfactual, not a single snapshot</h2>
+      <h2 id="causal-heading">5. Audit a proposed counterfactual, not a single snapshot</h2>
       <p>Paste an aggregate two-arm annual panel to check matched timepoints, stable measurement declaration, treatment timing, comparison rationale, possible confounders, spillover and independent review. A passing screen produces arithmetic only; it does <strong>not</strong> establish parallel trends or a causal effect. The sample is entirely synthetic.</p>
       <div className="rp-buttons"><button type="button" onClick={()=>{setPanelText(JSON.stringify(SYNTHETIC_PANEL,null,2));setPanelAudit(null);setPanelError("");}}>Load synthetic teaching panel</button></div>
       <label className="rp-field">Bounded aggregate design JSON (no patient data)
@@ -160,7 +160,7 @@ export default function EvidenceActionClient(){
       </div>}
     </section>
     <section className="rp-program" aria-labelledby="action-heading">
-      <h2 id="action-heading">5. Link an improvement proposal to actual verification</h2>
+      <h2 id="action-heading">6. Link an improvement proposal to actual verification</h2>
       <p>Existing evidence-based strategies are candidate actions, not locally proven solutions. A reported delivery receipt is checked for numerator/denominator, fidelity, balancing harms and comparison; it is never automatically declared authentic or closed.</p>
       <label className="rp-field">Select a candidate strategy
         <select value={selected?.id||""} onChange={e=>{setActionId(e.target.value);setReceiptResult(null);}}>
@@ -186,7 +186,7 @@ export default function EvidenceActionClient(){
       </div>}
     </section>
     <section className="rp-program" aria-labelledby="gap-heading">
-      <h2 id="gap-heading">6. Open MAP–GAP obligations and handoffs</h2>
+      <h2 id="gap-heading">Open MAP–GAP obligations and handoffs</h2>
       <p>The issue register is generated from the existing research case plus bridge-specific unmet measurement, causal and implementation requirements. A named role is proposed; no institution or person is involuntarily assigned a duty.</p>
       <div className="rp-table-wrap"><table>
         <thead><tr><th>Gap</th><th>Evidence needed</th><th>Proposed owner role</th></tr></thead>
@@ -199,6 +199,6 @@ export default function EvidenceActionClient(){
       <div className="rp-buttons"><Link href="/research-program">Return to full 20-phase research/implementation journey</Link><Link href="/research-program/method-validation">Compare established methods and ChainWeb</Link></div>
     </section>
     <PrivateCaseHandoff program={program} bridge={bridge}/>
-    <footer className="rp-footer"><p>Bounded research workspace: external source lookup occurs only through an owner-initiated authenticated metadata search. An owner-initiated private case handoff uses existing authenticated DIS workspace casework to save the curated public baseline and bounded research gap scaffold; no other research fields are saved. Manually pasted study, counterfactual and correction receipt inputs remain in this browser session and are not written to the database. No medical records, identifiers, unconsented data, clinical recommendations, signed approvals or verified outcomes should be entered or inferred. Independent scientific verification and durable case-linked storage remain distinct implementation acceptance gates.</p></footer>
+    <footer className="rp-footer"><p>External source lookup requires an owner-initiated authenticated metadata search. A separately initiated private case save retains the declared investigation and any explicitly reviewed public or synthetic supplement. Other study, counterfactual and receipt editors are not automatically saved: deliberately include approved material in that supplement. Free text and source declarations are not privacy certification or independent scientific validation. Do not enter medical records or personal identifiers. No clinical action, signed approval, RPLICE execution or verified beneficiary outcome is implied. Live authenticated persistence and independent scientific review remain separate acceptance checks.</p></footer>
   </main>;
 }
