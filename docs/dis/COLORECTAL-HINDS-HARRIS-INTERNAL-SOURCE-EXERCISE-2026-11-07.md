@@ -25,6 +25,14 @@ Do not plug the 2019–2023 all-stage rate into a 2018–2022 late-stage equatio
 
 The percent-late measure, late-stage rate and annual case count all appear in a single source table but use different denominators and are **not three independent observations**. Verify exactly how unknown-stage cases enter the published percent-late denominator. Age-adjusted rates must not be manipulated as if they were unadjusted case counts or conditional percentages.
 
+## Additional source-vintage cross-check: Colorado
+
+During the November 7, 2026 internal lookup, the live Colorado NCI late-stage colorectal county view for all races, both sexes and all ages was labeled **2019–2023**. Previously indexed search excerpts for the same county-source query reported **2018–2022**. This is a source-version and retrieval-timing trap, not grounds to average or compare the two releases without qualification. Denver County in the live 2019–2023 view shows an age-adjusted late-stage rate of **20.3 (95% CI 18.8–21.9)**, **140** annual late-stage cases and **62.4%** late stage, but **none of these values has been introduced into the Hinds 2018–2022 matched-period comparison**.
+
+Official query: https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&graph=2&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=08&type=incd
+
+Protocol adaptation: pin actual provider observation vintage, page download timestamp, source method and release identity per cell, rather than relying on a static URL or cached search excerpt. Any cross-source harmonization should identify the exact conflicting periods, reject unqualified pooling, and route to an independent epidemiologic reviewer. Added a deterministic regression for this exact mismatch.
+
 ## Competing explanations and discriminating evidence
 | Hypothesis (not an established cause) | Relevant missing test or source | Suggested independent owner role |
 | --- | --- | --- |
