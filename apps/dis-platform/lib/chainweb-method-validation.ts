@@ -8,6 +8,7 @@
  * never silently invoked. Does not call a network/API.
  */
 import {createHash} from "node:crypto";
+import {CASE_SOURCE_REGISTRY} from "./chainweb-claim-assurance";
 
 export type CaseDesign="RANDOMIZED_EBI"|"OBSERVATIONAL_PROGRAM"|"OBSERVATIONAL_DIAGNOSIS"|"METHODS_APPLICATION";
 export type Endpoint="SCREENING_COMPLETION"|"DIAGNOSTIC_COMPLETION"|"IMPLEMENTATION_DELIVERY";
@@ -86,7 +87,12 @@ export const effectClass=(design:CaseDesign,outcome:Outcome):EffectClass=>
 
 export function evidencePreflight(cases:readonly SelectedCase[]=SELECTED_METHOD_CASES){
  const errors:string[]=[];const seen=new Set<string>();let numericalContrasts=0;
+ if(cases.length!==SELECTED_METHOD_CASES.length)errors.push("Published casebook completeness changed: separately review additions and removals.");
  for(const c of cases){
+  const pinned=CASE_SOURCE_REGISTRY.find(x=>x.id===c.id);
+  if(!pinned||c.source!==pinned.source)errors.push("Unrecognized or changed original citation: "+c.id);
+  const frozen=SELECTED_METHOD_CASES.find(x=>x.id===c.id);
+  if(!frozen||JSON.stringify(frozen)!==JSON.stringify(c))errors.push("Published case snapshot changed without explicit source re-audit: "+c.id);
   if(!c.id||seen.has(c.id))errors.push("Missing/duplicate case id "+c.id);
   seen.add(c.id);
   if(!c.source.startsWith("https://")||!c.setting||!c.population||!c.comparator||!c.intervention)errors.push("Missing source/scope "+c.id);
