@@ -111,7 +111,7 @@ export function evidencePreflight(cases:readonly SelectedCase[]=SELECTED_METHOD_
   chainwebSuperiorityMeasured:false as const,independentAdjudicationPerformed:false as const,
   clinicalEffectOfChainwebMeasured:false as const,interventionAuthorized:false as const};
 }
-export const STANDARD_COMPARATOR="Updated CFIR (2022) + iterative PRISM–RE-AIM + FRAME-IS, with full original evidence, causal reasoning, adaptation and sustainment, equal support and time";
+export const STANDARD_COMPARATOR="Updated CFIR (2022) + iterative PRISM–RE-AIM + FRAME-IS + the 2026 learning-health-system implementation/sustainment process, with full original evidence, causal reasoning, adaptation and sustainment, equal support and time";
 export const CHAINWEB_ADDITION="All standard comparator methods PLUS source-classed multilevel evidence-chain, linked hypotheses, test/owner/response/outcome and temporal re-map; RPLICE optional HIL selection, not automatically run";
 
 export function constructEqualEvidenceComparison(cases:readonly SelectedCase[]=SELECTED_METHOD_CASES){
