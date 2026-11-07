@@ -30,7 +30,7 @@ export const CRC_MECHANISM_EXERCISE:MechanismGraph={
  nodes:[
   {id:"stage-share",kind:"MEASUREMENT",label:"Late-stage share",definition:"Late-stage cases among staged incident cases"},
   {id:"late-rate",kind:"MEASUREMENT",label:"Late-stage age-adjusted rate",definition:"Age-standardized population rate"},
-  {id:"disease-occurrence",kind:"PHENOMENON",label:"Underlying disease occurrence",definition:"Incident invasive colorectal disease"},
+  {id:"late-stage-burden",kind:"PHENOMENON",label:"Population late-stage burden",definition:"Incident late-stage colorectal disease per resident population"},
   {id:"screening",kind:"MECHANISM",label:"Screening pathway",definition:"Eligible population through completed screening"},
   {id:"diagnostic-resolution",kind:"MECHANISM",label:"Abnormal result resolution",definition:"Timely definitive evaluation after actionable abnormal result"},
   {id:"staging",kind:"SELECTION",label:"Stage ascertainment",definition:"Selection of incident cases with recorded stage"},
@@ -38,7 +38,7 @@ export const CRC_MECHANISM_EXERCISE:MechanismGraph={
  ],
  edges:[
   {from:"stage-share",to:"staging",relation:"MEASURES",evidenceIds:["NCI-COUNTY-LATE-STAGE-2018-2022"],test:"Verify stage completeness and denominator definition",status:"UNTESTED"},
-  {from:"late-rate",to:"disease-occurrence",relation:"MEASURES",evidenceIds:["NCI-COUNTY-LATE-STAGE-2018-2022"],test:"Reextract age-specific all-stage and late-stage rates",status:"UNTESTED"},
+  {from:"late-rate",to:"late-stage-burden",relation:"MEASURES",evidenceIds:["NCI-COUNTY-LATE-STAGE-2018-2022"],test:"Reextract age-specific all-stage and late-stage rates",status:"UNTESTED"},
   {from:"care-capacity",to:"diagnostic-resolution",relation:"PROPOSED_CAUSAL",evidenceIds:[],test:"Compare authorized appointment capacity and resolution intervals under a credible design",status:"UNTESTED"},
   {from:"screening",to:"diagnostic-resolution",relation:"ASSOCIATED_WITH",evidenceIds:[],test:"Check screening and follow-up cohorts separately, with denominators",status:"UNTESTED"}
  ]};
