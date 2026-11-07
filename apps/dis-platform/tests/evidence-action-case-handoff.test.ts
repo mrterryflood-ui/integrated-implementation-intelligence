@@ -1,0 +1,60 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+import {colorectalEvidenceAction} from "../lib/evidence-action-colorectal";
+import {buildEvidenceActionCaseHandoff,EVIDENCE_ACTION_HANDOFF_VERSION} from "../lib/evidence-action-case-handoff";
+import {buildPlaybook,validatePlaybook} from "../lib/decision-playbook";
+
+test("public research case can seed existing private casework with typed gaps and no unverified outcome promotion",()=>{
+  const {program,bridge}=colorectalEvidenceAction();
+  const save=buildEvidenceActionCaseHandoff(program,bridge);
+  assert.equal(save.report.schemaVersion,EVIDENCE_ACTION_HANDOFF_VERSION);
+  assert.equal(save.report.state,"RESEARCH_GAP_SCAFFOLD_UNVERIFIED");
+  assert.equal(save.report.noPatientData,true);
+  assert.equal(save.report.independentOutcomeVerified,false);
+  assert.equal(save.report.interventionAuthorized,false);
+  assert.equal(save.report.externalCommunicationAuthorized,false);
+  assert.equal(save.report.causalEffectEstablished,false);
+  assert.equal(save.report.sourceIndicators.length,3);
+  assert.ok(save.report.sourceIndicators.every(i=>i.sourceUrl.startsWith("https://")));
+  assert.ok(save.report.gapIDs.includes("counterfactual-unverified"));
+  assert.ok(save.report.gapIDs.includes("diagnostic-resolution"));
+  assert.ok(save.report.actionPlan.tasks.length>=5);
+  assert.ok(JSON.stringify(save.report).length<65000);
+  assert.equal("literature" in save.report,false);
+  assert.equal("pastedStudy" in save.report,false);
+  assert.equal("patientRecords" in save.report,false);
+});
+test("existing DIS casework transforms internal research gaps into versionable tasks and evidence measures",()=>{
+  const {program,bridge}=colorectalEvidenceAction();
+  const handoff=buildEvidenceActionCaseHandoff(program,bridge);
+  const p=buildPlaybook(handoff.question,handoff.report);
+  assert.equal(validatePlaybook(p),true);
+  assert.match(p.evidenceLevel,/RESEARCH_GAP_SCAFFOLD_UNVERIFIED/);
+  assert.ok(p.tasks.some(t=>t.phase==="proposed"&&t.why.includes("diagnostic-resolution")));
+  assert.ok(p.tasks.some(t=>t.phase==="proposed"&&t.why.includes("counterfactual-unverified")));
+  assert.ok(p.metrics.some(m=>m.label==="Screening uptake in eligible population"&&!m.verified));
+  assert.ok(p.metrics.some(m=>m.label==="Abnormal-result diagnostic resolution"&&!m.verified));
+  assert.ok(p.tasks.every(t=>!t.done));
+  assert.equal(p.decision,"UNDECIDED — evidence and user authorization required");
+});
+test("case handoff blocks a swapped research identity and retains pre-existing evidence validation",()=>{
+  const {program,bridge}=colorectalEvidenceAction();
+  assert.throws(()=>buildEvidenceActionCaseHandoff(program,{...bridge,caseId:"other"}),/identity/);
+  assert.throws(()=>buildEvidenceActionCaseHandoff(program,{...bridge,verifiedCorrections:1 as unknown as 0}),/outcome/);
+});
+test("private case handoff reuses existing authenticated workspace API and requires a user click to write",()=>{
+  const ui=readFileSync("app/research-program/evidence-action/private-case-handoff.tsx","utf8");
+  assert.match(ui,/function load\(/);
+  assert.match(ui,/function save\(/);
+  assert.match(ui,/fetch\("\/api\/workspaces"/);
+  assert.match(ui,/fetch\("\/api\/cases"/);
+  assert.match(ui,/body\.historyRecorded/);
+  assert.match(ui,/disabled={busy\|\|!uuid.test\(chosen\)}/);
+  assert.doesNotMatch(ui,/useEffect|localStorage|RPLICE_API_KEY|DIS_DATABASE_URL/);
+  const existing=readFileSync("app/api/cases/route.ts","utf8");
+  assert.match(existing,/await auth\(\)/);
+  assert.match(existing,/set_config\('dis\.subject_id'/);
+  assert.match(existing,/INSERT INTO dis_case_events/);
+  assert.match(existing,/RETURNING id/);
+});

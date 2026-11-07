@@ -13,7 +13,8 @@ const phases=[
 export function buildPlaybook(question:string,report:unknown):Playbook{
  const status=(report&&typeof report==="object"&&"state" in report)?String((report as {state:unknown}).state):"UNKNOWN";
  const candidate=report&&typeof report==="object"&&"actionPlan" in report?(report as {actionPlan?:unknown}).actionPlan:null;
- const proposed=candidate&&typeof candidate==="object"&&"status" in candidate&&(candidate as {status:unknown}).status==="MODEL_PROPOSED_UNVERIFIED"?candidate as {tasks?:unknown,metrics?:unknown}:null;
+ const proposalState=candidate&&typeof candidate==="object"&&"status" in candidate?(candidate as {status:unknown}).status:null;
+ const proposed=(proposalState==="MODEL_PROPOSED_UNVERIFIED"||proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED")?candidate as {tasks?:unknown,metrics?:unknown}:null;
  const tailoredTasks=Array.isArray(proposed?.tasks)?proposed.tasks.slice(0,6).flatMap((v:unknown,i:number)=>{if(!v||typeof v!=="object")return [];const x=v as Record<string,unknown>;if(typeof x.title!=="string"||typeof x.success!=="string")return [];return [{id:"proposed-"+(i+1),phase:"proposed",title:x.title.slice(0,180),why:String(x.why||"Validate before implementation").slice(0,350),success:x.success.slice(0,350),owner:"Unassigned",due:null,done:false,evidence:"",review:null}]}):[];
  const tailoredMetrics=Array.isArray(proposed?.metrics)?proposed.metrics.slice(0,5).flatMap((v:unknown,i:number)=>{if(!v||typeof v!=="object")return [];const m=v as Record<string,unknown>;if(typeof m.label!=="string")return [];return [{id:"proposed-"+(i+1),label:m.label.slice(0,140),baseline:String(m.baseline||"Not measured").slice(0,120),target:String(m.target||"To be agreed").slice(0,120),observed:"",unit:String(m.unit||"User-defined").slice(0,60),verified:false}]}):[];
  return {objective:question,decision:"UNDECIDED — evidence and user authorization required",assumptions:["Question interpretation and end state need user validation","Selected council lenses are not human advice or endorsements","Research metadata or abstracts alone do not verify each claim"],
@@ -25,7 +26,7 @@ export function buildPlaybook(question:string,report:unknown):Playbook{
  {id:"impact",label:"Primary outcome improvement over baseline",baseline:"Not established",target:"To be agreed",observed:"",unit:"Defined by user",verified:false},
  {id:"adoption",label:"Intended users successfully completing the key task",baseline:"Not established",target:"To be agreed",observed:"",unit:"%",verified:false},
  {id:"sustain",label:"Postimplementation outcome sustained",baseline:"Not established",target:"To be agreed",observed:"",unit:"Review cycles",verified:false}
- ],nextReview:"Not scheduled",progressNotes:[],learningReview:{knowledge:"",skills:"",strategy:"",nextExperiment:""},evidenceLevel:tailoredTasks.length?"MODEL_PROPOSED_UNVERIFIED / "+status:status,version:1};
+ ],nextReview:"Not scheduled",progressNotes:[],learningReview:{knowledge:"",skills:"",strategy:"",nextExperiment:""},evidenceLevel:tailoredTasks.length?(proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED"?"RESEARCH_GAP_SCAFFOLD_UNVERIFIED / ":"MODEL_PROPOSED_UNVERIFIED / ")+status:status,version:1};
 }
 export function validatePlaybook(value:unknown):value is Playbook{
  if(!value||typeof value!=="object")return false;
