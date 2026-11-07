@@ -1,0 +1,6 @@
+import test from "node:test";import assert from "node:assert/strict";
+import {auditMechanismGraph,CRC_MECHANISM_EXERCISE} from "../lib/mechanism-graph";
+test("an investigation can preserve proposed mechanisms without falsely certifying causality",()=>{const r=auditMechanismGraph(CRC_MECHANISM_EXERCISE);assert.equal(r.valid,true);assert.equal(r.causalIdentificationEstablished,false);assert.ok(r.unresolvedTests.some(x=>x.includes("appointment capacity")));});
+test("descriptive association cannot be promoted to a causal relationship",()=>{const g=structuredClone(CRC_MECHANISM_EXERCISE);g.edges[2].status="DESCRIPTIVE";const r=auditMechanismGraph(g);assert.equal(r.valid,false);assert.ok(r.issues.some(x=>x.includes("cannot establish causality")));});
+test("unknown source evidence and fabricated node endpoints fail closed",()=>{const g=structuredClone(CRC_MECHANISM_EXERCISE);g.edges[0].evidenceIds=["invented"];g.edges[1].to="unknown";const r=auditMechanismGraph(g);assert.equal(r.valid,false);assert.ok(r.issues.some(x=>x.includes("source ledger")));assert.ok(r.issues.some(x=>x.includes("endpoint")));});
+test("measurement nodes must describe their actual measured construct",()=>{const g=structuredClone(CRC_MECHANISM_EXERCISE);g.nodes[0].kind="MECHANISM";assert.ok(auditMechanismGraph(g).issues.some(x=>x.includes("instrument/construct")));});
