@@ -50,6 +50,13 @@ for(const [label,engine,device] of [
     assert.equal(await page.getByRole("button",{name:"Remove Synthetic candidate"}).count(),0,"Candidate organizations cannot leak across studies");
     await page.getByText(/\$480,000/).waitFor();
     assert.equal(await page.getByRole("button",{name:"Run selected method"}).isDisabled(),true);
+    await page.getByText("Save in an existing private case",{exact:true}).click();
+    const authResponse=page.waitForResponse(r=>r.url().endsWith("/api/workspaces")&&r.request().method()==="GET");
+    await page.getByRole("button",{name:"Choose my private workspace"}).click();
+    const denial=await authResponse;
+    assert.ok([401,503].includes(denial.status()),"Private workspaces fail closed without real identity");
+    assert.equal(Array.isArray((await denial.json()).workspaces),false);
+    await page.getByRole("status").filter({hasText:/Sign in to choose your private workspace|Workspace service unavailable/}).waitFor();
     const dims=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
     assert.ok(dims.scroll<=dims.client+3,"No horizontal viewport overflow "+JSON.stringify(dims));
     assert.deepEqual(errors,[],"No browser runtime errors");
