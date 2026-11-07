@@ -61,3 +61,10 @@ test("invalid calendar and time values cannot become valid replay metadata",()=>
  }
  assert.throws(()=>reviewWaterReplay({...replay(),decisionAt:"2026-11-31T12:00:00Z"}));
 });
+
+test("distinct source and metric identifiers cannot collide through punctuation",()=>{
+ const x=replay();x.requiredMetrics=["turbidity","b|turbidity"];x.expectedUnits["b|turbidity"]="NTU";
+ x.records[0].sourceId="a|b";
+ x.records.push({...x.records[0],sourceId:"a",metric:"b|turbidity",lineageId:"independent-sensor"});
+ const r=reviewWaterReplay(x);assert.equal(r.observedRecords,2);assert.deepEqual(r.missingObservedMetrics,[]);assert.ok(!r.issues.some(i=>i.includes("duplicate")));
+});

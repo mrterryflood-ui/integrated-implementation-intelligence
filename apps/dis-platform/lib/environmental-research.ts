@@ -113,7 +113,7 @@ export function reviewWaterReplay(input:unknown){
   if(Date.parse(r.calibrationUntil)<Date.parse(r.observedAt)||Date.parse(r.calibrationUntil)<t){issues.push(prefix+"calibration expired for this review");continue;}
   if(r.value===null||typeof r.value!=="number"||!Number.isFinite(r.value)){issues.push(prefix+"measurement missing or invalid; zero was not substituted");continue;}
   if(!Object.hasOwn(x.expectedUnits,r.metric)||x.expectedUnits[r.metric]!==r.unit){issues.push(prefix+"unit or metric mismatch; no conversion inferred");continue;}
-  const key=[r.sourceId,r.metric,r.observedAt].join("|");if(seen.has(key)){issues.push(prefix+"duplicate source record");continue;}seen.add(key);
+  const key=JSON.stringify([r.sourceId,r.metric,r.observedAt]);if(seen.has(key)){issues.push(prefix+"duplicate source record");continue;}seen.add(key);
   admissible.push({...r});
  }
  const observed=admissible.filter(r=>r.kind==="OBSERVED");
