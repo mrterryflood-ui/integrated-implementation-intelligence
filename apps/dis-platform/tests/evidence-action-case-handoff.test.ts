@@ -41,7 +41,7 @@ test("existing DIS casework transforms internal research gaps into versionable t
 test("case handoff blocks a swapped research identity and retains pre-existing evidence validation",()=>{
   const {program,bridge}=colorectalEvidenceAction();
   assert.throws(()=>buildEvidenceActionCaseHandoff(program,{...bridge,caseId:"other"}),/identity/);
-  assert.throws(()=>buildEvidenceActionCaseHandoff(program,{...bridge,verifiedCorrections:1}),/outcome/);
+  assert.throws(()=>buildEvidenceActionCaseHandoff(program,{...bridge,verifiedCorrections:1 as unknown as 0}),/outcome/);
 });
 test("private case handoff reuses existing authenticated workspace API and requires a user click to write",()=>{
   const ui=readFileSync("app/research-program/evidence-action/private-case-handoff.tsx","utf8");
