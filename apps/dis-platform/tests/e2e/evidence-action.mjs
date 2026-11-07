@@ -59,7 +59,7 @@ for(const [label,engine,device] of [
     assert.ok([401,503].includes(authResponse.status()),"private workspace must fail closed when unauthenticated or production identity is deliberately unavailable");
     const denial=await authResponse.json();
     assert.equal(Array.isArray(denial.workspaces),false,"denied response cannot expose private workspaces");
-    await page.getByText(/Sign in to use private DIS casework|Workspace service unavailable/).waitFor();
+    await page.getByText(/Sign in to use private DIS casework|Private workspace access is unavailable in this environment/).waitFor();
     const dims=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,client:document.documentElement.clientWidth}));
     assert.ok(dims.scroll<=dims.client+3,"No horizontal viewport overflow "+JSON.stringify(dims));
     assert.deepEqual(errors,[],"No browser runtime errors");
