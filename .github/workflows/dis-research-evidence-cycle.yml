@@ -37,6 +37,25 @@ jobs:
           cmp research-results/analysis/results.json research-results/replay/results.json
           cmp research-results/analysis/national_original_extract.csv research-results/replay/national_original_extract.csv
           echo 'PASS: identical source snapshot produces byte-identical analytical results.'
+      - name: Print bounded aggregate research result summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research-results/analysis/results.json')
+          if not p.exists():
+              print('ANALYSIS_NOT_COMPLETED: inspect analysis_failure.json and source receipts')
+          else:
+              d=json.loads(p.read_text())
+              print('ANALYSIS_STATUS',d['status'])
+              print('COUNTY_2019_2023',json.dumps(d['county_colorectal']['counties'],sort_keys=True))
+              print('COUNTY_CONTRASTS',json.dumps(d['county_colorectal']['contrasts'],sort_keys=True))
+              print('NATIONAL_CANCER_CORRELATIONS',json.dumps(d['national_cancer']['cross_cancer'],sort_keys=True))
+              print('NSFG_OVERALL_CHECKS',json.dumps({k:{'point':v['literal_age_domain']['percent'],'point_matches':v['point_matches_published_rounding'],'se_matches':v['se_matches_published_rounding'],'eligible_age50_sensitivity':v['eligible_age50_sensitivity']['percent']} for k,v in d['nsfg']['estimates'].items()},sort_keys=True))
+              print('NSFG_DESCRIPTIVE_AGE_STANDARDIZED_CONTRASTS',json.dumps({k:v['contrast'] for k,v in d['nsfg']['equal_age_standardized_black_white'].items()},sort_keys=True))
+              print('NO_CAUSAL_OR_FIELD_EFFECT_VERIFIED')
+          PY
       - name: Classify acquisition completeness independently from job success
         if: always()
         run: python research/three_study_cycle/readiness.py research-results
