@@ -52,7 +52,7 @@ jobs:
           cmp research-results/analysis/results.json research-results/replay/results.json
           cmp research-results/analysis/national_original_extract.csv research-results/replay/national_original_extract.csv
           echo 'PASS: identical source snapshot produces byte-identical analytical results.'
-      - name: Independently recompute originals and calibrate against NCHS published benchmarks
+      - name: Audit ranking reversals for rounding and published rate interval overlap\n        run: python research/three_study_cycle/ranking_sensitivity.py --input research-results/analysis/national_original_extract.csv --out research-results/analysis/ranking_sensitivity.json\n      - name: Independently recompute originals and calibrate against NCHS published benchmarks
         run: python research/three_study_cycle/reference_audit.py research-results --out research-results/reference-audit --compare-analysis research-results/analysis/results.json
       - name: Print bounded aggregate research result summary
         if: always()
