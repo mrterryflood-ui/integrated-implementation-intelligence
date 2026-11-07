@@ -27,6 +27,11 @@ def rate_interval(x):
     if not 0<=lo<=r<=hi:raise ValueError('Inconsistent rate and interval')
     return r,lo,hi
 
+def rate_column(frame):
+    cols=[c for c in frame.columns if str(c).startswith('Age-Adjusted Incidence Rate')]
+    if len(cols)!=1:raise ValueError('Source rate column is missing or ambiguous')
+    return cols[0]
+
 def verify_inputs(root):
     manifest=json.loads((root/'MANIFEST_SHA256.json').read_text())
     for name,h in manifest.items():
@@ -37,28 +42,29 @@ def verify_inputs(root):
     sources={x['id']:x for x in receipt['sources']}
     if not REQUIRED.issubset(sources):raise ValueError('Required analytic source missing')
     semantics={}
-    for name in REQUIRED:
+    for name in sorted(REQUIRED):
         s=sources[name]
         if s['status']!='ORIGINAL_BYTES_RETAINED':raise ValueError('Required source failed: '+name)
         if sha(root/s['path'])!=s['sha256']:raise ValueError('Source receipt/hash disagreement: '+name)
         if name=='nsfg_female':continue
         text=(root/s['path']).read_text();tree=html.fromstring(text)
-        heading=' '.join(' '.join(tree.xpath('//h2//text()')).split())
-        if '2019-2023' not in heading or s.get('reported_period_candidates')!=['2019-2023']:raise ValueError('Source release changed; adjudication required: '+name)
+        headings=[' '.join(' '.join(h.itertext()).split()) for h in tree.xpath('//h2')]
+        reports=[h for h in headings if h.startswith('Incidence Rate Report')]
+        if len(reports)!=1 or '2019-2023' not in reports[0] or s.get('reported_period_candidates')!=['2019-2023']:raise ValueError('Source release changed; adjudication required: '+name)
         cancer='047' if name.startswith('lung') else '055' if name.startswith('breast') else '020'
-        expected={'cancer':cancer,'sex':'2' if cancer=='055' else '0','stage':'999' if name.endswith('_all') else '211','age':'001','race':'00','year':'0','statefips':'28' if name.startswith('hinds') else '48' if name.startswith('harris') else '00','areatype':'county' if name.startswith(('hinds','harris')) else 'state'}
+        expected={'cancer':cancer,'sex':'2' if cancer=='055' else '0','stage':'999' if name.endswith('_all') else '211','age':'001','race':'00','ruralurban':'0','year':'0','statefips':'28' if name.startswith('hinds') else '48' if name.startswith('harris') else '00','areatype':'county' if name.startswith(('hinds','harris')) else 'state'}
         actual={}
         for k,v in expected.items():
             selected=tree.xpath('//select[translate(@name,"ABCDEFGHIJKLMNOPQRSTUVWXYZ","abcdefghijklmnopqrstuvwxyz")="'+k+'"]/option[@selected]/@value')
             if selected!=[v]:raise ValueError('Source-selected scope differs: '+name+' '+k+' '+str(selected))
             actual[k]=v
-        semantics[name]={'heading':heading,'selected_scope':actual}
+        semantics[name]={'heading':reports[0],'selected_scope':actual}
     return receipt,sources,semantics
 
 def nci_frame(root):
     allrows=None
     for cancer in CANCERS:
-        t=pd.read_csv(root/f'extracted/{cancer}_states_table_0.csv');r=t.iloc[:,1].map(rate_interval)
+        t=pd.read_csv(root/f'extracted/{cancer}_states_table_0.csv');r=t[rate_column(t)].map(rate_interval)
         frame=pd.DataFrame({'geography':t.iloc[:,0].map(clean_name),cancer+'_rate':r.map(lambda x:x[0]),cancer+'_rate_lo':r.map(lambda x:x[1]),cancer+'_rate_hi':r.map(lambda x:x[2]),cancer+'_share':pd.to_numeric(t['Percent of Cases with Late Stage']),cancer+'_count':pd.to_numeric(t['Average Annual Count'])})
         if len(frame)!=53 or frame.geography.nunique()!=53:raise ValueError('Unexpected source geography frame')
         if not frame[cancer+'_share'].between(0,100).all():raise ValueError('Invalid case percentage')
@@ -101,7 +107,7 @@ def county(root):
         for stage in ('all','late'):
             t=pd.read_csv(root/f'extracted/{key}_{stage}_table_0.csv');r=t.loc[t.iloc[:,0].map(clean_name).eq(label)]
             if len(r)!=1:raise ValueError('County not uniquely identified: '+label)
-            r=r.iloc[0];rate,lo,hi=rate_interval(r.iloc[1]);v={'rate_per_100k':rate,'ci95':[lo,hi],'annual_count':int(r['Average Annual Count'])}
+            r=r.iloc[0];rate,lo,hi=rate_interval(r[rate_column(t)]);v={'rate_per_100k':rate,'ci95':[lo,hi],'annual_count':int(r['Average Annual Count'])}
             if stage=='late':v['late_share_percent']=float(r['Percent of Cases with Late Stage'])
             vals[stage]=v
         out['counties'][label]=vals
@@ -150,7 +156,7 @@ def survey(root):
                 total=float(w[a].sum());yes=float(w[a&y.eq(1)].sum());missing=float(w[a&~y.isin([1,5])].sum())
                 lower+=yes/total/3;upper+=(yes+missing)/total/3
             v,df=variance(lin,d);groups[label]={'crude_percent':crude*100,'standardized_percent':std*100,'standardized_se_pp':100*math.sqrt(v),'n_valid':cr['n_valid'],'age_cells':cells};influences[label]=(std,lin);bounds[label]={'all_missing_no_percent':100*lower,'all_missing_yes_percent':100*upper}
-        white=groups['non_Hispanic_White_single_race'];black=groups['non_Hispanic_Black_single_race'];wp,wl=influences['non_Hispanic_White_single_race'];bp,bl=influences['non_Hispanic_Black_single_race'];diff=bp-wp;v,df=variance(bl-wl,d);se=math.sqrt(v);crit=float(stats.t.ppf(.975,df));pv=float(2*stats.t.sf(abs(diff/se),df))
+        wp,wl=influences['non_Hispanic_White_single_race'];bp,bl=influences['non_Hispanic_Black_single_race'];diff=bp-wp;v,df=variance(bl-wl,d);se=math.sqrt(v);crit=float(stats.t.ppf(.975,df));pv=float(2*stats.t.sf(abs(diff/se),df))
         out['equal_age_standardized_black_white'][c]={'groups':groups,'contrast':{'black_minus_white_pp':100*diff,'se_pp':100*se,'unadjusted_95_ci_pp':[100*(diff-crit*se),100*(diff+crit*se)],'p_unadjusted':pv,'design_df':df}};pvalues.append(pv);out['item_nonresponse_bounds'][c]=bounds
     adjusted=[0.]*3;running=0.
     for rank,i in enumerate(np.argsort(pvalues)):
