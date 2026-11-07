@@ -14,8 +14,8 @@ CANCERS=("colorectal","lung","breast")
 def interval_order(a:float,b:float,delta:float)->int:
     """Return certain strict order under independent +/- delta rounding."""
     if not all(math.isfinite(x) for x in (a,b,delta)) or delta<0:raise ValueError("Invalid interval")
-    if a-delta>b+delta:return 1
-    if b-delta>a+delta:return -1
+    if a-delta>b+delta+1e-12:return 1
+    if b-delta>a+delta+1e-12:return -1
     return 0
 
 def ci_order(a_lo:float,a_hi:float,b_lo:float,b_hi:float)->int:
