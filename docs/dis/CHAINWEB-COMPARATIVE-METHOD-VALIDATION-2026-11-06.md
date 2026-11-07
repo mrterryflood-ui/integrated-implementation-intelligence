@@ -11,7 +11,7 @@ Does supplementing **competent** current implementation-science practice with DI
 
 ## Comparator is not a straw man
 
-**Control:** skilled analysts using the updated CFIR (2022), iterative PRISM–RE-AIM, FRAME-IS, eligible epidemiological methods and actual stakeholder consideration. The control has the same case facts, reference access, time window, staffing, and usable AI privileges as the ChainWeb arm.
+**Control:** skilled analysts using the updated CFIR (2022), iterative PRISM–RE-AIM, FRAME-IS, the 2026 learning-health-system improvement pillars and steps, eligible epidemiological methods and actual stakeholder consideration. The control has the same case facts, reference access, time window, staffing, and usable AI privileges as the ChainWeb arm.
 
 **Experiment:** all control capabilities PLUS ChainWeb’s versioned evidence-bound node/edge map, quantified missingness, independent rival explanations, root-cause discrimination tests, cross-system effects, explicit owner/action/outcome chain, and day-after-success and long-range learning triggers. RPLICE specialist methods are opt-in via a real human’s selection, valid provider credentials and specific authorized inputs. Selection alone is not execution.
 
@@ -59,6 +59,7 @@ No effect-size pooling is permitted across unlike outcomes/periods. None proves 
 - **FRAME-IS** (modification reporting): Miller CJ, et al. *Implement Sci.* 2021;16:36. doi:10.1186/s13012-021-01105-3.
 - **Proctor implementation outcomes** (acceptability, adoption, appropriateness, feasibility, fidelity, cost, penetration, sustainability): Proctor EK, et al. *Implement Sci.* 2023;18:31. doi:10.1186/s13012-023-01286-z (scoping review).
 - **ERICA/ERIC** may assist strategy selection but is not automatically selected or executed: Powell BJ, et al. *Implement Sci.* 2015;10:21. doi:10.1186/s13012-015-0209-1. Contemporary primary articles above take precedence for effectiveness claims.
+- **Lane C, McCrabb S, Turon H, et al.** Learning health system for implementation, scale-up, and sustainment: a systematic review to consolidate guidance for improvement. *Implement Sci.* 2026;21:13. doi:10.1186/s13012-025-01482-z. This strengthens the comparator rather than establishing ChainWeb novelty.
 - **Garza RH, et al** reporting cascading changes to implementation strategies. *Implement Res Pract.* 2026;7:26334895251407338. doi:10.1177/26334895251407338.
 - **Published challenge-case sources:** doi:10.1001/jamanetworkopen.2024.46693; doi:10.1001/jama.2023.18755; doi:10.7326/ANNALS-24-01885; doi:10.1001/jamanetworkopen.2025.0928; doi:10.1001/jamanetworkopen.2026.39013; doi:10.1002/cncr.70031; https://pubmed.ncbi.nlm.nih.gov/39394785/.
 
