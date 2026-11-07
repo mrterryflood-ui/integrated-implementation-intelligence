@@ -5,7 +5,7 @@ import {buildResearchProgram} from "../lib/research-program";
 import {jacksonCancerCase} from "../lib/jackson-cancer-case";
 import {
   BRIDGE_VERSION,boundDiscoveryLeads,reviewEvidenceToAction,
-  reviewCounterfactual,reviewCorrectionReceipt,
+  reviewCounterfactual,reviewCorrectionReceipt,reviewCrossStudyMeasurements,
   type CounterfactualRequest,type CorrectionReceipt
 } from "../lib/evidence-action-bridge";
 import {COLORECTAL_CROSSWALK,colorectalEvidenceAction,COLORECTAL_COMPARISON_SITES} from "../lib/evidence-action-colorectal";
@@ -143,4 +143,47 @@ test("new discovery API reuses bounded OpenAlex and existing authentication boun
   assert.match(route,/looksLikePrivateRecord\(query\)/);
   assert.match(route,/sourceStatus:"DISCOVERY_ONLY"/);
   assert.doesNotMatch(route,/RPLICE_API_KEY|runSelectedRpliceMcp|AI_GATEWAY_API_KEY/);
+});
+
+test("cross-source measurements identify related phenomena without pooling or fabricating provenance",()=>{
+  const base=colorectalEvidenceAction().bridge.measures;
+  const item={id:"registry-typed",title:"Source-reported external screening measurement",
+    sourceUrl:"https://www.cdc.gov/places/about/",condition:"colorectal",
+    construct:"SCREENING_COMPLETION",geography:"Comparison geography not yet reconciled",
+    populationFrame:"Screening-eligible adults, definition unverified",
+    period:"2022",numeratorDefinition:"Completed recommended colorectal screening",
+    denominatorDefinition:"Screening-eligible population",unit:"percent",
+    methodVersion:"Source methods must be checked",value:null};
+  const reviewed=reviewCrossStudyMeasurements([item],base);
+  assert.equal(reviewed.admitted.length,1);
+  assert.equal(reviewed.links.length,3);
+  assert.ok(reviewed.links.every(x=>x.relation==="SAME_PHENOMENON_DIFFERENT_MEASURE"));
+  assert.ok(reviewed.links.every(x=>!x.safeToPool&&!x.causalityEstablished));
+  assert.equal(reviewed.originalMethodsVerified,false);
+  assert.equal(reviewed.pooledEstimate,null);
+  const wrong=reviewCrossStudyMeasurements([{...item,id:"breast-switch",condition:"breast"}],base);
+  assert.equal(wrong.links.length,0,"No automatic cross-condition evidence transfer");
+});
+test("cross-study importer refuses malformed, repeated and impossible values",()=>{
+  const base=colorectalEvidenceAction().bridge.measures;
+  const valid={id:"lead",title:"Source-reported example",sourceUrl:"https://www.cdc.gov/places/about/",
+    condition:"colorectal",construct:"SCREENING_COMPLETION",
+    geography:"Test county",populationFrame:"Ages per source",
+    period:"2022",numeratorDefinition:"Screened individuals",
+    denominatorDefinition:"Eligible residents",unit:"percent",methodVersion:"Source method",value:40};
+  const out=reviewCrossStudyMeasurements([valid,{...valid,value:110,id:"overflow"},
+    {...valid,id:"lead"},{...valid,id:"bad-url",sourceUrl:"http://notsecure.example"}],base);
+  assert.equal(out.admitted.length,1);
+  assert.equal(out.rejected.length,3);
+  assert.ok(out.rejected.some(x=>x.id==="overflow"&&x.reasons.some(r=>r.includes("exceed 100"))));
+  assert.ok(out.rejected.some(x=>x.id==="lead"&&x.reasons.some(r=>r.includes("Duplicate"))));
+});
+test("generic multi-site program cannot relabel breast indicator as colorectal",()=>{
+  const source=buildResearchProgram(jacksonCancerCase("general"));
+  const fake=[{indicatorId:"BREAST-LATE-SHARE",condition:"colorectal" as const,
+    construct:"LATE_STAGE_CASE_SHARE" as const,denominatorClass:"STAGED_INCIDENT_CASES",
+    populationFrame:"Hinds County residents",methodVersion:"Original NCI county methods"}];
+  const result=reviewEvidenceToAction(source,fake);
+  assert.equal(result.measures.length,0);
+  assert.ok(result.gaps.some(x=>x.id==="unmapped:BREAST-LATE-SHARE"));
 });
