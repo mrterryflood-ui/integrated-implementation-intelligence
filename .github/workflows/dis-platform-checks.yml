@@ -86,6 +86,7 @@ jobs:
           node tests/e2e/evidence-action-boundaries.mjs
           node tests/e2e/ecosystem-planning.mjs
           node tests/e2e/operating-contract.mjs
+          node tests/e2e/case-recovery.mjs
         env:
           DIS_E2E_BASE_URL: http://127.0.0.1:3000
           DIS_E2E_ARTIFACT_DIR: test-results/dis-candidate-browser

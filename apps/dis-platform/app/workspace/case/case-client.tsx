@@ -10,6 +10,12 @@ type Metric={id:string,label:string,baseline:string,target:string,observed:strin
 type Playbook={objective:string,decision:string,assumptions:string[],alternatives:string[],tasks:Task[],metrics:Metric[],nextReview:string,progressNotes:string[],evidenceLevel:string,version:number,learningReview?:{knowledge:string,skills:string,strategy:string,nextExperiment:string}};
 type Case={id:string,title:string,question:string,version:number,status:string,playbook:Playbook,report:{state?:string,deliberation?:{synthesis:string},retrieval?:string,citations?:{checked:string,claimSupport:string},limitations?:string},updated_at:string};
 export default function CaseClient({caseId}:{caseId:string}){
+ // Each navigation starts a distinct editor lifetime, including A → B → A.
+ // A pending response may finish for its original case but cannot replace the
+ // state or unsaved draft of a later editor instance.
+ return <CaseEditor key={caseId} caseId={caseId}/>;
+}
+function CaseEditor({caseId}:{caseId:string}){
  const [item,setItem]=useState<Case|null>(null),[draft,setDraft]=useState<Playbook|null>(null),[message,setMessage]=useState(""),[busy,setBusy]=useState(false),[note,setNote]=useState("");
  const [historyView,setHistoryView]=useState(()=>emptyHistoryView(caseId)),[historyBusy,setHistoryBusy]=useState(false);
  const historyEpoch=useRef(0);
@@ -27,6 +33,13 @@ export default function CaseClient({caseId}:{caseId:string}){
  const r=await fetch("/api/cases/recheck",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({id:item.id,version:saved.case.version})});
  const j=await r.json();if(!r.ok)throw Error(j.error||"Recheck unavailable");setItem(j.case);setDraft(j.case.playbook);const historyIssue=await refreshHistory(item.id);setMessage((j.note||"Council recheck recorded")+(historyIssue?" History refresh was not confirmed: "+historyIssue:""))
  }catch(e){setMessage(e instanceof Error?e.message:"Recheck failed")}finally{setBusy(false)}}
+ async function restoreAssessment(eventId:string){if(!item||busy)return;setBusy(true);setMessage("Restoring the selected saved assessment…");try{
+ const response=await fetch("/api/cases/restore",{method:"POST",headers:{"content-type":"application/json"},credentials:"same-origin",body:JSON.stringify({id:item.id,version:item.version,eventId})});
+ const value=await response.json();if(!response.ok)throw Error(value.error||"Assessment restoration failed");
+ setItem(value.case); // The server preserves the playbook; keep all unsaved local edits.
+ const historyIssue=await refreshHistory(item.id);
+ setMessage((value.note||"Assessment restored as a new review revision.")+" Unsaved action-plan edits are retained."+(historyIssue?" History refresh was not confirmed: "+historyIssue:""));
+ }catch(e){setMessage(e instanceof Error?e.message:"Assessment restoration failed")}finally{setBusy(false)}}
  if(!item||!draft)return <main style={{maxWidth:920,margin:"50px auto",padding:24}}><Link href="/workspace">Back to workspaces</Link><p role="status">{message||"Loading case…"}</p></main>;
  const completed=draft.tasks.filter(t=>t.done).length;
  const timeline=asLearningCheckpoints(historyView.events);
@@ -75,7 +88,7 @@ export default function CaseClient({caseId}:{caseId:string}){
  <ol>{timeline.slice().reverse().map(entry=><li key={entry.caseVersion} style={{margin:"12px 0"}}><strong>Revision {entry.caseVersion} · {new Date(entry.recordedAt).toLocaleString()}</strong>
  <p>Knowledge: {entry.reflection.knowledge||"Not documented"}; Skills: {entry.reflection.skills||"Not documented"}; Strategy: {entry.reflection.strategy||"Not documented"}.</p><p>Next test: {entry.reflection.nextExperiment||"Not specified"}</p>
  </li>)}</ol></details>
- <details><summary>Earlier assessments and their retained source evidence</summary>{historyView.events.filter(e=>e.event_type==="REASSESSMENT").map(e=><ArchivedCaseEvidence key={e.id} event={e} caseId={item.id}/>)}</details>
+ <details><summary>Earlier assessments and their retained source evidence</summary>{historyView.events.filter(e=>e.event_type==="REASSESSMENT").map(e=><ArchivedCaseEvidence key={e.id} event={e} caseId={item.id} onRestore={restoreAssessment} restoring={busy||historyBusy}/>)}</details>
  </section>
  <h2>Revisit the decision</h2><label>Next review date (or trigger) <input value={draft.nextReview} maxLength={75} onChange={e=>setDraft({...draft,nextReview:e.target.value})}/></label><p>What changed? Record new evidence, constraints, or outcomes and request another council assessment when you need it.</p>
  <textarea rows={3} style={{width:"100%"}} placeholder="Progress update or changed assumption" value={note} onChange={e=>setNote(e.target.value)} maxLength={1000}/><button onClick={()=>{if(!note.trim())return;setDraft({...draft,progressNotes:[...draft.progressNotes,note.trim()].slice(-80)});setNote("")}}>Add progress note</button>
