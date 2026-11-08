@@ -46,8 +46,8 @@ CANDIDATES=(
     ProcessChange(
         id="CRC-01",condition="colorectal_cancer",context="symptomatic younger adult in primary care",
         first_signal="documented rectal bleeding, with onset and clinician availability kept distinct",
-        source_url="https://pubmed.ncbi.nlm.nih.gov/38522331/",
-        source_scope="Research hypothesis; this paper is an expert-network comparator, not CRC-specific evidence",
+        source_url="https://doi.org/10.1093/jnci/djad068",
+        source_scope="observational early-onset CRC red-flag association; not evidence of intervention effect",
         observed_failure=None,hypothesized_mechanism="screening eligibility misapplied to symptom evaluation",
         proposed_change="versioned screening-vs-diagnostic scope check with clinician review",
         comparator="competent existing symptomatic diagnostic evaluation",
