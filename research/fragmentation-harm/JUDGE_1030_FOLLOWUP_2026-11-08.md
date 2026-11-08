@@ -2,7 +2,7 @@
 
 ## Scope and revision history
 
-The 10:30 judge report names PR85 revision `f19291fe47da0d9731831a38b504c12680f74e74`. This reconciliation preserves the newer PR85 research code at `1586139ab1d90d1e0a36ff0cd58aa267451ddc6a`, its three subsequent documentation commits through `e764b5d0e4142b9845884b4665cc031d06ecda84`, and the earlier PR86 corrections at `f0df3d6a7b5a9d0917cf02b6713edf0af232d653`. The newer documentation correctly separates Monday's partnership accelerator from platform acceptance. Prior comparator, outcome-planning and source-lineage qualifications remain preserved. New opportunity/access statements in the inherited unified plan are not independently re-certified by this bounded code/source audit. The original judge report remains unchanged; unexecuted human, clinical, production or field acceptance is not represented as complete.
+The 10:30 judge report names PR85 revision `f19291fe47da0d9731831a38b504c12680f74e74`. This reconciliation preserves the newer PR85 research code at `1586139ab1d90d1e0a36ff0cd58aa267451ddc6a`, its subsequent program documentation and registry-instrument audit through `c4d949812e9facdfda8a08c0a1af1698a08143ca`, and the earlier PR86 corrections at `f0df3d6a7b5a9d0917cf02b6713edf0af232d653`. The newer documentation correctly separates Monday's partnership accelerator from platform acceptance. Prior comparator, outcome-planning and source-lineage qualifications remain preserved. New opportunity/access statements in the inherited unified plan are not independently re-certified by this bounded code/source audit. The original judge report remains unchanged; unexecuted human, clinical, production or field acceptance is not represented as complete.
 
 ## Corrective actions and retained exceptions
 
@@ -16,18 +16,24 @@ The 10:30 judge report names PR85 revision `f19291fe47da0d9731831a38b504c12680f7
 | Kapsala year and diagnostic interval | Full paper and subsequent correspondence checked; citation corrected | Final issue 2023; online April 20, 2022. Median 24 months and the cited percentages reproduce. IQR differs between abstract/main Results (54) and Figure 1 (57). The later author reply qualifies the damage endpoint. See the corrected cross-condition source entry and linked originals. |
 | Sloan absent from PubMed | Publisher Summary and DOI metadata verified; full-text appraisal remains open | Article existence and summary quantities are supported. No full-body text, model-specific denominator or missingness appraisal is claimed. A failed PubMed lookup does not establish that a publisher-verified paper is fictitious. |
 
+## Additional concurrent delta through c4d9498
+
+The new registry-instrument audit used Python `assert` for its twelve integrity gates. Independent reproduction showed a fabricated ZIP with an empty manifest and empty original HTML was accepted under `python -O`. The repair uses explicit checks that remain active under optimization. The new adversarial regression fails before the repair and passes afterward; the exact real archive still passes.
+
+Primary-source review also distinguishes Sharma's eight patients from nine reported procedures. The aggregate Table 1 supplies no patient/procedure crosswalk; this is an unresolved denominator discrepancy, not a proved count contradiction. Three advanced findings versus four concerning/significant findings may use different definitions. No unadjudicated detection rate is calculated. The final issue citation is corrected to 2022; the convenience sample and scheduled-or-completed eligibility are preserved.
+
 ## Executed local validation
 
-- 118 research unit tests passed with `CHAINWEB_ARCHIVE` pointing to the restored original ZIP: **zero skipped**, including all eight new archive integration tests.
+- 125 research unit tests passed with `CHAINWEB_ARCHIVE` pointing to the restored original ZIP: **zero skipped**, including all nine archive integration tests, with both archive environment variables supplied.
 - 26 engineering receipt-gate tests passed. These test the receipt policy, not application or clinical effectiveness.
 - Research comparability validator and standalone symmetric-decomposition checks passed. The decomposition remains descriptive arithmetic, not causal attribution.
-- The default remote research workflow does not provision the private original ZIP; its eight conditional archive checks can be skipped. Local source-backed execution is recorded separately. A green workflow alone must not be described as remote execution of all original-source tests.
+- The default remote research workflow does not provision the private original ZIP; its nine conditional archive checks can be skipped. Local source-backed execution is recorded separately. A green workflow alone must not be described as remote execution of all original-source tests.
 - Exact changed-tree review, publication identity and new remote CI are recorded in the accompanying audit receipts and PR description after execution. Earlier CI runs cannot satisfy the new revision.
 
 Reproduce from this repository revision with the hash-matched archive:
 
 ```bash
-CHAINWEB_ARCHIVE=/absolute/path/county-originals-ddee039a.zip python -m unittest discover -s research/fragmentation-harm -p 'test_*.py' -v
+CHAINWEB_ARCHIVE=/absolute/path/county-originals-ddee039a.zip DIS_NCI_ARCHIVE_PATH=/absolute/path/county-originals-ddee039a.zip python -m unittest discover -s research/fragmentation-harm -p 'test_*.py' -v
 python -m unittest discover -s tests -p test_engineering_receipt_gate.py -v
 python research/fragmentation-harm/validate_contract.py
 python research/fragmentation-harm/test_hinds_harris_symmetric_decomposition.py
