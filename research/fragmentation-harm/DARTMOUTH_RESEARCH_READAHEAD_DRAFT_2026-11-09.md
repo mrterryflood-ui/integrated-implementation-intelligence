@@ -1,53 +1,53 @@
-# Dartmouth Research Briefing — Evidence-Qualified Read-Ahead (DRAFT)
-**Meeting:** Monday, November 9, 2026, 1:15 p.m. ET / 12:15 p.m. CT (per independent judge correspondence). **NOT SENT.** Scientific status: methods and published-data validation; not proven patient-level intervention impact.
+# Internal DIS–RPLICE Research Dossier — DRAFT, NOT an Accelerator Meeting Agenda
+
+**Owner scope correction, November 8, 2026:** Monday's Dartmouth meeting concerns a separate partnership accelerator, NOT this platform. The earlier meeting assignment to this file was incorrect. This retained filename is historical; its contents are an internal research dossier and are not scheduled for presentation, submission or external distribution. Do not infer platform review, data access, sponsorship or acceptance from that meeting. **NOT SENT.** Scientific status: methods and published-data validation, not proven patient-level intervention impact.
 
 ## Opening thesis
 DIS–RPLICE is developing a reusable research and implementation intelligence method to identify clinically meaningful risk earlier, reconcile incompatible healthcare measures, test what could have been known at a decision point, and evaluate whether timely, feasible action improves outcomes across connected systems. ChainWeb is the falsifiable hypothesis that upstream measurement and decision failures can produce multiple downstream consequences; benefits from correcting them must be demonstrated, not assumed.
 
 ## Why the CRC calibration matters
-Accepted 2019–2023 county aggregates show Hinds MS vs Harris TX: all-stage incidence 46.4 vs 38.0 per 100k; late-stage incidence 29.9 vs 23.9; reported late-stage case shares 63.7% vs 63.4%. Nearly identical shares conceal a 6.0/100k late-stage incidence gap (25.1% relative). The age-adjusted late/all rate quotient is a different construct from the reported case share.
+Retained 2019–2023 county aggregates show Hinds MS vs Harris TX: all-stage incidence 46.4 vs 38.0 per 100k; late-stage incidence 29.9 vs 23.9; reported late-stage case shares 63.7% vs 63.4%. Near-equal point estimates of case shares accompany a 6.0/100k late-stage incidence gap (25.1% relative). The age-adjusted late/all rate quotient is a different construct from the reported case share; equivalence of the shares has not been established.
 
-An independent judge decomposed the **rate gap mathematically**: approximately 5.348/100k from the all-stage incidence contrast and 0.652/100k from the late/all age-adjusted rate quotient contrast. **This is not causal attribution.** Raw registry source was retained in the project archive and has not been freshly independently downloaded for this briefing.
+A symmetric descriptive decomposition of the rate gap gives approximately 5.348/100k from the all-stage incidence contrast and 0.652/100k from the late/all age-adjusted rate quotient contrast. **This is algebra, not causal attribution.** The source is the retained project archive, not a fresh current registry release. Original archive replay and expanded-county analysis are documented in `CHAINWEB_EXPANDED_EMPIRICAL_BATCH_2026-11-08.md`; subsequent scientific review must identify its exact commit scope.
 
 ## Upstream risk before routine screening
-Time zero for symptomatic pathways is the earliest *contemporaneously knowable warning sign*, not a positive screening test or diagnosis. Distinguish symptomatic diagnostic evaluation at any age from asymptomatic risk-adapted screening and hereditary surveillance. Fritz et al. (2023, doi:10.1093/jnci/djad068) found four red flags associated with early-onset CRC; 19.3% of cases had a first recorded warning 3–24 months before diagnosis, while 49.3% had one within 3 months. Demb et al. (2020, doi:10.1136/gutjnl-2020-321849) estimated five-year CRC incidence 0.45% with iron-deficiency anemia vs 0.05% without among younger VA patients. These are observational risk associations, not proof of benefit from earlier testing.
+Time zero for symptomatic pathways is the earliest contemporaneously knowable warning sign, not a positive screening test or diagnosis. Preserve patient-reported onset, first recorded signal and first clinician-available signal as separate times. Distinguish symptomatic diagnostic evaluation at any age from asymptomatic risk-adapted screening and hereditary surveillance. Preserve primary prevention and upstream exposure reduction as well.
 
-Virdee et al. (2026, doi:10.1186/s12885-026-16179-9) externally validated longitudinal blood-count models in >6.5 million patients, discrimination c-statistics 0.73–0.74 with subgroup calibration problems. Prediction is not intervention.
+Fritz et al. (2023, doi:10.1093/jnci/djad068) found four red flags associated with early-onset CRC; 19.3% of cases had a first recorded warning 3–24 months before diagnosis, while 49.3% had one within three months. Demb et al. (online 2020; issue date must be recorded separately, doi:10.1136/gutjnl-2020-321849) estimated five-year CRC incidence 0.45% with iron-deficiency anemia vs 0.05% without among younger VA patients. These are observational associations, not proof of benefit from earlier testing.
+
+Virdee et al. (2026, doi:10.1186/s12885-026-16179-9) externally validated longitudinal blood-count models in over 6.5 million patients, with c-statistics 0.73–0.74. Risk was underpredicted in reported subgroups including people aged 70+, White individuals and higher-deprivation groups. Prediction is not intervention.
 
 ## Independent challenge and contrary evidence
-Chima et al. (published 2025, doi:10.3399/BJGP.2024.0491) randomized abnormal-blood-test cancer-risk decision support; the adjusted follow-up difference was 2.6 percentage points (95% CI -2.8 to 7.9), not statistically significant. The crude 76% vs 70% proportions are not the adjusted effect. This is a negative result for a particular intervention, not proof that decision support never works.
+Chima et al. (published 2025, doi:10.3399/BJGP.2024.0491) tested abnormal-blood-test cancer-risk decision support in Australian practices. The adjusted follow-up difference was 2.6 percentage points (95% CI -2.8 to 7.9), not statistically significant. The crude 76% vs 70% proportions are not the adjusted effect. This is an inconclusive benefit result for a particular intervention, not proof that decision support never works; the authors discuss a possible ceiling effect.
 
-Coronado et al. (2025, doi:10.7326/ANNALS-24-01885) found navigation after abnormal stool testing increased one-year colonoscopy completion 42.1% to 55.1% in ages **50–75**. That cannot establish an under-50 prediagnostic benefit or a causal effect of data integration.
+Coronado et al. (2025, doi:10.7326/ANNALS-24-01885) found navigation after abnormal stool testing increased one-year colonoscopy completion 42.1% to 55.1% in ages 50–75. That does not establish an under-50 prediagnostic benefit or a causal effect of data integration.
 
-Published EHR/registry research demonstrates semantic loss and population selection mechanisms, but local Hinds/Harris patient-level missed opportunities and prevented harm remain unmeasured.
+Published EHR/registry research supplies measurement and population-selection mechanisms; exact denominators and original full-text claims require adjudication. Local Hinds/Harris patient-level missed opportunities and prevented harm remain unmeasured.
 
 ## Research design and scaling
-1. Validate the original data and measurement instruments with explicit numerator/denominator/time/age/race/stage definitions and source provenance.
-2. Reconstruct first observable risk signals, availability-at-decision, clinical interpretation, owner, capacity, patient experience, diagnostic resolution and harm.
-3. Estimate risk-adapted starting points for asymptomatic populations using published risk advancement period methods, without treating age 45 as a universal gate; test benefits, false positives and colonoscopy capacity before recommendations.
-4. Prespecify causal comparisons with target-trial principles, negative controls, subgroup calibration and outcome hierarchies.
-5. Scale the *research method* to autoimmune disease and endometriosis as owner-named priorities, plus lung cancer as a methodological comparison; preserve disease-specific outcomes.
-6. Use secure, durable evidence storage, independent review and versioned reproducibility receipts; avoid treating ephemeral CI artifacts as archival storage.
+1. Validate original data and measurement instruments: numerator, denominator, time, age, population, stage, collection process and source provenance.
+2. Reconstruct first risk signals, availability at decision time, interpretation, accountable ownership, capacity, patient experience, appropriate action and outcomes. Include unresolved episodes and people without an eventual diagnosis.
+3. Investigate population-specific starting points using published risk-advancement methods without treating age 45 as a universal software gate. Resolve the nine outstanding published-transformation discrepancies before promoting the current RAP benchmark. Test calibration, false positives, net benefit and capacity; no new clinical starting age is recommended.
+4. Prespecify causal comparisons, rival mechanisms including polypectomy, negative controls, subgroup calibration and integrated outcomes.
+5. Prepare endometriosis and autoimmune research as the owner-named expansion priorities. Lung cancer is a complementary methods comparison, not a replacement.
+6. Preserve original bytes, licensed source extracts, code versions, review records and restore-tested evidence. Temporary CI artifacts alone are not durable storage.
 
-## Integrated outcomes (owner-adjudicated: not either/or)
-The owner explicitly requires a jointly interpreted, multidimensional outcome framework: first-warning-sign recognition and action timing; early- and late-stage counts, rates and ratios; all-stage and late-stage incidence; mortality and emergency presentation; patient experience, equity, functional outcomes, false positives, overdiagnosis and sustainability. None is discarded in favor of another. Individual experiments may prespecify statistical estimands, but this does not narrow the mission. Discordant measures are an object of investigation. Endometriosis and autoimmune studies use condition-appropriate outcomes such as diagnostic interval, symptoms, function and quality of life, not invented cancer stage metrics.
+## Integrated outcomes — owner adjudicated, not either/or
+Jointly interpret first-signal recognition and action timing; early- and late-stage counts, rates and ratios; all-stage and late-stage incidence; mortality and emergency presentation; experience, equity, function, unnecessary investigation, overdiagnosis, costs and sustainability. No domain disappears in favor of another. Individual studies may prespecify statistical estimands without narrowing the mission. Endometriosis and autoimmune evaluation require condition-appropriate diagnostic intervals, symptoms, function and quality of life, not invented cancer stage categories.
 
 ## Review and status
-Independent judge (Drive W8, Nov 8): 34 claims, 24 PASS, 5 UNCERTAIN, 3 NOT_CHECKED, 1 owner decision, 1 citation/slide fix; none FAIL. Tests reported 61 + 130 (+20 subtests). GitHub workflow success is separately recorded, but it does not establish scientific validity. Do not imply independent review has cleared all exceptions.
+The judge's earlier review covers its stated snapshot: 34 claims, 24 PASS, five UNCERTAIN, three NOT_CHECKED, one owner decision and one citation/slide correction. That review does not automatically approve subsequent commits. Current work and exceptions must be reviewed as a delta against the pinned source and code versions. Code test success is not scientific or clinical validation.
 
-## Stakeholders, ultimate beneficiaries and scale
-Dartmouth is **one scientific stakeholder and potential collaborator**, not the ultimate customer or research destination. Ultimate beneficiaries are patients, families and communities. Operational users include clinicians, care teams, CHWs, public health practitioners, researchers and health-system decision makers. Other partners may include VA, UTHealth, community organizations, registries, payers and public agencies. Research, engineering, independent assurance, implementation and cross-condition scale-out advance in parallel beyond this meeting. No external partnership, data access or funding commitment is presumed.
+## Stakeholders, beneficiaries and separate workstreams
+Patients, families and communities are ultimate beneficiaries. Operational users include clinicians, care teams, CHWs, public health practitioners, researchers and health-system decision makers. Dartmouth, VA, UTHealth, registries, community organizations and others are possible partners; no role acceptance or access is presumed. Monday's partnership accelerator remains outside this platform workstream. Research, engineering, independent assurance, implementation and cross-condition testing proceed on their own gates.
 
-## What Dartmouth can contribute
-Scientific sponsorship, methods review and biostatistics, registry expertise, ethically authorized longitudinal clinical data partnerships, implementation research core, patient/community governance and prospective comparative evaluation. Potential paths include SEER Research Plus/USCS and institution-approved data environments; access and eligibility must be confirmed before claims.
+## Potential research-partner contributions
+Methods review, biostatistics, registry expertise, legitimately authorized longitudinal data, implementation research and patient/community governance may contribute to future studies. SEER Research, Research Plus, USCS and restricted data products have different access rules and variable availability. Verify the exact required fields and permissions before promising any analysis.
 
 ## Explicit unknowns
-No patient-level Hinds/Harris linkage, no identified historical counterfactual benefit, no demonstrated mortality reduction from ChainWeb, no verified cross-disease transfer, and no institutionally approved data agreement. These are the next scientific gates.
+No patient-level Hinds/Harris linkage, no established historical counterfactual benefit, no demonstrated ChainWeb mortality reduction, no validated cross-disease clinical transfer, and no verified institutional data agreement. These remain separate evidence requirements, not reasons to stop permitted public-data research or workflow testing.
 
-## Requested decisions for discussion
-- Discuss the full multidimensional CRC outcomes and specify estimands for individual experiments without forcing an either/or metric choice.
-- Identify academic/clinical leads and the first feasible authorized data source.
-- Explore clinical and scientific collaboration across owner-prioritized autoimmune/endometriosis and CRC research; lung remains an optional methodological comparator, not a replacement.
-- Agree on a reproducibility and independent-review plan, then discuss DIADH/STTR/clinical funding separately from scientific validation.
+## Next research decisions
+Freeze a source-bound evidence package; obtain the lifecycle agent's actual code and scoring specification; compare integrated evidence against competent equal-time current practice with a prespecified independent rubric; preserve justified nonchange and adverse effects; resolve reviewer exceptions and durable storage before any claim of scientific acceptance. Clinical access, external messages, spending, applications and public deposition require explicit authorization.
 
-**Status:** Owner review draft. No external distribution authorized.
+**Status:** Internal research draft. No association with Monday's partnership-accelerator agenda and no external distribution authorized.
