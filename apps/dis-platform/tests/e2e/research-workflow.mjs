@@ -91,7 +91,7 @@ try{for(const [label,engine,device] of [['desktop',chromium,{viewport:{width:128
   assert.deepEqual(preview.workflow.frameworks,['CFIR','RE_AIM']);assert.ok(preview.workflow.studyText.length);assert.equal(preview.workflow.correctionReceiptText,receiptText);assert.equal(preview.noPatientData,null);assert.equal(preview.independentOutcomeVerified,false);
   checks.push('all_editors_in_complete_preview_without_authority_promotion');
   phase='typed create and normal saved-case resume';
-  await page.getByRole('button',{name:'Load my private DIS workspaces',exact:true}).click();await page.getByRole('button',{name:'Create research case and dated baseline',exact:true}).click();await page.getByText('Saved case revision 1.',{exact:false}).waitFor();
+  await page.getByRole('button',{name:'Load my private DIS workspaces',exact:true}).click();await page.getByRole('button',{name:'Create research case and dated baseline',exact:true}).click();await page.getByText('Saved case revision 1. New edits are retained only when you save another revision.',{exact:true}).waitFor();
   assert.equal(posts.length,1);assert.equal(saved.report.workflow.narrative.population,'SYNTHETIC eligible population; no patient records');const original=structuredClone(saved);
   checks.push('typed_create_records_entire_workflow_after_explicit_confirmation');
   await page.goto('https://research-fixture.test/resume?caseId='+caseId);await page.getByText('Editing saved case revision 1.',{exact:false}).waitFor();
@@ -110,7 +110,7 @@ try{for(const [label,engine,device] of [['desktop',chromium,{viewport:{width:128
   phase='explicit revision and conflict preservation';
   await page.getByRole('textbox',{name:'Setting, services and geography',exact:true}).fill('SYNTHETIC revised clinic setting');
   await page.getByRole('button',{name:'Save research revision',exact:true}).click();await page.getByText(/Explicit public-aggregate confirmation is required/).waitFor();assert.equal(posts.length,1);
-  await confirmation().check();await page.getByRole('button',{name:'Save research revision',exact:true}).click();await page.getByText('Saved case revision 2.',{exact:false}).waitFor();
+  await confirmation().check();await page.getByRole('button',{name:'Save research revision',exact:true}).click();await page.getByText('Saved case revision 2. New edits are retained only when you save another revision.',{exact:true}).waitFor();
   assert.deepEqual(saved.report.calibratedEvidence,original.report.calibratedEvidence);assert.deepEqual(archives[0].report,original.report);assert.equal(saved.report.workflow.narrative.setting,'SYNTHETIC revised clinic setting');
   checks.push('new_edit_requires_confirmation_and_preserves_original_source_revision');
   mode='conflict';await page.getByRole('textbox',{name:'Setting, services and geography',exact:true}).fill('SYNTHETIC unsaved draft retained after conflict');await confirmation().check();await page.getByRole('button',{name:'Save research revision',exact:true}).click();await page.getByText(/Case changed or access denied/).waitFor();
