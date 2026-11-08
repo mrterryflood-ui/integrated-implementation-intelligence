@@ -4,15 +4,52 @@ No network calls. Marginal age/race estimates are not joint or causal effects.
 """
 from __future__ import annotations
 import argparse,hashlib,json
-from pathlib import Path
+from pathlib import Path,PurePosixPath
 from urllib.parse import urlsplit
 import pandas as pd
 from reference_audit import parse_nci,base_query
 from verify_retained import load_json
 from lxml import html
 
+# Two originals were reused from the earlier availability probe. Preserve their
+# archived filenames without making arbitrary receipt basenames authoritative.
+LEGACY_ORIGINAL_NAMES={
+    'hinds_age_009_late':'nci_hinds_under50_late_probe.html',
+    'harris_age_009_late':'nci_harris_under50_late_probe.html',
+}
+
 def sha(p):return hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def number(x):return None if pd.isna(x) else float(x)
+
+def retained_original(root:Path,source_id:str,recorded_path:object)->Path:
+    """Resolve a registered original inside this bundle, never its former host.
+
+    Older receipts retain the acquisition machine's absolute path. Its exact
+    registered originals/<filename> suffix is provenance, not permission to
+    read that location after an archive is restored. Do not rewrite the
+    checksum-bound receipt or accept an arbitrary basename.
+    """
+    if not isinstance(recorded_path,str) or not recorded_path or '\\' in recorded_path or '\x00' in recorded_path:
+        raise ValueError('Marginal source path must be a relative or legacy absolute POSIX path')
+    if any(part in ('.','..') for part in recorded_path.split('/')):
+        raise ValueError('Marginal source path traversal is not admitted')
+    declared=PurePosixPath(recorded_path)
+    names={source_id+'.html'}
+    if source_id in LEGACY_ORIGINAL_NAMES:names.add(LEGACY_ORIGINAL_NAMES[source_id])
+    relative=PurePosixPath('originals',declared.name)
+    if declared.name not in names or (declared.parts[-2:]!=relative.parts if declared.is_absolute() else recorded_path!=str(relative)):
+        raise ValueError('Marginal source path does not match its registered source identity')
+    if (root/'originals').is_symlink():raise ValueError('Symlinked marginal originals are not admitted')
+    if sum((root/'originals'/name).exists() or (root/'originals'/name).is_symlink() for name in names)>1:
+        raise ValueError('Ambiguous primary and legacy marginal originals')
+    p=root/str(relative)
+    for candidate in (root/'originals',p):
+        if candidate.is_symlink():raise ValueError('Symlinked marginal originals are not admitted')
+    if not p.resolve().is_relative_to(root/'originals'):
+        raise ValueError('Marginal source path escapes retained originals')
+    if not p.is_file():raise ValueError('Marginal original is missing from the supplied evidence bundle')
+    return p
+
 def build(root:Path):
     root=Path(root).resolve();path=root/'marginal-acquisition-receipt.json';receipt=load_json(path)
     records=receipt.get('records',[])
@@ -20,12 +57,7 @@ def build(root:Path):
     if len(records)!=16 or {x.get('id') for x in records}!=expected:raise ValueError('Exactly sixteen distinct authorized marginal scopes required')
     sources=[];normal=[]
     for r in records:
-        p=Path(r['path'])
-        if not p.is_absolute():p=root/p
-        if p.is_symlink() or not p.resolve().is_relative_to(root/'originals'):raise ValueError('Marginal source path escapes retained originals')
-        for part in p.relative_to(root).parents:
-            if (root/part).is_symlink():raise ValueError('Symlinked source directories are not admitted')
-        p=p.resolve();sid=r['id']
+        sid=r['id'];p=retained_original(root,sid,r['path'])
         if r['status']!='ORIGINAL_BYTES_RETAINED' or not 0<p.stat().st_size<=32*1024*1024 or p.stat().st_size!=r['bytes'] or sha(p)!=r['sha256']:raise ValueError('Marginal source byte mismatch')
         normalized={**r,'path':str(p.relative_to(root))};normal.append(normalized)
         url=urlsplit(r['url'])
