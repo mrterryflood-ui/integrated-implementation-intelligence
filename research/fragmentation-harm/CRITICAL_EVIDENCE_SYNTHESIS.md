@@ -34,7 +34,7 @@ The Hinds/Harris difference in late-stage incidence with similar late-stage shar
 [Atl23] Atlas et al. (2023), JAMA. DOI 10.1001/jama.2023.18755.
 [Cor25] Coronado et al. (2025), Ann Intern Med. DOI 10.7326/ANNALS-24-01885.
 [For20] Forbes et al. (2020), Clin Gastroenterol Hepatol. DOI 10.1016/j.cgh.2020.09.048.
-[Gra25] Grancher et al. (2025), Gut. DOI 10.1136/gutjnl-2025-336036.
+[Gra25] Grancher et al. Gut. 2026;75(4):748–759. DOI 10.1136/gutjnl-2025-336036. The legacy source key is retained; the journal issue year is 2026.
 [Tho20] Thompson et al. (2020), Cancer Epidemiol Biomarkers Prev. DOI 10.1158/1055-9965.EPI-19-0882.
 [Con22b] Conderino et al. (2022), BMC Med Inform Decis Mak. DOI 10.1186/s12911-022-01831-8.
 [Sha20b] Sharma et al. (2020), J Patient Saf. DOI 10.1097/PTS.0000000000000718.

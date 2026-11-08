@@ -22,7 +22,7 @@ The retained 2019–2023 Hinds County, MS / Harris County, TX county summaries s
 
 ## Finding 2 — a clinically consequential counterfactual remains disputed even with large cohorts
 
-Grancher et al.'s 2025 France nationwide retrospective cohort conditioned its analysis on **374,113 FIT-positive people who ultimately underwent colonoscopy within 24 months**. The reported adjusted odds ratio for *advanced-stage CRC* at 12 months vs the 2–3-month group was **1.04 (95% CI 0.85–1.25)**; this analysis found no increased detected risk through 24 months *within its selected study population*. High fecal hemoglobin was a much stronger risk marker. [Grancher et al.](https://doi.org/10.1136/gutjnl-2025-336036).
+Grancher et al.'s 2026 journal-issue France nationwide retrospective cohort conditioned its analysis on **374,113 FIT-positive people who ultimately underwent colonoscopy within 24 months**. The reported adjusted odds ratio for *advanced-stage CRC* at 12 months vs the 2–3-month group was **1.04 (95% CI 0.85–1.25)**; this analysis found no increased detected risk through 24 months *within its selected study population*. High fecal hemoglobin was a much stronger risk marker. [Grancher et al.](https://doi.org/10.1136/gutjnl-2025-336036).
 
 A published 2026 scientific exchange disputes what that null implies:
 - **February 13:** Brenner et al. questioned whether counting only cancers found at post-FIT colonoscopy excludes symptomatic cancers diagnosed earlier outside the screening pathway; this could obscure harms of waiting. [DOI](https://doi.org/10.1136/gutjnl-2025-337926).
@@ -34,7 +34,7 @@ A published 2026 scientific exchange disputes what that null implies:
 
 ## Finding 3 — a sequence of process effects is not a demonstrated chain of clinical effects
 
-- **Standardization loss, observed:** Conderino et al. found 15.9% of colorectal screening records in raw EHR health-maintenance fields were not in coded CDM fields. This is record-level capture, not patient-level missed screening [Con22b](https://doi.org/10.1186/s12911-022-01831-8).
+- **Documentation outside standardized codes, observed:** Conderino et al. report 15.9% of patients with colorectal screening documented in health-maintenance fields but absent from standardized diagnosis/procedure codes. The paper describes patients, not a fraction of screening-event records; retain its indicator eligibility and separate analytic samples. This does not establish missed clinical screening [Con22b](https://doi.org/10.1186/s12911-022-01831-8).
 - **Population selection, observed:** Thompson et al. reported 10,659/41,165 (25.89%) cancer cases from the region in its selected episode-care EHR group, and heterogeneous county coverage. This is a defined analytic selection fraction, not the registry's sensitivity [Tho20](https://doi.org/10.1158/1055-9965.EPI-19-0882).
 - **Cancer history ascertainment, observed:** Hoopes et al. report 23,616/51,977 = 45.4% registry-confirmed cases without corresponding EHR cancer history in linked CHC EHRs, not 45.4% failures of clinical service [Hoo20b](https://doi.org/10.1093/jnci/djaa210).
 - **Follow-up documentation, observed:** Escaron et al. identified more completed procedures after chart/claims review than EHR-only query. The source reports internally inconsistent timing and period details, so this result supports additional **ascertainment review** but not a pooled 12-month effect estimate pending clarification [Esc22](https://doi.org/10.1177/21501319221138423).
@@ -69,7 +69,7 @@ These findings are deliberately kept at their own units (record, EHR cohort, can
 | Stage shares establish statistical equivalence | UNTESTED | INCONCLUSIVE | No margin, uncertainty or equivalence design |
 | CDM extraction can omit recorded screening | VERIFIED in cited setting | SUPPORTED | Conderino 2022 |
 | EHR cancer cohorts can be unrepresentative | VERIFIED in cited setting | SUPPORTED | Thompson 2020, Hoopes 2021 |
-| Longer FIT-to-colonoscopy delay has no harmful effect | INFERRED from selected observational data | MIXED / DISPUTED | Grancher 2025 and 2026 correspondence; earlier studies |
+| Longer FIT-to-colonoscopy delay has no harmful effect | INFERRED from selected observational data | MIXED / DISPUTED | Grancher 2026 and subsequent 2026 correspondence; earlier studies |
 | Navigation improves one-year completion in PRECISE setting | VERIFIED published randomized estimate | SUPPORTED | Coronado 2025 |
 | Integration itself improves *local* Hinds/Harris prevention decision quality | UNTESTED | INCONCLUSIVE | No historical decisions / case comparisons |
 | Integration averts local clinical harm or cascading morbidity | UNTESTED | INCONCLUSIVE | No patient-level counterfactual outcomes |

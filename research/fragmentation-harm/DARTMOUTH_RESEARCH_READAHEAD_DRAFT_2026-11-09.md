@@ -12,7 +12,7 @@ An independent judge decomposed the **rate gap mathematically**: approximately 5
 ## Upstream risk before routine screening
 Time zero for symptomatic pathways is the earliest *contemporaneously knowable warning sign*, not a positive screening test or diagnosis. Distinguish symptomatic diagnostic evaluation at any age from asymptomatic risk-adapted screening and hereditary surveillance. Fritz et al. (2023, doi:10.1093/jnci/djad068) found four red flags associated with early-onset CRC; 19.3% of cases had a first recorded warning 3–24 months before diagnosis, while 49.3% had one within 3 months. Demb et al. (2020, doi:10.1136/gutjnl-2020-321849) estimated five-year CRC incidence 0.45% with iron-deficiency anemia vs 0.05% without among younger VA patients. These are observational risk associations, not proof of benefit from earlier testing.
 
-Virdee et al. (2026, doi:10.1186/s12885-026-16179-9) externally validated longitudinal blood-count models in >6.5 million patients, discrimination c-statistics 0.73–0.74 with subgroup calibration problems. Prediction is not intervention.
+Virdee et al. (2026, doi:10.1186/s12885-026-16179-9) externally validated longitudinal blood-count models in >6.5 million patients, discrimination c-statistics 0.73–0.74 with subgroup calibration problems. The full text did not establish overall superiority to its blood-test-abnormality comparator. Prediction performance remains separate from intervention benefit.
 
 ## Independent challenge and contrary evidence
 Chima et al. (published 2025, doi:10.3399/BJGP.2024.0491) randomized abnormal-blood-test cancer-risk decision support; the adjusted follow-up difference was 2.6 percentage points (95% CI -2.8 to 7.9), not statistically significant. The crude 76% vs 70% proportions are not the adjusted effect. This is a negative result for a particular intervention, not proof that decision support never works.
@@ -29,8 +29,8 @@ Published EHR/registry research demonstrates semantic loss and population select
 5. Scale the *research method* to autoimmune disease and endometriosis as owner-named priorities, plus lung cancer as a methodological comparison; preserve disease-specific outcomes.
 6. Use secure, durable evidence storage, independent review and versioned reproducibility receipts; avoid treating ephemeral CI artifacts as archival storage.
 
-## Scientific endpoints (owner adjudication requested)
-Mission-facing objective: earlier recognition, less late disease and avoidable harm. Proposed CRC primary analytic endpoint: late-stage incidence/100k; secondary/complementary: CRC mortality, emergency presentation, all-stage incidence and early:late ratio. A rising early:late ratio without improved late-stage incidence or mortality can be misleading due to overdiagnosis and stage migration. Endometriosis and autoimmune studies require different patient-centered endpoints.
+## Scientific endpoints (owner adjudication recorded)
+The recorded owner decision requires jointly interpreted outcomes: first knowable warning to appropriate action; age-specific risk; early/late counts and incidence; stage distribution and ratios; all-stage incidence, mortality and emergency presentation; function, quality of life, experience, equity, harms, cost, capacity and durability. No single metric replaces the mission. Each experiment may prespecify primary statistical estimands, multiplicity handling and power while retaining the other relevant domains. Divergent movement is a finding to investigate, including ascertainment, overdiagnosis, stage migration and prevention. Endometriosis and autoimmune studies require condition-specific outcomes. See OWNER_ADJUDICATION_MULTIDIMENSIONAL_OUTCOMES_2026-11-08.md.
 
 ## Review and status
 Independent judge (Drive W8, Nov 8): 34 claims, 24 PASS, 5 UNCERTAIN, 3 NOT_CHECKED, 1 owner decision, 1 citation/slide fix; none FAIL. Tests reported 61 + 130 (+20 subtests). GitHub workflow success is separately recorded, but it does not establish scientific validity. Do not imply independent review has cleared all exceptions.
@@ -42,7 +42,7 @@ Scientific sponsorship, methods review and biostatistics, registry expertise, et
 No patient-level Hinds/Harris linkage, no identified historical counterfactual benefit, no demonstrated mortality reduction from ChainWeb, no verified cross-disease transfer, and no institutionally approved data agreement. These are the next scientific gates.
 
 ## Requested decisions for discussion
-- Agree on primary CRC analytic endpoint hierarchy while retaining early:late improvement as the mission objective.
+- Select the first experiment's estimands and analysis plan within the already-adjudicated multidimensional outcome framework.
 - Identify academic/clinical leads and the first feasible authorized data source.
 - Confirm cross-condition order: autoimmune/endometriosis are the stated next priorities; lung is a complementary comparator.
 - Agree on a reproducibility and independent-review plan, then discuss DIADH/STTR/clinical funding separately from scientific validation.
