@@ -1,4 +1,4 @@
-name: DIS original-source research evidence cycle
+name: DIS research code checks and source refresh audit
 on:
   pull_request:
     paths:
@@ -120,8 +120,9 @@ jobs:
         run: python research/three_study_cycle/ascertainment_stress.py --out research-results/simulations
       - name: Compute conditional uncertainty and available survey-group comparisons
         run: python research/three_study_cycle/review_followup.py --input research-results --out research-results/review-followup
-      - name: Project bounded public aggregates for research workbench reconciliation
-        run: python research/three_study_cycle/platform_snapshot.py --input research-results --output research-results/platform-calibration-supplement.json
+      - name: Audit availability of a new research workbench refresh candidate
+        id: refresh_candidate
+        run: python research/three_study_cycle/refresh_candidate.py --input research-results --expected-revision "$(git rev-parse HEAD)"
       - name: Classify acquisition completeness independently from job success
         if: always()
         run: python research/three_study_cycle/readiness.py research-results
@@ -141,8 +142,26 @@ jobs:
           retention-days: 90
       - name: Record evidence boundary
         if: always()
+        env:
+          DIS_REFRESH_CANDIDATE_OUTCOME: ${{ steps.refresh_candidate.outcome }}
+          DIS_REFRESH_CANDIDATE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
-          echo '## Original-source research cycle' >> "$GITHUB_STEP_SUMMARY"
+          echo '## Research checks and source refresh audit' >> "$GITHUB_STEP_SUMMARY"
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          p=Path('research-results/refresh_candidate_status.json')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              if p.exists() and os.environ.get('DIS_REFRESH_CANDIDATE_OUTCOME')=='success':
+                  r=json.loads(p.read_text())
+                  receipt_digest=hashlib.sha256(Path('research-results/acquisition_receipt.json').read_bytes()).hexdigest()
+                  if r['producerRevision']!=os.environ['DIS_REFRESH_CANDIDATE_EXPECTED_SHA'] or r['acquisitionReceiptSha256']!=receipt_digest:
+                      raise ValueError('Refresh summary is not bound to this revision and source attempt')
+                  out.write('\n**Refresh outcome: '+r['state']+'**; '+str(r['byteAdmittedSources'])+'/'+str(r['requiredSources'])+' originals byte-admitted.\n\n')
+                  out.write('Failed source IDs: '+(', '.join(r['failedSourceIds']) or 'none')+'. Accepted application baseline unchanged: '+str(r['baselineSha256Before']==r['baselineSha256After'])+'.\n\n')
+              else:
+                  out.write('\n**Refresh candidate audit did not complete.** Inspect the failed step; no fresh-source success is established.\n\n')
+          PY
           echo 'Read acquisition_receipt.json, verified_readiness.json, readiness.json, analysis/results.json and mechanism-tests/mechanism_journal.json. Job success, file integrity, source completeness, statistical reproduction, causal identification and beneficiary benefit are distinct.' >> "$GITHUB_STEP_SUMMARY"
           echo 'early-action/early_action_rehearsal.json contains synthetic workflow checks only; no clinical action or patient outcome is authorized or verified.' >> "$GITHUB_STEP_SUMMARY"
           echo 'The full source and executable package has a SHA-256 manifest. Archive each accepted cycle outside expiring CI storage before claiming durable research retention.' >> "$GITHUB_STEP_SUMMARY"

@@ -6,6 +6,7 @@ import retained from "../data/pilot-calibration-20261108.json";
 import {explainStudy,type Observation} from "./three-study-explanation";
 import {credentialFreeHttps,strictTimestamp} from "./evidence-action-input-integrity";
 import {sameJsonContent} from "./json-content-equality";
+import {agreesWithComputedDifference} from "./computed-difference";
 export type CalibrationSupplement=typeof retained;
 const sourceIds=["nsfg_female","nsfg_codebook","nsfg_published","colorectal_states","lung_states","breast_states","hinds_all","hinds_late","harris_all","harris_late"];
 const sha=(x:string)=>/^[a-f0-9]{64}$/.test(x);
@@ -33,9 +34,9 @@ export function validateCalibrationSupplement(s:CalibrationSupplement):void{
     if(!finite(r.late.late_share_percent,0,100))fail("case share is not zero-filled suppression");
   }
   const [h,t]=s.county.rows;
-  if(s.county.contrasts.late_stage_rate_difference!==h.late.rate_per_100k-t.late.rate_per_100k||
-    s.county.contrasts.all_stage_rate_difference!==h.all.rate_per_100k-t.all.rate_per_100k||
-    s.county.contrasts.share_difference_pp!==h.late.late_share_percent-t.late.late_share_percent)fail("contrast/source disagreement");
+  if(!agreesWithComputedDifference(s.county.contrasts.late_stage_rate_difference,h.late.rate_per_100k,t.late.rate_per_100k)||
+    !agreesWithComputedDifference(s.county.contrasts.all_stage_rate_difference,h.all.rate_per_100k,t.all.rate_per_100k)||
+    !agreesWithComputedDifference(s.county.contrasts.share_difference_pp,h.late.late_share_percent,t.late.late_share_percent))fail("contrast/source disagreement");
   if(s.national.period!=="2019-2023"||s.national.states!==50||
     s.national.excludedAggregates.join("|")!=="United States|District of Columbia|Puerto Rico"||
     s.national.scope!=="CRC and lung: both sexes; breast: female; all ages; all races including Hispanic")fail("state frame or sex-specific scope");

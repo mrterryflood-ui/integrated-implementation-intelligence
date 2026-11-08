@@ -3,6 +3,7 @@
 import retained from "../data/crc-marginals-20261108.json";
 import {credentialFreeHttps,strictTimestamp} from "./evidence-action-input-integrity";
 import {sameJsonContent} from "./json-content-equality";
+import {agreesWithComputedDifference} from "./computed-difference";
 export type CrcMarginalSupplement=typeof retained;
 const fail=(why:string):never=>{throw Error("CRC marginal supplement: "+why);};
 const finite=(n:number)=>typeof n==="number"&&Number.isFinite(n)&&n>=0;
@@ -39,9 +40,8 @@ export function validateCrcMarginals(s:CrcMarginalSupplement){
    }
   });
   const [h,t]=row.counties;
-  const rate=h.late.ratePer100k===null||t.late.ratePer100k===null?null:h.late.ratePer100k-t.late.ratePer100k;
-  const share=h.late.lateCaseSharePercent===null||t.late.lateCaseSharePercent===null?null:h.late.lateCaseSharePercent-t.late.lateCaseSharePercent;
-  if(row.lateRateDifference!==rate||row.lateShareDifferencePp!==share)fail("contrast/source agreement");
+  if(!agreesWithComputedDifference(row.lateRateDifference,h.late.ratePer100k,t.late.ratePer100k)||
+    !agreesWithComputedDifference(row.lateShareDifferencePp,h.late.lateCaseSharePercent,t.late.lateCaseSharePercent))fail("contrast/source agreement");
  });
  if(new Set(referenced).size!==16||s.sources.some(x=>!referenced.includes(x.id)))fail("orphan source");
  if(new TextEncoder().encode(JSON.stringify(s)).length>12000)fail("case payload budget");
