@@ -33,7 +33,7 @@ test("create and checkpoint routes share capacity while retaining real auth, RLS
  const route=readFileSync("app/api/cases/route.ts","utf8");
  assert.equal((route.match(/await readBoundedCaseJson\(request\)/g)||[]).length,2);
  assert.equal((route.match(/serializeCasePlaybook\(/g)||[]).length,2);
- assert.match(route,/await auth\(\)/);assert.match(route,/set_config\('dis.subject_id'/);assert.match(route,/version=version\+1/);assert.match(route,/status:409/);assert.doesNotMatch(route,/body.length>50000/);
+ assert.match(route,/await auth\(\)/);assert.match(route,/set_config\('dis.subject_id'/);assert.match(route,/version=c\.version\+1/);assert.match(route,/c\.id=prior\.id AND c\.version=\$\{version\}/);assert.match(route,/status:409/);assert.doesNotMatch(route,/body.length>50000/);
 });
 test("a source-rich 100K-character report survives bounded multibyte create transport without loss",async()=>{
  const report={state:"RESEARCH_CALIBRATION",notes:"é".repeat(100000),clinicalActionAuthorized:false};

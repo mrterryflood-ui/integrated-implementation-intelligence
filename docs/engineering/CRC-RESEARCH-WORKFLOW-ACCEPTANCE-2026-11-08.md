@@ -77,6 +77,12 @@ Pull-request CI may execute GitHub's generated merge revision. Retain that revis
 
 ## Acceptance and rollback
 
+### Subsequent witnessed checkpoint and correction
+
+The authorized signed-in journey was subsequently witnessed on preview deployment `dpl_4TXqMxFbNdRvZAHptUMKG7e8Rh7i` at `79ce50037af972e79b2ba205bbc13fd2c9eb7899` (tree `6f4f9c3391d846226c751deb584b62deedfc727c`). It reached case version5, retained five dated events, rejected a stale editor write, recovered all15 narrative fields after closing the earlier editors, and created/reopened a private planning copy whose JSON, Markdown and Word retained the same saved research snapshot. This supersedes the earlier missing-sign-in status for that bounded journey. It does not certify human usability, production release or clinical/scientific outcomes.
+
+That witness also exposed a retained task whose no-retrieval wording contradicted six attached discovery leads. Complete plan acceptance therefore remained conditional. [The task reconciliation record](CRC-TASK-RECONCILIATION-2026-11-08.md) tracks the corrective implementation and its separate verification. Earlier witness files and exports remain unchanged; later fixes require their own source, CI, preview and live receipts.
+
 Local build/type/unit/database results are development evidence. Required final gates are exact-commit independent review, CI browser results, deployed revision identity, and a witnessed authorized signed-in create/reopen/revise/restore/planning/export journey. Keep missing live evidence visible. Do not merge or promote over unresolved required engineering gaps.
 
 The change needs no database migration and preserves the existing case, event and organization tables. Rollback is a revert of this candidate's code commits; retain saved records and journal history. Older code can retain the optional workflow/snapshot data in JSON but will not expose the new editors or readable appendix. Do not delete those records to roll back the interface.

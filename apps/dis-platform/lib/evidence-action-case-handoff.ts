@@ -7,6 +7,7 @@ import {buildColorectalDecisionBrief} from "./evidence-action-colorectal";
 import {getCalibrationSupplement} from "./pilot-calibration-supplement";
 import {getCrcMarginals} from "./crc-marginal-supplement";
 import {serializeCaseReport} from "./case-payload-capacity";
+import {projectResearchGapTask} from "./research-task-guidance";
 export const EVIDENCE_ACTION_HANDOFF_VERSION="dis-evidence-action-case-v1" as const;
 export type InvestigationNote={id:string;kind:"SOURCE"|"HYPOTHESIS"|"COUNTERFACTUAL"|"CORRECTION"|"OUTCOME"|"REOPEN";text:string;sourceUrl:string;gapIds:string[];origin:"PUBLIC_SOURCE_TRANSCRIPTION"|"SYNTHETIC"};
 export type InvestigationSupplement={publicAggregateConfirmed:boolean;additionalGaps:EvidenceGap[];notes:InvestigationNote[]};
@@ -41,7 +42,7 @@ export function buildEvidenceActionCaseHandoff(program:ResearchProgram,review:Ev
  const gaps=[...review.gaps,...(extra?.additionalGaps||[])];
  // Existing playbooks accept 35 tasks including seven general tasks. Preserve all
  // gaps in the full report even when only 28 fit in the editable task projection.
- const tasks=gaps.slice(0,28).map(g=>({title:("Investigate: "+g.problem).slice(0,175),why:("Evidence gap "+g.id+". Proposed review owner: "+g.ownerRole+".").slice(0,340),success:g.nextEvidence.slice(0,340)}));
+ const tasks=gaps.slice(0,28).map(g=>projectResearchGapTask(g,review.literature.length>0));
  const clinical=program.site==="colorectal"?[
   {label:"All-stage invasive disease incidence",baseline:"Implementation cohort not measured; separately retained2019–2023 registry context available",target:"Site-specific, source-aligned and lag-aware",unit:"cases per 100,000"},
   {label:"Screening uptake in eligible population",baseline:"Not measured locally",target:"Site-defined before pilot",unit:"%"},

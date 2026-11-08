@@ -28,6 +28,7 @@ function source(){
  workflow.supplementText=JSON.stringify({notes:[{id:'outcome-note-fixture',kind:'OUTCOME',text:'SYNTHETIC outcome marker',gapIds:[],origin:'SYNTHETIC'}]});
  const report:Record<string,unknown>={...handoff.report,workflow};
  const playbook=buildPlaybook(handoff.question,handoff.report);playbook.progressNotes=['SYNTHETIC learning note to preserve'];playbook.metrics[0].observed='SYNTHETIC reported value';playbook.metrics[0].verified=true;
+ playbook.tasks[7].title='SYNTHETIC revised task guidance';playbook.tasks[7].success='SYNTHETIC revised acceptance evidence';
  return {id:randomUUID(),workspace_id:randomUUID(),version:1,title:handoff.title,question:handoff.question,report,playbook};
 }
 test('fixed research snapshot survives JSON key reordering, retains inputs and does not promote reported verification',()=>{
@@ -38,8 +39,10 @@ test('fixed research snapshot survives JSON key reordering, retains inputs and d
  assert.deepEqual(snapshot.report,row.report);assert.deepEqual(snapshot.playbook,row.playbook);
  row.playbook.progressNotes.push('Later unsaved note');assert.notDeepEqual(snapshot.playbook,row.playbook);
  const report=researchPlanningReport(snapshot);assert.equal(report.sections.recommendation,'UNKNOWN');assert.match(report.sections.question,/SYNTHETIC problem narrative/);
+ assert.match(report.sections.implementation,/SYNTHETIC sustainment narrative/);assert.match(report.sections.implementation,/Review the retained tasks against the saved research before use/);
  const readable=researchPlanningSections(snapshot).map(section=>section.title+'\n'+section.text).join('\n');
  assert.match(readable,/SYNTHETIC retained workflow marker/);assert.match(readable,/SYNTHETIC outcome marker/);assert.match(readable,/SYNTHETIC learning note/);assert.match(readable,/does not independently verify/);assert.match(readable,/SYNTHETIC actual retrieval query retained separately/);
+ assert.match(readable,/Task guidance review/);assert.match(readable,/Matching wording does not establish source appraisal/);
  assert.equal(researchPlanningDigest({b:1,a:[2,3]}),researchPlanningDigest({a:[2,3],b:1}));
 });
 test('legacy v1 and retainedResearch wrappers preserve complete assessments without rewriting the research source',()=>{
@@ -158,6 +161,7 @@ test('actual service, SQL/RLS and export handler retain research through private
    for(const heading of headings)assert.match(heading[1],/<w:keepNext\s*\/>/,'Every heading stays with its following content');
    assert.match(content,/No linked organizational source records were attached to this saved record\./);
    assert.match(document,/No linked organizational source records were attached to this saved record\./);
+   for(const text of [content,document]){assert.match(text,/SYNTHETIC revised task guidance/);assert.match(text,/SYNTHETIC revised acceptance evidence/);assert.match(text,/Review the retained tasks against the saved research before use/);}
   });
   await t.test('actual reconciled export retains linked snapshot; inaccessible and stale exports fail',async()=>{
    state.actor='alice';

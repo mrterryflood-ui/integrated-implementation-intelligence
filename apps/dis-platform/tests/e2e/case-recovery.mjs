@@ -20,7 +20,13 @@ for(const[label,engine,device]of[["desktop",chromium,{viewport:{width:1280,heigh
  const errors=[],restoreRequests=[],checks=[];page.on("pageerror",e=>errors.push(e.message));
  let item,history,mode="success",gets=0,releaseRestore,restoreStarted;
  const otherCaseId="10000000-0000-4000-8000-000000000002";
- const reset=()=>{item={id:caseId,title:"Synthetic recovery case",question:"Can the earlier assessment be restored safely?",version:3,status:"REVIEW",playbook:structuredClone(playbook),report:structuredClone(current),updated_at:"2026-01-02T00:00:00Z"};history=[{id:eventId,event_type:"REASSESSMENT",created_at:"2026-01-02T00:00:00Z",payload:{previousVersion:1,newVersion:3,previousReport:original}}];gets=0;};reset();
+ const reset=()=>{item={id:caseId,title:"Synthetic recovery case",question:"Can the earlier assessment be restored safely?",version:3,status:"REVIEW",playbook:structuredClone(playbook),report:structuredClone(current),updated_at:"2026-01-02T00:00:00Z"};history=[{id:eventId,event_type:"REASSESSMENT",created_at:"2026-01-02T00:00:00Z",payload:{previousVersion:1,newVersion:3,previousReport:original}}];gets=0;
+  if(mode.startsWith("guidance")){
+   // Minimal component fixture; actual full-report persistence is exercised by the route suite.
+   item.report={schemaVersion:"dis-evidence-action-case-v1",gapLedger:[{id:"literature-not-retrieved",severity:"RESEARCH_REQUIRED",problem:"Synthetic discovery leads are attached; source appraisal remains open.",ownerRole:"Proposed reviewer",nextEvidence:"Appraise the original sources and local applicability."}],investigation:{literature:[{id:"synthetic-lead",claimVerified:false}]},causalEffectEstablished:false,interventionAuthorized:false};
+   Object.assign(item.playbook.tasks[0],{title:"Investigate: No fresh scholarly retrieval attached to this case.",why:"Evidence gap literature-not-retrieved. Proposed review owner: Research librarian.",evidence:"Synthetic prior notes"});
+  }
+ };reset();
  const payload=()=>({case:item,history,historyPage:{hasMore:false,isFirstPage:true,incompleteCoverage:false,caseVersion:item.version,returnedCount:history.length,limit:250,order:"created_at_desc_id_desc",maxResponseBytes:3145728,nextCursor:null}});
  await context.route("https://case-fixture.test/**",async route=>{
   const request=route.request(),url=new URL(request.url());
@@ -28,6 +34,13 @@ for(const[label,engine,device]of[["desktop",chromium,{viewport:{width:1280,heigh
   if(url.pathname==="/")return route.fulfill({contentType:"text/html",body:'<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><div id="root"></div><script src="/fixture.js"></script></body></html>'});
   if(url.pathname==="/fixture.js")return route.fulfill({contentType:"text/javascript",body:bundle});
   if(url.pathname==="/api/cases"&&request.method()==="GET"){if(url.searchParams.get("id")===otherCaseId){const p=payload();return json({...p,case:{...p.case,id:otherCaseId,title:"Other synthetic case",version:1},history:[],historyPage:{...p.historyPage,caseVersion:1,returnedCount:0}});}gets++;return mode==="history-failure"&&gets>1?json({error:"Synthetic history unavailable"},503):json(payload());}
+  if(url.pathname==="/api/cases"&&request.method()==="PATCH"){
+   assert.ok(mode.startsWith("guidance"));const body=request.postDataJSON();assert.equal(body.id,caseId);assert.equal(body.version,3);
+   if(mode==="guidance-conflict")return json({error:"Version conflict. Reload before retrying."},409);
+   const previousPlaybook=item.playbook;item={...item,version:4,playbook:body.playbook};
+   history.unshift({id:"20000000-0000-4000-8000-000000000003",event_type:"CHECKPOINT",created_at:"2026-01-03T00:00:00Z",payload:{previousVersion:3,caseVersion:4,previousPlaybook,playbook:item.playbook}});
+   return json({case:item,historyRecorded:true});
+  }
   if(url.pathname==="/api/cases/restore"&&request.method()==="POST"){
    const body=request.postDataJSON();restoreRequests.push(body);assert.deepEqual(body,{id:caseId,version:3,eventId});
    if(mode==="conflict")return json({error:"The case changed. Reload before restoring."},409);
@@ -60,6 +73,26 @@ for(const[label,engine,device]of[["desktop",chromium,{viewport:{width:1280,heigh
    assert.equal(await page.getByRole("heading",{level:1}).textContent(),back?"Synthetic recovery case":"Other synthetic case");
    await page.getByText("DIS decision workspace · Version "+(back?3:1),{exact:true}).waitFor();assert.equal(await page.getByLabel("Responsible person").inputValue(),"New editor draft");checks.push(back?"late_response_cannot_replace_returned_case_generation":"late_response_cannot_replace_other_case");
   }
+  mode="guidance";reset();await page.reload();await page.getByRole("heading",{name:"Synthetic recovery case"}).waitFor();
+  await page.getByLabel("Responsible person").fill("Synthetic retained owner");
+  await page.getByText("Review or edit task guidance",{exact:true}).click();
+  await page.getByRole("button",{name:"Use current guidance for task 1",exact:true}).click();
+  assert.equal(await page.getByRole("textbox",{name:"Task title 1",exact:true}).inputValue(),"Appraise discovery leads and record source applicability");
+  assert.equal(await page.getByLabel("Responsible person").inputValue(),"Synthetic retained owner");
+  assert.equal(await page.getByLabel("Observation, source or test evidence").inputValue(),"Synthetic prior notes");assert.equal(item.version,3);
+  await page.screenshot({path:join(out,"task-guidance-"+label+".png"),fullPage:true});
+  await page.getByRole("button",{name:"Save progress",exact:true}).click();await page.getByText("DIS decision workspace · Version 4",{exact:true}).waitFor();
+  await page.getByRole("status").filter({hasText:"Progress and time-stamped learning checkpoint saved together"}).waitFor();
+  assert.equal(item.playbook.tasks[0].sourceGapId,"literature-not-retrieved");assert.equal(item.report.causalEffectEstablished,false);assert.equal(item.report.interventionAuthorized,false);
+  await page.reload();await page.getByText("DIS decision workspace · Version 4",{exact:true}).waitFor();
+  await page.getByText("Recorded task guidance changes",{exact:true}).click();
+  await page.getByText(/title: Investigate: No fresh scholarly retrieval attached/).waitFor();
+  await page.getByText(/title: Appraise discovery leads and record source applicability/).waitFor();
+  checks.push("current_gap_guidance_requires_explicit_draft_adoption","task_owner_and_evidence_retained","saved_guidance_and_prior_wording_survive_reload");
+  mode="guidance-conflict";reset();await page.reload();await page.getByRole("heading",{name:"Synthetic recovery case"}).waitFor();
+  await page.getByText("Review or edit task guidance",{exact:true}).click();await page.getByRole("textbox",{name:"Task title 1",exact:true}).fill("Synthetic deliberate local task adaptation");
+  await page.getByRole("button",{name:"Save progress",exact:true}).click();await page.getByRole("status").filter({hasText:"Version conflict"}).waitFor();
+  assert.equal(await page.getByRole("textbox",{name:"Task title 1",exact:true}).inputValue(),"Synthetic deliberate local task adaptation");assert.equal(item.version,3);checks.push("task_edit_conflict_preserves_unsaved_draft");
   assert.deepEqual(errors,[]);writeFileSync(join(out,"case-recovery-"+label+".json"),JSON.stringify({kind:"SYNTHETIC_COMPONENT_BROWSER_FIXTURE",revision:process.env.GITHUB_SHA||null,device:label,bundleSha256,checks,clientErrors:errors,clerkSignInVerified:false,productionDatabaseUsed:false},null,2));console.log("PASS case recovery "+label+": "+checks.length+" component behavior checks");
  }finally{await context.close();await browser.close();}
 }

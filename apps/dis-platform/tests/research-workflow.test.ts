@@ -67,9 +67,11 @@ test("legacy notes and discovery leads survive successive conversions, while cur
  assert.equal(second.investigation.notes[0].id,"legacy-note");assert.equal(second.investigation.literature[0].id,"synthetic-lead");
  const newCase=buildResearchWorkflowCase(a).report;
  const withLeads=retainedResearchReport(reviseResearchWorkflowReport(newCase,w))!;
- assert.equal(withLeads.investigation.literature[0].id,"synthetic-lead");assert.ok(!withLeads.gapIDs.includes("literature-not-retrieved"));
+ assert.equal(withLeads.investigation.literature[0].id,"synthetic-lead");assert.ok(withLeads.gapIDs.includes("literature-not-retrieved"));
+ assert.match(withLeads.gapLedger.find(g=>g.id==="literature-not-retrieved")!.nextEvidence,/Discovery alone does not close this gap/);
  const without=retainedResearchReport(reviseResearchWorkflowReport(withLeads,{...w,leads:[]}))!;
  assert.equal(without.investigation.literature.length,0);assert.ok(without.gapIDs.includes("literature-not-retrieved"));
+ assert.match(without.gapLedger.find(g=>g.id==="literature-not-retrieved")!.problem,/No scholarly discovery leads are attached/);
 });
 test("legacy admission compares the entire source contract and cannot be bypassed by changing its markers",()=>{
  const legacy=buildEvidenceActionCaseHandoff(program,bridge).report;assert.deepEqual(admitCaseReport(legacy),legacy);

@@ -2,6 +2,8 @@ import {createHash} from 'node:crypto';
 import {serializeCasePlaybook,serializeCaseReport} from './case-payload-capacity';
 import {normalizeReport,PLANNING_SCHEMA,PLANNING_SECTIONS,type PlanningReport} from './planning-contract';
 import {WORKFLOW_FIELDS} from './research-workflow';
+import type {WorkItem} from './decision-playbook';
+import {researchTaskReviewNotice} from './research-task-guidance';
 
 /** A retained planning source, never evidence of clinical benefit or authority. */
 export const RESEARCH_PLANNING_SNAPSHOT_VERSION='dis.research-planning-snapshot.v1';
@@ -84,7 +86,7 @@ export function researchPlanningSections(value:unknown):Array<{title:string;text
   const fields=[['frameworks','Selected frameworks'],['searchQuery','Current evidence search question'],['retrievalQuery','Query used for the retained discovery leads'],['leads','Retained scholarly discovery leads'],['focusIds','Selected candidate mechanisms'],['studyText','Saved study measurement inputs'],['counterfactualText','Saved counterfactual inputs'],['correctionActionId','Selected correction candidate'],['correctionReceiptText','Saved correction receipt inputs'],['supplementText','Saved investigation and outcome supplement'],['publicAggregateConfirmed','Author’s public aggregate confirmation']] as const;
   for(const [key,title] of fields)sections.push({title,text:workflow[key]===undefined||workflow[key]===''?'Not supplied':recordedText(workflow[key])});
  }
- sections.push({title:'Saved actions, measures and learning',text:recordedText(snapshot.playbook)},{title:'Full retained research snapshot (JSON)',text:JSON.stringify(snapshot,null,2)});
+ sections.push({title:'Task guidance review',text:researchTaskReviewNotice(snapshot.report,snapshot.playbook.tasks as WorkItem[])},{title:'Saved actions, measures and learning',text:recordedText(snapshot.playbook)},{title:'Full retained research snapshot (JSON)',text:JSON.stringify(snapshot,null,2)});
  return sections;
 }
 /** Seed the existing editable template; the complete source stays beside it. */
@@ -107,7 +109,7 @@ export function researchPlanningReport(value:ResearchPlanningSnapshot):PlanningR
  sections.gaps=supplied('designed','operational','experienced')||sections.gaps;
  sections.outcomes=supplied('success')||sections.outcomes;
  sections.options=supplied('design','designJustification','comparison')||sections.options;
- sections.implementation=supplied('designed','sustainment')||sections.implementation;
+ sections.implementation=[supplied('designed','sustainment')||sections.implementation,researchTaskReviewNotice(snapshot.report,snapshot.playbook.tasks as WorkItem[])].join('\n\n');
  sections.measures=supplied('success','comparison')||sections.measures;
  sections.resources=supplied('operational','sustainment')||sections.resources;
  sections.risks=[supplied('harms'),RESEARCH_PLANNING_NOTICE].filter(Boolean).join('\n\n');

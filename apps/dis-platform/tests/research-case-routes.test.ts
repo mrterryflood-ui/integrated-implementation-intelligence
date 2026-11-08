@@ -29,6 +29,7 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
    export {emptyResearchWorkflow} from './lib/research-workflow';
    export {colorectalEvidenceAction} from './lib/evidence-action-colorectal';
    export {buildEvidenceActionCaseHandoff} from './lib/evidence-action-case-handoff';
+   export {applyResearchTaskGuidance} from './lib/research-task-guidance';
   `,resolveDir:app,loader:"ts"},outfile:bundlePath,bundle:true,platform:"node",format:"cjs",packages:"external",logLevel:"silent",plugins:[{
    name:"synthetic-identity-and-transport-only",
    setup(builder){
@@ -232,6 +233,39 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
    assert.equal(durable.numericText,exactNumber);
    const predecessor=(await db.query<{body:string}>("SELECT (payload->'previousReport')::text AS body FROM dis_case_events WHERE case_id=$1 AND event_type='REASSESSMENT'",[wrappedId])).rows[0];
    assert.equal(predecessor.body,before);
+  });
+  await t.test("task reconciliation preserves progress and both plan versions through atomic writes, denied attempts and database restart",async()=>{
+   const created=await call(owner,api.cases.POST,"/api/cases","POST",createBody);assert.equal(created.status,201);
+   const taskCaseId=created.body.case.id,workingPlan=structuredClone(created.body.case.playbook);
+   const taskIndex=workingPlan.tasks.findIndex((task:any)=>task.sourceGapId==="literature-not-retrieved");assert.ok(taskIndex>=0);
+   delete workingPlan.tasks[taskIndex].sourceGapId;
+   workingPlan.tasks[taskIndex].owner="Synthetic retained owner";workingPlan.tasks[taskIndex].evidence="Synthetic prior search record";workingPlan.tasks[taskIndex].done=true;
+   assert.equal((await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id:taskCaseId,version:1,playbook:workingPlan})).status,200);
+   const lead={id:"task-discovery-lead",kind:"SCHOLARLY",title:"Synthetic attached source",summary:"Fixture only",source:"Synthetic index",url:"https://example.org/task-source",retrievedAt:"2026-11-08T12:00:00Z",sourceStatus:"DISCOVERY_ONLY"};
+   const revised=await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id:taskCaseId,version:2,researchWorkflow:{...workflow,retrievalQuery:"Synthetic task source search",leads:[lead]}});
+   assert.equal(revised.status,200);assert.deepEqual(revised.body.case.playbook,workingPlan);
+   const adapted=structuredClone(workingPlan);adapted.tasks[taskIndex]=api.applyResearchTaskGuidance(adapted.tasks[taskIndex],revised.body.case.report);
+   assert.equal(adapted.tasks[taskIndex].title,"Appraise discovery leads and record source applicability");
+   const request={id:taskCaseId,version:3,playbook:adapted};
+   for(const [actor,version,status] of [[null,3,401],[other,3,409],[owner,2,409],[owner,"3",400]] as const)assert.equal((await call(actor,api.cases.PATCH,"/api/cases","PATCH",{...request,version})).status,status);
+   const countBefore=(await db.query<{n:number}>("SELECT count(*)::int AS n FROM dis_case_events WHERE case_id=$1",[taskCaseId])).rows[0].n;
+   await db.exec("CREATE TRIGGER refuse_research_journal BEFORE INSERT ON dis_case_events FOR EACH ROW EXECUTE FUNCTION refuse_research_journal();");
+   try{
+    assert.equal((await call(owner,api.cases.PATCH,"/api/cases","PATCH",request)).status,503);
+    const unchanged=(await db.query<{version:number;playbook:unknown}>("SELECT version,playbook FROM dis_casework WHERE id=$1",[taskCaseId])).rows[0];
+    assert.equal(unchanged.version,3);assert.deepEqual(unchanged.playbook,workingPlan);
+    assert.equal((await db.query<{n:number}>("SELECT count(*)::int AS n FROM dis_case_events WHERE case_id=$1",[taskCaseId])).rows[0].n,countBefore);
+   }finally{await db.exec("DROP TRIGGER refuse_research_journal ON dis_case_events");}
+   const saved=await call(owner,api.cases.PATCH,"/api/cases","PATCH",request);assert.equal(saved.status,200);assert.equal(saved.body.historyRecorded,true);
+   assert.deepEqual(saved.body.case.playbook,adapted);assert.deepEqual(saved.body.case.report,revised.body.case.report);
+   for(const key of ["owner","done","evidence","due","review"])assert.equal(saved.body.case.playbook.tasks[taskIndex][key],workingPlan.tasks[taskIndex][key]);
+   const checkpoint=(await db.query<{payload:any}>("SELECT payload FROM dis_case_events WHERE case_id=$1 AND payload->>'caseVersion'='4'",[taskCaseId])).rows[0].payload;
+   assert.deepEqual(checkpoint.previousPlaybook,workingPlan);assert.deepEqual(checkpoint.playbook,adapted);assert.equal(checkpoint.previousVersion,3);
+   await db.close();db=new PGlite(databaseDirectory);await db.waitReady;fixture.__disResearchRouteDb=db;
+   const reopened=await call(owner,api.cases.GET,"/api/cases?id="+taskCaseId,"GET");
+   assert.deepEqual(reopened.body.case.playbook,adapted);assert.equal(reopened.body.case.version,4);
+   assert.deepEqual(reopened.body.history.find((event:any)=>event.payload.caseVersion===4).payload.previousPlaybook,workingPlan);
+   assert.equal((await call(owner,api.cases.PATCH,"/api/cases","PATCH",request)).status,409);
   });
   await t.test("committed research inputs and history remain available after closing and reopening the database",async()=>{
    await db.close();db=new PGlite(databaseDirectory);await db.waitReady;fixture.__disResearchRouteDb=db;

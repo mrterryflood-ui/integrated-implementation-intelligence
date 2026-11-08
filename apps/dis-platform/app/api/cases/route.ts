@@ -72,19 +72,23 @@ export async function PATCH(request:Request){try{
   if(!revised[1].length)return Response.json({error:"Case changed or access denied. Nothing revised; reload before retrying."},{status:409});
   return Response.json({case:revised[1][0],historyRecorded:true,note:"Research inputs saved as a new revision. Prior evidence and the current action plan are retained; review the plan against the changed inputs."},{headers:{"cache-control":"private, no-store"}});
  }
- if(!uuid.test(id)||!Number.isInteger(version)||version<1||!validatePlaybook(input.playbook))return Response.json({error:"Invalid case update"},{status:400});
+ if(!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647||!validatePlaybook(input.playbook))return Response.json({error:"Invalid case update"},{status:400});
  const body=serializeCasePlaybook(input.playbook);
  // Case update and checkpoint archive stay atomic and version-conflict protected.
  const learning=JSON.stringify(buildLearningCheckpoint(input.playbook,version+1,new Date().toISOString()));
  const rows=await ctx.sql.transaction([
   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
-  ctx.sql`WITH updated AS (
-    UPDATE dis_casework SET playbook=${body}::jsonb,version=version+1,updated_at=now()
-    WHERE id=${id} AND version=${version}
-    RETURNING id,workspace_id,owner_subject,title,question,report,playbook,version,status,updated_at
+  ctx.sql`WITH prior AS MATERIALIZED (
+    SELECT id,playbook,version FROM dis_casework WHERE id=${id} AND version=${version} FOR UPDATE
+   ), updated AS (
+    UPDATE dis_casework c SET playbook=${body}::jsonb,version=c.version+1,updated_at=now()
+    FROM prior WHERE c.id=prior.id AND c.version=${version}
+    RETURNING c.id,c.workspace_id,c.owner_subject,c.title,c.question,c.report,c.playbook,c.version,c.status,c.updated_at
    ), journal AS (
     INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
-    SELECT id,workspace_id,owner_subject,'CHECKPOINT',${learning}::jsonb FROM updated
+    SELECT updated.id,updated.workspace_id,updated.owner_subject,'CHECKPOINT',
+      ${learning}::jsonb||jsonb_build_object('previousVersion',prior.version,'previousPlaybook',prior.playbook,'playbook',updated.playbook)
+    FROM updated JOIN prior ON prior.id=updated.id
     RETURNING id
    )
    SELECT updated.id,updated.workspace_id,updated.title,updated.question,

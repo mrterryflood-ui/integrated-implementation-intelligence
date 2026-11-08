@@ -5,6 +5,7 @@ import {buildEvidenceActionCaseHandoff,validateInvestigationSupplement,type Inve
 import {boundDiscoveryLeads,reviewCounterfactual,reviewCrossStudyMeasurements,reviewCorrectionReceipt,type EvidenceActionReview,type CounterfactualRequest,type CorrectionReceipt} from "./evidence-action-bridge";
 import {credentialFreeHttps,objectRecord,hasOnlyKeys,strictTimestamp} from "./evidence-action-input-integrity";
 import {CasePayloadError,serializeCaseReport} from "./case-payload-capacity";
+import {projectResearchGapTask} from "./research-task-guidance";
 
 export const RESEARCH_WORKFLOW_VERSION="dis-research-workflow-v1" as const;
 export const WORKFLOW_FIELDS=[
@@ -130,15 +131,18 @@ export function reviseResearchWorkflowReport(value:unknown,input:unknown):Record
  const literature=[...baseLeads,...boundDiscoveryLeads(workflow.leads)];
  const declaredSupplement=workflowSupplement(workflow,baseIds);
  const discoveryGapReferenced=[...source.investigation.notes,...(declaredSupplement?.notes||[])].some(n=>n.gapIds.includes("literature-not-retrieved"));
- if(literature.length)baseGaps=discoveryGapReferenced?baseGaps.map(g=>g.id==="literature-not-retrieved"?{...g,problem:"An earlier investigation note references the discovery gap. Candidate leads are now attached; original sources and applicability still require review.",nextEvidence:"Retain this gap identity for the historical note; review the newly attached original articles and record the reconciliation."}:g):baseGaps.filter(g=>g.id!=="literature-not-retrieved");
- else if(!baseGaps.some(g=>g.id==="literature-not-retrieved"))baseGaps.push({id:"literature-not-retrieved",severity:"RESEARCH_REQUIRED",problem:"No scholarly discovery leads are attached to the current workflow.",ownerRole:"Research librarian",nextEvidence:"Retrieve candidate sources, read original articles and confirm population, outcome and design."});
+ if(literature.length)baseGaps=baseGaps.map(g=>g.id==="literature-not-retrieved"?{...g,problem:(discoveryGapReferenced?"An earlier investigation note references this gap. ":"")+"Candidate leads are now attached; original sources and applicability still require review.",nextEvidence:"Appraise the attached original articles, record population, outcome, design and local applicability, and retain unresolved findings. Discovery alone does not close this gap."}:g);
+ else {
+  const missingDiscovery={id:"literature-not-retrieved",severity:"RESEARCH_REQUIRED" as const,problem:"No scholarly discovery leads are attached to the current workflow.",ownerRole:"Research librarian",nextEvidence:"Retrieve candidate sources, read original articles and confirm population, outcome and design."};
+  baseGaps=baseGaps.some(g=>g.id===missingDiscovery.id)?baseGaps.map(g=>g.id===missingDiscovery.id?missingDiscovery:g):[...baseGaps,missingDiscovery];
+ }
  baseIds=baseGaps.map(g=>g.id);
  const supplement=workflowSupplement(workflow,baseIds),gaps=[...baseGaps,...(supplement?.additionalGaps||[])];
  const baseNoteIds=source.workflowBaselineNoteIds||(source.workflow?[]:source.investigation.notes.map(n=>n.id));
  const baseNotes=source.investigation.notes.filter(n=>baseNoteIds.includes(n.id));
  if(baseNotes.length!==baseNoteIds.length||new Set(baseNoteIds).size!==baseNoteIds.length)invalid("Retained baseline note identities are inconsistent; nothing revised.");
  if(supplement?.notes.some(n=>baseNoteIds.includes(n.id)))invalid("A supplementary note cannot replace a retained legacy note identity; use a new note ID.");
- const tasks=gaps.slice(0,28).map(g=>({title:("Investigate: "+g.problem).slice(0,175),why:("Evidence gap "+g.id+". Proposed review owner: "+g.ownerRole+".").slice(0,340),success:g.nextEvidence.slice(0,340)}));
+ const tasks=gaps.slice(0,28).map(g=>projectResearchGapTask(g,literature.length>0));
  const next:ResearchReport={...structuredClone(source),workflow,workflowBaselineGapIds:[...baseIds],workflowBaselineNoteIds:[...baseNoteIds],workflowBaselineLeadIds:[...baseLeadIds],gapIDs:gaps.map(g=>g.id),gapLedger:gaps,
   taskProjection:{...source.taskProjection,editableCount:tasks.length,totalGapCount:gaps.length,unmaterializedGapIDs:gaps.slice(28).map(g=>g.id)},
   investigation:{...source.investigation,literature,notes:[...baseNotes,...(supplement?.notes||[])],privacyStatus:"OPERATOR_DECLARED_PUBLIC_NOT_PRIVACY_CERTIFIED"},
