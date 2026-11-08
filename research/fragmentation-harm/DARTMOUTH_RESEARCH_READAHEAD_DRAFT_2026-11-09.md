@@ -29,11 +29,14 @@ Published EHR/registry research demonstrates semantic loss and population select
 5. Scale the *research method* to autoimmune disease and endometriosis as owner-named priorities, plus lung cancer as a methodological comparison; preserve disease-specific outcomes.
 6. Use secure, durable evidence storage, independent review and versioned reproducibility receipts; avoid treating ephemeral CI artifacts as archival storage.
 
-## Scientific endpoints (owner adjudication requested)
-Mission-facing objective: earlier recognition, less late disease and avoidable harm. Proposed CRC primary analytic endpoint: late-stage incidence/100k; secondary/complementary: CRC mortality, emergency presentation, all-stage incidence and early:late ratio. A rising early:late ratio without improved late-stage incidence or mortality can be misleading due to overdiagnosis and stage migration. Endometriosis and autoimmune studies require different patient-centered endpoints.
+## Integrated outcomes (owner-adjudicated: not either/or)
+The owner explicitly requires a jointly interpreted, multidimensional outcome framework: first-warning-sign recognition and action timing; early- and late-stage counts, rates and ratios; all-stage and late-stage incidence; mortality and emergency presentation; patient experience, equity, functional outcomes, false positives, overdiagnosis and sustainability. None is discarded in favor of another. Individual experiments may prespecify statistical estimands, but this does not narrow the mission. Discordant measures are an object of investigation. Endometriosis and autoimmune studies use condition-appropriate outcomes such as diagnostic interval, symptoms, function and quality of life, not invented cancer stage metrics.
 
 ## Review and status
 Independent judge (Drive W8, Nov 8): 34 claims, 24 PASS, 5 UNCERTAIN, 3 NOT_CHECKED, 1 owner decision, 1 citation/slide fix; none FAIL. Tests reported 61 + 130 (+20 subtests). GitHub workflow success is separately recorded, but it does not establish scientific validity. Do not imply independent review has cleared all exceptions.
+
+## Stakeholders, ultimate beneficiaries and scale
+Dartmouth is **one scientific stakeholder and potential collaborator**, not the ultimate customer or research destination. Ultimate beneficiaries are patients, families and communities. Operational users include clinicians, care teams, CHWs, public health practitioners, researchers and health-system decision makers. Other partners may include VA, UTHealth, community organizations, registries, payers and public agencies. Research, engineering, independent assurance, implementation and cross-condition scale-out advance in parallel beyond this meeting. No external partnership, data access or funding commitment is presumed.
 
 ## What Dartmouth can contribute
 Scientific sponsorship, methods review and biostatistics, registry expertise, ethically authorized longitudinal clinical data partnerships, implementation research core, patient/community governance and prospective comparative evaluation. Potential paths include SEER Research Plus/USCS and institution-approved data environments; access and eligibility must be confirmed before claims.
@@ -42,9 +45,9 @@ Scientific sponsorship, methods review and biostatistics, registry expertise, et
 No patient-level Hinds/Harris linkage, no identified historical counterfactual benefit, no demonstrated mortality reduction from ChainWeb, no verified cross-disease transfer, and no institutionally approved data agreement. These are the next scientific gates.
 
 ## Requested decisions for discussion
-- Agree on primary CRC analytic endpoint hierarchy while retaining early:late improvement as the mission objective.
+- Discuss the full multidimensional CRC outcomes and specify estimands for individual experiments without forcing an either/or metric choice.
 - Identify academic/clinical leads and the first feasible authorized data source.
-- Confirm cross-condition order: autoimmune/endometriosis are the stated next priorities; lung is a complementary comparator.
+- Explore clinical and scientific collaboration across owner-prioritized autoimmune/endometriosis and CRC research; lung remains an optional methodological comparator, not a replacement.
 - Agree on a reproducibility and independent-review plan, then discuss DIADH/STTR/clinical funding separately from scientific validation.
 
 **Status:** Owner review draft. No external distribution authorized.
