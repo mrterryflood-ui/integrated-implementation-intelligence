@@ -11,7 +11,13 @@ for(const [label,engine,device] of [["desktop",chromium,{viewport:{width:1280,he
  try{
   const first=await page.goto(base+"/research-program",{waitUntil:"domcontentloaded",timeout:45000});assert.equal(first?.status(),200);
   await page.getByRole("link",{name:/Open the evidence-to-action bridge/}).click();
-  await page.getByRole("heading",{name:/What happens between discovering a difference and correcting it/}).waitFor();
+  await page.getByRole("heading",{name:/What is being missed, and what would improve the outcome/}).waitFor();
+  const calibrated=page.getByRole("region",{name:"Reproduced pilot evidence and the decision it supports"});
+  await calibrated.getByText(/Observed late-stage rate contrast: 6.0/).waitFor();
+  const study=page.getByRole("combobox",{name:"Inspect a calibrated study"});
+  await study.selectOption("national");await calibrated.getByText("0.735",{exact:true}).waitFor();
+  await study.selectOption("survey");await calibrated.getByText("6.158",{exact:true}).waitFor();
+  await study.selectOption("county");
   await page.getByText("30.4 cases per 100,000 annually").waitFor();await page.getByText("63.3 percent").waitFor();await page.getByText("76 average cases per year").waitFor();
   await page.getByText("Safe to pool: no.",{exact:false}).first().waitFor();await page.getByText(/Harris County, Texas/).first().waitFor();
   await page.getByRole("button",{name:"Load existing NCI exercise source"}).click();await page.getByRole("button",{name:"Review cross-study measurements"}).click();
@@ -19,6 +25,11 @@ for(const [label,engine,device] of [["desktop",chromium,{viewport:{width:1280,he
   await page.getByRole("button",{name:"Load synthetic teaching panel"}).click();await page.getByRole("button",{name:"Check counterfactual readiness"}).click();
   await page.getByText(/candidate for independent design review/i).first().waitFor();await page.getByText(/Raw difference in differences: 1.000/i).waitFor();await page.getByText("Causal effect established: no.",{exact:false}).waitFor();
   const panel=page.getByRole("textbox",{name:/Bounded aggregate design JSON/});
+  const divergent=JSON.parse(await panel.inputValue());
+  [10,12,14].forEach((value,i)=>{divergent.treated.observations[i].value=value;divergent.comparator.observations[i].value=9;});
+  await panel.fill(JSON.stringify(divergent));await page.getByRole("button",{name:"Check counterfactual readiness"}).click();
+  await page.getByText(/Observed preperiod slopes: treated 2, comparison 0, gap 2/).waitFor();
+  await page.getByText(/descriptive diagnostics, not a statistical test or acceptance threshold/).waitFor();
   await panel.fill(JSON.stringify({condition:"colorectal",construct:"LATE_STAGE_INCIDENCE",unit:"synthetic",interventionYear:null,commonMeasurementVersion:"",treated:{site:"A",populationFrame:"A",observations:[{year:2020,value:1,denominator:10}]},comparator:{site:"B",populationFrame:"B",observations:[{year:2020,value:2,denominator:10}]},comparisonRationale:"",parallelTrendsEvidence:"",competingChangesEvidence:"",spilloverAssessment:"",independentReviewer:""}));
   await page.getByRole("button",{name:"Check counterfactual readiness"}).click();await page.getByText(/insufficient for causal estimate/i).first().waitFor();
   const receipt=page.getByRole("textbox",{name:/Aggregate delivery receipt JSON/});
@@ -36,6 +47,10 @@ for(const [label,engine,device] of [["desktop",chromium,{viewport:{width:1280,he
   const snapshot=JSON.parse(await archive.innerText());
   assert.ok(snapshot.gapIDs.includes("synthetic-subgroup-signal"));assert.ok(snapshot.gapLedger.length>6);
   assert.equal(snapshot.investigation.notes[0].origin,"SYNTHETIC");assert.equal(snapshot.independentOutcomeVerified,false);
+  assert.equal(snapshot.calibratedEvidence.county.contrasts.late_stage_rate_difference,6);
+  assert.equal(snapshot.calibratedEvidence.national.correlations.length,6);
+  assert.equal(snapshot.calibratedEvidence.survey.conditions.length,3);
+  assert.ok(Object.values(snapshot.calibratedEvidence.authority).every(x=>x===false));
   const authRequest=page.waitForResponse(r=>r.url().endsWith("/api/workspaces")&&r.request().method()==="GET");
   await page.getByRole("button",{name:"Load my private DIS workspaces"}).click();const authResponse=await authRequest;
   assert.ok([401,503].includes(authResponse.status()),"private workspace must fail closed when unsigned or identity unavailable");

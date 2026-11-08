@@ -2,7 +2,8 @@ import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {buildPlaybook,validatePlaybook} from "../../../lib/decision-playbook";
 import {buildLearningCheckpoint} from "../../../lib/longitudinal-learning";
-import {CasePayloadError,readBoundedCaseJson,serializeCasePlaybook} from "../../../lib/case-payload-capacity";
+import {CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
+import {CASE_HISTORY_DB_PAYLOAD_BYTES,CASE_HISTORY_LIMIT,CASE_HISTORY_PAGE_SQL,CaseHistoryReadError,buildCaseHistoryPageBody,decodeCaseHistoryCursor,type CaseHistoryDatabasePage} from "../../../lib/case-history-pagination";
 import {randomUUID} from "node:crypto";
 export const runtime="nodejs";
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
@@ -12,12 +13,16 @@ export async function GET(request:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
  const p=new URL(request.url).searchParams,id=p.get("id"),workspaceId=p.get("workspaceId");
  if(id){if(!uuid.test(id))return Response.json({error:"Invalid case identifier"},{status:400});
- const rows=await ctx.sql.transaction([
-  ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
-  ctx.sql`SELECT id,workspace_id,title,question,report,playbook,version,status,updated_at,created_at FROM dis_casework WHERE id=${id} LIMIT 1`,
-  ctx.sql`SELECT id,event_type,payload,created_at FROM dis_case_events WHERE case_id=${id} ORDER BY created_at DESC,id DESC LIMIT 250`
- ]);
- return rows[1].length?Response.json({case:rows[1][0],history:rows[2],historyLimit:250}):Response.json({error:"Not found"},{status:404})}
+ try{
+  const before=decodeCaseHistoryCursor(p.get("historyCursor"),id);
+  const rows=await ctx.sql.transaction([
+   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
+   ctx.sql.query(CASE_HISTORY_PAGE_SQL,[id,before?.createdAt??null,before?.id??null,CASE_HISTORY_DB_PAYLOAD_BYTES,CASE_HISTORY_LIMIT])
+  ]);
+  if(!rows[1].length)return Response.json({error:"Not found"},{status:404});
+  const page=buildCaseHistoryPageBody(rows[1][0] as CaseHistoryDatabasePage,id,before);
+  return new Response(page.body,{headers:{"content-type":"application/json; charset=utf-8","cache-control":"private, no-store"}});
+ }catch(e){if(e instanceof CaseHistoryReadError)return Response.json(e.responseBody(),{status:e.status});throw e;}}
  if(!workspaceId||!uuid.test(workspaceId))return Response.json({error:"Valid workspace required"},{status:400});
  const rows=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT id,workspace_id,title,question,status,version,updated_at FROM dis_casework WHERE workspace_id=${workspaceId} ORDER BY updated_at DESC LIMIT 100`]);
  return Response.json({cases:rows[1]});
@@ -28,7 +33,7 @@ export async function POST(request:Request){try{
  const title=String(input.title||question.slice(0,90)).trim();
  if(!uuid.test(workspaceId)||question.length<5||question.length>3000||title.length<1||title.length>150)return Response.json({error:"Invalid workspace or question"},{status:400});
  const report=input.report&&typeof input.report==="object"?input.report:{state:"NOT_RUN"};
- if(JSON.stringify(report).length>65000)return Response.json({error:"Report exceeds save limit"},{status:413});
+ const reportBody=serializeCaseReport(report);
  const playbook=buildPlaybook(question,report),playbookBody=serializeCasePlaybook(playbook);
  // Ordered inserts share one transaction; the event RLS policy sees its case.
  const caseId=randomUUID();
@@ -36,7 +41,7 @@ export async function POST(request:Request){try{
  const rows=await ctx.sql.transaction([
   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
   ctx.sql`INSERT INTO dis_casework(id,workspace_id,owner_subject,title,question,report,playbook,status)
-    VALUES(${caseId}::uuid,${workspaceId},${ctx.userId},${title},${question},${JSON.stringify(report)}::jsonb,${playbookBody}::jsonb,'ACTIVE')
+    VALUES(${caseId}::uuid,${workspaceId},${ctx.userId},${title},${question},${reportBody}::jsonb,${playbookBody}::jsonb,'ACTIVE')
     RETURNING id,workspace_id,title,question,report,playbook,version,status,updated_at`,
   ctx.sql`INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
     VALUES(${caseId}::uuid,${workspaceId},${ctx.userId},'CREATED',${baseline}::jsonb) RETURNING id`

@@ -8,6 +8,7 @@
  * create a renewed ownership/maintenance obligation rather than auto-SCALE.
  */
 import type {ResearchProgram} from "./research-program";
+import {strictTimestamp,scaleViolation} from "./evidence-action-input-integrity";
 
 export type OutcomePath="NOT_TESTED"|"FAILURE"|"PARTIAL_SUCCESS"|"SUCCESS"|"UNINTENDED_HARM";
 export type ScenarioRehearsal={
@@ -279,8 +280,7 @@ export type CheckpointResult={
   recommendedNextReview:"OWNER_MUST_SET_EVIDENCE_VALID_WINDOW";
   comparisonWithPriorCheckpoint:"NOT_AVAILABLE_WITHOUT_SIGNED_PREVIOUS_SNAPSHOT";
 };
-const checkedTime=(s:string)=>/^\d{4}-\d\d-\d\dT\d\d:\d\d(?::\d\d(?:\.\d+)?)?(?:Z|[+-]\d\d:\d\d)$/i.test(s)
-  ?Date.parse(s):NaN;
+const checkedTime=(s:string)=>strictTimestamp(s)??NaN;
 export function reviewLongitudinalCheckpoint(program:ResearchProgram,input:CheckpointEvidence):CheckpointResult{
   const issues:CheckpointResult["reviewIssues"]=[];
   const add=(code:string,explanation:string,requiredProof:string)=>{
@@ -303,6 +303,8 @@ export function reviewLongitudinalCheckpoint(program:ResearchProgram,input:Check
       add("INSTRUMENT_UNSPECIFIED","Construct, unit, population or definition version is not specified.","Verify original measurement and definition changes before comparison.");
     if(m.baseline===null||m.observed===null||!Number.isFinite(m.baseline)||!Number.isFinite(m.observed))
       add("OUTCOME_NOT_MEASURED","Baseline and observed results are absent or invalid.","Report real observed and baseline values with uncertainty, never treat missing as zero.");
+    if(scaleViolation(m.baseline,m.unit)||scaleViolation(m.observed,m.unit))
+      add("MEASUREMENT_SCALE_INVALID","A value violates its declared nonnegative measurement scale or bounded percent/proportion unit.","Verify the instrument range and original values; do not compare impossible values. Signed constructs need their own explicit validated contract.");
     if(m.denominator!==null&&(!Number.isFinite(m.denominator)||m.denominator<=0))
       add("DENOMINATOR_INVALID","Denominator is zero or invalid.","Confirm actual eligible or relevant observation population.");
     if(m.limitations.length===0)add("LIMITATIONS_NOT_APPRAISED","Instrument limitations or errors have not been declared.","Review validity, range, error and missingness with the instrument owner.");

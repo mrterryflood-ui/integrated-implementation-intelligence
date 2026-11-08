@@ -6,6 +6,7 @@ import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {productionIdentityBlocked} from "../../../lib/release-gates";
 import {planOwnedCapabilities,invokeOwnedCapabilities} from "../../../lib/owned-capability-fabric";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../lib/bounded-json-request";
 export const runtime="nodejs";
 export const maxDuration=35;
 
@@ -23,7 +24,7 @@ export async function POST(request:Request){
  if(origin){try{if(new URL(origin).host!==new URL(request.url).host)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}}
  if(Number(request.headers.get("content-length")||0)>4000)return Response.json({error:"Request too large"},{status:413});
  let body:unknown;
- try{const raw=await request.text();if(raw.length>4000)return Response.json({error:"Request too large"},{status:413});body=JSON.parse(raw)}catch{return Response.json({error:"Invalid request JSON"},{status:400})}
+ try{body=await readBoundedJsonRequest(request,4000)}catch(e){return Response.json({error:"Invalid or oversized request JSON"},{status:jsonRequestStatus(e)})}
  if(!body||typeof body!=="object"||Array.isArray(body))return Response.json({error:"Invalid request"},{status:400});
  const b=body as Record<string,unknown>;
  const ecosystem=b.mode==='ecosystem-plan'||b.mode==='ecosystem-invoke';

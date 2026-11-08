@@ -1,0 +1,393 @@
+{
+  "schema": "dis-crc-marginal-supplement-v1",
+  "id": "crc-marginals-0817f609fc8c",
+  "period": "2019-2023",
+  "state": "DESCRIPTIVE_RESEARCH_CALIBRATION",
+  "sourceReceiptSha256": "0817f609fc8c2714354a5d0679cc9c791060878e3edf3feb35c1cd571d1d1fa7",
+  "projectionScriptSha256": "82e52abe646496704972025097d6c4b4f6dfba3cb47035197fb61c1f5d334364",
+  "sourceEndpoint": "https://statecancerprofiles.cancer.gov/incidencerates/index.php",
+  "sources": [
+    {
+      "id": "hinds_age_009_all",
+      "query": "age=009&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=28&type=incd&year=0",
+      "sha256": "e1996120f63ae409b70a6bd7fd96cdc68d607f9e2ee7d27207b8558c86096ce8",
+      "bytes": 254185,
+      "capturedAt": "2026-11-08T01:39:03.382699+00:00"
+    },
+    {
+      "id": "hinds_age_009_late",
+      "query": "age=009&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=28&type=incd&year=0",
+      "sha256": "d25266b40b1d14abeaa438228b30f1cb29c7eef1960f11519e2f967c0b87d418",
+      "bytes": 217699,
+      "capturedAt": "2026-11-08T01:35:35.039404+00:00"
+    },
+    {
+      "id": "hinds_age_136_all",
+      "query": "age=136&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=28&type=incd&year=0",
+      "sha256": "706559823ce8c1cf9eb8f04c950030816447b06a081e96556ec324cae105c159",
+      "bytes": 325449,
+      "capturedAt": "2026-11-08T01:39:03.452435+00:00"
+    },
+    {
+      "id": "hinds_age_136_late",
+      "query": "age=136&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=28&type=incd&year=0",
+      "sha256": "f045ec9c47d88d02c6eb2bf56eeb4b8cfdf9d90bc538d5dd185e0999779f8199",
+      "bytes": 275829,
+      "capturedAt": "2026-11-08T01:39:03.307328+00:00"
+    },
+    {
+      "id": "hinds_race_28_all",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=28&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=28&type=incd&year=0",
+      "sha256": "ecbef0b2ec3cf5b9211af61db254afb21289e3cc278af51d5eefe3fdb0e34a77",
+      "bytes": 297947,
+      "capturedAt": "2026-11-08T01:39:03.447253+00:00"
+    },
+    {
+      "id": "hinds_race_28_late",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=28&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=28&type=incd&year=0",
+      "sha256": "76a9e412d4d4fafbdfd288036cdf41ef8e8955c8e30835640d3b70d3b57fb116",
+      "bytes": 243380,
+      "capturedAt": "2026-11-08T01:39:07.470132+00:00"
+    },
+    {
+      "id": "hinds_race_07_all",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=07&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=28&type=incd&year=0",
+      "sha256": "557cc8bd942e460a2803db090b46e4a3f6fe64899b64e2af733bf74ed60787ad",
+      "bytes": 316814,
+      "capturedAt": "2026-11-08T01:39:07.496492+00:00"
+    },
+    {
+      "id": "hinds_race_07_late",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=07&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=28&type=incd&year=0",
+      "sha256": "3d755c1beaef09435c1fea372f617fe29cc291a346c8935ddbf1b9ad1218976d",
+      "bytes": 262067,
+      "capturedAt": "2026-11-08T01:39:07.334468+00:00"
+    },
+    {
+      "id": "harris_age_009_all",
+      "query": "age=009&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=48&type=incd&year=0",
+      "sha256": "0a826da78ab1e1c78ef7d4bdf07bce048d5347eef831e103e9420c5086ce51e2",
+      "bytes": 725036,
+      "capturedAt": "2026-11-08T01:39:07.566309+00:00"
+    },
+    {
+      "id": "harris_age_009_late",
+      "query": "age=009&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",
+      "sha256": "88111830faed7397e3dd69fbeb5732bc49b08a0f9886cf77270e649514a73259",
+      "bytes": 614233,
+      "capturedAt": "2026-11-08T01:35:35.353787+00:00"
+    },
+    {
+      "id": "harris_age_136_all",
+      "query": "age=136&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=48&type=incd&year=0",
+      "sha256": "f0592aaba861b47d2804223e571232c072e0102175b55e96a3f74ab4a9264f0d",
+      "bytes": 855630,
+      "capturedAt": "2026-11-08T01:39:10.803907+00:00"
+    },
+    {
+      "id": "harris_age_136_late",
+      "query": "age=136&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",
+      "sha256": "67f88befc9eb1a6a675fcbe31f17622d857e4e5b933c16fd94ffcd03e60a980b",
+      "bytes": 718863,
+      "capturedAt": "2026-11-08T01:39:10.586956+00:00"
+    },
+    {
+      "id": "harris_race_28_all",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=28&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=48&type=incd&year=0",
+      "sha256": "260b4d3d048cf39b1f8f399bb2ee2080150c268e16b5e52d7c3820057ed10fdb",
+      "bytes": 710706,
+      "capturedAt": "2026-11-08T01:39:10.706276+00:00"
+    },
+    {
+      "id": "harris_race_28_late",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=28&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",
+      "sha256": "962ac56a3771395a8cabef11215a0c624a8d5f99e7391ddcca9cc3c4e2ef9266",
+      "bytes": 593878,
+      "capturedAt": "2026-11-08T01:39:10.804466+00:00"
+    },
+    {
+      "id": "harris_race_07_all",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=07&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=48&type=incd&year=0",
+      "sha256": "ba48eec3d945e29d750fc597fa81c2fb2412189c2724807bf0d760a21e8e4f69",
+      "bytes": 827835,
+      "capturedAt": "2026-11-08T01:39:13.871550+00:00"
+    },
+    {
+      "id": "harris_race_07_late",
+      "query": "age=001&areatype=county&cancer=020&datatype=01&race=07&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",
+      "sha256": "3c2b66d1ee15166e77e094997a2205214aa88773470c35de91346507e6a47858",
+      "bytes": 693104,
+      "capturedAt": "2026-11-08T01:39:13.932441+00:00"
+    }
+  ],
+  "strata": [
+    {
+      "dimension": "age",
+      "code": "009",
+      "label": "<50",
+      "age": "<50",
+      "race": "All races including Hispanic",
+      "sex": "Both sexes",
+      "counties": [
+        {
+          "name": "Hinds County, MS",
+          "fips": "28049",
+          "all": {
+            "sourceId": "hinds_age_009_all",
+            "ratePer100k": 12.8,
+            "ci95": [
+              10.2,
+              16.0
+            ],
+            "averageAnnualCount": 16.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "hinds_age_009_late",
+            "ratePer100k": 8.5,
+            "ci95": [
+              6.4,
+              11.1
+            ],
+            "averageAnnualCount": 11.0,
+            "lateCaseSharePercent": 65.4,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        },
+        {
+          "name": "Harris County, TX",
+          "fips": "48201",
+          "all": {
+            "sourceId": "harris_age_009_all",
+            "ratePer100k": 8.9,
+            "ci95": [
+              8.5,
+              9.4
+            ],
+            "averageAnnualCount": 282.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "harris_age_009_late",
+            "ratePer100k": 6.1,
+            "ci95": [
+              5.7,
+              6.5
+            ],
+            "averageAnnualCount": 192.0,
+            "lateCaseSharePercent": 68.0,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        }
+      ],
+      "lateRateDifference": 2.4000000000000004,
+      "lateShareDifferencePp": -2.5999999999999943
+    },
+    {
+      "dimension": "age",
+      "code": "136",
+      "label": "50+",
+      "age": "50+",
+      "race": "All races including Hispanic",
+      "sex": "Both sexes",
+      "counties": [
+        {
+          "name": "Hinds County, MS",
+          "fips": "28049",
+          "all": {
+            "sourceId": "hinds_age_136_all",
+            "ratePer100k": 135.1,
+            "ci95": [
+              123.3,
+              147.7
+            ],
+            "averageAnnualCount": 102.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "hinds_age_136_late",
+            "ratePer100k": 86.2,
+            "ci95": [
+              76.8,
+              96.4
+            ],
+            "averageAnnualCount": 64.0,
+            "lateCaseSharePercent": 63.4,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        },
+        {
+          "name": "Harris County, TX",
+          "fips": "48201",
+          "all": {
+            "sourceId": "harris_age_136_all",
+            "ratePer100k": 114.3,
+            "ci95": [
+              111.6,
+              117.0
+            ],
+            "averageAnnualCount": 1450.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "harris_age_136_late",
+            "ratePer100k": 70.7,
+            "ci95": [
+              68.6,
+              72.9
+            ],
+            "averageAnnualCount": 906.0,
+            "lateCaseSharePercent": 62.5,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        }
+      ],
+      "lateRateDifference": 15.5,
+      "lateShareDifferencePp": 0.8999999999999986
+    },
+    {
+      "dimension": "race",
+      "code": "07",
+      "label": "White (Non-Hispanic)",
+      "age": "All ages",
+      "race": "White (Non-Hispanic)",
+      "sex": "Both sexes",
+      "counties": [
+        {
+          "name": "Hinds County, MS",
+          "fips": "28049",
+          "all": {
+            "sourceId": "hinds_race_07_all",
+            "ratePer100k": 48.0,
+            "ci95": [
+              40.9,
+              56.2
+            ],
+            "averageAnnualCount": 39.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "hinds_race_07_late",
+            "ratePer100k": 32.9,
+            "ci95": [
+              27.0,
+              39.9
+            ],
+            "averageAnnualCount": 26.0,
+            "lateCaseSharePercent": 66.0,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        },
+        {
+          "name": "Harris County, TX",
+          "fips": "48201",
+          "all": {
+            "sourceId": "harris_race_07_all",
+            "ratePer100k": 37.3,
+            "ci95": [
+              36.0,
+              38.7
+            ],
+            "averageAnnualCount": 676.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "harris_race_07_late",
+            "ratePer100k": 23.3,
+            "ci95": [
+              22.3,
+              24.4
+            ],
+            "averageAnnualCount": 421.0,
+            "lateCaseSharePercent": 62.2,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        }
+      ],
+      "lateRateDifference": 9.599999999999998,
+      "lateShareDifferencePp": 3.799999999999997
+    },
+    {
+      "dimension": "race",
+      "code": "28",
+      "label": "Black (Non-Hispanic)",
+      "age": "All ages",
+      "race": "Black (Non-Hispanic)",
+      "sex": "Both sexes",
+      "counties": [
+        {
+          "name": "Hinds County, MS",
+          "fips": "28049",
+          "all": {
+            "sourceId": "hinds_race_28_all",
+            "ratePer100k": 45.8,
+            "ci95": [
+              41.1,
+              50.8
+            ],
+            "averageAnnualCount": 77.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "hinds_race_28_late",
+            "ratePer100k": 28.3,
+            "ci95": [
+              24.7,
+              32.3
+            ],
+            "averageAnnualCount": 48.0,
+            "lateCaseSharePercent": 62.1,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        },
+        {
+          "name": "Harris County, TX",
+          "fips": "48201",
+          "all": {
+            "sourceId": "harris_race_28_all",
+            "ratePer100k": 48.8,
+            "ci95": [
+              46.7,
+              51.1
+            ],
+            "averageAnnualCount": 422.0,
+            "lateCaseSharePercent": null,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          },
+          "late": {
+            "sourceId": "harris_race_28_late",
+            "ratePer100k": 29.9,
+            "ci95": [
+              28.2,
+              31.6
+            ],
+            "averageAnnualCount": 262.0,
+            "lateCaseSharePercent": 62.1,
+            "state": "OBSERVED_SOURCE_AGGREGATE"
+          }
+        }
+      ],
+      "lateRateDifference": -1.5999999999999979,
+      "lateShareDifferencePp": 0.0
+    }
+  ],
+  "sourceConfidenceIntervalsOnly": true,
+  "jointAgeRaceAnalysis": false,
+  "causalEffectEstablished": false,
+  "under45InferenceSupported": false,
+  "clinicalActionAuthorized": false,
+  "limits": [
+    "The <50 band includes45–49; it cannot isolate under45 or routine-screening eligibility.",
+    "Age and race comparisons are separate marginals; they cannot identify joint interactions or decompose the aggregate contrast.",
+    "Point contrasts and equal rounded shares do not establish population differences or equivalence; no contrast interval is claimed.",
+    "Source rates are age-adjusted within their published scope; average counts are rounded, and no individual risk, delay or preventable burden is observed."
+  ],
+  "nextTest": "Investigate group-specific risk/context, prevention, recognition, access, follow-through, capacity and measurement with finer age and joint strata plus time-aligned pathway evidence."
+}

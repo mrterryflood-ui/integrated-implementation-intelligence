@@ -19,8 +19,8 @@ export const JACKSON_CANCER_INDICATORS:ResearchIndicator[]=[
     "Historical Hinds County rate; not Jackson city, not the population share of late-stage cases, and not an intervention effect.",[27.3,33.8]),
   base("CRC-LATE-SHARE","Share of incident colorectal cancers diagnosed late-stage","colorectal",63.3,"percent",
     "Incident colorectal cancers classified late-stage",
-    "All staged incident colorectal cancers in the published site-specific NCI measure",CRC_URL,
-    "Hinds County 2018–2022. Denominator is incident cancer cases, NOT all people eligible for screening."),
+    "Provider-defined incident colorectal cancers in the published percentage; unknown-stage handling unresolved",CRC_URL,
+    "Hinds County 2018–2022. Diagnosed-case percentage, not screening-eligible population. Retained methods do not verify exclusion of unknown-stage cases."),
   base("CRC-LATE-COUNT","Average annual late-stage colorectal cases","colorectal",76,"average cases per year",
     "Average annual late-stage colorectal cases in 2018–2022",
     "Five-year population registry count annualized; not per 100,000",CRC_URL,
@@ -31,8 +31,8 @@ export const JACKSON_CANCER_INDICATORS:ResearchIndicator[]=[
     "Historical Hinds County female breast cancer measure, not Jackson city.",[47.7,59.1]),
   base("BREAST-LATE-SHARE","Share of female incident breast cancers diagnosed late-stage","breast",37.7,"percent",
     "Female incident breast cancers classified late-stage",
-    "All staged female incident breast cancers in this published NCI measure",BREAST_URL,
-    "Hinds County 2018–2022. Not directly comparable with colorectal site-specific stage percentage."),
+    "Provider-defined female incident breast cancers in the published percentage; unknown-stage handling unresolved",BREAST_URL,
+    "Hinds County 2018–2022. Not directly comparable with colorectal stage percentage. Unknown-stage denominator handling needs source-method verification."),
   base("BREAST-LATE-COUNT","Average annual female late-stage breast cancer cases","breast",74,"average cases per year",
     "Average annual female late-stage breast cancer cases in 2018–2022",
     "Five-year registry case count annualized, not a percentage of screening-eligible women",BREAST_URL,
@@ -146,6 +146,20 @@ const st=(id:string,name:string,journey:string,basis:StrategyCandidate["basis"],
   id,name,whereInJourney:journey,basis,sourceUrl:url,studyTarget:target,
   localEffect:"NOT_ESTABLISHED",measureToVerify:measure,potentialHarm:harm
 });
+const CRC_DISCOVERY_DRIVERS:DriverQuestion[]=[
+ d("H-EARLY","What is missed before routine screening or diagnosis?",
+  "Some people may have earlier identifiable risk or clinical signals that the existing pathway misses; age is one candidate, not an established cause.",
+  "Link age, stage, prior risk information, eligibility, symptoms and care history; separately examine average-risk asymptomatic screening, higher-risk pathways and symptomatic/abnormal-result evaluation. Test interactions with access and follow-through.",
+  "Biology, interval disease, prior prevention, referral loss, case mix, documentation or measurement may explain the pattern, separately or together. All-age rates cannot establish when a person should have been screened.",
+  "Authorized age/risk/stage and longitudinal pathway data; pre-outcome signals without leakage; qualified instruments, external validation and incremental benefit/harm evaluation.",
+  "Registry scientist, clinical pathway lead, biostatistician and patient partners"),
+ d("H-PREVENT","Occurrence, precancer prevention and discovery",
+  "Differences in underlying occurrence or opportunities for effective precancer prevention may contribute to late-stage population burden.",
+  "Study age-specific all-stage incidence, prior screening and polyp detection/removal, relevant risk/context measures and stage completeness; distinguish prevention from earlier detection.",
+  "Detection intensity, population composition, disease biology or registration differences may change observed incidence without a local prevention effect.",
+  "Time-aligned registry history, appropriate eligibility and procedure records, validated risk measures and a suitable longitudinal comparator.",
+  "Cancer epidemiologist, prevention clinician and implementation evaluator")
+];
 const CORE_STRATEGIES:StrategyCandidate[]=[
   st("EBI-NAV","Patient navigation","Due for screening through definitive diagnostic follow-up",
     "EVIDENCE_FOR_SCREENING_UPTAKE","https://www.cdc.gov/cancer/php/interventions/patient-navigation.html",
@@ -183,7 +197,7 @@ export function jacksonCancerCase(site:SiteKey="colorectal"):ResearchProgramSpec
     problemDefinition:"Determine why cancers are diagnosed at advanced stages in the target population, distinguishing cancer site, registry definitions, screening access, abnormal-result follow-up, symptom evaluation, biology and contextual determinants.",
     lastSourceCheck:"2026-11-06; historical published data period is 2018–2022.",
     indicators:selected,dataSources:JACKSON_PUBLIC_SOURCES,
-    strata:COMMON_STRATA,drivers:JACKSON_DRIVERS,strategies:CORE_STRATEGIES
+    strata:COMMON_STRATA,drivers:site==="colorectal"?[...JACKSON_DRIVERS,...CRC_DISCOVERY_DRIVERS]:JACKSON_DRIVERS,strategies:CORE_STRATEGIES
   };
 }
 

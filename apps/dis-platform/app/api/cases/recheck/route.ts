@@ -1,13 +1,18 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {convene} from "../../../../lib/council-engine";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
+import {serializeCaseReport,CasePayloadError} from "../../../../lib/case-payload-capacity";
+import {retainResearchForReassessment,researchContextForReassessment,researchSourcesForReassessment} from "../../../../lib/saved-research-evidence";
 export const runtime="nodejs";
 export const maxDuration=90;
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 export async function POST(request:Request){try{
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in required"},{status:401});
  if(!process.env.DIS_DATABASE_URL)return Response.json({error:"Workspace unavailable"},{status:503});
- const body=await request.json(),id=String(body.id||""),version=Number(body.version);
+ let body:any;try{body=await readBoundedJsonRequest(request,4000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e)})}
+ if(!body||typeof body!=="object"||Array.isArray(body))return Response.json({error:"Invalid case request"},{status:400});
+ const id=String(body.id||""),version=Number(body.version);
  if(!uuid.test(id)||!Number.isInteger(version)||version<1)return Response.json({error:"Invalid case or version"},{status:400});
  const sql=neon(process.env.DIS_DATABASE_URL);
  const rows=await sql.transaction([
@@ -17,11 +22,11 @@ export async function POST(request:Request){try{
  if(!rows[1].length)return Response.json({error:"Case was updated or access denied; refresh before rechecking"},{status:409});
  const prior=rows[1][0],playbook=prior.playbook as {tasks?:{title:string,done:boolean,evidence:string}[],metrics?:{label:string,observed:string,verified:boolean}[],progressNotes?:string[]};
  const observations=JSON.stringify({tasks:playbook.tasks?.map(t=>({title:t.title,done:t.done,evidence:t.evidence.slice(0,350)})),metrics:playbook.metrics?.map(m=>({measure:m.label,observed:m.observed,verified:m.verified})),recentNotes:playbook.progressNotes?.slice(-8)}).slice(0,4500);
- const prompt=String(prior.question).slice(0,1800)+"\n\nLatest user-reported progress and observations (UNVERIFIED):\n"+observations+"\n\nReassess course of action, reaction, counteraction, measurable outcomes, implementation gaps and next review. Differentiate user reports from verified evidence.";
- const report=await convene({prompt,count:6,redCount:4,selected:[],redSelected:[],depth:"Deep"});
+ const sourceContext=researchContextForReassessment(prior.report);
+ const prompt=String(prior.question).slice(0,1800)+(sourceContext?"\n\nRetained public descriptive research context (not a causal or clinical conclusion):\n"+sourceContext:"")+"\n\nLatest user-reported progress and observations (UNVERIFIED):\n"+observations+"\n\nReassess course of action, reaction, counteraction, measurable outcomes, implementation gaps and next review. Differentiate user reports from verified evidence.";
+ const report=await convene({prompt,count:6,redCount:4,selected:[],redSelected:[],depth:"Deep",providedEvidence:researchSourcesForReassessment(prior.report)});
  if(report.state!=="PRELIMINARY_DELIBERATION")return Response.json({error:"New council research or inference was incomplete. Existing assessment preserved.",state:report.state},{status:503});
- const audit=JSON.stringify(report);
- if(audit.length>65000)return Response.json({error:"Report exceeds safe storage limit"},{status:413});
+ const audit=serializeCaseReport(retainResearchForReassessment(prior.report,report));
  // Prior report is preserved as an append-only revision event. Case update uses optimistic concurrency.
  // A council reassessment must preserve its predecessor in the same
  // transaction as the new report. No best-effort archival success claims.
@@ -45,4 +50,4 @@ export async function POST(request:Request){try{
  ]);
  if(!updated[1].length)return Response.json({error:"The case changed during recheck. New report was not applied."},{status:409});
  return Response.json({case:updated[1][0],note:"Preliminary council reassessment and prior report archived atomically; the new analysis is not independently verified.",historyRecorded:true});
-}catch{return Response.json({error:"Recheck unavailable"},{status:503})}}
+}catch(e){return e instanceof CasePayloadError?Response.json({error:e.message},{status:e.status}):Response.json({error:"Recheck unavailable"},{status:503})}}

@@ -88,3 +88,12 @@ test("provenance and denominator remain core regardless of cancer vs non-clinica
  assert.ok(r.reviewIssues.some(i=>i.code==="SHARED_SOURCE_LINEAGE"));
  assert.equal(r.causalBenefitEstablished,false);
 });
+test("impossible calendar dates do not normalize into accepted checkpoint evidence",()=>{
+ const x=base();x.asOf="2026-02-30T15:00:00Z";x.measures[0].observedAt="2026-02-30T13:00:00Z";x.measures[0].receivedAt="2026-02-30T14:00:00Z";
+ const r=reviewLongitudinalCheckpoint(program(),x);assert.equal(r.finding,"EVIDENCE_INSUFFICIENT");
+ assert.ok(r.reviewIssues.some(i=>i.code==="DECISION_TIME_INVALID"));assert.ok(r.reviewIssues.some(i=>i.code==="TIMESTAMP_UNVERIFIED"));
+});
+test("percent and proportion scales are enforced before interpreting a longitudinal change",()=>{
+ const x=base();x.measures[1].baseline=110;x.measures[1].observed=120;
+ const r=reviewLongitudinalCheckpoint(program(),x);assert.equal(r.finding,"EVIDENCE_INSUFFICIENT");assert.ok(r.reviewIssues.some(i=>i.code==="MEASUREMENT_SCALE_INVALID"));
+});

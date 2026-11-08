@@ -1,5 +1,6 @@
 import type {ConsultationPackage} from './consultation-package';
 import type {Deliverable} from './consultation';
+import {readBoundedJsonRequest} from './bounded-json-request';
 const LIMIT=160000;
 /** Export the actual edited draft, not a rebuilt approximation. Browser claims never confer review status. */
 export function preserveDraftExportArtifacts(pkg:ConsultationPackage,value:unknown):ConsultationPackage{
@@ -16,10 +17,5 @@ export function preserveDraftExportArtifacts(pkg:ConsultationPackage,value:unkno
  return {...pkg,documents,quality:{...pkg.quality,grade:'DRAFT / GATES OPEN',knownGaps:[...pkg.quality.knownGaps,'Exported document content is client-supplied or edited; review claims, sources and approval independently.']}};
 }
 export async function readBoundedOfficeRequest(request:Request,maxBytes=240000):Promise<unknown>{
- if(!request.body)throw Error('Missing export request.');
- const reader=request.body.getReader(),parts:Uint8Array[]=[];let size=0;
- try{for(;;){const item=await reader.read();if(item.done)break;size+=item.value.byteLength;if(size>maxBytes){await reader.cancel();throw Error('Export request too large.');}parts.push(item.value);}}
- finally{reader.releaseLock();}
- const bytes=new Uint8Array(size);let offset=0;for(const part of parts){bytes.set(part,offset);offset+=part.length;}
- return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+ return readBoundedJsonRequest(request,maxBytes);
 }

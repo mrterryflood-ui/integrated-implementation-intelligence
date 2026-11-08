@@ -2,6 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {productionIdentityBlocked} from "../../../../lib/release-gates";
 import {compareRpliceParallax, RpliceBridgeError, validatePerspectives} from "../../../../lib/rplice-adapter";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -21,7 +22,7 @@ export async function POST(request: Request) {
         return Response.json({error:"Origin mismatch"},{status:403});
     } catch { return Response.json({error:"Invalid request origin"},{status:403}); }
   }
-  const body = await request.json().catch(() => null);
+  let body:any;try{body=await readBoundedJsonRequest(request,24000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e)});}
   if (!body || typeof body !== "object")
     return Response.json({error:"Invalid input"},{status:400});
   if (body.externalConsent !== true)

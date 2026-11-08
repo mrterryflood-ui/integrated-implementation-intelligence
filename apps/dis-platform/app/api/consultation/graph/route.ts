@@ -1,5 +1,6 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
 export const runtime="nodejs";
 export const maxDuration=45;
 const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -25,7 +26,8 @@ export function buildGraphData(sessionId:string,intake:Record<string,unknown>,re
 const error=()=>Response.json({error:"Knowledge graph unavailable"},{status:503});
 export async function POST(request:Request){
  const {userId}=await auth();if(!userId)return Response.json({error:"Unauthorized"},{status:401});
- let body:any;try{body=await request.json()}catch{return Response.json({error:"Invalid request"},{status:400})}
+ let body:any;try{body=await readBoundedJsonRequest(request,4000)}catch(e){return Response.json({error:"Invalid or oversized request"},{status:jsonRequestStatus(e)})}
+ if(!body||typeof body!=="object"||Array.isArray(body))return Response.json({error:"Invalid request"},{status:400});
  const sessionId=String(body.sessionId||"");
  if(!uuid.test(sessionId)||body.confirmSync!==true)return Response.json({error:"Valid session and explicit sync approval required"},{status:400});
  if(!process.env.DIS_DATABASE_URL)return error();

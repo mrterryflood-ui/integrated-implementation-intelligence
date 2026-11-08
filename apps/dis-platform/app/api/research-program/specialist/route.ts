@@ -2,6 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {productionIdentityBlocked} from "../../../../lib/release-gates";
 import {evaluateHIL} from "../../../../lib/whole-system-exercise";
 import {runSelectedRpliceMcp,RpliceBridgeError,type SpecialistChoice} from "../../../../lib/rplice-adapter";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
 export const runtime="nodejs";
 export const maxDuration=30;
 /** Stateless specialist analysis; no database mutation, inferred approval or PHI access. */
@@ -15,7 +16,7 @@ export async function POST(request:Request){
  if(origin)try{
    if(new URL(origin).origin!==new URL(request.url).origin)return Response.json({error:"Origin mismatch"},{status:403});
  }catch{return Response.json({error:"Invalid request origin"},{status:403});}
- const b=await request.json().catch(()=>null);
+ let b:any;try{b=await readBoundedJsonRequest(request,14000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e)});}
  if(!b||typeof b!=="object")return Response.json({error:"Invalid input"},{status:400});
  const method=b.method as SpecialistChoice;
  if(!["SALP","CFIR","RE_AIM"].includes(method))return Response.json({error:"Choose an available RPLICE method"},{status:400});

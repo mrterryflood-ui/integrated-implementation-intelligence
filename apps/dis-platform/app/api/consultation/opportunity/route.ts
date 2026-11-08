@@ -1,5 +1,6 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
 export const runtime="nodejs";
 export const maxDuration=25;
 const clean=(x:unknown,n=350)=>typeof x==="string"?x.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim().slice(0,n):"";
@@ -17,7 +18,8 @@ export async function detail(opportunityId:number,fetcher:typeof fetch=fetch){
 }
 export async function POST(req:Request){
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in required"},{status:401});
- const body=await req.json().catch(()=>null),id=Number(body?.opportunityId);
+ let body:any;try{body=await readBoundedJsonRequest(req,2000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e)});}
+ const id=Number(body?.opportunityId);
  if(!Number.isInteger(id)||id<1||id>99999999999)return Response.json({error:"Invalid Grants.gov ID"},{status:400});
  if(!process.env.DIS_DATABASE_URL)return Response.json({error:"Research authorization unavailable"},{status:503});
  try{

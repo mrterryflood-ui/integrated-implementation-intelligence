@@ -37,7 +37,7 @@ export default function PrivateCaseHandoff({program,bridge}:{program:ResearchPro
  }
  return <section className="rp-program" aria-labelledby="private-case-heading">
   <h2 id="private-case-heading">7. Preserve the investigation and challenge apparent success</h2>
-  <p>All {bridge.gaps.length} current gaps, original measurement definitions, source leads, competing explanations and proposed corrections are retained in the case report. Up to 28 gap tasks fit in the existing editable playbook; any additional gaps remain visible in the full archive. Nothing is silently dropped or marked resolved.</p>
+  <p>The complete calibrated public-evidence supplement, colorectal decision brief, intended users and value test, all {bridge.gaps.length} baseline/research gaps, original measurement definitions, source leads, competing explanations and proposed corrections are retained in the case report. Up to28 gap tasks fit in the editable playbook; additional gaps remain in the full archive. Nothing is silently dropped or marked resolved.</p>
   <h3>Internal equity exercise — synthetic, not patient data</h3>
   <p>A better average does not establish equitable benefit. This example improves average process completion by 10 percentage points while one group declines by 10 points. No independent or causal conclusion follows.</p>
   <div className="rp-buttons"><button type="button" disabled={busy||!!savedId} onClick={addSynthetic}>Stage synthetic subgroup challenge</button></div>

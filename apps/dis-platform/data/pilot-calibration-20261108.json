@@ -1,0 +1,582 @@
+{
+  "schema": "dis-calibration-supplement-v1",
+  "id": "retained-public-cycle-fd0f28735830",
+  "state": "DESCRIPTIVE_RESEARCH_CALIBRATION",
+  "sourceCaptureCompletedAt": "2026-11-08T00:44:25.752890+00:00",
+  "analysisProducerRevision": "6502bcd135af615e32f32353380390087a32b9a2",
+  "artifacts": {
+    "acquisitionReceiptSha256": "fd0f28735830ef4f1f7dfb7c9e93cfc9d45a2d7a73b5f4877e8ce05f6c324a09",
+    "analysisSha256": "36e15353a329ccfefb925b65af008b26e2367cb2b258e730e523e428e9c956f0",
+    "reviewFollowupSha256": "1c6cd44922aa107333ef9658f698ca6e319e750c9929bcd73b3b66ad90338527",
+    "projectionScriptSha256": "e3f2f29d54efc9021d9189ebaf601afe16301ab7ac90e90bdad68df6659d106a"
+  },
+  "sources": [
+    {
+      "id": "breast_states",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=state&cancer=055&datatype=01&race=00&ruralurban=0&sex=2&sortOrder=asc&sortVariableName=name&stage=211&statefips=00&type=incd&year=0",
+      "sha256": "3c4b8b2cfb42397b143480ef1e2746768e6f1bb48b2ce8f4da28ed7d1eb5dc0a",
+      "bytes": 175589,
+      "capturedAt": "2026-11-08T00:44:01.361665+00:00",
+      "scope": "Incidence Rate Report by State Breast (Late Stage^), 2019-2023 All Races (includes Hispanic), Female, All Ages Sorted by Name"
+    },
+    {
+      "id": "colorectal_states",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=state&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=00&type=incd&year=0",
+      "sha256": "ffbbf1fc1a177aec492274748e38ff7bd27e75080c030ed6dc9b1eea4c06b747",
+      "bytes": 175611,
+      "capturedAt": "2026-11-08T00:43:54.414575+00:00",
+      "scope": "Incidence Rate Report by State Colon & Rectum (Late Stage^), 2019-2023 All Races (includes Hispanic), Both Sexes, All Ages Sorted by Name"
+    },
+    {
+      "id": "harris_all",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=48&type=incd&year=0",
+      "sha256": "bb53122cd99f3c26692f60a9818e0afb88c289a1e52f91059597665fa7228b63",
+      "bytes": 859139,
+      "capturedAt": "2026-11-08T00:44:11.651125+00:00",
+      "scope": "Incidence Rate Report for Texas by County Colon & Rectum (All Stages^), 2019-2023 All Races (includes Hispanic), Both Sexes, All Ages Sorted by Name"
+    },
+    {
+      "id": "harris_late",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",
+      "sha256": "57a17d24f3a2fd1a2c6cd971db09f3e945b60ae01d05ab318c715c09e8b66441",
+      "bytes": 721213,
+      "capturedAt": "2026-11-08T00:44:14.736532+00:00",
+      "scope": "Incidence Rate Report for Texas by County Colon & Rectum (Late Stage^), 2019-2023 All Races (includes Hispanic), Both Sexes, All Ages Sorted by Name"
+    },
+    {
+      "id": "hinds_all",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=28&type=incd&year=0",
+      "sha256": "cee746af61ed2544b417d583a0d13e5b924b3240c72f9cf9c1d3dbe4fb4ae126",
+      "bytes": 325159,
+      "capturedAt": "2026-11-08T00:44:04.621757+00:00",
+      "scope": "Incidence Rate Report for Mississippi by County Colon & Rectum (All Stages^), 2019-2023 All Races (includes Hispanic), Both Sexes, All Ages Sorted by Name"
+    },
+    {
+      "id": "hinds_late",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=28&type=incd&year=0",
+      "sha256": "a973c6054bdf72b3204c001cf17e798a2e6c386c5117b101241c0d460c3585d1",
+      "bytes": 275678,
+      "capturedAt": "2026-11-08T00:44:08.341563+00:00",
+      "scope": "Incidence Rate Report for Mississippi by County Colon & Rectum (Late Stage^), 2019-2023 All Races (includes Hispanic), Both Sexes, All Ages Sorted by Name"
+    },
+    {
+      "id": "lung_states",
+      "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=state&cancer=047&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=00&type=incd&year=0",
+      "sha256": "a079702b9b125f91cf31127d63c08a8f0f308f82b764960e6c1bbf84b28acdb3",
+      "bytes": 175621,
+      "capturedAt": "2026-11-08T00:43:57.776830+00:00",
+      "scope": "Incidence Rate Report by State Lung & Bronchus (Late Stage^), 2019-2023 All Races (includes Hispanic), Both Sexes, All Ages Sorted by Name"
+    },
+    {
+      "id": "nsfg_codebook",
+      "url": "https://www.cdc.gov/nchs/data/nsfg/codebooks/2022-2023-NSFG-FemRespPUFCodebook.pdf",
+      "sha256": "d0453a3c07127e7fa053c9eed8ca578ec5b3dbb0fdfe13c5b34f710289ec975e",
+      "bytes": 13549038,
+      "capturedAt": "2026-11-08T00:43:46.379338+00:00",
+      "scope": "NSFG 2022–2023 public survey/data documentation"
+    },
+    {
+      "id": "nsfg_female",
+      "url": "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/NSFG/NSFG-2022-2023-FemRespPUFData.zip",
+      "sha256": "ef9f0ec715ce7909b50f1ea67958166b2cd1ad3482c4b083174898ec8c7ceaaa",
+      "bytes": 2541378,
+      "capturedAt": "2026-11-08T00:43:43.041788+00:00",
+      "scope": "NSFG 2022–2023 public survey/data documentation"
+    },
+    {
+      "id": "nsfg_published",
+      "url": "https://www.cdc.gov/nchs/data/hestat/hestat121.htm",
+      "sha256": "a3116561d7a8d97175541270a09c66ac221a74b4785488d09df35b748673200e",
+      "bytes": 114299,
+      "capturedAt": "2026-11-08T00:43:50.412784+00:00",
+      "scope": "NSFG 2022–2023 public survey/data documentation"
+    }
+  ],
+  "county": {
+    "period": "2019-2023",
+    "condition": "colorectal",
+    "scope": "County residence; both sexes; all races including Hispanic; all ages",
+    "rows": [
+      {
+        "name": "Hinds County",
+        "fips": "28049",
+        "allSourceId": "hinds_all",
+        "lateSourceId": "hinds_late",
+        "all": {
+          "rate_per_100k": 46.4,
+          "ci95": [
+            42.6,
+            50.5
+          ],
+          "annual_count": 118
+        },
+        "late": {
+          "rate_per_100k": 29.9,
+          "ci95": [
+            26.8,
+            33.2
+          ],
+          "annual_count": 75,
+          "late_share_percent": 63.7
+        }
+      },
+      {
+        "name": "Harris County",
+        "fips": "48201",
+        "allSourceId": "harris_all",
+        "lateSourceId": "harris_late",
+        "all": {
+          "rate_per_100k": 38.0,
+          "ci95": [
+            37.2,
+            38.9
+          ],
+          "annual_count": 1732
+        },
+        "late": {
+          "rate_per_100k": 23.9,
+          "ci95": [
+            23.3,
+            24.6
+          ],
+          "annual_count": 1098,
+          "late_share_percent": 63.4
+        }
+      }
+    ],
+    "contrasts": {
+      "all_stage_rate_ratio": 1.2210526315789474,
+      "all_stage_rate_difference": 8.399999999999999,
+      "late_stage_rate_ratio": 1.2510460251046025,
+      "late_stage_rate_difference": 6.0,
+      "share_difference_pp": 0.30000000000000426
+    },
+    "stageShareDefinition": "Provider-defined diagnosed-case percentage; unknown-stage denominator handling unresolved",
+    "meaning": "Geographic burden contrasts, not an intervention effect, preventable-case count, individual risk or funding rule",
+    "nextTest": "Age/risk/stage and time-aligned prevention, recognition, referral, capacity and experienced-barrier evidence to distinguish interacting mechanisms"
+  },
+  "national": {
+    "period": "2019-2023",
+    "states": 50,
+    "excludedAggregates": [
+      "United States",
+      "District of Columbia",
+      "Puerto Rico"
+    ],
+    "scope": "CRC and lung: both sexes; breast: female; all ages; all races including Hispanic",
+    "correlations": [
+      {
+        "construct": "rate",
+        "pair": [
+          "colorectal",
+          "lung"
+        ],
+        "pearson": 0.7345106352831557,
+        "conditionalIidFisher95": [
+          0.5733926837212682,
+          0.8409306259058054
+        ],
+        "conditionalExchangeablePermutationP": 4.999750012499375e-05
+      },
+      {
+        "construct": "rate",
+        "pair": [
+          "colorectal",
+          "breast"
+        ],
+        "pearson": 0.44857908813575303,
+        "conditionalIidFisher95": [
+          0.19451922831379181,
+          0.6462370273216216
+        ],
+        "conditionalExchangeablePermutationP": 0.000999950002499875
+      },
+      {
+        "construct": "rate",
+        "pair": [
+          "lung",
+          "breast"
+        ],
+        "pearson": 0.29103001547792634,
+        "conditionalIidFisher95": [
+          0.013800218731787758,
+          0.52671023327779
+        ],
+        "conditionalExchangeablePermutationP": 0.03904804759762012
+      },
+      {
+        "construct": "share",
+        "pair": [
+          "colorectal",
+          "lung"
+        ],
+        "pearson": 0.12875478974698554,
+        "conditionalIidFisher95": [
+          -0.15515341009097575,
+          0.3930173170791686
+        ],
+        "conditionalExchangeablePermutationP": 0.3792810359482026
+      },
+      {
+        "construct": "share",
+        "pair": [
+          "colorectal",
+          "breast"
+        ],
+        "pearson": 0.23067033530072414,
+        "conditionalIidFisher95": [
+          -0.05094861886129079,
+          0.47830756942673536
+        ],
+        "conditionalExchangeablePermutationP": 0.10664466776661168
+      },
+      {
+        "construct": "share",
+        "pair": [
+          "lung",
+          "breast"
+        ],
+        "pearson": 0.4456337035195251,
+        "conditionalIidFisher95": [
+          0.19097470178465192,
+          0.6440880196958836
+        ],
+        "conditionalExchangeablePermutationP": 0.0017499125043747813
+      }
+    ],
+    "uncertaintyLimit": "Finite-state descriptive coefficient. Interval assumes IID random-unit model; permutation assumes exchangeability. Neither accounts for registry-estimate uncertainty or spatial dependence. An interval including zero does not establish equivalence or no association.",
+    "permutationProtocol": {
+      "iterations": 20000,
+      "seed": 20261107
+    },
+    "nextTest": "Specify the decision/estimand and spatial dependence before interpreting or transferring geographic associations"
+  },
+  "survey": {
+    "period": "2022-2023",
+    "population": "National female public-use survey; reported ever diagnosis, not biological prevalence or diagnostic delay",
+    "literalInterview20to49N": 4855,
+    "eligibilityAge50SensitivityN": 4856,
+    "domainNote": "Literal interview ages and the sensitivity including one age-50 record remain separate; item-specific valid denominators differ",
+    "publicCsvSha256": "eb10fa3bd11e671b1a3533781a01550261bde9c6b8ad9b17a87dd7250bc131a8",
+    "archiveSourceId": "nsfg_female",
+    "conditions": [
+      {
+        "code": "ENDO",
+        "label": "Endometriosis",
+        "publishedPercent": 6.2,
+        "publishedSePp": 0.49,
+        "literalDomain": {
+          "n_valid": 4813,
+          "n_excluded": 42,
+          "percent": 6.159187580537029,
+          "taylor_se_pp": 0.48570156377480317,
+          "design_df": 60
+        },
+        "eligibilitySensitivity": {
+          "n_valid": 4814,
+          "n_excluded": 42,
+          "percent": 6.158021171759557,
+          "taylor_se_pp": 0.48558502022993494,
+          "design_df": 60
+        },
+        "publicGroups": [
+          {
+            "code": 1,
+            "label": "Hispanic",
+            "crudePercent": 3.703662747037743,
+            "validN": 996,
+            "itemMissingN": 18,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -2.2961622109004938,
+              "sePp": 0.6930563784302523,
+              "unadjusted95CiPp": [
+                -3.6824813752076184,
+                -0.9098430465933692
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 2,
+            "label": "non_Hispanic_White",
+            "crudePercent": 8.073711673038511,
+            "validN": 2461,
+            "itemMissingN": 13,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": 1.8713714870326519,
+              "sePp": 0.440519574557777,
+              "unadjusted95CiPp": [
+                0.9902011414900819,
+                2.752541832575222
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 3,
+            "label": "non_Hispanic_Black",
+            "crudePercent": 3.7386202455748285,
+            "validN": 728,
+            "itemMissingN": 6,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -2.3787531977161636,
+              "sePp": 0.8464010610451297,
+              "unadjusted95CiPp": [
+                -4.071807396675296,
+                -0.6856989987570318
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 4,
+            "label": "non_Hispanic_other_or_multiple",
+            "crudePercent": 4.649182970735214,
+            "validN": 629,
+            "itemMissingN": 5,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -1.5763633587129025,
+              "sePp": 0.9356882766689935,
+              "unadjusted95CiPp": [
+                -3.4480185806181667,
+                0.29529186319236167
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          }
+        ]
+      },
+      {
+        "code": "PCOS",
+        "label": "PCOS",
+        "publishedPercent": 8.7,
+        "publishedSePp": 0.51,
+        "literalDomain": {
+          "n_valid": 4801,
+          "n_excluded": 54,
+          "percent": 8.708978814579412,
+          "taylor_se_pp": 0.5088303835310121,
+          "design_df": 60
+        },
+        "eligibilitySensitivity": {
+          "n_valid": 4802,
+          "n_excluded": 54,
+          "percent": 8.707327506574197,
+          "taylor_se_pp": 0.5084204416252688,
+          "design_df": 60
+        },
+        "publicGroups": [
+          {
+            "code": 1,
+            "label": "Hispanic",
+            "crudePercent": 8.193253332846945,
+            "validN": 994,
+            "itemMissingN": 20,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -0.5407859409234744,
+              "sePp": 1.1575729341525103,
+              "unadjusted95CiPp": [
+                -2.8562765599313975,
+                1.7747046780844489
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 2,
+            "label": "non_Hispanic_White",
+            "crudePercent": 9.909106396537561,
+            "validN": 2457,
+            "itemMissingN": 17,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": 1.1849415637873797,
+              "sePp": 0.483928139144804,
+              "unadjusted95CiPp": [
+                0.21694116104461447,
+                2.152941966530145
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 3,
+            "label": "non_Hispanic_Black",
+            "crudePercent": 4.350655236844005,
+            "validN": 723,
+            "itemMissingN": 11,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -4.3556136194502555,
+              "sePp": 0.9172321625730402,
+              "unadjusted95CiPp": [
+                -6.1903511165265375,
+                -2.520876122373973
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 4,
+            "label": "non_Hispanic_other_or_multiple",
+            "crudePercent": 9.01186953656566,
+            "validN": 628,
+            "itemMissingN": 6,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": 0.20788607664457143,
+              "sePp": 1.388391679628675,
+              "unadjusted95CiPp": [
+                -2.569310776219388,
+                2.985082929508531
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          }
+        ]
+      },
+      {
+        "code": "UF",
+        "label": "Uterine fibroids",
+        "publishedPercent": 7.8,
+        "publishedSePp": 0.53,
+        "literalDomain": {
+          "n_valid": 4808,
+          "n_excluded": 47,
+          "percent": 7.800286313946317,
+          "taylor_se_pp": 0.5322451803992161,
+          "design_df": 60
+        },
+        "eligibilitySensitivity": {
+          "n_valid": 4809,
+          "n_excluded": 47,
+          "percent": 7.798808915448401,
+          "taylor_se_pp": 0.5324086754615398,
+          "design_df": 60
+        },
+        "publicGroups": [
+          {
+            "code": 1,
+            "label": "Hispanic",
+            "crudePercent": 7.401246880668409,
+            "validN": 997,
+            "itemMissingN": 17,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -0.1446176383452319,
+              "sePp": 0.8323289085608933,
+              "unadjusted95CiPp": [
+                -1.8095233413390932,
+                1.5202880646486294
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 2,
+            "label": "non_Hispanic_White",
+            "crudePercent": 7.062088937096814,
+            "validN": 2457,
+            "itemMissingN": 17,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -0.8468690768485998,
+              "sePp": 0.4867828922601833,
+              "unadjusted95CiPp": [
+                -1.8205798360304468,
+                0.1268416823332473
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 3,
+            "label": "non_Hispanic_Black",
+            "crudePercent": 12.49119338150391,
+            "validN": 727,
+            "itemMissingN": 7,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": 4.95210488941077,
+              "sePp": 1.4560753609395742,
+              "unadjusted95CiPp": [
+                2.0395205162347123,
+                7.864689262586828
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          },
+          {
+            "code": 4,
+            "label": "non_Hispanic_other_or_multiple",
+            "crudePercent": 6.6871775739251165,
+            "validN": 628,
+            "itemMissingN": 6,
+            "standardizedGroupMinusOverall": {
+              "estimatePp": -1.2106693290035109,
+              "sePp": 1.094407183976412,
+              "unadjusted95CiPp": [
+                -3.3998096355082876,
+                0.9784709775012661
+              ],
+              "estimand": "EQUAL_BAND_STANDARDIZED_GROUP_MINUS_OVERALL",
+              "scale": "PERCENTAGE_POINTS",
+              "notUncertaintyForCrudePercent": true
+            }
+          }
+        ]
+      }
+    ],
+    "standardization": {
+      "bands": [
+        [
+          20,
+          29
+        ],
+        [
+          30,
+          39
+        ],
+        [
+          40,
+          50
+        ]
+      ],
+      "weights": [
+        0.3333333333333333,
+        0.3333333333333333,
+        0.3333333333333333
+      ],
+      "interpretation": "Fixed equal age-band sensitivity in the eligibility domain including the age-50 boundary record, not standard-US population prevalence; full-sample PSU Taylor covariance"
+    },
+    "nextTest": "Qualify condition-specific symptom/care-history instruments and clinical ascertainment to separate occurrence, recognition, access, recall and selection"
+  },
+  "authority": {
+    "causalEffectEstablished": false,
+    "clinicalActionAuthorized": false,
+    "fieldBenefitMeasured": false,
+    "actualAssignmentsAccepted": false
+  },
+  "missing": {
+    "localDiagnosticResolution": null,
+    "interventionEffect": null,
+    "incrementalPlatformBenefit": null
+  },
+  "lineageRule": "Repeated displays and files from one source are not independent corroboration; source integrity is separate from scientific validity"
+}

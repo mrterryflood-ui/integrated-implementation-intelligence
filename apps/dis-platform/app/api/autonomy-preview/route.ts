@@ -1,4 +1,5 @@
 import {AUTONOMY_LEVELS,OPERATIONS,evaluateAutonomy,defaultAutonomy} from '../../../lib/ecosystem/autonomy-policy';
+import {readBoundedJsonRequest,jsonRequestStatus} from '../../../lib/bounded-json-request';
 export const runtime='nodejs';
 export async function GET(){
  return Response.json({schemaVersion:'dis-autonomy-preview-v1',levels:AUTONOMY_LEVELS,operations:OPERATIONS,
@@ -7,8 +8,8 @@ export async function GET(){
 export async function POST(request:Request){
  if(Number(request.headers.get('content-length')||0)>1200)return Response.json({error:'Request too large'},{status:413});
  let value:unknown;
- try{const text=await request.text();if(text.length>1200)return Response.json({error:'Request too large'},{status:413});value=JSON.parse(text)}
- catch{return Response.json({error:'Invalid JSON'},{status:400})}
+ try{value=await readBoundedJsonRequest(request,1200)}
+ catch(e){return Response.json({error:'Invalid or oversized JSON'},{status:jsonRequestStatus(e)})}
  if(!value||typeof value!=='object'||Array.isArray(value))return Response.json({error:'Invalid request'},{status:400});
  const v=value as Record<string,unknown>;
  if(Object.keys(v).some(k=>!['level','operation','externalConsent'].includes(k))||
