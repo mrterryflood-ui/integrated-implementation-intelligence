@@ -42,3 +42,11 @@ Retain W2/W4 as partial and W8 as review received with exceptions open. Acceptan
 - Artifact workflow: https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/42411939810
 
 Reproduce the software checks with `python3 research/fragmentation-harm/validate_contract.py` and `python3 -m unittest discover -s research/fragmentation-harm -p 'test_*.py' -v`. Run `replay_retained_county_archive.py` with the unchanged pinned ZIP using its documented arguments. Preserve exact code revision, source digest, runtime and outputs alongside each run.
+
+## Integration of later work and validator regression fixes
+
+The correction branch incorporates the other agent's subsequent work through `f19291fe47da0d9731831a38b504c12680f74e74`. The only overlapping document was the Dartmouth read-ahead. The resolution retains its newer stakeholder and cross-condition language and the recorded outcome decision, while preserving the comparator, statistical-planning, cost and capacity qualifications.
+
+Independent boundary examples found two defects in the new minimal intelligence validator: numeric zero was rejected as a missing effect, and an unrecognized or incompatible evidence grade could be labeled a validated causal effect. The repair reuses the existing six-grade vocabulary, preserves numeric zero, and restricts that causal label to `verified` or `supported` records with the required metadata. Four regression test methods exercise zero, invalid grades, incompatible grades, a positive control and a missing estimate. They failed against the original validator and pass after the change. These are synthetic metadata tests, not causal validation or authenticated review receipts.
+
+The integrated candidate passes 83 research unit tests and the comparability validator using the commands above. The Python research contract has no new app route, database, authorization, model call or production deployment; web UI/typecheck, tenant/persistence and live field acceptance are outside this patch's execution evidence. This does not waive those gates for a future operational integration. PR 86 remains a review branch, with its exact remote revision and workflow results recorded separately from this source document. The broader scientific exceptions above remain open.

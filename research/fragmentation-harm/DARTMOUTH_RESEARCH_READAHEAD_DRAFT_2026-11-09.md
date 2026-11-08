@@ -30,10 +30,13 @@ Published EHR/registry research demonstrates semantic loss and population select
 6. Use secure, durable evidence storage, independent review and versioned reproducibility receipts; avoid treating ephemeral CI artifacts as archival storage.
 
 ## Scientific endpoints (owner adjudication recorded)
-The recorded owner decision requires jointly interpreted outcomes: first knowable warning to appropriate action; age-specific risk; early/late counts and incidence; stage distribution and ratios; all-stage incidence, mortality and emergency presentation; function, quality of life, experience, equity, harms, cost, capacity and durability. No single metric replaces the mission. Each experiment may prespecify primary statistical estimands, multiplicity handling and power while retaining the other relevant domains. Divergent movement is a finding to investigate, including ascertainment, overdiagnosis, stage migration and prevention. Endometriosis and autoimmune studies require condition-specific outcomes. See OWNER_ADJUDICATION_MULTIDIMENSIONAL_OUTCOMES_2026-11-08.md.
+The recorded owner decision requires jointly interpreted outcomes: first knowable warning to appropriate action; age-specific risk; early/late counts and incidence; stage distribution and ratios; all-stage incidence, mortality and emergency presentation; function, quality of life, experience, equity, harms, cost, capacity and durability. No single metric replaces the mission. Each experiment may prespecify primary statistical estimands, multiplicity handling and power while retaining the other relevant domains. Divergent movement is a finding to investigate, including ascertainment, overdiagnosis, stage migration and prevention. Endometriosis and autoimmune studies require condition-appropriate outcomes such as diagnostic interval, symptoms, function and quality of life; cancer-stage metrics do not apply. See OWNER_ADJUDICATION_MULTIDIMENSIONAL_OUTCOMES_2026-11-08.md.
 
 ## Review and status
 Independent judge (Drive W8, Nov 8): 34 claims, 24 PASS, 5 UNCERTAIN, 3 NOT_CHECKED, 1 owner decision, 1 citation/slide fix; none FAIL. Tests reported 61 + 130 (+20 subtests). GitHub workflow success is separately recorded, but it does not establish scientific validity. Do not imply independent review has cleared all exceptions.
+
+## Stakeholders, ultimate beneficiaries and scale
+Dartmouth is **one scientific stakeholder and potential collaborator**, not the ultimate customer or research destination. Ultimate beneficiaries are patients, families and communities. Operational users include clinicians, care teams, CHWs, public health practitioners, researchers and health-system decision makers. Other partners may include VA, UTHealth, community organizations, registries, payers and public agencies. Research, engineering, independent assurance, implementation and cross-condition scale-out advance in parallel beyond this meeting. No external partnership, data access or funding commitment is presumed.
 
 ## What Dartmouth can contribute
 Scientific sponsorship, methods review and biostatistics, registry expertise, ethically authorized longitudinal clinical data partnerships, implementation research core, patient/community governance and prospective comparative evaluation. Potential paths include SEER Research Plus/USCS and institution-approved data environments; access and eligibility must be confirmed before claims.
@@ -44,7 +47,7 @@ No patient-level Hinds/Harris linkage, no identified historical counterfactual b
 ## Requested decisions for discussion
 - Select the first experiment's estimands and analysis plan within the already-adjudicated multidimensional outcome framework.
 - Identify academic/clinical leads and the first feasible authorized data source.
-- Confirm cross-condition order: autoimmune/endometriosis are the stated next priorities; lung is a complementary comparator.
+- Explore clinical and scientific collaboration across owner-prioritized autoimmune/endometriosis and CRC research; lung remains an optional methodological comparator, not a replacement.
 - Agree on a reproducibility and independent-review plan, then discuss DIADH/STTR/clinical funding separately from scientific validation.
 
 **Status:** Owner review draft. No external distribution authorized.
