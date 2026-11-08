@@ -2,7 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {buildPlaybook,validatePlaybook,reconcileTaskCompletion} from "../../../lib/decision-playbook";
 import {buildLearningCheckpoint} from "../../../lib/longitudinal-learning";
-import {CASE_REPORT_MAX_CHARS,CASE_PLAYBOOK_MAX_DB_BYTES,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
+import {CASE_REPORT_MAX_DB_BYTES,CASE_PLAYBOOK_MAX_DB_BYTES,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
 import {CASE_HISTORY_DB_PAYLOAD_BYTES,CASE_HISTORY_LIMIT,CASE_HISTORY_PAGE_SQL,CaseHistoryReadError,buildCaseHistoryPageBody,decodeCaseHistoryCursor,type CaseHistoryDatabasePage} from "../../../lib/case-history-pagination";
 import {randomUUID} from "node:crypto";
 import {admitCaseReport} from "../../../lib/research-case-admission";
@@ -64,7 +64,7 @@ export async function PATCH(request:Request){try{
  if(input.researchWorkflow!==undefined){
   if(request.headers.get("origin")!==new URL(request.url).origin)return Response.json({error:"Same-origin research revision required"},{status:403});
   if(Object.keys(input).some(k=>!["id","version","researchWorkflow"].includes(k))||!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647)return Response.json({error:"Research revision requires exact case ID, integer version and typed inputs"},{status:400});
-  const prior=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN char_length(report::text)<=${CASE_REPORT_MAX_CHARS} THEN report ELSE NULL END AS report FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
+  const prior=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN octet_length(report::text)<=${CASE_REPORT_MAX_DB_BYTES} THEN report ELSE NULL END AS report FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
   if(!prior[1].length)return Response.json({error:"Case changed or access denied. Reload before retrying."},{status:409});
   if(prior[1][0].report===null)return Response.json({error:"Stored research report exceeds bounded revision capacity; nothing changed or truncated."},{status:413});
   const body=serializeCaseReport(reviseResearchWorkflowReport(prior[1][0].report,input.researchWorkflow));

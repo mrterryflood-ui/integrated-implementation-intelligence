@@ -7,6 +7,9 @@ export const CASE_PLAYBOOK_MAX_DB_BYTES=CASE_PLAYBOOK_MAX_CHARS*4;
 /** Full research provenance plus the existing bounded investigation notes.
  * Shared by create, recheck and client preflight; transport remains 1 MiB. */
 export const CASE_REPORT_MAX_CHARS=128000;
+/** Stored JSONB expands whitespace and encodes Unicode as UTF-8. This bounded
+ * read allowance is separate from (and does not raise) compact admission. */
+export const CASE_REPORT_MAX_DB_BYTES=CASE_REPORT_MAX_CHARS*4;
 export const CASE_REQUEST_MAX_BYTES=1048576;
 export class CasePayloadError extends Error{constructor(message:string,readonly status:400|413){super(message);this.name="CasePayloadError";}}
 export function serializeCaseReport(value:unknown):string{
