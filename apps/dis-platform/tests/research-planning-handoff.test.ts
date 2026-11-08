@@ -153,6 +153,9 @@ test('actual service, SQL/RLS and export handler retain research through private
    assert.deepEqual((await json.json()).record.body.researchSnapshot,draft.body.researchSnapshot);
    const markdown=await exported(edited,'md');assert.equal(markdown.status,200);const content=await markdown.text();assert.match(content,/Research case provenance/);assert.match(content,/SYNTHETIC outcome marker/);assert.match(content,/SYNTHETIC learning note/);assert.ok(content.includes(draft.body.researchSnapshot.sourceDigest));for(const [key,label] of WORKFLOW_FIELDS){assert.ok(content.includes(label));assert.ok(content.includes('SYNTHETIC '+key+' narrative'));}assert.match(content,/Full retained research snapshot \(JSON\)/);
    const word=await exported(edited,'docx');assert.equal(word.status,200);const archive=await JSZip.loadAsync(await word.arrayBuffer());const document=await archive.file('word/document.xml')!.async('string');assert.match(document,/Research case provenance/);assert.match(document,/SYNTHETIC retained workflow marker/);assert.match(document,/SYNTHETIC outcome marker/);assert.match(document,/SYNTHETIC learning note/);assert.match(document,/First warning sign and time-zero definition/);assert.match(document,/SYNTHETIC funding narrative/);assert.match(document,/Full retained research snapshot/);
+   const headings=[...document.matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].filter(match=>/<w:pStyle w:val="(?:Title|Heading[12])"\s*\/>/.test(match[1]));
+   assert.ok(headings.length>20,'The complete planning and research section headings are present');
+   for(const heading of headings)assert.match(heading[1],/<w:keepNext\s*\/>/,'Every heading stays with its following content');
   });
   await t.test('actual reconciled export retains linked snapshot; inaccessible and stale exports fail',async()=>{
    state.actor='alice';

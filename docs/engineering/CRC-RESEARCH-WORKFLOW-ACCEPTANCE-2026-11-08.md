@@ -71,6 +71,7 @@ Pull-request CI may execute GitHub's generated merge revision. Retain that revis
 - The initial component-browser run could not locate a populated textarea using exact implicit-label text. The fixture now requires the textbox's same exact accessible caption, preserves all state/value assertions, and captures DOM, label associations and runtime errors when a journey fails.
 - Submission withdrawal could recompute a digest after JSONB key ordering and violate the immutable submission trigger; withdrawal preserves body, title and digest while changing visibility/version.
 - Word could emit invalid XML for admitted Unicode control/noncharacters; presentation escapes are disclosed and leave the stored content, JSON and digest unchanged.
+- Rendered Word review found a section heading separated from its content at a page break. All exported headings now explicitly stay with their following content, with a handler-level paragraph-property regression check.
 - Seven existing Next route modules exported non-route helpers. Those helpers moved to adjacent modules. Independent source/AST comparison found all moved declarations and HTTP handler bodies unchanged; tests import the helper modules without weakening assertions.
 
 ## Acceptance and rollback

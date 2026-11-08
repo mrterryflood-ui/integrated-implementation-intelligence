@@ -26,7 +26,7 @@ export async function GET(req:Request){try{
  if(format==='json'){body=JSON.stringify({...data,notice},null,2);media='application/json';}
  else if(format==='md'){body=markdown;media='text/markdown; charset=utf-8';}
  else {
-  const paragraph=(text:string,heading?:(typeof HeadingLevel)[keyof typeof HeadingLevel])=>new Paragraph({text:wordPresentationText(text),...(heading?{heading}:{})});
+  const paragraph=(text:string,heading?:(typeof HeadingLevel)[keyof typeof HeadingLevel])=>new Paragraph({text:wordPresentationText(text),...(heading?{heading,keepNext:true}:{})});
   const wordNotice=notice+(wordPresentationText(markdown)!==markdown?' Word presentation note: characters that XML cannot represent are displayed as visible Unicode escape sequences (for example, \\uFFFE). The stored content, JSON download and source fingerprint are unchanged.':'');
   const children=[paragraph(data.record.title,HeadingLevel.TITLE),paragraph(receipt),paragraph(wordNotice),...[...sections,...researchSections].flatMap(s=>[paragraph(s.title,HeadingLevel.HEADING_1),...s.text.split('\n').map(t=>paragraph(t))]),paragraph('Retained source snapshots',HeadingLevel.HEADING_1),...data.sources.flatMap(s=>[paragraph(s.title,HeadingLevel.HEADING_2),paragraph(`Record ${s.id}; version ${s.version}; ${s.digest}`),...JSON.stringify(s.body,null,2).split('\n').map(t=>paragraph(t))])];
   body=new Uint8Array(await Packer.toBuffer(new Document({sections:[{children}]})));media='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
