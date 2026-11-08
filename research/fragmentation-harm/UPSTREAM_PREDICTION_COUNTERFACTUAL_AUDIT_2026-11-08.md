@@ -1,0 +1,31 @@
+# ChainWeb 15-minute targeted research: prediagnostic longitudinal signals and intervention falsification
+Date: 2026-11-08. Issue #81. Evidence stage: verified published abstract metadata and quantitative checks; no patient-level intervention study.
+
+## Major correction to research scope
+Study **before screening** as well as screening and post-screening. Three distinct decision contexts: asymptomatic population screening; symptomatic diagnostic evaluation; hereditary/family-history risk surveillance. A single CRC screening completion indicator cannot measure early prevention or appropriate investigation.
+
+## Empirical findings and counterfactual challenge
+**Longitudinal FBC risk:** [Vir26] Virdee et al., BMC Cancer (2026), doi:10.1186/s12885-026-16179-9, external validation. 2,956,977 males (12,578 CRC outcomes) and 3,561,349 females (11,939 CRC outcomes). Two-year prediction from age and historical hemoglobin, mean cell volume, platelet trends. C-statistic 0.73 males (95% CI 0.72–0.73), 0.74 females (0.74–0.75). Calibration slopes 0.92 males (0.89–0.94), 0.95 females (0.93–0.98); risk underpredicted in age >=70, White people and higher deprivation strata as reported. **Discrimination is not an intervention effect**. Prioritization requires thresholds, decision curves, false-positive burden and external subgroup calibration.
+
+**Prediction model systematic review:** [Vir25b] Virdee et al., JMIR Cancer (2025), doi:10.2196/70275. 16 articles, 7 developed models, 14 external validations; pooled ColonFlag c-statistic 0.81 (0.77–0.85) across four validations, but most models high risk of analysis bias and calibration rarely tested. Different model populations and horizons cannot be pooled into a universal threshold.
+
+**Randomized falsification:** [Chi24] Chima et al., Br J Gen Pract (2024), doi:10.3399/BJGP.2024.0491. Pragmatic cluster RCT in 40 practices, 7,555 at-risk patients. 2,820/3,709 (76.0%) guideline-concordant follow-up in intervention versus 2,693/3,846 (70.0%) control. The **unadjusted arithmetic difference is 6.0 percentage points**, whereas the prespecified modeled between-arm effect was **2.6 percentage points (95% CI -2.8 to 7.9), P=0.332**. Do not report the crude difference as the trial's causal effect. No significant improvement established. Possible ceiling effect, workflow fidelity and case mix require investigation.
+
+**Transfer test — lung:** [Sin22b] Singh et al., Respir Med (2022), doi:10.1016/j.rmed.2022.106737. Prospective tracking program compared 408/523 (78%) completed follow-up in notified group with 57/109 (52%) not tracked, RR 1.49 (1.24–1.79). Observational comparison with potential selection bias, not a randomized effect or proven mortality benefit.
+
+**Transfer test — women's health:** [Dol21] Doll et al., JAMA Oncol (2021), doi:10.1001/jamaoncol.2021.1700. Simulation of endometrial thickness triage among symptomatic women with postmenopausal bleeding; 4-mm threshold sensitivity 47.5% among Black women vs 87.9% among White women. **Simulated test-performance disparity, not an observed patient cohort outcome**. Supports separate instrument-validation hypothesis and equity audit, not an automatic recommendation to change thresholds.
+
+**Symptomatic FIT limitations:** [Boo22b] Booth et al., Lancet Reg Health Eur (2022), doi:10.1016/j.lanepe.2022.100518. Meta-analysis of 31 studies, 79,566 symptomatic patients; at 10 µg/g, all-symptom sensitivity 91.0%, specificity 75.2%. A negative test does not eliminate risk; symptoms, anemia, prior risk and safety-netting remain separate decisions.
+
+## Fine-grained original-research protocol: earliest actionable signal
+Index event: first recorded symptom, family-history update, or longitudinal blood-count change that would have met a **prespecified contemporary clinical evaluation criterion**. Define earliest date the signal was *available to the clinician*; do not infer from future diagnosis. Link subsequent risk recognition, clinical action, documented capacity, outcome and harms. Compare action versus no action only among comparable eligible patients and account for differential testing/encounter frequency, competing diagnoses, clinician access, calendar time and stage ascertainment.
+
+Test four competing mechanisms: (1) signal never captured; (2) captured but hidden by extract/fragmentation; (3) recognized but no accountable action; (4) appropriate action not feasible or declined. Use negative controls (future-only data, unrelated laboratory trends, clinically irrelevant symptom clusters), subgroup calibration, decision-curve net benefit and patient-centered adverse effects.
+
+## Quantitative arithmetic verification
+- [Chi24] 2820/3709 = 76.03%; 2693/3846 = 70.02%; unadjusted difference = 6.01 percentage points. Modeled difference remains 2.6 pp, not interchangeable.
+- [Vir26] total 6,518,326 people, 24,517 CRC outcomes across sex cohorts. Two-year prediction in tested population; do not translate this into prevalence among all county residents.
+- [Dol21] simulated sensitivity difference = 40.4 percentage points; do not interpret as measured clinical harm.
+
+## Decision and next empirical gate
+GO: prediagnostic longitudinal evidence, symptom evaluation, familial risk, cross-source availability-at-decision and implementation testing. NO-GO: equating prediction discrimination with clinical effectiveness; extrapolating UK/VA cohorts to Hinds/Harris without local calibration; asserting downstream ChainWeb effects. Required next: local authorized longitudinal lab/symptom and encounter records, population denominators, historical guideline versions, documented clinical decisions and capacity, IRB/privacy determination. Independently adjudicate model validity and intervention impact before any clinical recommendation.
