@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {buildPlaybook,validatePlaybook} from "../lib/decision-playbook";
+import {buildPlaybook,validatePlaybook,reconcileTaskCompletion} from "../lib/decision-playbook";
 import {emptyResearchWorkflow,buildResearchWorkflowCase,reviseResearchWorkflowReport} from "../lib/research-workflow";
 import {applyResearchTaskGuidance,projectResearchGapTask,researchTaskGuidance,researchTaskReviewNotice,taskGuidanceChanges} from "../lib/research-task-guidance";
 
@@ -20,7 +20,8 @@ test("legacy task follows its gap identity after discovery, with explicit draft 
  assert.match(guidance.gap!.problem,/leads are now attached/);
  const after=applyResearchTaskGuidance(task,changed);
  assert.equal(after.title,"Appraise discovery leads and record source applicability");
- for(const key of ["id","owner","done","evidence","review","due","phase"] as const)assert.equal(after[key],before[key]);
+ for(const key of ["id","owner","evidence","review","due","phase"] as const)assert.equal(after[key],before[key]);
+ assert.equal(before.done,true);assert.equal(after.done,false);
  assert.deepEqual(task,before);assert.notEqual(initial.report,changed);
  for(const key of ["causalEffectEstablished","independentOutcomeVerified","interventionAuthorized","externalCommunicationAuthorized"])assert.equal(changed[key],false);
  assert.equal(researchTaskGuidance(changed,after)!.changed,false);
@@ -60,4 +61,16 @@ test("history discloses before and after guidance and leaves older summary-only 
  const changes=taskGuidanceChanges({previousPlaybook:plan,playbook:after});
  assert.equal(changes.length,1);assert.match(changes[0].before,/No fresh scholarly retrieval/);assert.match(changes[0].after,/Appraise discovery leads/);
  assert.deepEqual(taskGuidanceChanges({summary:{tasksTotal:25}}),[]);
+});
+test("server normalization rejects carried completion after any definition change and allows later explicit completion",()=>{
+ const {plan,task}=fixture();
+ for(const key of ["title","why","success"] as const){
+  const submitted=structuredClone(plan),edited=submitted.tasks.find(item=>item.id===task.id)!;
+  edited[key]="Synthetic changed requirement";edited.done=true;
+  const normalized=reconcileTaskCompletion(plan,submitted);
+  assert.equal(normalized.playbook.tasks.find(item=>item.id===task.id)!.done,false);assert.deepEqual(normalized.reopenedTaskIds,[task.id]);
+  assert.equal(submitted.tasks.find(item=>item.id===task.id)!.done,true);assert.equal(plan.tasks.find(item=>item.id===task.id)!.done,true);
+  const reviewed=structuredClone(normalized.playbook);reviewed.tasks.find(item=>item.id===task.id)!.done=true;
+  assert.equal(reconcileTaskCompletion(normalized.playbook,reviewed).playbook.tasks.find(item=>item.id===task.id)!.done,true);
+ }
 });

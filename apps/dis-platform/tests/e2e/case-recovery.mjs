@@ -24,7 +24,7 @@ for(const[label,engine,device]of[["desktop",chromium,{viewport:{width:1280,heigh
   if(mode.startsWith("guidance")){
    // Minimal component fixture; actual full-report persistence is exercised by the route suite.
    item.report={schemaVersion:"dis-evidence-action-case-v1",gapLedger:[{id:"literature-not-retrieved",severity:"RESEARCH_REQUIRED",problem:"Synthetic discovery leads are attached; source appraisal remains open.",ownerRole:"Proposed reviewer",nextEvidence:"Appraise the original sources and local applicability."}],investigation:{literature:[{id:"synthetic-lead",claimVerified:false}]},causalEffectEstablished:false,interventionAuthorized:false};
-   Object.assign(item.playbook.tasks[0],{title:"Investigate: No fresh scholarly retrieval attached to this case.",why:"Evidence gap literature-not-retrieved. Proposed review owner: Research librarian.",evidence:"Synthetic prior notes"});
+   Object.assign(item.playbook.tasks[0],{title:"Investigate: No fresh scholarly retrieval attached to this case.",why:"Evidence gap literature-not-retrieved. Proposed review owner: Research librarian.",evidence:"Synthetic prior notes",done:true});
   }
  };reset();
  const payload=()=>({case:item,history,historyPage:{hasMore:false,isFirstPage:true,incompleteCoverage:false,caseVersion:item.version,returnedCount:history.length,limit:250,order:"created_at_desc_id_desc",maxResponseBytes:3145728,nextCursor:null}});
@@ -80,15 +80,16 @@ for(const[label,engine,device]of[["desktop",chromium,{viewport:{width:1280,heigh
   assert.equal(await page.getByRole("textbox",{name:"Task title 1",exact:true}).inputValue(),"Appraise discovery leads and record source applicability");
   assert.equal(await page.getByLabel("Responsible person").inputValue(),"Synthetic retained owner");
   assert.equal(await page.getByLabel("Observation, source or test evidence").inputValue(),"Synthetic prior notes");assert.equal(item.version,3);
+  assert.equal(await page.getByRole("checkbox").first().isChecked(),false);
   await page.screenshot({path:join(out,"task-guidance-"+label+".png"),fullPage:true});
   await page.getByRole("button",{name:"Save progress",exact:true}).click();await page.getByText("DIS decision workspace · Version 4",{exact:true}).waitFor();
   await page.getByRole("status").filter({hasText:"Progress and time-stamped learning checkpoint saved together"}).waitFor();
-  assert.equal(item.playbook.tasks[0].sourceGapId,"literature-not-retrieved");assert.equal(item.report.causalEffectEstablished,false);assert.equal(item.report.interventionAuthorized,false);
+  assert.equal(item.playbook.tasks[0].sourceGapId,"literature-not-retrieved");assert.equal(item.playbook.tasks[0].done,false);assert.equal(history[0].payload.previousPlaybook.tasks[0].done,true);assert.equal(item.report.causalEffectEstablished,false);assert.equal(item.report.interventionAuthorized,false);
   await page.reload();await page.getByText("DIS decision workspace · Version 4",{exact:true}).waitFor();
   await page.getByText("Recorded task guidance changes",{exact:true}).click();
   await page.getByText(/title: Investigate: No fresh scholarly retrieval attached/).waitFor();
   await page.getByText(/title: Appraise discovery leads and record source applicability/).waitFor();
-  checks.push("current_gap_guidance_requires_explicit_draft_adoption","task_owner_and_evidence_retained","saved_guidance_and_prior_wording_survive_reload");
+  checks.push("current_gap_guidance_requires_explicit_draft_adoption","changed_guidance_requires_renewed_completion","task_owner_and_evidence_retained","saved_guidance_and_prior_wording_survive_reload");
   mode="guidance-conflict";reset();await page.reload();await page.getByRole("heading",{name:"Synthetic recovery case"}).waitFor();
   await page.getByText("Review or edit task guidance",{exact:true}).click();await page.getByRole("textbox",{name:"Task title 1",exact:true}).fill("Synthetic deliberate local task adaptation");
   await page.getByRole("button",{name:"Save progress",exact:true}).click();await page.getByRole("status").filter({hasText:"Version conflict"}).waitFor();

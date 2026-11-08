@@ -1,8 +1,8 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
-import {buildPlaybook,validatePlaybook} from "../../../lib/decision-playbook";
+import {buildPlaybook,validatePlaybook,reconcileTaskCompletion} from "../../../lib/decision-playbook";
 import {buildLearningCheckpoint} from "../../../lib/longitudinal-learning";
-import {CASE_REPORT_MAX_CHARS,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
+import {CASE_REPORT_MAX_CHARS,CASE_PLAYBOOK_MAX_CHARS,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
 import {CASE_HISTORY_DB_PAYLOAD_BYTES,CASE_HISTORY_LIMIT,CASE_HISTORY_PAGE_SQL,CaseHistoryReadError,buildCaseHistoryPageBody,decodeCaseHistoryCursor,type CaseHistoryDatabasePage} from "../../../lib/case-history-pagination";
 import {randomUUID} from "node:crypto";
 import {admitCaseReport} from "../../../lib/research-case-admission";
@@ -73,9 +73,13 @@ export async function PATCH(request:Request){try{
   return Response.json({case:revised[1][0],historyRecorded:true,note:"Research inputs saved as a new revision. Prior evidence and the current action plan are retained; review the plan against the changed inputs."},{headers:{"cache-control":"private, no-store"}});
  }
  if(!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647||!validatePlaybook(input.playbook))return Response.json({error:"Invalid case update"},{status:400});
- const body=serializeCasePlaybook(input.playbook);
+ const priorPlan=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN char_length(playbook::text)<=${CASE_PLAYBOOK_MAX_CHARS} THEN playbook ELSE NULL END AS playbook FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
+ if(!priorPlan[1].length)return Response.json({error:"Version conflict, not found, or access denied. Reload before retrying."},{status:409});
+ if(priorPlan[1][0].playbook===null)return Response.json({error:"Stored plan exceeds bounded revision capacity; nothing changed or truncated."},{status:413});
+ const reconciled=reconcileTaskCompletion(priorPlan[1][0].playbook,input.playbook);
+ const body=serializeCasePlaybook(reconciled.playbook);
  // Case update and checkpoint archive stay atomic and version-conflict protected.
- const learning=JSON.stringify(buildLearningCheckpoint(input.playbook,version+1,new Date().toISOString()));
+ const learning=JSON.stringify(buildLearningCheckpoint(reconciled.playbook,version+1,new Date().toISOString()));
  const rows=await ctx.sql.transaction([
   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
   ctx.sql`WITH prior AS MATERIALIZED (
@@ -96,5 +100,5 @@ export async function PATCH(request:Request){try{
      updated.updated_at,journal.id AS learning_event_id FROM updated CROSS JOIN journal`
  ]);
  if(!rows[1].length)return Response.json({error:"Version conflict, not found, or access denied. Reload before retrying."},{status:409});
- return Response.json({case:rows[1][0],historyRecorded:true});
+ return Response.json({case:rows[1][0],historyRecorded:true,reopenedTaskIds:reconciled.reopenedTaskIds,...(reconciled.reopenedTaskIds.length?{note:"Changed task guidance requires renewed completion. Earlier completion and notes remain in history; review the revised requirements before recording completion again."}:{})});
 }catch(e){return fail(e)}}

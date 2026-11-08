@@ -246,7 +246,9 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
    assert.equal(revised.status,200);assert.deepEqual(revised.body.case.playbook,workingPlan);
    const adapted=structuredClone(workingPlan);adapted.tasks[taskIndex]=api.applyResearchTaskGuidance(adapted.tasks[taskIndex],revised.body.case.report);
    assert.equal(adapted.tasks[taskIndex].title,"Appraise discovery leads and record source applicability");
-   const request={id:taskCaseId,version:3,playbook:adapted};
+   assert.equal(adapted.tasks[taskIndex].done,false);
+   const forgedCompletion=structuredClone(adapted);forgedCompletion.tasks[taskIndex].done=true;
+   const request={id:taskCaseId,version:3,playbook:forgedCompletion};
    for(const [actor,version,status] of [[null,3,401],[other,3,409],[owner,2,409],[owner,"3",400]] as const)assert.equal((await call(actor,api.cases.PATCH,"/api/cases","PATCH",{...request,version})).status,status);
    const countBefore=(await db.query<{n:number}>("SELECT count(*)::int AS n FROM dis_case_events WHERE case_id=$1",[taskCaseId])).rows[0].n;
    await db.exec("CREATE TRIGGER refuse_research_journal BEFORE INSERT ON dis_case_events FOR EACH ROW EXECUTE FUNCTION refuse_research_journal();");
@@ -258,7 +260,8 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
    }finally{await db.exec("DROP TRIGGER refuse_research_journal ON dis_case_events");}
    const saved=await call(owner,api.cases.PATCH,"/api/cases","PATCH",request);assert.equal(saved.status,200);assert.equal(saved.body.historyRecorded,true);
    assert.deepEqual(saved.body.case.playbook,adapted);assert.deepEqual(saved.body.case.report,revised.body.case.report);
-   for(const key of ["owner","done","evidence","due","review"])assert.equal(saved.body.case.playbook.tasks[taskIndex][key],workingPlan.tasks[taskIndex][key]);
+   for(const key of ["owner","evidence","due","review"])assert.equal(saved.body.case.playbook.tasks[taskIndex][key],workingPlan.tasks[taskIndex][key]);
+   assert.equal(saved.body.case.playbook.tasks[taskIndex].done,false);assert.deepEqual(saved.body.reopenedTaskIds,[workingPlan.tasks[taskIndex].id]);
    const checkpoint=(await db.query<{payload:any}>("SELECT payload FROM dis_case_events WHERE case_id=$1 AND payload->>'caseVersion'='4'",[taskCaseId])).rows[0].payload;
    assert.deepEqual(checkpoint.previousPlaybook,workingPlan);assert.deepEqual(checkpoint.playbook,adapted);assert.equal(checkpoint.previousVersion,3);
    await db.close();db=new PGlite(databaseDirectory);await db.waitReady;fixture.__disResearchRouteDb=db;
@@ -266,6 +269,21 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
    assert.deepEqual(reopened.body.case.playbook,adapted);assert.equal(reopened.body.case.version,4);
    assert.deepEqual(reopened.body.history.find((event:any)=>event.payload.caseVersion===4).payload.previousPlaybook,workingPlan);
    assert.equal((await call(owner,api.cases.PATCH,"/api/cases","PATCH",request)).status,409);
+   const reviewed=structuredClone(adapted);reviewed.tasks[taskIndex].done=true;
+   const completion=await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id:taskCaseId,version:4,playbook:reviewed});
+   assert.equal(completion.status,200);assert.equal(completion.body.case.playbook.tasks[taskIndex].done,true);assert.deepEqual(completion.body.reopenedTaskIds,[]);
+   let concurrent=false;
+   fixture.__disResearchAfterTransaction=async statements=>{
+    if(!statements.some(statement=>/END AS playbook FROM dis_casework/.test(statement.text)))return;
+    fixture.__disResearchAfterTransaction=null;
+    await as(owner,()=>db.query("UPDATE dis_casework SET version=version+1 WHERE id=$1",[taskCaseId]));concurrent=true;
+   };
+   try{
+    const lost=await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id:taskCaseId,version:5,playbook:adapted});
+    assert.equal(concurrent,true);assert.equal(lost.status,409);
+    const current=(await db.query<{version:number;playbook:unknown}>("SELECT version,playbook FROM dis_casework WHERE id=$1",[taskCaseId])).rows[0];
+    assert.equal(current.version,6);assert.deepEqual(current.playbook,reviewed);
+   }finally{fixture.__disResearchAfterTransaction=null;}
   });
   await t.test("committed research inputs and history remain available after closing and reopening the database",async()=>{
    await db.close();db=new PGlite(databaseDirectory);await db.waitReady;fixture.__disResearchRouteDb=db;

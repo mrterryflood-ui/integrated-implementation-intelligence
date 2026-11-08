@@ -59,3 +59,18 @@ export function summarizeProgress(p:Playbook){
  const unknown=p.metrics.filter(m=>!m.verified).length;
  return {completed,total:p.tasks.length,percentage:p.tasks.length?Math.round(100*completed/p.tasks.length):0,measuresVerified:accepted,measuresUnverified:unknown,reviewDue:p.nextReview};
 }
+/** A changed task definition needs renewed completion, while its prior state
+ * remains in the server journal. A client cannot carry completion across scope. */
+export function reconcileTaskCompletion(previous:unknown,next:Playbook){
+ const prior=previous&&typeof previous==="object"&&(previous as {tasks?:unknown}).tasks;
+ const tasks=Array.isArray(prior)?prior:[];
+ const reopenedTaskIds:string[]=[];
+ const playbook={...next,tasks:next.tasks.map(task=>{
+  const matches=tasks.filter(value=>value&&typeof value==="object"&&value.id===task.id);
+  const changed=matches.some(value=>["title","why","success"].some(key=>value[key]!==task[key as "title"|"why"|"success"]));
+  if(!changed)return task;
+  if(task.done||matches.some(value=>value.done===true))reopenedTaskIds.push(task.id);
+  return {...task,done:false};
+ })};
+ return {playbook,reopenedTaskIds};
+}

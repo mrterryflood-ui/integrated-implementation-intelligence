@@ -31,10 +31,11 @@ export function researchTaskGuidance(report:unknown,task:WorkItem){
  const current=projectResearchGapTask(gap as EvidenceGap,hasLeads);
  return {sourceGapId,gap:gap as EvidenceGap,current,changed:guidanceKeys.some(key=>task[key]!==current[key])};
 }
-/** Explicit draft operation. Ownership, completion and evidence remain untouched. */
+/** Explicit draft operation. New guidance needs renewed completion; the previous
+ * completion remains in the journal, with ownership and evidence notes retained. */
 export function applyResearchTaskGuidance(task:WorkItem,report:unknown):WorkItem{
  const guidance=researchTaskGuidance(report,task);
- return guidance?.current?{...task,...guidance.current}:task;
+ return guidance?.current?{...task,...guidance.current,...(guidance.changed?{done:false}:{})}:task;
 }
 export function researchTaskReviewNotice(report:unknown,tasks:WorkItem[]):string{
  const comparisons=tasks.map(task=>researchTaskGuidance(report,task)).filter(value=>value!==null);

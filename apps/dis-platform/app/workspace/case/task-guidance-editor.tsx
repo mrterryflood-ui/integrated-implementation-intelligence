@@ -13,8 +13,9 @@ export default function TaskGuidanceEditor({task,index,report,disabled,onChange}
  <h3>Current evidence gap</h3><p>{guidance.gap.problem}</p><p><strong>Next evidence required:</strong> {guidance.gap.nextEvidence}</p>
  <p><strong>Suggested task:</strong> {guidance.current?.title}</p>
  <button type="button" style={{minHeight:44}} disabled={disabled} onClick={()=>onChange(applyResearchTaskGuidance(task,report))}>Use current guidance for task {index+1}</button>
- <p>This changes the draft wording only. It preserves the owner, progress and evidence. Save progress to record the revision.</p>
+ <p>This preserves the owner and evidence notes. Changed guidance reopens the task; earlier completion stays in history. Save progress, then confirm completion against the revised requirements.</p>
  </section>}
+ <p>Changing the title, rationale or acceptance evidence requires renewed completion. Earlier notes do not verify the revised task.</p>
  <label style={{display:"block",marginTop:12}}>Task title
  <input aria-label={"Task title "+(index+1)} style={{display:"block",width:"100%",minHeight:44,boxSizing:"border-box"}} disabled={disabled} maxLength={499} value={task.title} onChange={event=>edit({title:event.target.value})}/></label>
  <label style={{display:"block",marginTop:12}}>Why this task matters
