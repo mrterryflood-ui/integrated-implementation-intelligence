@@ -1,0 +1,67 @@
+{
+  "schema_version": "0.1",
+  "status": "hypothesis_only_not_a_causal_model",
+  "nodes": [
+    "abnormal_screening_signal",
+    "comparability_validated",
+    "accountable_followup",
+    "diagnostic_resolution",
+    "patient_outcome"
+  ],
+  "edges": [
+    {
+      "edge_id": "cw-01",
+      "source": "abnormal_screening_signal",
+      "target": "comparability_validated",
+      "hypothesis": "Reliable semantic matching reduces false or missed signals",
+      "evidence_strength": "mechanistic",
+      "evidence_refs": [
+        "doi:10.1186/s12911-022-01831-8"
+      ],
+      "measure": "fraction of alerts with adjudicated accurate classification",
+      "owner": "research_measurement_lead",
+      "harm_monitor": "false positive and false negative alerts"
+    },
+    {
+      "edge_id": "cw-02",
+      "source": "comparability_validated",
+      "target": "accountable_followup",
+      "hypothesis": "Validated alerts combined with assigned ownership improve follow-up",
+      "evidence_strength": "experimental",
+      "evidence_refs": [
+        "doi:10.1001/jama.2023.18755",
+        "doi:10.7326/ANNALS-24-01885"
+      ],
+      "measure": "follow-up completion within prespecified window",
+      "owner": "implementation_lead",
+      "harm_monitor": "staff burden and inequitable outreach"
+    },
+    {
+      "edge_id": "cw-03",
+      "source": "accountable_followup",
+      "target": "diagnostic_resolution",
+      "hypothesis": "Completed follow-up shortens diagnostic resolution time",
+      "evidence_strength": "mechanistic",
+      "evidence_refs": [
+        "doi:10.1097/PTS.0000000000000718"
+      ],
+      "measure": "days from abnormal test to diagnostic resolution",
+      "owner": "clinical_pathway_owner",
+      "harm_monitor": "unnecessary invasive procedures"
+    },
+    {
+      "edge_id": "cw-04",
+      "source": "diagnostic_resolution",
+      "target": "patient_outcome",
+      "hypothesis": "Timely diagnostic resolution can improve longer-term patient outcomes in defined contexts",
+      "evidence_strength": "observational",
+      "evidence_refs": [
+        "doi:10.1016/j.cgh.2020.09.048",
+        "doi:10.1136/gutjnl-2025-336036"
+      ],
+      "measure": "stage at diagnosis and patient-relevant outcomes with appropriate follow-up",
+      "owner": "clinical_evaluation_lead",
+      "harm_monitor": "selection bias and unequal access"
+    }
+  ]
+}
