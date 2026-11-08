@@ -1,0 +1,77 @@
+{
+  "schema_version": "0.1",
+  "status": "template_not_completed_comparability_assessment",
+  "required_dimensions": [
+    "source_steward",
+    "canonical_url",
+    "source_sha256",
+    "extraction_timestamp",
+    "registry_submission",
+    "geography",
+    "population",
+    "numerator",
+    "denominator",
+    "age_adjustment",
+    "case_definition",
+    "stage_definition",
+    "period",
+    "subgroup_coding",
+    "suppression",
+    "uncertainty",
+    "publication_latency",
+    "decision_owner",
+    "actionability"
+  ],
+  "allowed_statuses": [
+    "PASS",
+    "CONDITIONAL",
+    "FAIL",
+    "UNKNOWN"
+  ],
+  "claim_levels": [
+    "descriptive",
+    "associational",
+    "causal_candidate",
+    "causal_supported"
+  ],
+  "records": [
+    {
+      "comparison_id": "hinds-harris-crc-2019-2023",
+      "sources": [
+        "Hinds County MS",
+        "Harris County TX"
+      ],
+      "condition": "colorectal_cancer",
+      "period": "2019-2023",
+      "all_stage_rate_per_100k": [
+        46.4,
+        38
+      ],
+      "late_stage_rate_per_100k": [
+        29.9,
+        23.9
+      ],
+      "late_stage_share_percent": [
+        63.7,
+        63.4
+      ],
+      "comparison_status": "CONDITIONAL",
+      "claim_level": "descriptive",
+      "reason": "Archived originals independently reproduced; registry footnotes, uncertainty and full definition harmonization require source-by-source adjudication before stronger claims.",
+      "causal_harm_established": false
+    },
+    {
+      "comparison_id": "colorado-candidate-crc-2019-2023",
+      "sources": [
+        "Colorado county candidate",
+        "Hinds/Harris pilot"
+      ],
+      "condition": "colorectal_cancer",
+      "period": "2019-2023",
+      "comparison_status": "UNKNOWN",
+      "claim_level": "descriptive",
+      "reason": "Comparator not prespecified; registry submission and population/stage comparability unresolved.",
+      "causal_harm_established": false
+    }
+  ]
+}
