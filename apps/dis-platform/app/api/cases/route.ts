@@ -2,7 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
 import {buildPlaybook,validatePlaybook,reconcileTaskCompletion} from "../../../lib/decision-playbook";
 import {buildLearningCheckpoint} from "../../../lib/longitudinal-learning";
-import {CASE_REPORT_MAX_CHARS,CASE_PLAYBOOK_MAX_CHARS,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
+import {CASE_REPORT_MAX_CHARS,CASE_PLAYBOOK_MAX_DB_BYTES,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
 import {CASE_HISTORY_DB_PAYLOAD_BYTES,CASE_HISTORY_LIMIT,CASE_HISTORY_PAGE_SQL,CaseHistoryReadError,buildCaseHistoryPageBody,decodeCaseHistoryCursor,type CaseHistoryDatabasePage} from "../../../lib/case-history-pagination";
 import {randomUUID} from "node:crypto";
 import {admitCaseReport} from "../../../lib/research-case-admission";
@@ -73,7 +73,7 @@ export async function PATCH(request:Request){try{
   return Response.json({case:revised[1][0],historyRecorded:true,note:"Research inputs saved as a new revision. Prior evidence and the current action plan are retained; review the plan against the changed inputs."},{headers:{"cache-control":"private, no-store"}});
  }
  if(!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647||!validatePlaybook(input.playbook))return Response.json({error:"Invalid case update"},{status:400});
- const priorPlan=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN char_length(playbook::text)<=${CASE_PLAYBOOK_MAX_CHARS} THEN playbook ELSE NULL END AS playbook FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
+ const priorPlan=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN octet_length(playbook::text)<=${CASE_PLAYBOOK_MAX_DB_BYTES} THEN playbook ELSE NULL END AS playbook FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
  if(!priorPlan[1].length)return Response.json({error:"Version conflict, not found, or access denied. Reload before retrying."},{status:409});
  if(priorPlan[1][0].playbook===null)return Response.json({error:"Stored plan exceeds bounded revision capacity; nothing changed or truncated."},{status:413});
  const reconciled=reconcileTaskCompletion(priorPlan[1][0].playbook,input.playbook);

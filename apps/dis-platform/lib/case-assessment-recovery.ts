@@ -1,8 +1,8 @@
-import {CASE_PLAYBOOK_MAX_CHARS,CASE_REPORT_MAX_CHARS,CasePayloadError,serializeCaseReport} from "./case-payload-capacity";
+import {CASE_PLAYBOOK_MAX_DB_BYTES,CASE_REPORT_MAX_CHARS,CasePayloadError,serializeCaseReport} from "./case-payload-capacity";
 
 /** Restore only a report already archived by this case. This is recovery, not validation. */
 export const CASE_RECOVERY_MAX_REPORT_BYTES=CASE_REPORT_MAX_CHARS*4;
-const maxPlaybookBytes=CASE_PLAYBOOK_MAX_CHARS*4;
+const maxPlaybookBytes=CASE_PLAYBOOK_MAX_DB_BYTES;
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 export type AssessmentRestoreRequest={id:string;version:number;eventId:string};
 export class AssessmentRecoveryError extends Error{

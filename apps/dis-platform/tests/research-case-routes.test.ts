@@ -285,6 +285,35 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
     assert.equal(current.version,6);assert.deepEqual(current.playbook,reviewed);
    }finally{fixture.__disResearchAfterTransaction=null;}
   });
+  await t.test("an admitted near-limit Unicode plan remains editable after JSONB formatting, with bounded legacy reads",async()=>{
+   const created=await call(owner,api.cases.POST,"/api/cases","POST",createBody);assert.equal(created.status,201);
+   const id=created.body.case.id,largePlan=structuredClone(created.body.case.playbook);
+   largePlan.tasks=Array.from({length:35},(_,i)=>({...largePlan.tasks[0],id:"capacity-"+i,title:"T".repeat(160),why:"漢".repeat(2000),success:"S".repeat(700),evidence:"E".repeat(2000),owner:"O".repeat(50)}));
+   largePlan.progressNotes=[];
+   const target=249950;
+   while(JSON.stringify(largePlan).length<target){
+    const remaining=target-JSON.stringify(largePlan).length;if(remaining<=3)break;
+    largePlan.progressNotes.push("N".repeat(Math.min(1000,remaining-(largePlan.progressNotes.length?3:2))));
+   }
+   assert.equal(JSON.stringify(largePlan).length,target);assert.ok(largePlan.progressNotes.length<=80);
+   const saved=await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id,version:1,playbook:largePlan});
+   assert.equal(saved.status,200);assert.equal(saved.body.case.version,2);
+   const stored=(await db.query<{characters:number;bytes:number}>("SELECT char_length(playbook::text) AS characters,octet_length(playbook::text) AS bytes FROM dis_casework WHERE id=$1",[id])).rows[0];
+   assert.ok(stored.characters>250000);assert.ok(stored.bytes>stored.characters);assert.ok(stored.bytes<1000000);
+   const smaller={...largePlan,progressNotes:[]};
+   const shrunk=await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id,version:2,playbook:smaller});
+   assert.equal(shrunk.status,200);assert.equal(shrunk.body.case.version,3);assert.deepEqual(shrunk.body.case.playbook,smaller);
+   const checkpoint=(await db.query<{payload:any}>("SELECT payload FROM dis_case_events WHERE case_id=$1 AND payload->>'caseVersion'='3'",[id])).rows[0].payload;
+   assert.deepEqual(checkpoint.previousPlaybook,largePlan);assert.deepEqual(checkpoint.playbook,smaller);
+   // Oversized legacy content is rejected before transport, without truncation.
+   const hugeLegacy={...smaller,legacyPayload:"L".repeat(1000001)};
+   await db.query("UPDATE dis_casework SET playbook=$2::jsonb WHERE id=$1",[id,JSON.stringify(hugeLegacy)]);
+   const eventCount=(await db.query<{n:number}>("SELECT count(*)::int AS n FROM dis_case_events WHERE case_id=$1",[id])).rows[0].n;
+   assert.equal((await call(owner,api.cases.PATCH,"/api/cases","PATCH",{id,version:3,playbook:smaller})).status,413);
+   const unchanged=(await db.query<{version:number;playbook:unknown}>("SELECT version,playbook FROM dis_casework WHERE id=$1",[id])).rows[0];
+   assert.equal(unchanged.version,3);assert.deepEqual(unchanged.playbook,hugeLegacy);
+   assert.equal((await db.query<{n:number}>("SELECT count(*)::int AS n FROM dis_case_events WHERE case_id=$1",[id])).rows[0].n,eventCount);
+  });
   await t.test("committed research inputs and history remain available after closing and reopening the database",async()=>{
    await db.close();db=new PGlite(databaseDirectory);await db.waitReady;fixture.__disResearchRouteDb=db;
    const loaded=await call(owner,api.cases.GET,"/api/cases?id="+item.id,"GET");

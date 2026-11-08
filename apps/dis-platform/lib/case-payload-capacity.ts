@@ -1,6 +1,9 @@
 import {validatePlaybook} from "./decision-playbook";
 /** Bounded authenticated case transport, not a database durability claim. */
 export const CASE_PLAYBOOK_MAX_CHARS=250000;
+/** Stored JSONB has canonical spacing and UTF-8 bytes unlike compact JS JSON.
+ * Keep the existing recovery allowance separate from the submitted size limit. */
+export const CASE_PLAYBOOK_MAX_DB_BYTES=CASE_PLAYBOOK_MAX_CHARS*4;
 /** Full research provenance plus the existing bounded investigation notes.
  * Shared by create, recheck and client preflight; transport remains 1 MiB. */
 export const CASE_REPORT_MAX_CHARS=128000;
