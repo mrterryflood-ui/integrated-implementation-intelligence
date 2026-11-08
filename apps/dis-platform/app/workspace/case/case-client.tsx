@@ -47,7 +47,7 @@ function CaseEditor({caseId}:{caseId:string}){
  const latest=timeline[timeline.length-1];
  return <main style={{maxWidth:980,margin:"35px auto",padding:22,color:"#152a3a",background:"#fbfcff"}}>
  <Link href="/workspace">← My workspaces</Link><p style={{color:"#687888"}}>DIS decision workspace · Version {item.version}</p><h1>{item.title}</h1><p>{item.question}</p><div style={{background:"#edf4fa",padding:16,borderRadius:10}}><strong>Progress: {completed} of {draft.tasks.length} checkpoints recorded</strong><p>Recorded completion is not proof of effectiveness. Evidence, baseline and outcomes require separate validation.</p></div>
- <SavedCaseEvidence report={item.report} caseId={item.id}/>
+ <SavedCaseEvidence report={item.report} caseId={item.id} caseVersion={item.version} planningDisabled={busy||Boolean(note.trim())||JSON.stringify(draft)!==JSON.stringify(item.playbook)}/>
  {item.report?.deliberation?.synthesis&&<details style={{marginTop:20}}><summary><strong>Read the council's latest preliminary assessment</strong></summary><pre style={{whiteSpace:"pre-wrap",fontFamily:"inherit"}}>{item.report.deliberation.synthesis}</pre></details>}
  <h2>Action plan and guidance</h2><p>Assign owners, collect evidence, and record what you observed. No plan step authorizes external action without your approval.</p>
  {draft.tasks.map((t,i)=><section key={t.id} style={{border:"1px solid #d8e1ea",padding:18,borderRadius:12,margin:"12px 0",background:"white"}}>
