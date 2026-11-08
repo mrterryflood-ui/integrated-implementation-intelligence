@@ -7,8 +7,9 @@ def causal_edge():
     return dict(edge_type="validated_causal_effect", source_id="synthetic-fixture",
                 evidence_grade="verified", disconfirmation_test="negative control",
                 identification_design="randomized comparison", population="defined cohort",
-                effect_estimate=0.2, uncertainty={"lower": -0.1, "upper": 0.5},
-                time_window="12 months", independent_review={"status": "approved", "receipt": "fixture"})
+                effect_estimate=0.2, effect_measure="risk_difference", result="supported", uncertainty={"lower": -0.1, "upper": 0.5},
+                time_window="12 months", independent_review={"status": "approved", "reviewer_id": "synthetic-reviewer",
+                    "artifact_ref": "synthetic://fixture-only", "reviewed_at": "2026-11-08T16:00:00Z"})
 
 
 class ConnectionBoundaryTests(unittest.TestCase):
@@ -22,7 +23,7 @@ class ConnectionBoundaryTests(unittest.TestCase):
             validate_connection(causal_edge() | {"evidence_grade": "not-a-grade"})
 
     def test_incompatible_grade_cannot_be_validated_causal_effect(self):
-        for grade in ("hypothesis", "inferred", "unknown", "contradicted"):
+        for grade in ("supported", "hypothesis", "inferred", "unknown", "contradicted"):
             with self.subTest(grade=grade):
                 with self.assertRaisesRegex(ValueError, "evidence grade"):
                     validate_connection(causal_edge() | {"evidence_grade": grade})
