@@ -58,6 +58,8 @@ node tests/e2e/research-planning-handoff.mjs
 
 These two new component browser fixtures declare their synthetic HTTP/storage boundaries. They exercise create, reopen, revise, conflict, destination/version confirmation, delayed requests, input preservation and client errors. The existing candidate HTTP journeys separately check the rendered application and unsigned private-route denial. A blocked local browser launch is not reported as a pass.
 
+Pull-request CI may execute GitHub's generated merge revision. Retain that revision and its tree alongside the branch head; a candidate-content claim requires the trees to match. The independent review uses the published branch commit directly.
+
 ## Repairs exposed by verification
 
 - Successive conversion of a legacy case could lose older notes; baseline note and source identities are retained across revisions.
@@ -65,6 +67,8 @@ These two new component browser fixtures declare their synthetic HTTP/storage bo
 - An altered report marker could bypass research admission; structural evidence fields and authority claims now also trigger admission checks.
 - Legacy discovery URLs could contain credentials; these are rejected before storage.
 - The initial typed create could retain a curated-only privacy label despite operator inputs; it now records an unverified operator declaration.
+- An uppercase UUID in a saved-case link passed validation but did not match the database's lowercase response. The editor canonicalizes that identity before its request, response check and component lifetime key; the browser fixture uses a UUID with letters so uppercase acceptance is a real regression check.
+- The initial component-browser run could not locate a populated textarea using exact implicit-label text. The fixture now requires the textbox's same exact accessible caption, preserves all state/value assertions, and captures DOM, label associations and runtime errors when a journey fails.
 - Submission withdrawal could recompute a digest after JSONB key ordering and violate the immutable submission trigger; withdrawal preserves body, title and digest while changing visibility/version.
 - Word could emit invalid XML for admitted Unicode control/noncharacters; presentation escapes are disclosed and leave the stored content, JSON and digest unchanged.
 - Seven existing Next route modules exported non-route helpers. Those helpers moved to adjacent modules. Independent source/AST comparison found all moved declarations and HTTP handler bodies unchanged; tests import the helper modules without weakening assertions.

@@ -31,7 +31,8 @@ const SYNTHETIC_PANEL:CounterfactualRequest={
       {year:2022,value:12,denominator:100}]}
 };
 export default function EvidenceActionClient({caseId=""}:{caseId?:string}){
-  return <EvidenceActionEditor key={caseId} caseId={caseId}/>;
+  const canonicalCaseId=caseId.toLowerCase();
+  return <EvidenceActionEditor key={canonicalCaseId} caseId={canonicalCaseId}/>;
 }
 function EvidenceActionEditor({caseId}:{caseId:string}){
   const [workflow,setWorkflow]=useState(emptyResearchWorkflow);
