@@ -25,6 +25,10 @@ EXPECTED = {
     "harris_late": ("Harris County", "7", "23.9 (23.3, 24.6)", "1098", "63.4"),
 }
 
+def _require(condition, message):
+    if not condition:
+        raise AssertionError(message)
+
 def sha256(data):
     return hashlib.sha256(data).hexdigest()
 
@@ -37,31 +41,31 @@ def parse_county_csv(data, county):
 
 def audit(path):
     raw = Path(path).read_bytes()
-    assert sha256(raw) == EXPECTED_ZIP_SHA256, "Artifact ZIP digest changed"
+    _require(sha256(raw) == EXPECTED_ZIP_SHA256, "Artifact ZIP digest changed")
     with zipfile.ZipFile(io.BytesIO(raw)) as z:
         manifest = json.loads(z.read("MANIFEST_SHA256.json"))
-        assert len(manifest) == 18, "Manifest entry count drift"
+        _require(len(manifest) == 18, "Manifest entry count drift")
         for name, digest in manifest.items():
-            assert sha256(z.read(name)) == digest, f"Internal digest mismatch {name}"
+            _require(sha256(z.read(name)) == digest, f"Internal digest mismatch {name}")
         results = {}
         for key, (county, mark, rate, count, share) in EXPECTED.items():
             html_name = f"originals/{key}.html"
             csv_name = f"extracted/{key}_table_0.csv"
             html_source = z.read(html_name).decode("utf-8", "replace")
             row = parse_county_csv(z.read(csv_name), county)
-            assert FOOTNOTE_AGE in html_source, f"Age adjustment note absent: {key}"
-            assert FOOTNOTE_STAGE in html_source, f"Stage coding note absent: {key}"
-            assert "2019-2023" in html_source, f"Report period drift: {key}"
-            assert row["County"].strip() == f"{county}  {mark}", f"Source marker drift: {key}"
-            assert row["Age-Adjusted Incidence Rate † cases per 100,000 (95% Confidence Interval)"] == rate
-            assert row["Average Annual Count"] == count
+            _require(FOOTNOTE_AGE in html_source, f"Age adjustment note absent: {key}")
+            _require(FOOTNOTE_STAGE in html_source, f"Stage coding note absent: {key}")
+            _require("2019-2023" in html_source, f"Report period drift: {key}")
+            _require(row["County"].strip() == f"{county}  {mark}", f"Source marker drift: {key}")
+            _require(row["Age-Adjusted Incidence Rate † cases per 100,000 (95% Confidence Interval)"] == rate, f"Rate drift: {key}")
+            _require(row["Average Annual Count"] == count, f"Count drift: {key}")
             if share is not None:
-                assert row["Percent of Cases with Late Stage"] == share
+                _require(row["Percent of Cases with Late Stage"] == share, f"Case-share drift: {key}")
             stripped = re.sub(r"<[^>]+>", " ", html_source)
             if mark == "2":
-                assert re.search(r"2\s*Source:\s*National Program of Cancer Registries", stripped), "NPCR source note missing"
+                _require(re.search(r"2\s*Source:\s*National Program of Cancer Registries", stripped), "NPCR source note missing")
             else:
-                assert re.search(r"7\s*Source:\s*SEER\s+November 2025 submission", stripped), "SEER source note missing"
+                _require(re.search(r"7\s*Source:\s*SEER\s+November 2025 submission", stripped), "SEER source note missing")
             results[key] = {
                 "rate_ci": rate,
                 "average_annual_count": int(count),

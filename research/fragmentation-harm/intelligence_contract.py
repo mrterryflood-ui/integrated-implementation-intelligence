@@ -6,6 +6,7 @@ Accepted causal metadata remains subject to source verification and human review
 from collections.abc import Mapping
 from datetime import datetime
 from math import isfinite
+import re
 
 EDGE_TYPES = {'observed_association','measurement_dependency','operational_dependency',
               'causal_hypothesis','validated_causal_effect','policy_constraint','transfer_hypothesis'}
@@ -66,6 +67,15 @@ def validate_connection(edge: Mapping):
         if (not isinstance(review,Mapping) or review.get('status')!='approved'
                 or not _text(review.get('reviewer_id')) or not _text(review.get('artifact_ref'))):
             raise ValueError('independent_review requires approved status, reviewer and receipt')
+        reviewed_at=review.get('reviewed_at')
+        if not isinstance(reviewed_at,str) or not re.fullmatch(
+                r'\d{4}-\d{2}-\d{2}T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d'
+                r'(?:\.\d{1,6})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)', reviewed_at):
+            raise ValueError('independent_review requires valid timezone-aware reviewed_at')
+        try:
+            _dt(reviewed_at)
+        except ValueError as exc:
+            raise ValueError('independent_review requires valid timezone-aware reviewed_at') from exc
         if edge.get('result') not in {'supported','null','mixed','contradicted','inconclusive'}:
             raise ValueError('explicit result required; retain null and contradictory findings')
     return True

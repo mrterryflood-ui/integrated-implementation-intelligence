@@ -12,7 +12,8 @@ def connection():
                 population='defined trial population',time_window='published follow-up',effect_estimate=0.0,
                 effect_measure='risk_difference',uncertainty={'lower':-0.1,'upper':0.1},
                 independent_review={'status':'approved','reviewer_id':'synthetic-test-reviewer',
-                                    'artifact_ref':'synthetic://test-only'},result='null')
+                                    'artifact_ref':'synthetic://test-only',
+                                    'reviewed_at':'2026-11-08T16:00:00Z'},result='null')
 
 def event():
     return dict(event_id='software-test',source_id='source',source_version='v1',source_extract_sha256='a'*64,
