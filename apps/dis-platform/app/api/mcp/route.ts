@@ -11,6 +11,7 @@ import {buildResearchProgram} from "../../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../../lib/jackson-cancer-case";
 import {buildImplementationJourney} from "../../../lib/implementation-journey";
 import {proposeRpliceHandoff} from "../../../lib/rplice-implementation-handoff";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../lib/bounded-json-request";
 export const runtime="nodejs";
 const toolList=[
 
@@ -42,7 +43,9 @@ const rpc=(id:unknown,result:unknown)=>({jsonrpc:"2.0",id,result});
 const err=(id:unknown,code:number,message:string)=>({jsonrpc:"2.0",id,error:{code,message}});
 export async function dispatch(body:any){
  const id=body?.id??null;
- if(!body||body.jsonrpc!=="2.0"||typeof body.method!=="string")return err(id,-32600,"Invalid Request");
+ const validId=id===null||(typeof id==="string"&&id.length<=128)||(typeof id==="number"&&Number.isFinite(id)&&Math.abs(id)<=Number.MAX_SAFE_INTEGER);
+ if(!validId)return err(null,-32600,"Invalid Request ID");
+ if(!body||typeof body!=="object"||Array.isArray(body)||body.jsonrpc!=="2.0"||typeof body.method!=="string")return err(id,-32600,"Invalid Request");
  if(body.method==="initialize")return rpc(id,{protocolVersion:"2025-06-18",capabilities:{tools:{listChanged:false}},serverInfo:{name:"dynamic-intelligence-public",version:"0.3.0"}});
  if(body.method==="notifications/initialized")return null;
  if(body.method==="ping")return rpc(id,{});
@@ -50,7 +53,7 @@ export async function dispatch(body:any){
  if(body.method!=="tools/call")return err(id,-32601,"Method not found");
  const name=body.params?.name,args=body.params?.arguments||{},schema=toolList.find(t=>t.name===name)?.inputSchema;
  if(!schema||!args||typeof args!=="object"||Array.isArray(args))return err(id,-32602,"Unknown tool or invalid arguments");
- if(Object.keys(args).some(k=>!(k in schema.properties)))return err(id,-32602,"Unsupported argument");
+ if(Object.keys(args).some(k=>!Object.prototype.hasOwnProperty.call(schema.properties,k)))return err(id,-32602,"Unsupported argument");
  for(const [key,value] of Object.entries(args)){
   const spec=(schema.properties as Record<string,any>)[key];
   if(spec.type==="string"&&(typeof value!=="string"||value.length>1200||(spec.minLength&&value.length<spec.minLength)||(spec.maxLength&&value.length>spec.maxLength)||(spec.enum&&!spec.enum.includes(value))))return err(id,-32602,"Invalid argument "+key);
@@ -98,8 +101,7 @@ export async function dispatch(body:any){
  return rpc(id,{content:[{type:"text",text:JSON.stringify(answer)}],isError:false});
 }
 export async function POST(request:Request){
- if(Number(request.headers.get("content-length")||0)>12000)return NextResponse.json(err(null,-32600,"Payload too large"),{status:413});
- let body:any;try{body=await request.json()}catch{return NextResponse.json(err(null,-32700,"Parse error"))}
+ let body:any;try{body=await readBoundedJsonRequest(request,12000)}catch(e){const status=jsonRequestStatus(e);return NextResponse.json(err(null,status===413?-32600:-32700,status===413?"Payload too large":"Parse error"),{status});}
  const response=await dispatch(body);
  if(response===null)return new Response(null,{status:202});
  return NextResponse.json(response,{headers:{"cache-control":"no-store","x-content-type-options":"nosniff"}});

@@ -7,6 +7,7 @@ import {reviewCounterfactual,reviewCorrectionReceipt,type CounterfactualAudit,
 import type {IntelligenceRecord} from "../../../lib/consultation-research";
 import CrossStudyPanel from "./cross-study-panel";
 import PrivateCaseHandoff from "./private-case-handoff";
+import CalibratedEvidencePanel from "./calibrated-evidence-panel";
 
 const SYNTHETIC_PANEL:CounterfactualRequest={
   condition:"colorectal",construct:"LATE_STAGE_INCIDENCE",unit:"synthetic units, not a cancer rate",
@@ -38,7 +39,8 @@ export default function EvidenceActionClient(){
   const [receiptText,setReceiptText]=useState("");
   const [receiptResult,setReceiptResult]=useState<ReturnType<typeof reviewCorrectionReceipt>|null>(null);
   const [receiptError,setReceiptError]=useState("");
-  const {program,bridge,comparisonSites}=useMemo(()=>colorectalEvidenceAction(leads),[leads]);
+  const [focusIds,setFocusIds]=useState<string[]>([]);
+  const {program,bridge,comparisonSites,decisionBrief,calibratedEvidence,crcMarginalEvidence}=useMemo(()=>colorectalEvidenceAction(leads),[leads]);
   const selected=bridge.corrections.find(x=>x.id===(actionId||bridge.corrections[0]?.id));
   async function search(){
     if(query.trim().length<8||query.trim().length>200){setSearchState("Enter a public research question between 8 and 200 characters.");return;}
@@ -83,19 +85,60 @@ export default function EvidenceActionClient(){
     <nav aria-label="Research navigation" className="rp-back"><Link href="/research-program">Research Studio</Link> · <Link href="/research-program/method-validation">Methods validation</Link> · <Link href="/">DIS home</Link></nav>
     <header className="rp-head">
       <p className="rp-kicker">DIS × RPLICE · Research-to-action connection</p>
-      <h1>What happens between discovering a difference and correcting it?</h1>
-      <p>A linked research workbench for the colorectal comparison: original evidence, distinct measures, missing explanations, credible counterfactuals, intervention fidelity and actual follow-through.</p>
-      <div className="rp-warning"><strong>Research design; not clinical or operational authorization.</strong> Hinds County aggregates are historical (2018–2022), not Jackson city findings. No live Harris or Colorado rates, personal data, RPLICE execution, independent causal effect, verified correction or successful field intervention is claimed.</div>
-      <div className="rp-overview">
+      <h1>What is being missed, and what would improve the outcome?</h1>
+      <p>{decisionBrief.purpose}</p>
+      <div className="rp-warning"><strong>Research calibration; not clinical or operational authorization.</strong> The legacy2018–2022 Hinds reference and separately reproduced2019–2023 Hinds/Harris and national snapshots retain distinct periods and source lineage. County data are not city findings. Personal data, live feeds, RPLICE execution, a causal effect, verified correction or field benefit are not established.</div>
+      <details><summary>Inspect workbench coverage and open evidence gaps</summary><div className="rp-overview">
         <div><span>Measured source rows</span><strong>{bridge.measures.length} curated, not re-extracted</strong></div>
         <div><span>Measurement links</span><strong>{bridge.links.length} requiring interpretation</strong></div>
         <div><span>Research and delivery gaps</span><strong>{bridge.gaps.length} explicitly open</strong></div>
         <div><span>Independent outcome closures</span><strong>{bridge.verifiedCorrections}</strong></div>
-      </div>
+      </div></details>
     </header>
+    <section className="rp-program" aria-labelledby="decision-heading">
+      <h2 id="decision-heading">Start with the decision</h2>
+      <div className="rp-focus"><h3>{decisionBrief.decisionNow}</h3>
+        <p>{decisionBrief.hypothesisRule}</p>
+        <p><strong>Evidence layers:</strong> {decisionBrief.baselineScope}</p>
+        <p><strong>Delta still to establish:</strong> the pathway gap, preventable burden, intervention effect and the platform's added benefit are unknown. {decisionBrief.missingnessRule}</p>
+      </div>
+      <h3>Separate the pathways before combining explanations</h3>
+      <ul>{decisionBrief.pathways.map(p=><li key={p.id}><strong>{p.label}:</strong> {p.question}</li>)}</ul>
+      <fieldset>
+        <legend>Inspect candidate mechanisms together</legend>
+        <p>Choose one or several study focuses. Selection does not establish a cause; mechanisms can interact.</p>
+        {bridge.hypotheses.map(h=><label className="rp-check" key={h.id}>
+          <input type="checkbox" checked={focusIds.includes(h.id)} onChange={e=>setFocusIds(ids=>e.target.checked?[...ids,h.id]:ids.filter(id=>id!==h.id))}/>
+          {program.drivers.find(d=>d.id===h.id)?.label||h.id}
+        </label>)}
+      </fieldset>
+      <div aria-live="polite">
+        {bridge.hypotheses.filter(h=>focusIds.includes(h.id)).map(h=><article className="rp-focus" key={h.id}>
+          <h3>{program.drivers.find(d=>d.id===h.id)?.label||h.id}</h3>
+          <p><strong>Next evidence:</strong> {h.discriminatingTest}</p>
+          <p><strong>Rival:</strong> {h.alternative}</p>
+          <p><strong>Proposed reviewers, awaiting designation:</strong> {h.ownerRole}</p>
+          <p><strong>Exit evidence:</strong> {decisionBrief.workPackages.find(w=>w.hypothesisId===h.id)?.exitEvidence}</p>
+        </article>)}
+      </div>
+      <p className="rp-subtle">Focus choices are local to this view. The case record retains the complete candidate set and decision brief; no focus choice assigns work or records a test result.</p>
+      <details><summary>What would justify implementation and a claim of benefit?</summary>
+        <p>{decisionBrief.implementationCondition}</p><p>{decisionBrief.comparison}</p>
+        <p>{decisionBrief.signalValidation}</p><p>{decisionBrief.benefitEvidence}</p>
+      </details>
+      <details><summary>Who would use or buy this, and why?</summary>
+        <p><strong>Users:</strong> {decisionBrief.value.users}.</p>
+        <p><strong>Potential buyer:</strong> {decisionBrief.value.potentialBuyer}.</p>
+        <p><strong>Beneficiaries:</strong> {decisionBrief.value.beneficiaries}.</p>
+        <p><strong>Decision it supports:</strong> {decisionBrief.value.job}.</p>
+        <p><strong>Current offering:</strong> {decisionBrief.value.currentOffering}.</p>
+        <p><strong>Value to prove:</strong> {decisionBrief.value.proof}.</p>
+      </details>
+    </section>
+    <CalibratedEvidencePanel snapshot={calibratedEvidence} marginals={crcMarginalEvidence}/>
     <section className="rp-program" aria-labelledby="evidence-heading">
       <h2 id="evidence-heading">1. Preserve the measurement, not just the number</h2>
-      <p>The original DIS case supplies Hinds County observations. Values reflect different populations or denominators, and cannot be pooled. The crosswalk is explicit and colorectal-specific.</p>
+      <p>This retained legacy section supplies2018–2022 Hinds observations. Its historical gaps concern that accepted baseline; the newer supplement above adds source-matched all-stage rates and county contrasts in a separate period. Neither layer establishes clinical pathway performance. The crosswalk is explicit and colorectal-specific.</p>
       <div className="rp-table-wrap"><table>
         <thead><tr><th>Construct</th><th>Historical value</th><th>Numerator</th><th>Denominator</th><th>Source</th></tr></thead>
         <tbody>{bridge.measures.map(m=><tr key={m.id}>

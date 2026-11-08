@@ -85,3 +85,23 @@ test("cross-unit and nonnumeric observations cannot be compared arithmetically",
  const events2=[...events,{id:"3",event_type:"CHECKPOINT",created_at:c.recordedAt,payload:c}];
  assert.equal(summarizeMetricChanges(events2).find(x=>x.id===p.metrics[0].id)!.delta,null);
 });
+test("changed construct or source under one ID retains context and suppresses a false trend",()=>{
+ const p=example();p.metrics[0].label="Eligible screening completed";p.metrics[0].observed="60";
+ const a=buildLearningCheckpoint(p,1,at);
+ p.metrics[0]={...p.metrics[0],label:"Abnormal tests with diagnostic resolution",observed:"80",source:"Different cohort register"};
+ const b=buildLearningCheckpoint(p,2,"2026-10-30T10:00:00Z");
+ const events:CaseLearningEvent[]=[a,b].map((payload,i)=>({id:String(i),event_type:"CHECKPOINT",created_at:payload.recordedAt,payload}));
+ const r=summarizeMetricChanges(events)[0];assert.equal(r.delta,null);
+ assert.equal(r.first.label,"Eligible screening completed");assert.equal(r.latest.label,"Abnormal tests with diagnostic resolution");
+ assert.ok(r.comparabilityIssues.includes("MEASURE_DEFINITION_CHANGED_USE_NEW_ID"));
+ assert.ok(r.comparabilityIssues.includes("SOURCE_CHANGED_REQUIRES_HARMONIZATION_REVIEW"));
+});
+test("extreme finite reported values cannot create an infinite longitudinal delta",()=>{
+ const p=example();
+ const a=buildLearningCheckpoint(p,1,at),b=buildLearningCheckpoint(p,2,"2026-10-30T10:00:00Z");
+ // Historical/untrusted event payloads need a finite-result boundary too,
+ // independently of the current editor's 250-character sanitization.
+ a.metrics[0].observed="-"+"1"+"0".repeat(308);b.metrics[0].observed="1"+"0".repeat(308);
+ const r=summarizeMetricChanges([a,b].map((payload,i)=>({id:String(i),event_type:"CHECKPOINT",created_at:payload.recordedAt,payload})))[0];
+ assert.equal(r.delta,null);assert.ok(r.comparabilityIssues.includes("NUMERIC_OVERFLOW"));
+});

@@ -1,5 +1,9 @@
 # Enterprise agent operating contract
 
+## Platform stakeholder acceptance standard — November 7 2026
+
+For every change and output in this repository, load `docs/dis/PLATFORM-STAKEHOLDER-ASSURANCE-STANDARD.md`. Apply software-engineering, medical/cancer-research, statistical, implementation-science, patient/community, operator, accessibility/GIS and interoperability perspectives in proportion to the decision. This is an acceptance lens, not actual ACS/AMA review or endorsement. Audit earlier affected work and remediate inconsistent definitions, clocks, scales, provenance, security or claims; do not silently grandfather a known defect. Pilot calibration remains the immediate priority; longitudinal expansion requires the same standard. CI behavioral regressions, exact-revision review, source/uncertainty disclosure and requirement-specific evidence enforce the applicable technical part; a policy document does not certify the whole platform or clinical benefit.
+
 ## IRON-ENG-001 — mandatory engineering acceptance, November 1, 2026
 
 Before every platform/build change, read `docs/engineering/IRON-ENG-001.md` (v1.0.0). It applies across the portfolio, including every delegated agent. Carry its policy version/digest, exact revision, scope, acceptance tests and evidence into each handoff. Supersede older directions requiring Cursor/Bugbot, incomplete main-branch pushes, or completion without durable end-to-end acceptance. Use provider-independent GitHub/internal audits and Vercel review where configured; skipped/neutral/quota-limited checks are not approval. The supplied receipt-consistency validator is not an authenticity oracle or a substitute for executed tests. Record adoption per repository and agent; do not claim global rollout from this file alone.

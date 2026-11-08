@@ -1,0 +1,168 @@
+name: DIS research code checks and source refresh audit
+on:
+  pull_request:
+    paths:
+      - 'research/three_study_cycle/**'
+      - '.github/workflows/dis-research-evidence-cycle.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: dis-research-evidence-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-reproduction:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install bounded deterministic research dependencies
+        run: python -m pip install 'numpy==2.1.3' 'pandas==2.2.3' 'scipy==1.14.1' 'requests==2.32.3' 'lxml==5.3.0' 'PyMuPDF==1.24.14'
+      - name: Test evidence-readiness classification
+        run: python -m unittest discover -s research/three_study_cycle -p 'test_*.py'
+      - name: Rehearse early-action service pathways without patient data or clinical decisions
+        run: python research/three_study_cycle/early_action_exercise.py --out research-results/early-action
+      - name: Rehearse early-discovery counterfactuals and published RAP transformation
+        run: |
+          python research/three_study_cycle/early_discovery_counterfactual.py --out research-results/counterfactual
+          python research/three_study_cycle/rap_benchmark.py --out research-results/rap
+      - name: Acquire original public data and reproduce survey estimates
+        run: GITHUB_SHA="$(git rev-parse HEAD)" python research/three_study_cycle/acquire.py --out research-results
+      - name: Verify retained source bytes and the checked-out revision
+        if: always()
+        env:
+          DIS_EVIDENCE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python research/three_study_cycle/verify_retained.py research-results
+          python - <<'PY'
+          import json,sys
+          from pathlib import Path
+          r=json.loads(Path('research-results/verified_readiness.json').read_text())
+          invalid=r.get('integrity_rejected_source_ids',[])
+          revision=r.get('revision_binding',{}).get('state')
+          if invalid or revision!='MATCHES_DECLARED_EXPECTATION':
+              print('SOURCE_INTEGRITY_OR_REVISION_NOT_ADMITTED',invalid,revision)
+              sys.exit(1)
+          print('BYTE_CHECK_COMPLETE: source completeness and scientific validity remain separate gates.')
+          PY
+      - name: Reconcile and replay all three studies
+        run: |
+          python research/three_study_cycle/analyze.py --input research-results --out research-results/analysis
+          python research/three_study_cycle/analyze.py --input research-results --out research-results/replay
+          cmp research-results/analysis/results.json research-results/replay/results.json
+          cmp research-results/analysis/national_original_extract.csv research-results/replay/national_original_extract.csv
+          echo 'PASS: identical source snapshot produces byte-identical analytical results.'
+      - name: Audit ranking reversals for rounding and published rate interval overlap
+        run: |
+          python - <<'PY'
+          import sys,pandas as pd
+          sys.path.insert(0,'research/three_study_cycle')
+          from reference_audit import STATES
+          d=pd.read_csv('research-results/analysis/national_original_extract.csv')
+          if d.geography.duplicated().any() or set(d.geography)!=STATES|{'United States','District of Columbia','Puerto Rico'}:
+              raise ValueError('Expected named 50-state frame plus US/DC/Puerto Rico')
+          d.loc[d.geography.isin(STATES)].to_csv('research-results/analysis/national_50_states.csv',index=False)
+          PY
+          python research/three_study_cycle/ranking_sensitivity.py --input research-results/analysis/national_50_states.csv --out research-results/analysis/ranking_sensitivity.json
+      - name: Independently recompute originals and calibrate against NCHS published benchmarks
+        run: python research/three_study_cycle/reference_audit.py research-results --out research-results/reference-audit --compare-analysis research-results/analysis/results.json
+      - name: Exercise rival explanations and retain a reproducible investigation journal
+        run: |
+          python research/three_study_cycle/mechanism_sensitivity.py --input research-results --out research-results/mechanism-tests
+          python research/three_study_cycle/mechanism_sensitivity.py --input research-results --out research-results/mechanism-replay
+          cmp research-results/mechanism-tests/mechanism_sensitivity.json research-results/mechanism-replay/mechanism_sensitivity.json
+          cmp research-results/mechanism-tests/mechanism_journal.json research-results/mechanism-replay/mechanism_journal.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('research-results/mechanism-tests/mechanism_sensitivity.json').read_text())
+          r=json.loads(Path('research-results/analysis/ranking_sensitivity.json').read_text())
+          for c in ('colorectal','lung','breast'):
+              a=m['nci']['ranking_robustness'][c]
+              b=r['conditions'][c]
+              if a['reversed_pairs']!=b['point_reversals'] or a['reversed_pairs_robust_to_both_one_decimal_rounding_envelopes']!=b['rounding_stable_reversals']:
+                  raise ValueError('Raw-source/CSV ranking calculations disagree: '+c)
+          print('PASS: raw-source and existing ranking calculations agree; no causal identification.')
+          PY
+      - name: Print bounded aggregate research result summary
+        if: always()
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p=Path('research-results/analysis/results.json')
+          if not p.exists():
+              print('ANALYSIS_NOT_COMPLETED: inspect analysis_failure.json and source receipts')
+          else:
+              d=json.loads(p.read_text())
+              print('ANALYSIS_STATUS',d['status'])
+              print('COUNTY_2019_2023',json.dumps(d['county_colorectal']['counties'],sort_keys=True))
+              print('COUNTY_CONTRASTS',json.dumps(d['county_colorectal']['contrasts'],sort_keys=True))
+              print('NATIONAL_CANCER_CORRELATIONS',json.dumps(d['national_cancer']['cross_cancer'],sort_keys=True))
+              print('NSFG_OVERALL_CHECKS',json.dumps({k:{'point':v['literal_age_domain']['percent'],'point_matches':v['point_matches_published_rounding'],'se_matches':v['se_matches_published_rounding'],'eligible_age50_sensitivity':v['eligible_age50_sensitivity']['percent']} for k,v in d['nsfg']['estimates'].items()},sort_keys=True))
+              print('NO_CAUSAL_OR_FIELD_EFFECT_VERIFIED')
+          p=Path('research-results/mechanism-tests/mechanism_sensitivity.json')
+          if p.exists():
+              d=json.loads(p.read_text())
+              print('MECHANISM_TEST_STATUS',d['status'])
+              print('ROUNDING_ROBUST_REVERSALS',json.dumps({k:v['reversed_pairs_robust_to_both_one_decimal_rounding_envelopes'] for k,v in d['nci']['ranking_robustness'].items()},sort_keys=True))
+              print('ELIGIBLE_AGE_STANDARDIZED_CONTRASTS',json.dumps({k:v['contrast'] for k,v in d['survey']['standardizations']['primary_equal_three'].items()},sort_keys=True))
+          else:
+              print('MECHANISM_TESTS_NOT_COMPLETED')
+          PY
+      - name: Run bounded synthetic diagnosis-ascertainment stress test
+        run: python research/three_study_cycle/ascertainment_stress.py --out research-results/simulations
+      - name: Compute conditional uncertainty and available survey-group comparisons
+        run: python research/three_study_cycle/review_followup.py --input research-results --out research-results/review-followup
+      - name: Audit availability of a new research workbench refresh candidate
+        id: refresh_candidate
+        run: python research/three_study_cycle/refresh_candidate.py --input research-results --expected-revision "$(git rev-parse HEAD)"
+      - name: Classify acquisition completeness independently from job success
+        if: always()
+        run: python research/three_study_cycle/readiness.py research-results
+      - name: Bind executable code and complete evidence package
+        if: always()
+        run: |
+          mkdir -p research-results/code
+          cp research/three_study_cycle/*.py research-results/code/
+          python -c "import pathlib,hashlib,json; p=pathlib.Path('research-results'); files={str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.rglob('*')) if f.is_file() and f.name!='CYCLE_MANIFEST_SHA256.json'}; (p/'CYCLE_MANIFEST_SHA256.json').write_text(json.dumps(files,indent=2)+'\n')"
+      - name: Preserve exact source bytes, failures, definitions and calculated results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: dis-research-cycle-${{ github.run_id }}
+          path: research-results/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Record evidence boundary
+        if: always()
+        env:
+          DIS_REFRESH_CANDIDATE_OUTCOME: ${{ steps.refresh_candidate.outcome }}
+          DIS_REFRESH_CANDIDATE_EXPECTED_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          echo '## Research checks and source refresh audit' >> "$GITHUB_STEP_SUMMARY"
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          p=Path('research-results/refresh_candidate_status.json')
+          with open(os.environ['GITHUB_STEP_SUMMARY'],'a') as out:
+              if p.exists() and os.environ.get('DIS_REFRESH_CANDIDATE_OUTCOME')=='success':
+                  r=json.loads(p.read_text())
+                  receipt_digest=hashlib.sha256(Path('research-results/acquisition_receipt.json').read_bytes()).hexdigest()
+                  if r['producerRevision']!=os.environ['DIS_REFRESH_CANDIDATE_EXPECTED_SHA'] or r['acquisitionReceiptSha256']!=receipt_digest:
+                      raise ValueError('Refresh summary is not bound to this revision and source attempt')
+                  out.write('\n**Refresh outcome: '+r['state']+'**; '+str(r['byteAdmittedSources'])+'/'+str(r['requiredSources'])+' originals byte-admitted.\n\n')
+                  out.write('Failed source IDs: '+(', '.join(r['failedSourceIds']) or 'none')+'. Accepted application baseline unchanged: '+str(r['baselineSha256Before']==r['baselineSha256After'])+'.\n\n')
+              else:
+                  out.write('\n**Refresh candidate audit did not complete.** Inspect the failed step; no fresh-source success is established.\n\n')
+          PY
+          echo 'Read acquisition_receipt.json, verified_readiness.json, readiness.json, analysis/results.json and mechanism-tests/mechanism_journal.json. Job success, file integrity, source completeness, statistical reproduction, causal identification and beneficiary benefit are distinct.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'early-action/early_action_rehearsal.json contains synthetic workflow checks only; no clinical action or patient outcome is authorized or verified.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'The full source and executable package has a SHA-256 manifest. Archive each accepted cycle outside expiring CI storage before claiming durable research retention.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'No clinical action, private tenant access, external correspondence, paid agent, or production write is performed. No recurring schedule is enabled on this draft branch.' >> "$GITHUB_STEP_SUMMARY"

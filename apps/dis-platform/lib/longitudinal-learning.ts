@@ -57,9 +57,10 @@ export type MetricChange={
  id:string;
  label:string;
  unit:string;
- first:{value:string;recordedAt:string};
- latest:{value:string;recordedAt:string};
+ first:{value:string;recordedAt:string;label:string;unit:string;source:string;observedAt:string};
+ latest:{value:string;recordedAt:string;label:string;unit:string;source:string;observedAt:string};
  delta:number|null;
+ comparabilityIssues:string[];
  observations:number;
  evidenceState:"USER_REPORTED_UNVERIFIED";
 };
@@ -125,25 +126,31 @@ export function asLearningCheckpoints(events:CaseLearningEvent[]):LearningCheckp
   return [p as unknown as LearningCheckpoint];
  }).sort((a,b)=>a.caseVersion-b.caseVersion||a.recordedAt.localeCompare(b.recordedAt));
 }
-/** Only comparable numeric observations with unchanged units can have a numerical delta. */
+/** Preserve original context; changing definitions/sources cannot create a numeric trend. */
 export function summarizeMetricChanges(events:CaseLearningEvent[]):MetricChange[]{
  const timeline=asLearningCheckpoints(events);
- const byMetric=new Map<string,{label:string;unit:string;points:{value:string;recordedAt:string}[]}>();
+ type Point=MetricChange["first"];
+ const byMetric=new Map<string,{label:string;unit:string;source:string;issues:Set<string>;points:Point[]}>();
  for(const entry of timeline){
   for(const m of entry.metrics){
    if(!m||typeof m.id!=="string"||typeof m.observed!=="string"||!m.observed.trim())continue;
    const prior=byMetric.get(m.id);
-   if(!prior){byMetric.set(m.id,{label:m.label,unit:m.unit,points:[{value:m.observed,recordedAt:entry.recordedAt}]});continue;}
-   if(prior.unit!==m.unit){prior.unit="";} // changed unit: no meaningful arithmetic
-   prior.label=m.label;
+   const point:Point={value:m.observed,recordedAt:entry.recordedAt,label:clean(m.label,200),unit:clean(m.unit,80),source:clean(m.source,500),observedAt:clean(m.observedAt,40)};
+   if(!prior){byMetric.set(m.id,{label:point.label,unit:point.unit,source:point.source,issues:new Set(),points:[point]});continue;}
+   if(prior.unit!==point.unit)prior.issues.add("UNIT_CHANGED");
+   if(prior.label!==point.label)prior.issues.add("MEASURE_DEFINITION_CHANGED_USE_NEW_ID");
+   if(prior.source!==point.source)prior.issues.add("SOURCE_CHANGED_REQUIRES_HARMONIZATION_REVIEW");
    const last=prior.points[prior.points.length-1];
-   if(last.value!==m.observed)prior.points.push({value:m.observed,recordedAt:entry.recordedAt});
+   if(last.value!==point.value||last.label!==point.label||last.unit!==point.unit||last.source!==point.source||last.observedAt!==point.observedAt)prior.points.push(point);
   }
  }
  return [...byMetric.entries()].map(([id,v])=>{
   const first=v.points[0],latest=v.points[v.points.length-1],a=numeric(first.value),b=numeric(latest.value);
+  const difference=a!==null&&b!==null?b-a:null;
+  if(difference!==null&&!Number.isFinite(difference))v.issues.add("NUMERIC_OVERFLOW");
   return {id,label:v.label,unit:v.unit,first,latest,
-   delta:v.unit&&a!==null&&b!==null?Math.round((b-a)*10000)/10000:null,
+   delta:v.unit&&v.issues.size===0&&difference!==null&&Number.isFinite(difference)?Number(difference.toFixed(4)):null,
+   comparabilityIssues:[...v.issues],
    observations:v.points.length,evidenceState:"USER_REPORTED_UNVERIFIED" as const};
  });
 }

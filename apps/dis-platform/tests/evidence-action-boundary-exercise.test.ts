@@ -118,7 +118,9 @@ test("finite input overflow cannot yield a passing NaN or Infinity DID",()=>{
  const p=panel();for(const arm of [p.treated,p.comparator])for(const row of arm.observations)row.value=Number.MAX_VALUE;
  const out=reviewCounterfactual(p);
  assert.equal(out.gate,"INSUFFICIENT_FOR_CAUSAL_ESTIMATE");assert.equal(out.rawDifferenceInDifferences,null);
- assert.match(out.gaps.join(" "),/overflow|non-finite/);
+ // Stable uppercase diagnostic codes from the pretrend module retain the
+ // original overflow-rejection requirement; casing is not a safety criterion.
+ assert.match(out.gaps.join(" "),/overflow|non-finite/i);
 });
 test("a valid synthetic DID remains computable but never gains causal authority",()=>{
  const out=reviewCounterfactual(panel());

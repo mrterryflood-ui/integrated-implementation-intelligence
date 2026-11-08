@@ -1,0 +1,41 @@
+{
+  "schema": "dis-research-pathway-dictionary-v1",
+  "version": "1.0",
+  "status": "RESEARCH_SPECIFICATION_NOT_A_DEPLOYED_CLINICAL_SCHEMA",
+  "mission": "Connect a source-grounded signal to appropriate completed action and measured benefit while retaining local context and uncertainty",
+  "pathways": ["ASYMPTOMATIC_RISK_AND_PREVENTION", "SYMPTOM_OR_ABNORMAL_RESULT_EVALUATION", "COMMUNITY_REACH_AND_ACCESS"],
+  "fields": {
+    "subject_key": {"meaning": "Authorized pseudonymous research key; no identity inferred from aggregate data", "missing": "Do not fabricate an individual record"},
+    "condition": {"meaning": "Source-specific condition and definition version"},
+    "population_eligibility": {"meaning": "Target population, inclusion/exclusion, reference event and age definition"},
+    "source_record": {"meaning": "Original publisher, source version, permitted use, exact input hash and source observation identifier"},
+    "evidence_class": {"values": ["SOURCE_REPORTED", "REPRODUCED", "SYNTHESIZED", "HYPOTHESIS", "SYNTHETIC", "INDEPENDENTLY_REVIEWED", "OUTCOME_MEASURED"]},
+    "geography": {"meaning": "Observed unit, identifier, period and optional authorized versioned crosswalk", "units": ["INDIVIDUAL", "HOUSEHOLD", "SERVICE_AREA", "ZIP_POSTAL", "CENSUS_ZCTA", "TRACT", "COUNTY", "STATE", "NATIONAL"], "missing": "No geographic downscaling without evidence"},
+    "symptom_onset_recalled_at": {"meaning": "Patient-reported onset and date of recall retained separately", "clock": "RECALLED_NOT_OBSERVED"},
+    "first_recorded_signal_at": {"meaning": "First captured relevant signal; not asserted first-ever onset/contact"},
+    "first_actionable_information_at": {"meaning": "Contemporaneously available information adjudicated as actionable under the condition and setting protocol", "authority": "Qualified reviewer, not retrospective diagnosis alone"},
+    "recognition_at": {"meaning": "Recorded acknowledgment by the responsible clinical workflow"},
+    "planned_action": {"meaning": "Clinician-approved response including appropriate observation, evaluation or shared-decision management"},
+    "review_due_at": {"meaning": "Indication-specific agreed reassessment date; no synthetic exercise date becomes clinical policy"},
+    "completed_action_at": {"meaning": "Evidence that the appropriate response occurred; order, message and attendance alone do not establish resolution"},
+    "completion_evidence": {"meaning": "Authorized result/record, source, reviewer and exact version"},
+    "followup_interval_days": {"meaning": "Elapsed time from specified actionable event to verified appropriate completion", "unit": "days", "censoring": "Retain unresolved, loss, alternative disposition, declined care and time horizon; do not replace with zero"},
+    "abnormal_non_colonoscopy_test_followup": {"meaning": "Separate abnormal screening-test pathway from symptomatic evaluation; retain modality, indication, confirmation and clinical target source", "target_days": null, "target_status": "SOURCE_AND_CLINICAL_REVIEW_REQUIRED"},
+    "patient_choice": {"meaning": "Accepted, declined, paused or unknown with authorized reason and return plan; no automatic noncompliance label"},
+    "sdoh_context": {"meaning": "Temporally appropriate authorized affordability, coverage, transport, language, housing, food, work/care burden, trust, exposure and capacity evidence; individual and area-level values remain distinct"},
+    "outcomes": {"meaning": "Condition-specific benefit, function, harms, equity, cost and sustainment with source and observation period"},
+    "knowledge_state": {"meaning": "Known-at-decision evidence, alternatives, assumptions, uncertainty and subsequent revision; do not overwrite history"}
+  },
+  "crc_signal_concept_families": ["Rectal bleeding", "Abdominal pain", "Diarrhea", "Iron-deficiency anemia"],
+  "code_mapping_status": "CONCEPTS_ONLY_NOT_VALIDATED_ICD_SNOMED_OMOP_VALUE_SETS",
+  "code_mapping_acceptance": "Retain original publication code list, vocabulary version and permitted use; review inclusions/exclusions, negate/history context and clinician-adjudicated performance before use",
+  "independent_confidence_dimensions": ["SOURCE_FIDELITY", "STATISTICAL_PRECISION", "CAUSAL_CREDIBILITY", "CLINICAL_APPROPRIATENESS", "IMPLEMENTATION_RELIABILITY", "TRANSPORTABILITY", "EQUITY"],
+  "public_source_references": [
+    "https://statecancerprofiles.cancer.gov/help/about/incidence_rates.html",
+    "https://www.cdc.gov/nchs/data/hestat/hestat121.htm",
+    "https://www.cdc.gov/nchs/data/nsfg/recodespecs/2022-2023-NSFG-FemResp-RecodeSpecs.pdf",
+    "https://jamanetwork.com/journals/jamanetworkopen/fullarticle/2810996"
+  ],
+  "clinical_use_authorized": false,
+  "api_or_mcp_endpoint_registered_by_this_file": false
+}

@@ -3,6 +3,10 @@
  */
 import type {ResearchProgram} from "./research-program";
 import type {EvidenceActionReview,EvidenceGap} from "./evidence-action-bridge";
+import {buildColorectalDecisionBrief} from "./evidence-action-colorectal";
+import {getCalibrationSupplement} from "./pilot-calibration-supplement";
+import {getCrcMarginals} from "./crc-marginal-supplement";
+import {serializeCaseReport} from "./case-payload-capacity";
 export const EVIDENCE_ACTION_HANDOFF_VERSION="dis-evidence-action-case-v1" as const;
 export type InvestigationNote={id:string;kind:"SOURCE"|"HYPOTHESIS"|"COUNTERFACTUAL"|"CORRECTION"|"OUTCOME"|"REOPEN";text:string;sourceUrl:string;gapIds:string[];origin:"PUBLIC_SOURCE_TRANSCRIPTION"|"SYNTHETIC"};
 export type InvestigationSupplement={publicAggregateConfirmed:boolean;additionalGaps:EvidenceGap[];notes:InvestigationNote[]};
@@ -39,7 +43,7 @@ export function buildEvidenceActionCaseHandoff(program:ResearchProgram,review:Ev
  // gaps in the full report even when only 28 fit in the editable task projection.
  const tasks=gaps.slice(0,28).map(g=>({title:("Investigate: "+g.problem).slice(0,175),why:("Evidence gap "+g.id+". Proposed review owner: "+g.ownerRole+".").slice(0,340),success:g.nextEvidence.slice(0,340)}));
  const clinical=program.site==="colorectal"?[
-  {label:"All-stage invasive disease incidence",baseline:"Not established",target:"Site-specific, source-aligned and lag-aware",unit:"cases per 100,000"},
+  {label:"All-stage invasive disease incidence",baseline:"Implementation cohort not measured; separately retained2019–2023 registry context available",target:"Site-specific, source-aligned and lag-aware",unit:"cases per 100,000"},
   {label:"Screening uptake in eligible population",baseline:"Not measured locally",target:"Site-defined before pilot",unit:"%"},
   {label:"Abnormal-result diagnostic resolution",baseline:"Not measured locally",target:"Site-defined before pilot",unit:"%"}
  ]:[];
@@ -52,11 +56,12 @@ export function buildEvidenceActionCaseHandoff(program:ResearchProgram,review:Ev
  ];
  const title=(program.site+" evidence-to-action | "+program.population.targetName).slice(0,150);
  const question=(program.question+" [Internal evidence-to-action study; comparisons not yet validated]").slice(0,3000);
- const report={state:"RESEARCH_GAP_SCAFFOLD_UNVERIFIED",schemaVersion:EVIDENCE_ACTION_HANDOFF_VERSION,revision:"2026-11-07-full-investigation",sourceState:"CURATED_PUBLIC_REFERENCE_NOT_INDEPENDENTLY_REEXTRACTED",caseId:review.caseId,geography:program.population.proxyUnit,condition:program.site,
+ const report={state:"RESEARCH_GAP_SCAFFOLD_UNVERIFIED",schemaVersion:EVIDENCE_ACTION_HANDOFF_VERSION,revision:"2026-11-08-calibrated-and-marginal-evidence",sourceState:program.site==="colorectal"?"CURATED_LEGACY_BASELINE_AND_SEPARATE_RAW_REPLAYED_PUBLIC_SUPPLEMENTS":"CURATED_PUBLIC_REFERENCE_NOT_INDEPENDENTLY_REEXTRACTED",caseId:review.caseId,geography:program.population.proxyUnit,condition:program.site,
+  ...(program.site==="colorectal"?{decisionBrief:buildColorectalDecisionBrief(program,{...review,gaps}),calibratedEvidence:getCalibrationSupplement(),crcMarginalEvidence:getCrcMarginals()}:{}),
   sourceIndicators:review.measures.map(x=>({id:x.id,construct:x.construct,value:x.indicator.value,unit:x.indicator.unit,period:x.indicator.period,sourceUrl:x.indicator.sourceUrl,denominator:x.indicator.denominatorDefinition})),
   gapIDs:gaps.map(g=>g.id),gapLedger:gaps,taskProjection:{editableCount:tasks.length,totalGapCount:gaps.length,unmaterializedGapIDs:gaps.slice(28).map(g=>g.id),rule:"All gap definitions are retained; edit projection is bounded, not silently complete."},
   investigation:{measures:review.measures,links:review.links,literature:review.literature,hypotheses:review.hypotheses,corrections:review.corrections,notes:extra?.notes||[],status:"DECLARED_RECORD_NOT_AUTHENTICATED",privacyStatus:extra?"OPERATOR_DECLARED_PUBLIC_NOT_PRIVACY_CERTIFIED":"CURATED_PUBLIC_BASELINE",reopenRule:"A changed source version, denominator, population, hypothesis or adverse signal requires a new review; preserve prior baseline and dissent."},
   actionPlan:{status:"RESEARCH_GAP_SCAFFOLD_UNVERIFIED",tasks,metrics},independentOutcomeVerified:false,causalEffectEstablished:false,interventionAuthorized:false,externalCommunicationAuthorized:false,noPatientData:extra?null:true};
- if(JSON.stringify(report).length>64000)throw Error("Complete investigation exceeds case capacity; split into linked review cases. Nothing saved or truncated.");
+ serializeCaseReport(report);
  return structuredClone({title,question,report});
 }

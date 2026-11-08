@@ -2,6 +2,7 @@ import {auth} from "@clerk/nextjs/server";
 import {productionIdentityBlocked} from "../../../../lib/release-gates";
 import {research} from "../../../../lib/council-runtime";
 import {looksLikePrivateRecord} from "../../../../lib/answer-release-policy";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
 
 export const runtime="nodejs";
 export const maxDuration=15;
@@ -23,7 +24,7 @@ export async function POST(request:Request){
       return Response.json({error:"Request origin mismatch."},{status:403,headers});}
     catch{return Response.json({error:"Invalid request origin."},{status:403,headers});}
   }
-  const body=await request.json().catch(()=>null);
+  let body:any;try{body=await readBoundedJsonRequest(request,2000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e),headers});}
   const query=body&&typeof body==="object"&&typeof body.query==="string"?body.query.trim():"";
   if(query.length<8||query.length>200||looksLikePrivateRecord(query))
     return Response.json({error:"Use an 8–200 character public research question, with no private or patient information."},{status:400,headers});

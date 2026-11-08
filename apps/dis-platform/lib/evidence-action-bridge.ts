@@ -10,6 +10,7 @@ import type {ResearchProgram} from "./research-program";
 import type {IntelligenceRecord} from "./consultation-research";
 import {PUBLIC_MEASUREMENT_KEYS,CORRECTION_RECEIPT_KEYS,objectRecord,credentialFreeHttps,
  scaleViolation,strictTimestamp,hasOnlyKeys} from "./evidence-action-input-integrity";
+import {diagnosePretrends,type PretrendDiagnostics} from "./evidence-action-pretrend";
 const colorectalRequirements=[
  {id:"all-stage-incidence",construct:"DISEASE_INCIDENCE",problem:"Source-matched all-stage colorectal incidence is not available among accepted measurements."},
  {id:"screening-denominator",construct:"SCREENING_COMPLETION",problem:"Eligibility-based screening completion is not available among accepted measurements."},
@@ -34,19 +35,25 @@ export function reviewEvidenceToAction(program:ResearchProgram,bindings:readonly
  return out;
 }
 /** Text fields remain declarations, not independent scientific proof. */
-export function reviewCounterfactual(x:CounterfactualRequest):CounterfactualAudit{
- const fail=(reason:string):CounterfactualAudit=>({gate:"INSUFFICIENT_FOR_CAUSAL_ESTIMATE",gaps:[reason],matchedPreYears:[],matchedPostYears:[],rawDifferenceInDifferences:null,interpretation:"DESCRIPTIVE_ARITHMETIC_ONLY_NOT_CAUSAL",causalEffectEstablished:false});
+export function reviewCounterfactual(x:CounterfactualRequest):CounterfactualAudit & {pretrendDiagnostics:PretrendDiagnostics}{
+ const diagnostics=diagnosePretrends(x);
+ const fail=(reason:string):CounterfactualAudit & {pretrendDiagnostics:PretrendDiagnostics}=>({pretrendDiagnostics:diagnostics,gate:"INSUFFICIENT_FOR_CAUSAL_ESTIMATE",gaps:[reason,...diagnostics.errors],matchedPreYears:[],matchedPostYears:[],rawDifferenceInDifferences:null,interpretation:"DESCRIPTIVE_ARITHMETIC_ONLY_NOT_CAUSAL",causalEffectEstablished:false});
  if(!objectRecord(x))return fail("A defined aggregate panel is required.");
  for(const arm of [x.treated,x.comparator]){
   if(!arm||typeof arm.site!=="string"||typeof arm.populationFrame!=="string"||!Array.isArray(arm.observations))return fail("Malformed site, population or observation structure.");
   if(arm.observations.length>200)return fail("Series exceeds bounded input.");
   for(const p of arm.observations){if(p&&scaleViolation(p.value,x.unit))return fail("Values fall outside the stated measurement scale.");}
  }
- const out=coreCounterfactual(x);
+ const out={...coreCounterfactual(x),pretrendDiagnostics:diagnostics};
+ if(diagnostics.state==="INVALID_PANEL")return {...out,gate:"INSUFFICIENT_FOR_CAUSAL_ESTIMATE",rawDifferenceInDifferences:null,gaps:[...out.gaps,...diagnostics.errors]};
  if(out.gate==="CANDIDATE_FOR_INDEPENDENT_DESIGN_REVIEW"&&
     (out.rawDifferenceInDifferences===null||!Number.isFinite(out.rawDifferenceInDifferences)))
   return {...out,gate:"INSUFFICIENT_FOR_CAUSAL_ESTIMATE",rawDifferenceInDifferences:null,
    gaps:[...out.gaps,"Arithmetic overflow or non-finite result: investigate scale before interpreting this panel."]};
+ if(diagnostics.state==="DESCRIPTIVE_DIAGNOSTICS_ONLY"&&diagnostics.warnings.some(w=>w.startsWith("OBSERVED_PREPERIOD_GAP_VARIES"))){
+  out.gaps.push("Observed preperiod slopes: treated "+diagnostics.treatedSlopePerYear+", comparison "+diagnostics.comparatorSlopePerYear+", gap "+diagnostics.gapSlopePerYear+" "+diagnostics.unit+" per year. These are descriptive diagnostics, not a statistical test or acceptance threshold.");
+  out.gaps.push("Observed preperiod gap range: "+diagnostics.gapRange+"; linear-gap residual RMS: "+diagnostics.linearGapResidualRms+". Review magnitude, uncertainty, nonlinear patterns, competing changes and postperiod sensitivity before causal inference.");
+ }
  return out;
 }
 /** Strict public-schema projection; conflicting IDs are quarantined, identical repeats count once. */
