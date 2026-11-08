@@ -72,6 +72,7 @@ Pull-request CI may execute GitHub's generated merge revision. Retain that revis
 - Submission withdrawal could recompute a digest after JSONB key ordering and violate the immutable submission trigger; withdrawal preserves body, title and digest while changing visibility/version.
 - Word could emit invalid XML for admitted Unicode control/noncharacters; presentation escapes are disclosed and leave the stored content, JSON and digest unchanged.
 - Rendered Word review found a section heading separated from its content at a page break. All exported headings now explicitly stay with their following content, with a handler-level paragraph-property regression check.
+- The same review found an empty trailing source heading for records with no linked organizational sources. Readable exports now state that absence explicitly; linked-source exports retain their content without the empty-state notice.
 - Seven existing Next route modules exported non-route helpers. Those helpers moved to adjacent modules. Independent source/AST comparison found all moved declarations and HTTP handler bodies unchanged; tests import the helper modules without weakening assertions.
 
 ## Acceptance and rollback

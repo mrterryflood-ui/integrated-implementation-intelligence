@@ -156,11 +156,13 @@ test('actual service, SQL/RLS and export handler retain research through private
    const headings=[...document.matchAll(/<w:p\b[^>]*>([\s\S]*?)<\/w:p>/g)].filter(match=>/<w:pStyle w:val="(?:Title|Heading[12])"\s*\/>/.test(match[1]));
    assert.ok(headings.length>20,'The complete planning and research section headings are present');
    for(const heading of headings)assert.match(heading[1],/<w:keepNext\s*\/>/,'Every heading stays with its following content');
+   assert.match(content,/No linked organizational source records were attached to this saved record\./);
+   assert.match(document,/No linked organizational source records were attached to this saved record\./);
   });
   await t.test('actual reconciled export retains linked snapshot; inaccessible and stale exports fail',async()=>{
    state.actor='alice';
    const json=await exported(proposal,'json');assert.equal(json.status,200);const body=await json.json();assert.deepEqual(body.sources[0].body.researchSnapshot,draft.body.researchSnapshot);
-   const markdown=await exported(proposal,'md');assert.equal(markdown.status,200);assert.match(await markdown.text(),/SYNTHETIC outcome marker/);
+   const markdown=await exported(proposal,'md');assert.equal(markdown.status,200);const text=await markdown.text();assert.match(text,/SYNTHETIC outcome marker/);assert.doesNotMatch(text,/No linked organizational source records were attached/);
    assert.equal((await exported(edited,'json')).status,404);
    assert.equal((await exported({...proposal,version:proposal.version+1},'json')).status,409);
   });

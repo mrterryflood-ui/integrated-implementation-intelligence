@@ -20,7 +20,8 @@ export async function GET(req:Request){try{
   catch(error){if(error instanceof ResearchPlanningError)throw new OrganizationError(error.message,error.status);throw error;}
  }
  const receipt=`Record ${data.record.id} | version ${version} | ${data.record.kind} | fingerprint ${data.record.digest}`;
- const markdown=['# '+data.record.title,receipt,notice,...sections.flatMap(s=>['## '+s.title,s.text]),...researchSections.flatMap(s=>['## '+s.title,s.text]),'## Retained source snapshots',...data.sources.map(s=>`### ${s.title}\nRecord ${s.id}, version ${s.version}, fingerprint ${s.digest}\n${JSON.stringify(s.body,null,2)}`)].join('\n\n');
+ const emptySourceNotice='No linked organizational source records were attached to this saved record.';
+ const markdown=['# '+data.record.title,receipt,notice,...sections.flatMap(s=>['## '+s.title,s.text]),...researchSections.flatMap(s=>['## '+s.title,s.text]),'## Retained source snapshots',...(data.sources.length?data.sources.map(s=>`### ${s.title}\nRecord ${s.id}, version ${s.version}, fingerprint ${s.digest}\n${JSON.stringify(s.body,null,2)}`):[emptySourceNotice])].join('\n\n');
  if(format!=='json'&&Buffer.byteLength(markdown)>2*1024*1024)throw new OrganizationError('The readable export exceeds the bounded document size; select a focused report',413);
  let body:BodyInit,media:string;
  if(format==='json'){body=JSON.stringify({...data,notice},null,2);media='application/json';}
@@ -28,7 +29,7 @@ export async function GET(req:Request){try{
  else {
   const paragraph=(text:string,heading?:(typeof HeadingLevel)[keyof typeof HeadingLevel])=>new Paragraph({text:wordPresentationText(text),...(heading?{heading,keepNext:true}:{})});
   const wordNotice=notice+(wordPresentationText(markdown)!==markdown?' Word presentation note: characters that XML cannot represent are displayed as visible Unicode escape sequences (for example, \\uFFFE). The stored content, JSON download and source fingerprint are unchanged.':'');
-  const children=[paragraph(data.record.title,HeadingLevel.TITLE),paragraph(receipt),paragraph(wordNotice),...[...sections,...researchSections].flatMap(s=>[paragraph(s.title,HeadingLevel.HEADING_1),...s.text.split('\n').map(t=>paragraph(t))]),paragraph('Retained source snapshots',HeadingLevel.HEADING_1),...data.sources.flatMap(s=>[paragraph(s.title,HeadingLevel.HEADING_2),paragraph(`Record ${s.id}; version ${s.version}; ${s.digest}`),...JSON.stringify(s.body,null,2).split('\n').map(t=>paragraph(t))])];
+  const children=[paragraph(data.record.title,HeadingLevel.TITLE),paragraph(receipt),paragraph(wordNotice),...[...sections,...researchSections].flatMap(s=>[paragraph(s.title,HeadingLevel.HEADING_1),...s.text.split('\n').map(t=>paragraph(t))]),paragraph('Retained source snapshots',HeadingLevel.HEADING_1),...(data.sources.length?data.sources.flatMap(s=>[paragraph(s.title,HeadingLevel.HEADING_2),paragraph(`Record ${s.id}; version ${s.version}; ${s.digest}`),...JSON.stringify(s.body,null,2).split('\n').map(t=>paragraph(t))]):[paragraph(emptySourceNotice)])];
   body=new Uint8Array(await Packer.toBuffer(new Document({sections:[{children}]})));media='application/vnd.openxmlformats-officedocument.wordprocessingml.document';
  }
  return new Response(body,{headers:{'Content-Type':media,'Content-Disposition':`attachment; filename="DIS-record-${id}-v${version}.${format}"`,'Cache-Control':'private, no-store','X-Content-Type-Options':'nosniff'}});
