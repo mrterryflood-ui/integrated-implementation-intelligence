@@ -1,5 +1,6 @@
 import {createHash,randomUUID} from 'node:crypto';
 import {normalizeReport,reconciliationInput,planDigest,approvalStatus,type PlanningReport,type Governance,PLANNING_SECTIONS} from '../planning-contract';
+import {buildResearchPlanningSnapshot,researchPlanningReport,validateResearchPlanningSnapshot,ResearchPlanningError} from '../research-planning-handoff';
 import type {Queryable} from './database';
 export class OrganizationError extends Error {constructor(message:string,public status=400){super(message)}}
 export const digest=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -67,6 +68,27 @@ export async function actOnOrganization(db:Queryable,actor:string,input:any){
   await db.query("INSERT INTO dis_organization_requests(organization_id,subject_id,display_name,note) VALUES($1,$2,$3,$4) ON CONFLICT DO NOTHING",[orgId,actor,text(input.displayName,160,true),text(input.note||'',1000)]);return{requested:true,accessGranted:false};
  }
  const member=await lockOrganization(db,orgId,actor);
+ if(input.action==='import-research-case'){
+  if(Object.keys(input).some(key=>!['action','organizationId','caseId','caseVersion','confirmedPublicAggregate'].includes(key)))throw new OrganizationError('The handoff accepts a saved case reference, not replacement case content');
+  const caseId=uuid(input.caseId);
+  if(typeof input.caseVersion!=='number'||!Number.isSafeInteger(input.caseVersion)||input.caseVersion<1)throw new OrganizationError('Choose an exact saved case version');
+  if(input.confirmedPublicAggregate!==true)throw new OrganizationError('Review the saved question, assessment and action record, and confirm that the complete copy contains only public aggregate or synthetic research');
+  // Existing subject/workspace RLS remains in force. The explicit owner predicates
+  // also make the intended private-case boundary visible at this transfer point.
+  // Holding the case read lock binds this transaction to one committed revision.
+  const source=(await db.query('SELECT c.id,c.workspace_id,c.version,c.title,c.question,c.report,c.playbook FROM dis_casework c JOIN dis_workspaces w ON w.id=c.workspace_id WHERE c.id=$1 AND c.owner_subject=$2 AND w.owner_subject=$2 FOR SHARE OF c',[caseId,actor])).rows[0];
+  if(!source)throw new OrganizationError('Saved research case unavailable to this account',404);
+  if(source.version!==input.caseVersion)throw new OrganizationError('This research case changed. Review its current saved version before copying it to planning.',409);
+  try{
+   const researchSnapshot=buildResearchPlanningSnapshot(source);
+   // The existing organization transaction lock serializes ambiguous retries.
+   // Reuse an already edited private draft without replacing its planning text.
+   const prior=(await db.query("SELECT * FROM dis_organization_records WHERE organization_id=$1 AND owner_subject=$2 AND kind='draft' AND visibility='private' AND body->'researchSnapshot'->'source'->>'caseId'=$3 AND body->'researchSnapshot'->'source'->>'caseVersion'=$4 AND body->'researchSnapshot'->>'sourceDigest'=$5 ORDER BY created_at,id LIMIT 1",[orgId,actor,caseId,String(source.version),researchSnapshot.sourceDigest])).rows[0];
+   if(prior){validateResearchPlanningSnapshot(prior.body.researchSnapshot);return prior;}
+   const report=researchPlanningReport(researchSnapshot);
+   return await insertRecord(db,orgId,actor,'draft',report.title,{report,researchSnapshot,baseBaselineId:null,baseReference:null,originalUploadId:null,sourceIds:[]});
+  }catch(error){if(error instanceof ResearchPlanningError)throw new OrganizationError(error.message,error.status);throw error;}
+ }
  if(input.action==='admit-member'){
   if(member.role!=='admin')throw new OrganizationError('Membership administration required',403);
   const subject=text(input.subject,200,true),role=input.role||'contributor';if(!['contributor','facilitator','viewer'].includes(role))throw new OrganizationError('This action cannot confer administration or decision authority');
@@ -89,11 +111,15 @@ export async function actOnOrganization(db:Queryable,actor:string,input:any){
  if(input.action==='submit'){
   const row=await getRecord(db,orgId,uuid(input.id));if(row.kind!=='draft'||row.owner_subject!==actor)throw new OrganizationError('Only the draft author can submit it',403);expectVersion(row,input.version);
   const report=normalizeReport(row.body.report);if([report.sections.question,report.sections.recommendation].some(value=>!value.trim()||/^(UNKNOWN|NOT SUPPLIED|\[.*\])$/i.test(value.trim())))throw new OrganizationError('Add a question and recommendation before submitting');
-  return insertRecord(db,orgId,actor,'submission',report.title,{report,draftId:row.id,draftVersion:row.version,baseBaselineId:row.body.baseBaselineId,baseReference:row.body.baseReference,contributors:[actor],sourceIds:[]},'organization');
+  let researchSnapshot;try{if(row.body.researchSnapshot!==undefined)researchSnapshot=validateResearchPlanningSnapshot(row.body.researchSnapshot);}catch(error){if(error instanceof ResearchPlanningError)throw new OrganizationError(error.message,error.status);throw error;}
+  return insertRecord(db,orgId,actor,'submission',report.title,{report,...(researchSnapshot?{researchSnapshot}:{}),draftId:row.id,draftVersion:row.version,baseBaselineId:row.body.baseBaselineId,baseReference:row.body.baseReference,contributors:[actor],sourceIds:[]},'organization');
  }
  if(input.action==='withdraw'){
   const row=await getRecord(db,orgId,uuid(input.id));if(row.kind!=='submission'||row.owner_subject!==actor)throw new OrganizationError('Only the author may withdraw a submission',403);expectVersion(row,input.version);
-  return replaceRecord(db,row,actor,row.body,row.title,'private');
+  // Visibility changes must preserve immutable submission content and its stored
+  // digest. Re-stringifying a JSONB object can reorder keys and change that digest.
+  const changed=(await db.query("UPDATE dis_organization_records SET visibility='private',version=version+1,last_editor=$1,updated_at=now() WHERE id=$2 AND organization_id=$3 AND version=$4 RETURNING *",[actor,row.id,orgId,row.version])).rows[0];
+  if(!changed)throw new OrganizationError('Revision conflict; no content was overwritten',409);return changed;
  }
  if(input.action==='reconcile'){
   if(!['admin','facilitator'].includes(member.role))throw new OrganizationError('Facilitator access required',403);

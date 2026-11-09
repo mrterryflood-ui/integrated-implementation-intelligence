@@ -1,0 +1,161 @@
+{
+  "schema": "chainweb-expanded-county-stress-test-v1",
+  "analysis_type": "exploratory_archived_public_aggregate_reanalysis",
+  "provenance": {
+    "archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+    "manifest_entries_checked": 18,
+    "original_county_rows_compared_with_csv": 672,
+    "original_cells_compared_with_csv": 4368,
+    "acquisition_revision": "73455a439f950ffa0644d5714843b06b173f029a",
+    "revision_lineage_adjudicated": false,
+    "sources": {
+      "hinds_all": {
+        "source_sha256": "83484db2208ea5914aa588e19118ca150645d69fba35316aa9688198ce2f1aa6",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=28&type=incd&year=0",
+        "county_rows": 82,
+        "period": "2019-2023",
+        "stage_definition": "all"
+      },
+      "hinds_late": {
+        "source_sha256": "130843a055b089fb0471ab559fb214ee3b7efda90b18f94727ef8e09d64226ca",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=28&type=incd&year=0",
+        "county_rows": 82,
+        "period": "2019-2023",
+        "stage_definition": [
+          "regional",
+          "distant"
+        ]
+      },
+      "harris_all": {
+        "source_sha256": "aec6d2b4d7e9c7ac7ddbf2a30c7d700286ac6eab4e8a0ff88ca4a1c983feb456",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=999&statefips=48&type=incd&year=0",
+        "county_rows": 254,
+        "period": "2019-2023",
+        "stage_definition": "all"
+      },
+      "harris_late": {
+        "source_sha256": "a04b3b49759d680ccd4bb508e5bd68713e1a6516bb9c8c951c5c21a623522af3",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=01&race=00&ruralurban=0&sex=0&sortOrder=asc&sortVariableName=name&stage=211&statefips=48&type=incd&year=0",
+        "county_rows": 254,
+        "period": "2019-2023",
+        "stage_definition": [
+          "regional",
+          "distant"
+        ]
+      }
+    }
+  },
+  "primary_comparisons": "within-state; not independent pairs",
+  "hypothesis": "Near-equal late-stage case shares need not imply similar population late-stage rates.",
+  "thresholds_exploratory": true,
+  "no_equivalence_or_causal_test": true,
+  "by_state": {
+    "MS": {
+      "frame_counties": 82,
+      "complete_counties": 75,
+      "incomplete_counties": 7,
+      "by_geography": {
+        "Rural": {
+          "total": 62,
+          "complete": 57,
+          "incomplete": 5
+        },
+        "Urban": {
+          "total": 20,
+          "complete": 18,
+          "incomplete": 2
+        }
+      },
+      "share_window_tests": {
+        "0.3": {
+          "near_share_pairs": 84,
+          "late_rate_gap_at_least_5_pairs": 42,
+          "also_disjoint_marginal_rate_intervals": 2,
+          "also_both_annual_late_counts_ge16": 0,
+          "also_both_counts_ge16_and_disjoint_intervals": 0,
+          "rounding_robust_both_criteria": 33
+        },
+        "0.5": {
+          "near_share_pairs": 130,
+          "late_rate_gap_at_least_5_pairs": 65,
+          "also_disjoint_marginal_rate_intervals": 2,
+          "also_both_annual_late_counts_ge16": 0,
+          "also_both_counts_ge16_and_disjoint_intervals": 0,
+          "rounding_robust_both_criteria": 54
+        },
+        "1.0": {
+          "near_share_pairs": 238,
+          "late_rate_gap_at_least_5_pairs": 129,
+          "also_disjoint_marginal_rate_intervals": 4,
+          "also_both_annual_late_counts_ge16": 1,
+          "also_both_counts_ge16_and_disjoint_intervals": 1,
+          "rounding_robust_both_criteria": 118
+        }
+      }
+    },
+    "TX": {
+      "frame_counties": 254,
+      "complete_counties": 179,
+      "incomplete_counties": 75,
+      "by_geography": {
+        "Rural": {
+          "total": 168,
+          "complete": 103,
+          "incomplete": 65
+        },
+        "Urban": {
+          "total": 86,
+          "complete": 76,
+          "incomplete": 10
+        }
+      },
+      "share_window_tests": {
+        "0.3": {
+          "near_share_pairs": 551,
+          "late_rate_gap_at_least_5_pairs": 234,
+          "also_disjoint_marginal_rate_intervals": 39,
+          "also_both_annual_late_counts_ge16": 45,
+          "also_both_counts_ge16_and_disjoint_intervals": 22,
+          "rounding_robust_both_criteria": 159
+        },
+        "0.5": {
+          "near_share_pairs": 844,
+          "late_rate_gap_at_least_5_pairs": 377,
+          "also_disjoint_marginal_rate_intervals": 63,
+          "also_both_annual_late_counts_ge16": 63,
+          "also_both_counts_ge16_and_disjoint_intervals": 33,
+          "rounding_robust_both_criteria": 295
+        },
+        "1.0": {
+          "near_share_pairs": 1609,
+          "late_rate_gap_at_least_5_pairs": 738,
+          "also_disjoint_marginal_rate_intervals": 117,
+          "also_both_annual_late_counts_ge16": 129,
+          "also_both_counts_ge16_and_disjoint_intervals": 59,
+          "rounding_robust_both_criteria": 649
+        }
+      }
+    }
+  },
+  "coverage_all_counties": {
+    "Rural": {
+      "total": 230,
+      "complete": 160,
+      "incomplete": 70
+    },
+    "Urban": {
+      "total": 106,
+      "complete": 94,
+      "incomplete": 12
+    }
+  },
+  "limits": [
+    "Shared surveillance lineage is not independent corroboration.",
+    "Within-state descriptive comparison does not establish identical age/case mix or mechanisms.",
+    "No stage-share uncertainty supplied; near point estimates are not equivalence.",
+    "Pairs share counties; disjoint marginal intervals are not multiplicity-adjusted inference.",
+    "Suppression is not zero; rural/urban coverage is county-weighted, not population-weighted.",
+    "No symptom timing, individual outcomes, early:late ratio, prevention effect, or optimal starting age is estimated.",
+    "Regional plus distant stage is not interchangeable with distant-only stage."
+  ]
+}

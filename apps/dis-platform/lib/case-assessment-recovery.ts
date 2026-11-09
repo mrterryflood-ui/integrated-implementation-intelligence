@@ -1,8 +1,8 @@
-import {CASE_PLAYBOOK_MAX_CHARS,CASE_REPORT_MAX_CHARS,CasePayloadError,serializeCaseReport} from "./case-payload-capacity";
+import {CASE_PLAYBOOK_MAX_DB_BYTES,CASE_REPORT_MAX_CHARS,CASE_REPORT_MAX_DB_BYTES,CasePayloadError,serializeCaseReport} from "./case-payload-capacity";
 
 /** Restore only a report already archived by this case. This is recovery, not validation. */
-export const CASE_RECOVERY_MAX_REPORT_BYTES=CASE_REPORT_MAX_CHARS*4;
-const maxPlaybookBytes=CASE_PLAYBOOK_MAX_CHARS*4;
+export const CASE_RECOVERY_MAX_REPORT_BYTES=CASE_REPORT_MAX_DB_BYTES;
+const maxPlaybookBytes=CASE_PLAYBOOK_MAX_DB_BYTES;
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 export type AssessmentRestoreRequest={id:string;version:number;eventId:string};
 export class AssessmentRecoveryError extends Error{
@@ -35,6 +35,24 @@ export const CASE_ASSESSMENT_SOURCE_SQL=`SELECT c.version,
  THEN (e.payload->'previousReport')::text ELSE NULL END AS report_text
  ${archiveJoin}`;
 
+/** Count retained JSON tokens without parsing or changing numbers/string escapes.
+ * Only JSON whitespace outside strings is database formatting, not evidence. */
+function compactRetainedJsonLength(text:string):number{
+ let length=0,inString=false,escaped=false;
+ for(let i=0;i<text.length;i++){
+  const char=text[i];
+  if(inString){
+   length++;
+   if(escaped)escaped=false;
+   else if(char==="\\")escaped=true;
+   else if(char==='"')inString=false;
+  }else{
+   if(char==='"')inString=true;
+   if(char!==" "&&char!=="\t"&&char!=="\r"&&char!=="\n")length++;
+  }
+ }
+ return length;
+}
 export function validateAssessmentSource(row:Record<string,unknown>|undefined,expectedVersion:number):void{
  if(!row)throw new AssessmentRecoveryError("Case changed, archived assessment unavailable, or access denied. Reload before retrying.",409);
  const previous=Number(row.previous_version),reportBytes=Number(row.report_bytes),currentBytes=Number(row.current_report_bytes),planBytes=Number(row.playbook_bytes);
@@ -48,9 +66,9 @@ export function validateAssessmentSource(row:Record<string,unknown>|undefined,ex
   throw new AssessmentRecoveryError("Archived assessment content could not be verified",503);
  // Measure retained text before parsing: a huge JSON numeric token can become
  // Infinity/null in JavaScript and otherwise appear smaller on reserialization.
- // PostgreSQL's canonical whitespace may conservatively exclude a boundary-size
- // legacy report; preserve it and report the capacity gap rather than truncate.
- if(row.report_text.length>CASE_REPORT_MAX_CHARS)
+ // Discount formatting only. Spaces inside evidence and every numeric-token
+ // character still count, and the original JSONB is restored directly by SQL.
+ if(compactRetainedJsonLength(row.report_text)>CASE_REPORT_MAX_CHARS)
   throw new AssessmentRecoveryError("Stored assessment text exceeds the bounded 128,000-character recovery capacity; nothing changed or truncated",413);
  try{serializeCaseReport(JSON.parse(row.report_text));}
  catch(e){if(e instanceof CasePayloadError)throw new AssessmentRecoveryError(e.message,e.status);throw new AssessmentRecoveryError("Archived assessment JSON is invalid",409);}

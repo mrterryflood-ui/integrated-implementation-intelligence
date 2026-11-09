@@ -1,0 +1,51 @@
+{
+  "schema": "independent-concurrent-pr-reconciliation-v1",
+  "reviewer": "/root/integration_review",
+  "observedAt": "2026-11-09T00:26:52Z",
+  "concurrentPR": {
+    "number": 89,
+    "head": "5f80be44d42133e37f2a31f2b7f83422f8146d04",
+    "base": "a15397e74344cbcaaec66e96d781171a34428293",
+    "state": "open",
+    "merged": false
+  },
+  "currentCandidate": {
+    "localCommit": "26bc4d52c06bf37efd707653d837f47d78ec7cf2",
+    "publishedCommit": "80ef1c3906ebd56abeb9c61ff5b9c649fffa9799",
+    "tree": "61d8f77bc09b8ed0b41977604ed4c1385bf1acfa"
+  },
+  "productionRouteGitBlobBoth": "3744ab9eee6866dd0224f23654cbb67f5fe33553",
+  "capacitySemanticsEquivalent": true,
+  "capacityDifference": "COMMENT_ONLY",
+  "additionalCandidateRecoveryFixPreserved": true,
+  "uniqueContribution": "137-line actual-handler same-run negative-control regression",
+  "test": {
+    "gitBlob": "8a16eeaea6caad376be18c52a6c5dc7ffe562c0b",
+    "sha256": "f2f93628e10bc375db649fb6815dc7408b86300f9af06a675ae7b205db947174",
+    "unmodifiedSourceExecuted": true,
+    "nodeReportedTests": 6,
+    "subtests": 5,
+    "failed": 0,
+    "skipped": 0,
+    "exitCode": 0,
+    "oldHandlerBlob": "9479c6b2c3222b0575ba68de0a4207dd11dca3b9",
+    "ascii": {
+      "compactCharacters": 127984,
+      "storedCharacters": 130497,
+      "storedBytes": 130555,
+      "oldStatus": 413,
+      "newStatus": 200
+    },
+    "unicode": {
+      "compactCharacters": 127984,
+      "storedCharacters": 130497,
+      "storedBytes": 247447,
+      "oldStatus": 413,
+      "newStatus": 200
+    }
+  },
+  "disposition": "ALLOW_UNCHANGED_UNIQUE_REGRESSION_AND_PRESERVE_PR89_ANCESTRY_RETAIN_CURRENT_PRODUCTION_AND_RECOVERY_CODE",
+  "subsequentTreeRequiresBinding": true,
+  "subsequentPublishedCIRequired": true,
+  "mergesByReviewer": 0
+}

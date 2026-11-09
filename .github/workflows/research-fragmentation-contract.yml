@@ -23,3 +23,5 @@ jobs:
         run: python research/fragmentation-harm/validate_contract.py
       - name: Regression tests
         run: python -m unittest discover -s research/fragmentation-harm -p "test_*.py" -v
+      - name: Independent denominator invariants (archive replay is a separate source-dependent gate)
+        run: python -m unittest discover -s research/fragmentation-harm/denominator_adjudication -p "test_*.py" -v

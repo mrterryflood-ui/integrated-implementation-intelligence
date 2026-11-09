@@ -1,0 +1,130 @@
+{
+  "schema": "dis-independent-clinical-specification-review-v1",
+  "reviewer": "/root/diagnostic_evidence",
+  "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+  "review_class": "AI_DOCUMENT_REVIEW_NOT_QUALIFIED_CLINICAL_ACCEPTANCE",
+  "recommendation": "READY_FOR_CONTINUED_QUALIFIED_LOCAL_REVIEW_AND_UNSIGNED_PREPARATION",
+  "frozen_clinical_protocol_accepted": false,
+  "clinical_pathway_accepted": false,
+  "patient_enrollment_authorized_by_review": false,
+  "software_runtime_rejection_established": false,
+  "clinical_effect_measured": false,
+  "clinical_gate_statuses_preserved": {
+    "CP01": "NOT_ESTABLISHED",
+    "CP02": "NOT_ESTABLISHED",
+    "CP03": "NOT_ESTABLISHED",
+    "CP04": "NOT_ESTABLISHED",
+    "CP05": "NOT_ESTABLISHED",
+    "CP06": "NOT_ESTABLISHED",
+    "CP07": "NOT_ESTABLISHED",
+    "CP08": "NOT_ESTABLISHED"
+  },
+  "initial_manifest": "REVIEW_INPUT_MANIFEST.json",
+  "final_source_files": [
+    {
+      "path": "docs/dis/EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md",
+      "sha256": "dccc6c36f5713810b312af6b2e857c43765449af2aac2ff18a68d5d4441b444d",
+      "bytes": 28653,
+      "snapshot": "reviewed_sources_final/docs/dis/EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md"
+    },
+    {
+      "path": "docs/dis/clinical-pathway-evaluation/clinical_pathway_acceptance.json",
+      "sha256": "b031c35ec11178b0a7dbeb8b3244d9d28f78f72a459b4e1be2dbb1f6b5df0b44",
+      "bytes": 5411,
+      "snapshot": "reviewed_sources_final/docs/dis/clinical-pathway-evaluation/clinical_pathway_acceptance.json"
+    },
+    {
+      "path": "docs/dis/clinical-pathway-evaluation/clinical_pathway_event_dictionary.csv",
+      "sha256": "32f89aac6f6f4b290997bf46f934d0c6b48ff946db84438d10a5bfbf565cd410",
+      "bytes": 7628,
+      "snapshot": "reviewed_sources_final/docs/dis/clinical-pathway-evaluation/clinical_pathway_event_dictionary.csv"
+    },
+    {
+      "path": "docs/dis/clinical-pathway-evaluation/clinical_pathway_tabletop.json",
+      "sha256": "4344fd8a2104e1743a98a05d22b077bea258114c2321f0c84f2030e72b1ae3f6",
+      "bytes": 3640,
+      "snapshot": "reviewed_sources_final/docs/dis/clinical-pathway-evaluation/clinical_pathway_tabletop.json"
+    },
+    {
+      "path": "apps/dis-platform/lib/research-workflow.ts",
+      "sha256": "4c622ef4e5480eb438634ae15ba7d9ab2cd43106742e88df83a9471c1ac50d7f",
+      "bytes": 15652,
+      "snapshot": "reviewed_sources_final/apps/dis-platform/lib/research-workflow.ts"
+    }
+  ],
+  "findings": [
+    {
+      "id": "CSR01",
+      "subject": "Primary endpoint ambiguity",
+      "before": "Appropriate action and/or function versus Phase C appropriate completed action",
+      "after": "Consistent time from locked eligible index to independently verified appropriate completed action; function and horizon completion secondary",
+      "disposition": "DOCUMENT_CORRECTION_INDEPENDENTLY_VERIFIED",
+      "clinical_effect_measured": false,
+      "verified_by": "/root/diagnostic_evidence",
+      "verified_at": "2026-11-09T00:12:57.930035+00:00"
+    },
+    {
+      "id": "CSR02",
+      "subject": "Completion evidence versus appropriateness",
+      "before": "Completion field allowed independent or authorized verification without distinct structured clinical adjudication",
+      "after": "Source completion verification plus qualified independent adjudicator/rubric/decision/time/disagreement fields and both required for primary endpoint",
+      "disposition": "DOCUMENT_CORRECTION_INDEPENDENTLY_VERIFIED",
+      "clinical_effect_measured": false,
+      "verified_by": "/root/diagnostic_evidence",
+      "verified_at": "2026-11-09T00:12:57.930035+00:00"
+    },
+    {
+      "id": "CSR03",
+      "subject": "ACS guideline clock",
+      "before": "Preferred six-month interval lacked explicit starting event",
+      "after": "Initial-test origin named and separated from team result-availability process interval",
+      "disposition": "DOCUMENT_CORRECTION_INDEPENDENTLY_VERIFIED",
+      "clinical_effect_measured": false,
+      "verified_by": "/root/diagnostic_evidence",
+      "verified_at": "2026-11-09T00:12:57.930035+00:00"
+    },
+    {
+      "id": "CSR04",
+      "subject": "Linked identity and independent closure states",
+      "before": "No action/episode/question identifiers and single closure-scope field",
+      "after": "Stable episode/action/question IDs and separate action/question/episode closure status fields",
+      "disposition": "DOCUMENT_CORRECTION_INDEPENDENTLY_VERIFIED",
+      "clinical_effect_measured": false,
+      "verified_by": "/root/diagnostic_evidence",
+      "verified_at": "2026-11-09T00:12:57.930035+00:00"
+    },
+    {
+      "id": "CSR05",
+      "subject": "Eligibility knowability versus assessment",
+      "before": "Assessment-named field meant time eligibility became assessable",
+      "after": "Separate knowable-at and assessed-at fields",
+      "disposition": "DOCUMENT_CORRECTION_INDEPENDENTLY_VERIFIED",
+      "clinical_effect_measured": false,
+      "verified_by": "/root/diagnostic_evidence",
+      "verified_at": "2026-11-09T00:12:57.930035+00:00"
+    },
+    {
+      "id": "CSR06",
+      "subject": "Transfer versus competing event",
+      "before": "Transfer included in competing event examples without separating observation loss",
+      "after": "Separate transfer state, endpoint-precluding event and observation-end reason; explicit narrative rejects automatic competing-event classification",
+      "disposition": "DOCUMENT_CORRECTION_INDEPENDENTLY_VERIFIED",
+      "clinical_effect_measured": false,
+      "verified_by": "/root/diagnostic_evidence",
+      "verified_at": "2026-11-09T00:12:57.930035+00:00"
+    }
+  ],
+  "remaining_local_inputs": [
+    "actual site and accepted clinical/operational/data/reviewer roles",
+    "complete applicable guidance review and local differential/urgency rules",
+    "capacity, resources, ethics/privacy and data-use determinations",
+    "track-specific qualifying-action rubric and procedure/evaluation adequacy",
+    "locked eligibility, index event, action components, horizon, estimand, analysis unit and allocation",
+    "adjudicator independence, masking, conflict exceptions, reliability and disagreement handling",
+    "repeated function instrument timing/version/language and missingness",
+    "authorized end-to-end clinical workflow and failure/rollback rehearsal",
+    "independent human decision and patient outcome evaluation"
+  ],
+  "tabletop_result": "TABLETOP_REVIEW_RESULTS.json",
+  "qualification": "Ten document scenarios and six verified text corrections are neither clinical trials nor a clinical safety/effect rate."
+}

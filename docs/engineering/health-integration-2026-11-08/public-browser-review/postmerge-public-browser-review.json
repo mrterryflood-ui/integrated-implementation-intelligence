@@ -1,0 +1,57 @@
+{
+  "kind": "INDEPENDENT_PUBLIC_BROWSER_HARNESS_DELTA_REVIEW",
+  "base_commit": "2d9965efc5f09b51942de31309e4679879052dfa",
+  "source_tree": "1164219c569d8bf7f8185f3e227383b282d64846",
+  "checked_patch_files": [
+    {
+      "path": ".github/workflows/dis-platform-checks.yml",
+      "bytes": 4395,
+      "sha256": "843cd1630972709c6e616ccf5a64f90ba421da69c9982847dae6a0e44b356a3a",
+      "git_blob": "650beeae439472550d2434fa25264fbb956b9413"
+    },
+    {
+      "path": ".github/workflows/dis-public-browser-e2e.yml",
+      "bytes": 1771,
+      "sha256": "03e1a67348e2b50423b0de00b054c6c32675b78f7040e1bf8f38ad86f0208944",
+      "git_blob": "01b584fdf05611d78e79ec80d49aad48a37420ba"
+    },
+    {
+      "path": "apps/dis-platform/tests/e2e/public-site.mjs",
+      "bytes": 13543,
+      "sha256": "d223ca1ed9ba24922bb09862b2d677a8942ff5f4143552205b42046aedb0e6ca",
+      "git_blob": "1cfdc290a1af2a7b061a977c7d8e3ab63688f123"
+    }
+  ],
+  "working_changes_at_observation": [
+    ".github/workflows/dis-platform-checks.yml",
+    ".github/workflows/dis-public-browser-e2e.yml",
+    "apps/dis-platform/tests/e2e/public-site.mjs"
+  ],
+  "invalid_mode_controls": [
+    {
+      "mode": "",
+      "exit_code": 1,
+      "assertion": "explicit supported identity expectation required",
+      "browser_launch_reached": false,
+      "passed": true
+    },
+    {
+      "mode": "unsupported-identity-mode",
+      "exit_code": 1,
+      "assertion": "explicit supported identity expectation required",
+      "browser_launch_reached": false,
+      "passed": true
+    }
+  ],
+  "syntax_exit": 0,
+  "diff_check_exit": 0,
+  "home_component_control_file": "mobile-identity-home-controls.json",
+  "disposition": "ALLOW_BOUNDED_TEST_REPAIR_SUBJECT_TO_REAL_BROWSER_CI",
+  "limitations": [
+    "Review binds these working-file blobs; publication and CI require exact commit binding.",
+    "No production browser requests or private endpoint requests were made by this verifier.",
+    "Production DOM state and failed workflow outcome supplied by parent; source and merge tree independently verified.",
+    "Six Home cases used synthetic key fixtures and stubbed Clerk auth/presentation.",
+    "No real sign-in, paid inference, private persistence, scientific or clinical acceptance claimed."
+  ]
+}

@@ -1,0 +1,1012 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>19 Age Groups - Standard Populations - SEER Datasets</title>
+
+<script src="/j/jquery-3.6.0.min.js"></script>
+
+<link rel="stylesheet" href="/bootstrap/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/s/base.css" />
+<link rel="stylesheet" href="/s/styles.css" />
+
+<link rel="preconnect" href="https://www.googletagmanager.com">
+<link rel="preconnect" href="https://static.cancer.gov">
+<link rel="preconnect" href="https://www.platform.twitter.com">
+
+
+<!-------------------------Meta Tags for Social Sharing---------------------------------->
+<!----TWITTER---->
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:image" content="https://seer.cancer.gov/i/tile-fact.jpg" />
+
+<!----Open Graph---->
+<meta property="og:type" content="article" />
+<meta property="og:image" content="https://seer.cancer.gov/i/tile-fact.jpg" />
+<meta property="og:site_name" content="SEER" />
+<!--custom_head--><!-- Start Meta Tag Insertion - Do Not Edit - See /source_files/add_metatags -->
+					  <meta name="description" content="Table of US Standard Populations for 19 age groups, 1940-2000. Plus table of Canadian, European, and World Standard Populations for 19 age groups. ">
+					   <meta property="twitter:title" content="19 Age Groups - Standard Populations - SEER Datasets"> 
+				       <meta property="twitter:description" content="Table of US Standard Populations for 19 age groups, 1940-2000. Plus table of Canadian, European, and World Standard Populations for 19 age groups. "> 
+				       <meta property="twitter:url" content="https://seer.cancer.gov/stdpopulations/stdpop.19ages.html"> 
+				       <meta property="og:title" content="19 Age Groups - Standard Populations - SEER Datasets"> 
+				       <meta property="og:description" content="Table of US Standard Populations for 19 age groups, 1940-2000. Plus table of Canadian, European, and World Standard Populations for 19 age groups. "> 
+				       <meta property="og:url" content="https://seer.cancer.gov/stdpopulations/stdpop.19ages.html"> 
+				       <!-- End Meta Tag Insertion --><!--/custom_head--></head>
+
+<body  class="datasets " onload='IMS_Onload.run();'>
+
+	<a class="visually-hidden-focusable" href="#skipnav">Skip to Main Content</a>
+
+<!-- Blue Header -->
+<!-- NCI, SEER, Search, Navigation -->
+<!-- HEADER --> 
+<header class="push" role="banner">
+	<!---gov banner--->
+<section id="usa-banner" aria-label="Official government website">
+	<div class="container-lg">
+	  <div class="row">
+		<div class="usa-banner__header-text py-3">
+		  <img class="me-2" src="/i/usa-banner-flag-icon.png" alt="" /> An official website of the United States government
+		</div>
+	  </div>
+	</div>
+  </section>
+<!---end gov banner--> 
+
+	<div class="container-lg">
+    	<div class="row">
+        	<div class="col-md-8">
+		        <a class="seerLogo" href="/" title="Return Home">
+		        	<img src="/i/seer.svg" alt="Surveillance, Epidemiology, and End Results Program" width="1022.1" height="85.8" />
+		        </a>
+            </div>
+            <div class="col-md-4 search">
+				<div class="share">
+					<a class="facebook-share-button" href="" onclick="javascript:window.open(this.href, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');return false;" target="_blank">
+						<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16">
+							<path d="M16 8.049c0-4.446-3.582-8.05-8-8.05C3.58 0-.002 3.603-.002 8.05c0 4.017 2.926 7.347 6.75 7.951v-5.625h-2.03V8.05H6.75V6.275c0-2.017 1.195-3.131 3.022-3.131.876 0 1.791.157 1.791.157v1.98h-1.009c-.993 0-1.303.621-1.303 1.258v1.51h2.218l-.354 2.326H9.25V16c3.824-.604 6.75-3.934 6.75-7.951z"/>
+						</svg>
+						Share <span class="visually-hidden"> on Facebook</span>
+					</a>
+						
+						<a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-size="small" data-dnt="true" data-show-count="false">Tweet</a>
+						<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+						<a class="print text-nowrap" href="javascript:window.print();">
+							<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" fill="#fff" viewBox="0 0 32 32">
+								<g><path d="M24.67 10.62h-2.86V7.49H10.82v3.12H7.95c-.5 0-.9.4-.9.9v7.66h3.77v1.31L15 24.66h6.81v-5.44h3.77v-7.7c-.01-.5-.41-.9-.91-.9zM11.88 8.56h8.86v2.06h-8.86V8.56zm10.98 9.18h-1.05v-2.1h-1.06v7.96H16.4c-1.58 0-.82-3.74-.82-3.74s-3.65.89-3.69-.78v-3.43h-1.06v2.06H9.77v-3.58h13.09v3.61zm.75-4.91c-.4 0-.72-.32-.72-.72s.32-.72.72-.72c.4 0 .72.32.72.72s-.32.72-.72.72zm-4.12 2.96h-6.1v1.06h6.1v-1.06zm-6.11 3.15h6.1v-1.06h-6.1v1.06z"></path></g>
+							</svg>
+							<span>Print</span>
+						</a>
+					</div>
+	
+		        <form action="/search" method="get" name="search" onSubmit="return searchCheck(this.q) && NCIAnalytics.SiteSearch(this);">
+                        <label for="searchsite">Search SEER:</label>
+                        <input id="searchsite" type="text" size="15" name="q" placeholder="Search SEER" />
+                        <input type="image" src="/i/search_btn.png" class="greenBtn" alt="Search"/>
+                </form>
+            </div>
+        </div>
+ </div>
+</header>
+<div id="topnav">
+
+    <!-- Global nav/utilit bar/language  -->
+        <!-- BEGIN NAVIGATION -->
+        <!-- Begin nav-search bar -->
+			<nav class="navbar navbar-expand-lg navbar-dark" aria-labelledby="offcanvasLabel">
+				<div class="container-lg">
+					<button class="navbar-toggler my-2 py-1" id="mainNavToggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+						<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg>
+						<strong class="align-middle">Main Menu</strong>
+					</button>
+					<div class="offcanvas offcanvas-start container-fluid px-0" id="mainNav" aria-controls="offcanvasLabel" aria-labelledby="offcanvasLabel" data-bs-scroll="true">
+						<div class="offcanvas-header">
+							<div class="menu-label-wrapper"><div class="navbar-brand d-lg-none seer-logo"></div>
+							<h3 class="offcanvas-title text-white" id="offcanvasLabel">Main Menu</h3></div>
+							
+							<button type="button" class="btn-close text-reset me-1" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+						</div>
+						<div class="offcanvas-body">
+							<ul class="navbar-nav mb-2 mb-lg-0 w-100">
+								<li class="nav-item short-text">
+									<a class="nav-link active" href="/" id="home-nav">Home</a>
+								</li>
+								<li class="nav-item dropdown">
+									<button class="nav-link dropdown-toggle text-nowrap" href="#" id="cancerStatisticsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										Cancer Statistics
+									</button>
+									<ul class="dropdown-menu three-column" aria-labelledby="cancerStatisticsDropdown">
+										<div class="container-lg">
+											<div class="row dropdown-header-wrapper">
+												<div class="col-12 ps-lg-0">
+													<li class="pe-0 ps-lg-0">
+														<a class="dropdown-item dropdown-header landing-link" href="/statistics/">Cancer Statistics</a>
+													</li>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-4">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/statistics/reports.html">Reports on Cancer</a></li>
+														<li><a class="dropdown-item" href="/report_to_nation/">Annual Report to the Nation on the Status of Cancer</a></li>
+														<li><a class="dropdown-item" href="/statfacts/">Cancer Stat Facts</a></li>
+														<li><a class="dropdown-item" href="/statistics/preliminary-estimates/">Preliminary Cancer Incidence Rates and Trends</a></li>
+														<li class="d-lg-none"><a class="dropdown-item" href="/publications/">SEER Publications</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-4">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/statistics/interactive.html">Interactive Tools, Maps, &amp; Graphs</a></li>
+														<li><a class="dropdown-item" href="/statistics-network/">Cancer Statistics Explorer Network</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-4">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/statistics/resources.html">Understanding Statistics</a></li>
+														<li><a class="dropdown-item" href="/statistics/videos/">Did You Know? Video Series</a></li>
+														<li><a class="dropdown-item" href="/statistics/types.html">Defining Cancer Statistics</a></li>
+														<li><a class="dropdown-item" href="/cgi-bin/glossary/glossary.pl">Glossary of Statistical Terms</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</ul>
+								</li>
+								<li class="nav-item dropdown">
+									<button class="nav-link dropdown-toggle text-nowrap" href="#" id="dataSoftwareDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										SEER Data &amp; Software
+									</button>
+									<ul class="dropdown-menu four-column" aria-labelledby="dataSoftwareDropdown">
+										<div class="container-lg">
+											<div class="row dropdown-header-wrapper">
+												<div class="col-12 ps-lg-0">
+													<li class="pe-0 ps-lg-0">
+														<a class="dropdown-item dropdown-header landing-link" href="/data-software/">SEER Data &amp; Software</a>
+													</li>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/data/">SEER Incidence Database</a></li>
+														<li><a class="dropdown-item" href="/data/product-comparison.html">Comparison of Data Products</a></li>
+														<li><a class="dropdown-item" href="/data/access.html">How to Request the Data</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/data-software/documentation/">Documentation for Data</a></li>
+														<li><a class="dropdown-item" href="/data-software/documentation/seerstat/">SEER*Stat Database Details</a></li>
+														<li><a class="dropdown-item" href="/data-software/documentation/seerstat/nccr/">NCCR Databases in SEER*Stat</a></li>
+														<li><a class="dropdown-item" href="/analysis/">Variable and Recode Definitions</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/data-software/datasets.html">U.S. Datasets</a></li>
+														<li><a class="dropdown-item" href="/mortality/">U.S. Mortality</a></li>
+														<li><a class="dropdown-item" href="/data-software/uspopulations.html">U.S. Populations</a></li>
+														<li><a class="dropdown-item" href="/stdpopulations/">Standard Populations</a></li>
+														<li><a class="dropdown-item" href="/data-software/linked_databases.html">SEER Linked Databases</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/data-software/software.html">Statistical Software</a></li>
+														<li><a class="dropdown-item" href="/seerstat/">SEER*Stat</a></li>
+														<li><a class="dropdown-item" href="/seerprep/">SEER*Prep</a></li>
+														<li><a class="dropdown-item" href="/hdcalc/">Health Drivers Calculator (HD*Calc)</a></li>
+														<li><a class="dropdown-item exit pe-5 pe-lg-2" href="https://surveillance.cancer.gov/tools/">Methods &amp; Tools for Population-based Cancer Statistics</a></li>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</ul>
+								</li>
+								<li class="nav-item dropdown">
+									<button class="nav-link dropdown-toggle text-nowrap" href="#" id="registryOperationsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										Registry Operations
+									</button>
+									<ul class="dropdown-menu four-column" aria-labelledby="registryOperationsDropdown">
+										<div class="container-lg">
+											<div class="row dropdown-header-wrapper">
+												<div class="col-12 ps-lg-0">
+													<li class="pe-0 ps-lg-0">
+														<a class="dropdown-item dropdown-header landing-link" href="/registrars/">Registry Operations</a>
+													</li>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/registrars/guidelines.html">Reporting Guidelines</a></li>
+														<li><a class="dropdown-item" href="/tools/codingmanuals/">SEER Program Coding Manual</a></li>
+														<li><a class="dropdown-item" href="/tools/heme/">Hematopoietic Project</a></li>
+														<li><a class="dropdown-item" href="/tools/solidtumor/">Solid Tumor Rules</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/registrars/tools-software.html">Tools &amp; Software</a></li>
+														<li><a class="dropdown-item" href="/seertools/glossary/">Glossary for Registrars</a></li>
+														<li><a class="dropdown-item" href="/tools/seerrx/">SEER*Rx - Drug Database</a></li>
+														<li><a class="dropdown-item" href="/seerabs/">SEER Abstracting Tool</a></li>
+														<li><a class="dropdown-item" href="/seerdms/">SEER Data Management System (SEER*DMS)</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown mb-lg-2">
+														<li><a class="dropdown-item dropdown-header" href="/registrars/staging.html">Staging</a></li>
+														<li><a class="dropdown-item" href="/tools/staging/rsa.html">Registrar Staging Assistant (SEER*RSA)</a></li>
+														<li><a class="dropdown-item" href="/tools/ssm/">Summary Stage 2018</a></li>
+														<li><a class="dropdown-item" href="/tools/staging/index.html">Staging Resources</a></li>
+														<li><a class="dropdown-item" href="/tools/staging/eod/" id="eod-menu-link">Extent of Disease 2018</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-3">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/registrars/qa.html">Questions &amp; Answers</a></li>
+														<li><a class="dropdown-item" href="/seer-inquiry/">SEER Inquiry System</a></li>
+														<li><a class="dropdown-item" href="/registrars/contact.html">Ask a SEER Registrar</a></li>
+														<li><a class="dropdown-item" href="/registrars/data-collection.html">Data Collection Answers</a></li>
+													</ul>
+													<li class="mb-0 mb-lg-3"><a class="dropdown-item dropdown-header unlisted-children" href="/cancerpathchart/">Cancer PathCHART</a></li>
+													
+													<li class="mb-0 mb-lg-3"><a class="dropdown-item dropdown-header" href="/training/">Training</a></li>
+												</div>
+											</div>
+										</div>
+									</ul>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link text-nowrap text-nowrap" href="/news/" id="news-nav">News &amp; Events</a>
+								</li>
+								<li class="nav-item dropdown short-text">
+									<button class="nav-link dropdown-toggle text-nowrap" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+										About SEER
+									</button>
+									<ul class="dropdown-menu three-column" aria-labelledby="aboutDropdown">
+										<div class="container-lg">
+											<div class="row dropdown-header-wrapper">
+												<div class="col-12 ps-lg-0">
+													<li class="pe-0 ps-lg-0">
+														<a class="dropdown-item dropdown-header landing-link" href="/about/">About SEER</a>
+													</li>
+												</div>
+											</div>
+											<div class="row">
+												<div class="col-lg-4">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/about/overview.html">Program Overview</a></li>
+														<li><a class="dropdown-item" href="/about/goals.html">Goals of the SEER Program</a></li>
+														<li><a class="dropdown-item" href="/about/factsheets/">Fact Sheets &amp; Brochures</a></li>
+														<li><a class="dropdown-item" href="/about/organizations.html">Collaborating Organizations</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-4">
+													<ul class="multi-column-dropdown">
+														<li><a class="dropdown-item dropdown-header" href="/registries/">SEER Registries</a></li>
+														<li><a class="dropdown-item" href="/registries/cancer_registry/">What is a Cancer Registry?</a></li>
+														<li><a class="dropdown-item" href="/registries/list.html">List of Registries</a></li>
+														<li><a class="dropdown-item" href="/registries/terms.html">Registry Groupings</a></li>
+														<li><a class="dropdown-item" href="/registries/characteristics.html">Population Characteristics</a></li>
+													</ul>
+												</div>
+												<div class="col-lg-4">
+													<ul class="multi-column-dropdown mb-lg-2">
+														<li><a class="dropdown-item dropdown-header" href="/about/activities.html">Research Activities</a></li>
+														<li><a class="dropdown-item" href="/biospecimen/">Residual Tissue Repository Program</a></li>
+														<li><a class="dropdown-item" href="/vtr/">SEER-Linked Virtual Tissue Repository Program</a></li>
+													</ul>
+													<li class="mb-0 mb-lg-3"><a class="dropdown-item dropdown-header unlisted-children" href="/qi/">SEER Data Quality Initiatives</a></li>
+												</div>
+											</div>
+										</div>
+									</ul>
+								</li>
+							</ul>
+						</div>
+					</div> <!-- End offcanvas -->
+				</div>
+			</nav>
+        <!-- End nav-search bar -->
+        <!-- END NAVIGATION -->
+    <!-- END Global nav/utility bar/language -->
+
+</div>
+
+ <!-- BEGIN NAVIGATION -->
+    <!-- Begin nav-search bar -->
+
+
+<!-- End topnav -->
+
+ 
+
+<!-- White Section -->
+<div class="section">
+	<div class="highlighted">
+    	<!-- Crumbs -->
+        <div class="container-lg">  
+			<button class="togLeftNav button" data-bs-toggle="modal" data-bs-target="#leftNav"><span>Section Menu</span></button>
+            <ol class="breadcrumb"><li class="breadcrumb-item"><a href="/">Home</a> </li><li class="breadcrumb-item"><a href="/data-software/">SEER Data &amp; Software</a> </li><li class="breadcrumb-item"><a href="/data-software/datasets.html">U.S. Datasets</a> </li><li class="breadcrumb-item mobile-crumb"><a href="/stdpopulations/">Standard Population Data</a> </li><li class="breadcrumb-item" aria-current="page">19 Age Groups - Standard Populations - SEER Datasets</li></ol>            						<h1><!--body_title-->Standard Populations - 19 Age Groups<!--/body_title--></h1>
+					        </div>    	
+		    </div>
+    <div class="container-lg body ps-lg-0 pb-4"><img src="/i/left-body.png" alt="" class="bg-front">
+    	<div class="row">
+    	<!-- Smaller, Aside Column -->
+        <div class="col-lg-3">
+ 	 	 	<div class="leftNav-wrap">
+            	<nav class="subNav leftNav" aria-label="Datasets">			
+	<strong><a href="/data-software/datasets.html">U.S. Datasets</a></strong>
+	<ul>	
+		<li><a href="/mortality/">U.S. Mortality Data</a></li>
+		<li><a href="/data-software/uspopulations.html">U.S. Population Data</a>
+			<ul>
+				<li><a href="/popdata/">U.S. County Population Data</a>
+					<ul>
+						<li><a href="/popdata/download.html">Download U.S. County Population Data</a></li>
+						<li><a href="/popdata/singleages.html">Single Year of Age County Population Estimates</a></li>
+						<li><a href="/popdata/modifications.html">Modifications to the County Population Data</a></li>
+					</ul>
+				</li>
+				<li><a href="/censustract-pops/">U.S. Census Tract Population Data</a>
+					<ul>
+						<li> <a href="/censustract-pops/popdictract.html">Census Tract Population Data Dictionary</a></li>
+						<li> <a href="/censustract-pops/request.html">Request to Download Census Tract Population Estimates</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li><a class="active" href="/stdpopulations/">Standard Population Data</a>
+			<ul>
+				<li><a href="/stdpopulations/single_age.html">U.S. Standard Population vs. Standard Million</a></li>
+				<li><a href="/stdpopulations/survival.html">Age Standards for Survival</a></li>
+				<li><a href="/stdpopulations/2000stdpop-use.html">Use of the 2000 U.S. Standard Population</a></li>
+			</ul>
+		</li>
+
+		<li><a href="/seerstat/variables/countyattribs/">County/Tract Attributes</a>
+			<ul>
+				<li><a href="/seerstat/variables/countyattribs/static.html">Static County Attributes</a></li>
+				<li><a href="/seerstat/variables/countyattribs/time-dependent.html">Time-dependent County Attributes</a></li>
+				<li><a href="/seerstat/variables/countyattribs/census-tract-attribs.html">Time-dependent Census Tract Attributes</a>
+					<ul>
+						<li><a href="/seerstat/variables/countyattribs/ctattrdict.html">Data Dictionary</a></li>
+						<li><a href="/seerstat/variables/countyattribs/ctattrdict-2020census.html">Data Dictionary (2020 Tract Geographies)</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+		<li><a href="/expsurvival/">Expected Survival Life Tables</a></li>
+	   <li><a href="/data-software/linked_databases.html">SEER Linked Databases</a>
+			<ul>
+				<li><a href="/data-software/crwdi/">COVID-19 Real World Data Infrastructure (CRWDi)</a>
+					<ul>
+						<li><a href="/data-software/crwdi/links.html">Helpful Links</a></li>
+					</ul>
+				</li>
+			</ul>
+		</li>
+	  </ul>
+</nav>			</div>
+        </div>
+        <!-- Main Content Column -->	
+        <main class="col-lg-9" id="content" role="main">          
+            <a name="skipnav" id="skipnav" tabindex="-1"></a>
+            <!--body_content--><div class="table-responsive">
+	<h3 class="caption">U.S. Standard Population, 1940-2000</h3>
+	<table class="even_alternating">
+	 <thead>
+			<tr> 
+			<th scope="col" nowrap width="7%">Age</th>
+			<th scope="col"> 2000 U.S. Standard Million </th>
+			<th scope="col">2000 U.S. Standard <br />
+			Population (Census P25-1130) </th>
+			<th scope="col">1990 U.S. Standard Million</th>
+			<th scope="col">1980 U.S. Standard Million</th>
+			<th scope="col">1970 U.S. Standard Million</th>
+			<th scope="col">1960 U.S. Standard Million </th>
+			<th scope="col">1950 U.S. Standard Million </th>
+			<th scope="col">1940 U.S. Standard Million </th>
+		</tr>
+	 </thead>
+	 <tbody>
+		<tr> 
+			<th  scope="row" nowrap>00 years</th>
+			<td align="right">13,818</td>
+			<td align="right">3,794,901</td>
+			<td align="right">12,936</td>
+			<td align="right">15,598</td>
+			<td align="right">17,151</td>
+			<td align="right">22,930</td>
+			<td align="right">20,882</td>
+			<td align="right">15,343</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>01-04 years</th>
+			<td align="right">55,317</td>
+			<td align="right">15,191,619</td>
+			<td align="right">60,863</td>
+			<td align="right">56,565</td>
+			<td align="right">67,265</td>
+			<td align="right">90,390</td>
+			<td align="right">86,376</td>
+			<td align="right">64,718</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>05-09 years</th>
+			<td align="right">72,533</td>
+			<td align="right">19,919,840</td>
+			<td align="right">72,772</td>
+			<td align="right">73,716</td>
+			<td align="right">98,204</td>
+			<td align="right">104,235</td>
+			<td align="right">87,591</td>
+			<td align="right">81,147</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>10-14 years</th>
+			<td align="right">73,032</td>
+			<td align="right">20,056,779</td>
+			<td align="right">68,812</td>
+			<td align="right">80,523</td>
+			<td align="right">102,304</td>
+			<td align="right">93,538</td>
+			<td align="right">73,785</td>
+			<td align="right">89,208</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>15-19 years</th>
+			<td align="right">72,169</td>
+			<td align="right">19,819,518</td>
+			<td align="right">71,384</td>
+			<td align="right">93,439</td>
+			<td align="right">93,845</td>
+			<td align="right">73,717</td>
+			<td align="right">70,450</td>
+			<td align="right">93,670</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>20-24 years</th>
+			<td align="right">66,478</td>
+			<td align="right">18,257,225</td>
+			<td align="right">76,476</td>
+			<td align="right">94,103</td>
+			<td align="right">80,561</td>
+			<td align="right">60,231</td>
+			<td align="right">76,191</td>
+			<td align="right">88,007</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>25-29 years</th>
+			<td align="right">64,529</td>
+			<td align="right">17,722,067</td>
+			<td align="right">85,694</td>
+			<td align="right">86,168</td>
+			<td align="right">66,320</td>
+			<td align="right">60,612</td>
+			<td align="right">81,237</td>
+			<td align="right">84,277</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>30-34 years</th>
+			<td align="right">71,044</td>
+			<td align="right">19,511,370</td>
+			<td align="right">87,905</td>
+			<td align="right">77,516</td>
+			<td align="right">56,249</td>
+			<td align="right">66,635</td>
+			<td align="right">76,425</td>
+			<td align="right">77,789</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>35-39 years</th>
+			<td align="right">80,762</td>
+			<td align="right">22,179,956</td>
+			<td align="right">80,267</td>
+			<td align="right">61,644</td>
+			<td align="right">54,656</td>
+			<td align="right">69,601</td>
+			<td align="right">74,629</td>
+			<td align="right">72,495</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>40-44 years</th>
+			<td align="right">81,851</td>
+			<td align="right">22,479,229</td>
+			<td align="right">70,829</td>
+			<td align="right">51,510</td>
+			<td align="right">58,958</td>
+			<td align="right">64,689</td>
+			<td align="right">67,712</td>
+			<td align="right">66,742</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>45-49 years</th>
+			<td align="right">72,118</td>
+			<td align="right">19,805,793</td>
+			<td align="right">55,778</td>
+			<td align="right">48,951</td>
+			<td align="right">59,622</td>
+			<td align="right">60,670</td>
+			<td align="right">60,190</td>
+			<td align="right">62,697</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>50-54 years</th>
+			<td align="right">62,716</td>
+			<td align="right">17,224,359</td>
+			<td align="right">45,638</td>
+			<td align="right">51,689</td>
+			<td align="right">54,643</td>
+			<td align="right">53,568</td>
+			<td align="right">54,893</td>
+			<td align="right">55,114</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>55-59 years</th>
+			<td align="right">48,454</td>
+			<td align="right">13,307,234</td>
+			<td align="right">42,345</td>
+			<td align="right">51,271</td>
+			<td align="right">49,077</td>
+			<td align="right">47,009</td>
+			<td align="right">48,011</td>
+			<td align="right">44,383</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>60-64 years</th>
+			<td align="right">38,793</td>
+			<td align="right">10,654,272</td>
+			<td align="right">42,685</td>
+			<td align="right">44,528</td>
+			<td align="right">42,403</td>
+			<td align="right">39,830</td>
+			<td align="right">40,210</td>
+			<td align="right">35,911</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>65-69 years</th>
+			<td align="right">34,264</td>
+			<td align="right">9,409,940</td>
+			<td align="right">40,657</td>
+			<td align="right">38,767</td>
+			<td align="right">34,406</td>
+			<td align="right">34,897</td>
+			<td align="right">33,199</td>
+			<td align="right">28,911</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>70-74 years</th>
+			<td align="right">31,773</td>
+			<td align="right">8,725,574</td>
+			<td align="right">32,145</td>
+			<td align="right">30,008</td>
+			<td align="right">26,789</td>
+			<td align="right">26,427</td>
+			<td align="right">22,641</td>
+			<td align="right">19,515</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>75-79 years</th>
+			<td align="right">26,999</td>
+			<td align="right">7,414,559</td>
+			<td align="right">24,612</td>
+			<td align="right">21,160</td>
+			<td align="right">18,871</td>
+			<td align="right">17,028</td>
+			<td align="right">14,283</td>
+			<td align="right">11,422</td>
+		</tr>
+		<tr> 
+			<th height="22" nowrap  scope="row">80-84 years</th>
+			<td align="right">17,842</td>
+			<td align="right">4,900,234</td>
+			<td align="right">15,817</td>
+			<td align="right">12,956</td>
+			<td align="right">11,241</td>
+			<td align="right">8,811</td>
+			<td align="right">7,467</td>
+			<td align="right">5,881</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap height="22">85+ years</th>
+			<td align="right">15,508</td>
+			<td align="right">4,259,173</td>
+			<td align="right">12,385</td>
+			<td align="right">9,888</td>
+			<td align="right">7,435</td>
+			<td align="right">5,182</td>
+			<td align="right">3,828</td>
+			<td align="right">2,770</td>
+		</tr>
+		<tr> 
+			<th  scope="row" nowrap>Total</th>
+			<td align="right">1,000,000</td>
+			<td align="right">274,633,642</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+		</tr>
+	</tbody>
+	</table>
+</div>
+
+<div class="table-responsive">
+	<h3 class="caption">Candian, European, and World Standard Population</h3>
+	 <table class="even_alternating">
+	 <thead>
+		<tr>
+			<th nowrap="nowrap" scope="col">Age</th>
+			<th scope="col">European (Scandinavian 1960) Std Million<sup>1,2</sup></th>
+			<th scope="col">European (EU-27 plus EFTA 2011-2030) Std Million</th>   
+			<th scope="col">World (Segi 1960) Std Million<sup>1,2</sup></th>
+			<th scope="col">1991 Canadian Standard Million </th>
+			<th scope="col">1996 Canadian Standard Million</th>
+			<th scope="col">2011 Canadian Standard Population</th>
+			<th scope="col">2021 Canadian Standard Population (19 age groups)</th>
+			<th scope="col">World (WHO 2000-2025) Standard<sup>2</sup></th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<th  nowrap="nowrap" scope="row">00 years</th>
+			<td align="right">16,000</td>
+			<td align="right">10,000</td>
+			<td align="right">24,000</td>
+			<td align="right">14,334</td>
+			<td align="right">12,342</td>
+			<td align="right">376,321</td>
+			<td align="right">362,725</td>
+			<td align="right">17,917</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">01-04 years</th>
+			<td align="right">64,000</td>
+			<td align="right">40,000</td>
+			<td align="right">96,000</td>
+			<td align="right">55,131</td>
+			<td align="right">53,893</td>
+			<td align="right">1,522,743</td>
+			<td align="right">1,540,158
+			</td>
+			<td align="right">70,652</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">05-09 years</th>
+			<td align="right">70,000</td>
+			<td align="right">55,000</td>
+			<td align="right">100,000</td>
+			<td align="right">69,454</td>
+			<td align="right">67,985</td>
+			<td align="right">1,810,433</td>
+			<td align="right">2,072,565
+			</td>
+			<td align="right" width="157">86,870</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">10-14 years</th>
+			<td align="right">70,000</td>
+			<td align="right">55,000</td>
+			<td align="right">90,000</td>
+			<td align="right">68,034</td>
+			<td align="right">67,716</td>
+			<td align="right">1,918,164</td>
+			<td align="right">2,114,016
+			</td>
+			<td align="right">85,970</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">15-19 years</th>
+			<td align="right">70,000</td>
+			<td align="right">55,000</td>
+			<td align="right">90,000</td>
+			<td align="right">68,495</td>
+			<td align="right">67,841</td>
+			<td align="right">2,238,952</td>
+			<td align="right">2,059,975
+			</td>
+			<td align="right">84,670</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">20-24 years</th>
+			<td align="right">70,000</td>
+			<td align="right">60,000</td>
+			<td align="right">80,000</td>
+			<td align="right">75,016</td>
+			<td align="right">67,761</td>
+			<td align="right">2,354,354</td>
+			<td align="right">2,404,398
+			</td>
+			<td align="right">82,171</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">25-29 years</th>
+			<td align="right">70,000</td>
+			<td align="right">60,000</td>
+			<td align="right">80,000</td>
+			<td align="right">89,944</td>
+			<td align="right">72,914</td>
+			<td align="right">2,369,841</td>
+			<td align="right">2,674,655
+			</td>
+			<td align="right">79,272</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">30-34 years</th>
+			<td align="right">70,000</td>
+			<td align="right">65,000</td>
+			<td align="right">60,000</td>
+			<td align="right">92,400</td>
+			<td align="right">87,030</td>
+			<td align="right">2,327,955</td>
+			<td align="right">2,704,004
+			</td>
+			<td align="right">76,073</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">35-39 years</th>
+			<td align="right">70,000</td>
+			<td align="right">70,000</td>
+			<td align="right">60,000</td>
+			<td align="right">83,388</td>
+			<td align="right">88,510</td>
+			<td align="right">2,273,087</td>
+			<td align="right">2,643,161
+			</td>
+			<td align="right">71,475</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">40-44 years</th>
+			<td align="right">70,000</td>
+			<td align="right">70,000</td>
+			<td align="right">60,000</td>
+			<td align="right">76,063</td>
+			<td align="right">80,055</td>
+			<td align="right">2,385,918</td>
+			<td align="right">2,505,252
+			</td>
+			<td align="right">65,877</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">45-49 years</th>
+			<td align="right">70,000</td>
+			<td align="right">70,000</td>
+			<td align="right">60,000</td>
+			<td align="right">59,536</td>
+			<td align="right">71,847</td>
+			<td align="right">2,719,909</td>
+			<td align="right">2,381,758
+			</td>
+			<td align="right">60,379</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">50-54 years</th>
+			<td align="right">70,000</td>
+			<td align="right">70,000</td>
+			<td align="right">50,000</td>
+			<td align="right">47,649</td>
+			<td align="right">55,812</td>
+			<td align="right">2,691,260</td>
+			<td align="right">2,427,770
+			</td>
+			<td align="right">53,681</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">55-59 years</th>
+			<td align="right">60,000</td>
+			<td align="right">65,000</td>
+			<td align="right">40,000</td>
+			<td align="right">44,041</td>
+			<td align="right">44,869</td>
+			<td align="right">2,353,090</td>
+			<td align="right">2,690,509
+			</td>
+			<td align="right">45,484</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">60-64 years</th>
+			<td align="right">50,000</td>
+			<td align="right">60,000</td>
+			<td align="right">40,000</td>
+			<td align="right">42,326</td>
+			<td align="right">40,705</td>
+			<td align="right">2,050,443</td>
+			<td align="right">2,612,928
+			</td>
+			<td align="right">37,187</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">65-69 years</th>
+			<td align="right">40,000</td>
+			<td align="right">55,000</td>
+			<td align="right">30,000</td>
+			<td align="right">38,570</td>
+			<td align="right">37,858</td>
+			<td align="right">1,532,940</td>
+			<td align="right">2,226,492
+			</td>
+			<td align="right">29,590</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">70-74 years</th>
+			<td align="right">30,000</td>
+			<td align="right">50,000</td>
+			<td align="right">20,000</td>
+			<td align="right">29,660</td>
+			<td align="right">32,589</td>
+			<td align="right">1,153,822</td>
+			<td align="right">1,845,779
+			</td>
+			<td align="right">22,092</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">75-79 years</th>
+			<td align="right">20,000</td>
+			<td align="right">40,000</td>
+			<td align="right">10,000</td>
+			<td align="right">22,127</td>
+			<td align="right">23,232</td>
+			<td align="right">919,338</td>
+			<td align="right">1,272,339
+			</td>
+			<td align="right">15,195</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">80-84 years</th>
+			<td align="right">10,000</td>
+			<td align="right">25,000</td>
+			<td align="right">5,000</td>
+			<td align="right">13,595</td>
+			<td align="right">15,424</td>
+			<td align="right">701,140</td>
+			<td align="right">841,433
+			</td>
+			<td align="right">9,097</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">85+ years</th>
+			<td align="right">10,000</td>
+			<td align="right">25,000</td>
+			<td align="right">5,000</td>
+			<td align="right">10,237</td>
+			<td align="right">11,617</td>
+			<td align="right">643,070</td>
+			<td align="right">859,947
+			</td>
+			<td align="right">6,348</td>
+		</tr>
+		<tr>
+			<th  nowrap="nowrap" scope="row">Total</th>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">1,000,000</td>
+			<td align="right">34,342,780</td>
+			<td align="right">38,239,864
+			</td>
+			<td align="right">1,000,000</td>
+		</tr>
+	</tbody>
+	</table>
+	</div>
+
+
+<p><sup>1</sup> The labels for these standards were updated on November 1, 2012 to clarify which standards they correspond to, but the data did not change.  </p>
+<p><sup>2</sup> Documentation for the standards are in   
+the World Health Organization's publication, <a href="https://www.researchgate.net/publication/284696312_Age_Standardization_of_Rates_A_New_WHO_Standard">Discussion Paper 31: Age Standardization of Rates: A New WHO Standard</a><a class="extlink" href="https://www.cancer.gov/policies/linking"><img src="/images/exit.png" alt="External Web Site Policy" title="External Web Site Policy"></a> and on SEER's documentation for the <a href="world.who.html">World (WHO 2000-2025) Standard</a>.</p><!--/body_content-->        </main>
+        </div><!--close row-->
+    <img src="/i/right-body.png" alt="" class="bg-back"></div>
+
+    <div class="wrapper">
+        <meta http-equiv="last_modified" content="Thu, 06 Mar 2025 07:46:43 -0500" />
+    </div>
+</div>
+
+
+<!-- Blue Footer -->
+<footer class="footer" role="contentinfo">
+	<a class="returntop" href="#content" style="display: inline;"><span>Return to Top</span></a>
+	<div class="container-lg">
+    	<div class="row justify-content-around">
+    		<div class="col-lg-9">
+				<p class="seer-logo">SEER is supported by the <a href="https://surveillance.cancer.gov/">Surveillance Research Program (SRP)</a> in NCI's <a href="https://cancercontrol.cancer.gov/">Division of Cancer Control and Population Sciences (DCCPS)</a>. SRP provides national leadership in the science of cancer surveillance as well as analytical tools and methodological expertise in collecting, analyzing, interpreting, and disseminating reliable population-based statistics.</p>
+			</div>
+        </div>
+	</div>
+	
+	<div class="footer-links">
+    	<div class="container-lg"> 
+			<div class="row links-col">
+				<div class="col-md-3">
+					<h2>Follow SEER</h2>
+					<ul class="social">
+						<li><a href="https://surveillance.cancer.gov/blog"><img loading="lazy" src="/i/blog-icon.png" alt="SRP Blog" width="40" height="32"></a></li>
+						<li><a href="https://www.linkedin.com/showcase/nci-cancer-control-and-population-sciences/"><img loading="lazy" src="/i/linkedin-icon.png" alt="DCCPS LinkedIn" width="32" height="32"></a></li>
+					</ul>
+					<h2>Sign up for email updates</h2>
+					<a class="button-gray fw-bold" href="https://public.govdelivery.com/accounts/USNIHNCI/subscriber/new?topic_id=USNIHNCI_396">Sign Up</a>
+				</div>
+				
+				<div class="col-md-3">
+					<h2>Contact Information</h2>
+					<ul>        	
+						<li><a href="/about/contact.html">Contact SEER</a></li>
+						<li><a href="https://livehelp.cancer.gov/">NCI LiveHelp Online Chat</a></li>
+					</ul>
+				</div>
+				
+				<div class="col-md-3">
+					<h2>More Information</h2>
+					<ul>    
+						<li><a href="https://surveillance.cancer.gov/jobs/">Careers</a></li>	
+						<li><a href="/sitemap.html">Sitemap</a></li>
+						<li><a href="/about/using-website.html">Using This Website</a></li>
+					</ul>
+				</div>	
+				
+				<div class="col-md-3">
+					<h2>Policies</h2>
+					<ul>        						
+						<li><a href="https://www.cancer.gov/policies/accessibility">Accessibility</a></li>
+						<li><a href="https://www.cancer.gov/policies/disclaimer">Disclaimer</a></li>
+						<li><a href="https://www.cancer.gov/policies/foia">FOIA</a></li>
+						<li><a href="https://www.hhs.gov/vulnerability-disclosure-policy">HHS Vulnerability Disclosure</a></li>
+						<li><a href="https://www.cancer.gov/policies/privacy-security">Privacy &amp; Security</a></li>
+						<li><a href="https://www.cancer.gov/policies/copyright-reuse">Reuse of Graphics and Text</a></li>
+						<li><a href="https://www.cancer.gov/policies/linking">Website Linking</a></li>
+					</ul>
+				</div>	
+			</div>
+
+			<ul class="linkList ps-0 p-md-2">
+				<li><a href="https://www.hhs.gov/">U.S. Department of Health and Human Services</a></li>
+				<li><a href="https://www.nih.gov/">National Institutes of Health</a></li>
+				<li><a href="https://www.cancer.gov/">National Cancer Institute</a></li>
+				<li class="last"><a href="https://www.usa.gov/">USA.gov</a></li>
+			</ul>
+			<p class="text-center">NIH... Turning Discovery Into Health<sup>&reg;</sup></p>
+    	</div>
+	</div>
+</footer>
+
+
+<script type="text/javascript" src="/j/general.js"></script>
+
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+
+<!-- Do not defer jquery-ui, it needs to be available for mnav -->
+<script src="/j/jquery-ui.min.js" type="text/javascript"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-125238734-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-125238734-1');
+</script>
+
+<!-- NCI WEB ANALYTICS CODE -->
+<script src="//static.cancer.gov/webanalytics/WA_DCCPS_PageLoad.js"></script>
+
+<!-- create Facebook share URL for current page-->
+<script>
+    var fb_page = window.location.href; //current page url
+    var page_title = $("title").text(); //current page title
+    fb_page = "https://www.facebook.com/sharer/sharer.php?u=" + fb_page + "&t=" + page_title; //insert url and title into the FB sharer
+    $(".facebook-share-button").attr('href', fb_page); //add sharer url to link
+</script>
+<!-- Additional Scripts -->
+
+</body>
+</html>

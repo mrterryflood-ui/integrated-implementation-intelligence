@@ -1,0 +1,64 @@
+{
+  "task": "Health research integration and denominator adjudication",
+  "triage": "L4 GREEN: bounded research/software work; no current patient intervention",
+  "authorized_by": "Terry continuation 2026-11-08",
+  "base_revision": "06f21b4ef5fa3007c22acfaee453f8ee0ef0d452",
+  "reuse": {
+    "reused": [
+      "existing research/fragmentation-harm contracts and source archive",
+      "existing saved-case lifecycle and research-plan editor",
+      "existing RPLICE stateless claim validator",
+      "existing24-slot private register and evaluation protocol"
+    ],
+    "extended": [
+      "revision-bound integrated acceptance record",
+      "source-specific denominator adjudication",
+      "developmental comparison and real study readiness",
+      "clinical-pathway eligibility, capture and acceptance requirements"
+    ],
+    "new": "Only connected fixes/evidence needed for the current gaps; no new service or datastore",
+    "out_of_scope": [
+      "patient enrollment or care",
+      "external correspondence",
+      "paid agents or services",
+      "sensitive/public case-register publication",
+      "auth or tenant boundary weakening"
+    ]
+  },
+  "lanes": {
+    "root": "integration and release reconciliation; clinical pathway readiness",
+    "diagnostic_evidence": "DEN01/02/03/06 isolated source and replay adjudication",
+    "pilot_adjudication": "private study custody audit, executable preparation and developmental comparison; reserved placeholders unchanged"
+  },
+  "review_boundary": "AI engineering/scientific challenges are identified as AI; no actual clinical or human study acceptance inferred",
+  "policies": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "cde8a90b65600b16855225f9ad6c1f8e3c222e0bb2c5828e3dca067153f1220a"
+    },
+    {
+      "path": "platform-doctrine/SKILL.md",
+      "sha256": "45ab40eddbd869ccf9d43bbbe23132b0e1f80b099b82889e7b03801b5963209c"
+    },
+    {
+      "path": "docs/engineering/IRON-ENG-001.md",
+      "sha256": "60301dc8d8dd2443443e7afdffd8f1c33e199309668e7e8e6ebdc77932ac4c8b"
+    },
+    {
+      "path": "docs/dis/PLATFORM-STAKEHOLDER-ASSURANCE-STANDARD.md",
+      "sha256": "a078c8734d61be967c8365d7811be76933ced690ab0140c5958914f3d8a463af"
+    },
+    {
+      "path": "docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md",
+      "sha256": "ba23c2eb994edd6d9d5cca31355dda33d7b31ab2bea4e21ccf34ce870dd68d2c"
+    },
+    {
+      "path": "docs/dis/FEDERATED-EVIDENCE-AND-DECISION-STANDARD.md",
+      "sha256": "ea45285f6209a15041154bcd6d24478a3750fc2f02635bfa62afb76dcfe744e1"
+    },
+    {
+      "path": "docs/dis/STACK-AGNOSTIC-ENGINEERING-INQUIRY-PROTOCOL.md",
+      "sha256": "ef8d29fae8a3c07efe445d482e3b833b5a9bd0a7d7f0c3b8de2d653532e78b73"
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "schema": "dis-clinical-pathway-evaluation-v1",
+  "recorded_at": "2026-11-09T00:05:40.218260+00:00",
+  "decision_timezone": "America/Chicago",
+  "protocol": "../EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md",
+  "protocol_version": "0.2",
+  "scope": "RESEARCH_SPECIFICATION_REVIEW",
+  "clinical_pathway_accepted": false,
+  "patient_enrollment_authorized": false,
+  "clinical_effect_observed": false,
+  "independent_human_decision_study_completed": false,
+  "software_is_accepted_clinical_record_system": false,
+  "tracks": [
+    "CRC screening and diagnostic follow-through",
+    "Suspected endometriosis / HerHealth"
+  ],
+  "implementation_limits": [
+    "Dedicated typed research-case builder currently CRC-specific",
+    "Endometriosis clinical workflow not implemented or accepted",
+    "Engineering tests use synthetic identities and controlled database fixtures",
+    "Full ACOG2026 guidance requires qualified local review"
+  ],
+  "roles": {
+    "site_clinical_lead": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "operational_lead": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "data_steward": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "independent_methods_lead": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "independent_clinical_adjudicator_1": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "independent_clinical_adjudicator_2": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "patient_community_representative": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    },
+    "independent_safety_reviewer": {
+      "accepted_name": null,
+      "accepted_at": null,
+      "acceptance_evidence": null
+    }
+  },
+  "gates": [
+    {
+      "id": "CP01",
+      "name": "Clinical specification and guideline acceptance",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "Qualified reviewers reconcile current complete guidance and local scope",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP02",
+      "name": "Local authority and privacy",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "Actual site acceptance and research/privacy/consent/data-use determinations",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP03",
+      "name": "Capacity and accountable ownership",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "Accepted roles, covering arrangements, receiving services, capacity and resources",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP04",
+      "name": "Measurement and comparison freeze",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "Eligible denominator, time origin, comparator, instrument, analysis, missingness and sample rationale",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP05",
+      "name": "Clinical workflow rehearsal",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "Authorized representative end-to-end clinical cases and failure recovery at a pinned revision",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP06",
+      "name": "Feasibility release",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "All prior gates accepted, monitoring and stop/restart rules approved",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP07",
+      "name": "Comparative clinical benefit",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "Independent patient outcome and harm evaluation with uncertainty",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    },
+    {
+      "id": "CP08",
+      "name": "Transfer and sustainment",
+      "status": "NOT_ESTABLISHED",
+      "required_evidence": "New-site calibration and durable capacity, budget and source-change monitoring",
+      "evidence_reference": null,
+      "accepted_by": null,
+      "accepted_at": null
+    }
+  ],
+  "specification_review": {
+    "ai_review_status": "PENDING",
+    "qualified_clinical_review_status": "NOT_EXECUTED",
+    "patient_review_status": "NOT_EXECUTED"
+  },
+  "clinical_observations": {
+    "enrolled_patients": null,
+    "eligible_patients": null,
+    "verified_appropriate_actions": null,
+    "adverse_events": null,
+    "meaning": "No authorized clinical dataset was supplied or created; null is not an observed zero."
+  },
+  "resources": {
+    "site": null,
+    "staffing": null,
+    "diagnostic_capacity": null,
+    "funding": null,
+    "accepted_budget": null
+  },
+  "next_authorized_step": "Independent specification review and preparation of an unsigned local clinical acceptance packet",
+  "authority": "Project sponsor authorized integration and evaluation preparation; this file does not create institutional or clinician acceptance."
+}

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {dispatch} from "../app/api/mcp/route";
+import {dispatch} from "../app/api/mcp/dispatch";
 
 const call=async(name:string,args:Record<string,unknown>)=>{
   const result=await dispatch({jsonrpc:"2.0",id:17,method:"tools/call",params:{name,arguments:args}});

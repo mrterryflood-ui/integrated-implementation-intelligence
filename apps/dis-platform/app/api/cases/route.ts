@@ -1,10 +1,13 @@
 import {auth} from "@clerk/nextjs/server";
 import {neon} from "@neondatabase/serverless";
-import {buildPlaybook,validatePlaybook} from "../../../lib/decision-playbook";
+import {buildPlaybook,validatePlaybook,reconcileTaskCompletion} from "../../../lib/decision-playbook";
 import {buildLearningCheckpoint} from "../../../lib/longitudinal-learning";
-import {CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
+import {CASE_REPORT_MAX_DB_BYTES,CASE_PLAYBOOK_MAX_DB_BYTES,CasePayloadError,readBoundedCaseJson,serializeCasePlaybook,serializeCaseReport} from "../../../lib/case-payload-capacity";
 import {CASE_HISTORY_DB_PAYLOAD_BYTES,CASE_HISTORY_LIMIT,CASE_HISTORY_PAGE_SQL,CaseHistoryReadError,buildCaseHistoryPageBody,decodeCaseHistoryCursor,type CaseHistoryDatabasePage} from "../../../lib/case-history-pagination";
 import {randomUUID} from "node:crypto";
+import {admitCaseReport} from "../../../lib/research-case-admission";
+import {buildResearchWorkflowCase,reviseResearchWorkflowReport} from "../../../lib/research-workflow";
+import {CASE_RESEARCH_REVISION_SQL} from "../../../lib/research-case-revision";
 export const runtime="nodejs";
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 async function context(){const {userId}=await auth();if(!userId)return null;if(!process.env.DIS_DATABASE_URL)throw Error("Data unavailable");return {userId,sql:neon(process.env.DIS_DATABASE_URL)}}
@@ -29,7 +32,13 @@ export async function GET(request:Request){try{
 }catch{return fail()}}
 export async function POST(request:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
- const input=await readBoundedCaseJson(request);const workspaceId=String(input.workspaceId||""),question=String(input.question||"").trim();
+ let input=await readBoundedCaseJson(request);
+ if(input.researchWorkflow!==undefined){
+  if(request.headers.get("origin")!==new URL(request.url).origin)return Response.json({error:"Same-origin research save required"},{status:403});
+  if(Object.keys(input).some(k=>!["workspaceId","researchWorkflow"].includes(k)))return Response.json({error:"Research saves accept workflow inputs and a workspace only"},{status:400});
+  input={workspaceId:input.workspaceId,...buildResearchWorkflowCase(input.researchWorkflow)};
+ }else if(input.report!==undefined){input={...input,report:admitCaseReport(input.report)};}
+ const workspaceId=String(input.workspaceId||""),question=String(input.question||"").trim();
  const title=String(input.title||question.slice(0,90)).trim();
  if(!uuid.test(workspaceId)||question.length<5||question.length>3000||title.length<1||title.length>150)return Response.json({error:"Invalid workspace or question"},{status:400});
  const report=input.report&&typeof input.report==="object"?input.report:{state:"NOT_RUN"};
@@ -52,19 +61,38 @@ export async function POST(request:Request){try{
 export async function PATCH(request:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
  const input=await readBoundedCaseJson(request),id=String(input.id||""),version=Number(input.version);
- if(!uuid.test(id)||!Number.isInteger(version)||version<1||!validatePlaybook(input.playbook))return Response.json({error:"Invalid case update"},{status:400});
- const body=serializeCasePlaybook(input.playbook);
+ if(input.researchWorkflow!==undefined){
+  if(request.headers.get("origin")!==new URL(request.url).origin)return Response.json({error:"Same-origin research revision required"},{status:403});
+  if(Object.keys(input).some(k=>!["id","version","researchWorkflow"].includes(k))||!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647)return Response.json({error:"Research revision requires exact case ID, integer version and typed inputs"},{status:400});
+  const prior=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN octet_length(report::text)<=${CASE_REPORT_MAX_DB_BYTES} THEN report ELSE NULL END AS report FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
+  if(!prior[1].length)return Response.json({error:"Case changed or access denied. Reload before retrying."},{status:409});
+  if(prior[1][0].report===null)return Response.json({error:"Stored research report exceeds bounded revision capacity; nothing changed or truncated."},{status:413});
+  const body=serializeCaseReport(reviseResearchWorkflowReport(prior[1][0].report,input.researchWorkflow));
+  const revised=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql.query(CASE_RESEARCH_REVISION_SQL,[id,version,body])]);
+  if(!revised[1].length)return Response.json({error:"Case changed or access denied. Nothing revised; reload before retrying."},{status:409});
+  return Response.json({case:revised[1][0],historyRecorded:true,note:"Research inputs saved as a new revision. Prior evidence and the current action plan are retained; review the plan against the changed inputs."},{headers:{"cache-control":"private, no-store"}});
+ }
+ if(!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647||!validatePlaybook(input.playbook))return Response.json({error:"Invalid case update"},{status:400});
+ const priorPlan=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN octet_length(playbook::text)<=${CASE_PLAYBOOK_MAX_DB_BYTES} THEN playbook ELSE NULL END AS playbook FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
+ if(!priorPlan[1].length)return Response.json({error:"Version conflict, not found, or access denied. Reload before retrying."},{status:409});
+ if(priorPlan[1][0].playbook===null)return Response.json({error:"Stored plan exceeds bounded revision capacity; nothing changed or truncated."},{status:413});
+ const reconciled=reconcileTaskCompletion(priorPlan[1][0].playbook,input.playbook);
+ const body=serializeCasePlaybook(reconciled.playbook);
  // Case update and checkpoint archive stay atomic and version-conflict protected.
- const learning=JSON.stringify(buildLearningCheckpoint(input.playbook,version+1,new Date().toISOString()));
+ const learning=JSON.stringify(buildLearningCheckpoint(reconciled.playbook,version+1,new Date().toISOString()));
  const rows=await ctx.sql.transaction([
   ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,
-  ctx.sql`WITH updated AS (
-    UPDATE dis_casework SET playbook=${body}::jsonb,version=version+1,updated_at=now()
-    WHERE id=${id} AND version=${version}
-    RETURNING id,workspace_id,owner_subject,title,question,report,playbook,version,status,updated_at
+  ctx.sql`WITH prior AS MATERIALIZED (
+    SELECT id,playbook,version FROM dis_casework WHERE id=${id} AND version=${version} FOR UPDATE
+   ), updated AS (
+    UPDATE dis_casework c SET playbook=${body}::jsonb,version=c.version+1,updated_at=now()
+    FROM prior WHERE c.id=prior.id AND c.version=${version}
+    RETURNING c.id,c.workspace_id,c.owner_subject,c.title,c.question,c.report,c.playbook,c.version,c.status,c.updated_at
    ), journal AS (
     INSERT INTO dis_case_events(case_id,workspace_id,owner_subject,event_type,payload)
-    SELECT id,workspace_id,owner_subject,'CHECKPOINT',${learning}::jsonb FROM updated
+    SELECT updated.id,updated.workspace_id,updated.owner_subject,'CHECKPOINT',
+      ${learning}::jsonb||jsonb_build_object('previousVersion',prior.version,'previousPlaybook',prior.playbook,'playbook',updated.playbook)
+    FROM updated JOIN prior ON prior.id=updated.id
     RETURNING id
    )
    SELECT updated.id,updated.workspace_id,updated.title,updated.question,
@@ -72,5 +100,5 @@ export async function PATCH(request:Request){try{
      updated.updated_at,journal.id AS learning_event_id FROM updated CROSS JOIN journal`
  ]);
  if(!rows[1].length)return Response.json({error:"Version conflict, not found, or access denied. Reload before retrying."},{status:409});
- return Response.json({case:rows[1][0],historyRecorded:true});
+ return Response.json({case:rows[1][0],historyRecorded:true,reopenedTaskIds:reconciled.reopenedTaskIds,...(reconciled.reopenedTaskIds.length?{note:"Changed task guidance requires renewed completion. Earlier completion and notes remain in history; review the revised requirements before recording completion again."}:{})});
 }catch(e){return fail(e)}}

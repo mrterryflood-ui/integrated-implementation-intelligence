@@ -1,0 +1,24 @@
+[
+  {
+    "id": "hinds_report_interpretation",
+    "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=2&referrer=table",
+    "retrieved_at": "2026-11-08T23:47:11.892529+00:00",
+    "http_status": 200,
+    "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=2&referrer=table",
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 67589,
+    "path": "/workspace/scratch/ad20f6f1a514/denominator_adjudication/source_retrieval/hinds_report_interpretation.html",
+    "sha256": "51ac357e38fac45fef00fa31ba33b26a4c986cdefdc1c6c6cdcaf8caaa3ffb87"
+  },
+  {
+    "id": "harris_report_interpretation",
+    "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=2&referrer=table",
+    "retrieved_at": "2026-11-08T23:47:11.893371+00:00",
+    "http_status": 200,
+    "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=2&referrer=table",
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 175046,
+    "path": "/workspace/scratch/ad20f6f1a514/denominator_adjudication/source_retrieval/harris_report_interpretation.html",
+    "sha256": "7d0041e7e2522790d5a111ca2169eb9a4b26eb7117ae894235e4aa7372dd7900"
+  }
+]

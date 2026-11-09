@@ -1,0 +1,103 @@
+{
+  "schema": "dis-current-report-alignment-v1",
+  "archived_source": {
+    "archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+    "manifest_entries_verified": 18,
+    "html_csv_cells_verified": 4368,
+    "source_receipts": {
+      "hinds_all": {
+        "sha256": "83484db2208ea5914aa588e19118ca150645d69fba35316aa9688198ce2f1aa6",
+        "county_rows": 82
+      },
+      "hinds_late": {
+        "sha256": "130843a055b089fb0471ab559fb214ee3b7efda90b18f94727ef8e09d64226ca",
+        "county_rows": 82
+      },
+      "harris_all": {
+        "sha256": "aec6d2b4d7e9c7ac7ddbf2a30c7d700286ac6eab4e8a0ff88ca4a1c983feb456",
+        "county_rows": 254
+      },
+      "harris_late": {
+        "sha256": "a04b3b49759d680ccd4bb508e5bd68713e1a6516bb9c8c951c5c21a623522af3",
+        "county_rows": 254
+      }
+    },
+    "archive_reported_acquisition_revision": "73455a439f950ffa0644d5714843b06b173f029a",
+    "acquisition_runtime_revision_adjudicated_by_this_script": false,
+    "sources_acquired_at": "2026-11-07T20:37:41.234665+00:00"
+  },
+  "current_exports": {
+    "hinds_all": {
+      "county_rows_matched": 82,
+      "retrieval": {
+        "id": "hinds_all_export",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "retrieved_at": "2026-11-08T23:51:01.694402+00:00",
+        "historical_definition_availability_proven": false,
+        "http_status": 200,
+        "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "content_type": "text/csv; charset=iso-8859-1",
+        "bytes": 11812,
+        "path": "hinds_all_export.csv",
+        "sha256": "34ebb729828bb03454daddc69e708d902faca33958e95c8dcbe6c58612ae05b2"
+      },
+      "historical_dictionary_availability_proven": false
+    },
+    "hinds_late": {
+      "county_rows_matched": 82,
+      "retrieval": {
+        "id": "hinds_late_export",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "retrieved_at": "2026-11-08T23:51:01.695183+00:00",
+        "historical_definition_availability_proven": false,
+        "http_status": 200,
+        "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "content_type": "text/csv; charset=iso-8859-1",
+        "bytes": 9838,
+        "path": "hinds_late_export.csv",
+        "sha256": "d5cbbfc1c2f96f9ecb7c5274cb37540975e74ffdc0c3e26e9ef38c6b61d5f284"
+      },
+      "historical_dictionary_availability_proven": false
+    },
+    "harris_all": {
+      "county_rows_matched": 254,
+      "retrieval": {
+        "id": "harris_all_export",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "retrieved_at": "2026-11-08T23:51:01.695884+00:00",
+        "historical_definition_availability_proven": false,
+        "http_status": 200,
+        "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "content_type": "text/csv; charset=iso-8859-1",
+        "bytes": 25637,
+        "path": "harris_all_export.csv",
+        "sha256": "82c21ab022d4598139d61d15fcac3a4f3756eb38991db7ecd4569ec188da7665"
+      },
+      "historical_dictionary_availability_proven": false
+    },
+    "harris_late": {
+      "county_rows_matched": 254,
+      "retrieval": {
+        "id": "harris_late_export",
+        "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "retrieved_at": "2026-11-08T23:51:06.487200+00:00",
+        "historical_definition_availability_proven": false,
+        "http_status": 200,
+        "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+        "content_type": "text/csv; charset=iso-8859-1",
+        "bytes": 21262,
+        "path": "harris_late_export.csv",
+        "sha256": "551a3c9c2fdcb37b6875877d3211ebcf86cb30aae4dc24e6e2abf1f5292bfd5f"
+      },
+      "historical_dictionary_availability_proven": false
+    }
+  },
+  "core_measurement_cells_matched": 3696,
+  "county_identity_rows": 336,
+  "rank_and_trend_cells_compared": false,
+  "unknown_stage_membership_identified": false,
+  "dco_autopsy_membership_identified": false,
+  "historical_dictionary_availability_proven": false,
+  "geographic_boundary_vintage_established": false,
+  "claim": "Current exports match all retained county core measurements; later retrieval is not historical availability proof."
+}

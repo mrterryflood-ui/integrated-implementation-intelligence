@@ -1,0 +1,70 @@
+{
+  "schema": "dis-clinical-specification-tabletop-v1",
+  "created_at": "2026-11-09T00:05:40.218260+00:00",
+  "evidence_class": "SYNTHETIC_DOCUMENT_REVIEW_ONLY",
+  "patient_data": false,
+  "is_live_platform_test": false,
+  "is_qualified_clinical_review": false,
+  "cases": [
+    {
+      "id": "CP-T01",
+      "situation": "An abnormal stool screening result is followed by a referral order and a repeat negative stool test; no colonoscopy completion evidence is available.",
+      "required_boundary": "Keep diagnostic evaluation unresolved; a referral or repeat stool result does not verify indicated diagnostic completion.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T02",
+      "situation": "A person below usual screening eligibility age presents with concerning symptoms.",
+      "required_boundary": "Route to qualified clinical assessment using symptomatic guidance; do not use average-risk screening age to dismiss the concern.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T03",
+      "situation": "A person has persistent pelvic symptoms and functional impact despite a normal ultrasound.",
+      "required_boundary": "Preserve differential and reassessment; normal imaging alone cannot close suspected endometriosis.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T04",
+      "situation": "A person declines an offered action after an accessible discussion and wants later reassessment.",
+      "required_boundary": "Record informed choice and follow-up preferences; do not label diagnostic evaluation complete or infer harm.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T05",
+      "situation": "A patient reports an outside procedure but no authorized result or receiving-team handoff has been reconciled.",
+      "required_boundary": "Retain patient report as evidence and seek permitted reconciliation; distinguish reported completion from verified completion and transfer acceptance.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T06",
+      "situation": "Patient-reported onset predates the first observable record by years and the onset date is uncertain.",
+      "required_boundary": "Retain both times and uncertainty; do not set unknown onset to zero or measure delay only among confirmed diagnoses.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T07",
+      "situation": "A public research case is proposed as the destination for identifiable clinical information.",
+      "required_boundary": "Do not ingest; require the accepted clinical data boundary and actual local authority.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T08",
+      "situation": "Outreach increases while the receiving service has no additional capacity and the unresolved queue grows.",
+      "required_boundary": "Measure capacity and burden; revisit the intervention and resources rather than infer benefit from additional alerts or referrals.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T09",
+      "situation": "An urgent concern arises while a research prompt is waiting for review.",
+      "required_boundary": "Use the established clinical triage and responsible covering team; the research queue cannot replace urgent care governance.",
+      "observed_review": null
+    },
+    {
+      "id": "CP-T10",
+      "situation": "An endometriosis case is entered through the current CRC-specific research builder.",
+      "required_boundary": "Reject this as a valid condition-specific implementation; do not attach a CRC baseline or claim an accepted endometriosis workflow.",
+      "observed_review": null
+    }
+  ]
+}

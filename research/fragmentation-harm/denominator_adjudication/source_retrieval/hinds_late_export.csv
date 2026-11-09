@@ -1,0 +1,126 @@
+Incidence Rate Report for Mississippi by County
+
+"Colon & Rectum (Late Stage^), 2019-2023"
+
+"All Races (includes Hispanic), Both Sexes, All Ages"
+
+Sorted by Name
+
+County,FIPS,2023 Rural-Urban Continuum Codes([rural urban note]),"Age-Adjusted Incidence Rate([rate note]) - cases per 100,000","Lower 95% Confidence Interval","Upper 95% Confidence Interval","CI*Rank([rank note])","Lower CI (CI*Rank)","Upper CI (CI*Rank)",Average Annual Count,Percent of Cases with Late Stage
+"Mississippi(2)",28000,N/A,28.9 ,28, 29.7,N/A , N/A , N/A,1030,63.0
+"US (SEER+NPCR)(1)",00000,N/A,22.3 ,22.2, 22.3,N/A , N/A , N/A,89163,60.2
+"Adams County(2)",28001,Rural,18.9 ,13.1, 26.6,75 , 36 , 75,8,48.2
+"Alcorn County(2)",28003,Rural,28.5 ,21.8, 36.9,48 , 9 , 73,13,66.7
+"Amite County(2)",28005,Rural,28.8 ,18.1, 44.1,43 , 2 , 75,6,60.9
+"Attala County(2)",28007,Rural,36.2 ,25.9, 49.7,14 , 1 , 70,9,65.2
+"Bolivar County(2)",28011,Rural,22.9 ,16.6, 31,69 , 21 , 75,9,45.1
+"Calhoun County(2)",28013,Rural,54.3 ,39.3, 73.5,1 , 1 , 34,10,72.7
+"Carroll County(2)",28015,Rural,19.3 ,10.8, 33.6,74 , 16 , 75,3,51.6
+"Chickasaw County(2)",28017,Rural,42.2 ,30.5, 57.1,7 , 1 , 61,9,63.9
+"Choctaw County(2)",28019,Rural,35.7 ,22.6, 55.1,17 , 1 , 75,5,80.0
+"Clarke County(2)",28023,Rural,28.1 ,18.1, 41.8,51 , 3 , 75,6,48.3
+"Clay County(2)",28025,Rural,39.9 ,28.9, 53.8,9 , 1 , 68,10,72.7
+"Coahoma County(2)",28027,Rural,39.4 ,28.7, 52.8,10 , 1 , 66,10,64.5
+"Copiah County(2)",28029,Urban,25.7 ,19, 34.2,58 , 14 , 75,11,58.9
+"Covington County(2)",28031,Rural,31.1 ,21.4, 43.8,36 , 3 , 75,7,53.0
+"DeSoto County(2)",28033,Urban,28.5 ,25.2, 32.2,47 , 21 , 64,57,65.0
+"Forrest County(2)",28035,Urban,21.1 ,16.8, 26.2,72 , 42 , 75,17,55.5
+"George County(2)",28039,Rural,27.5 ,19.2, 38.4,53 , 6 , 75,8,65.5
+"Greene County(2)",28041,Rural,28.6 ,18.2, 43.1,45 , 3 , 75,5,66.7
+"Grenada County(2)",28043,Rural,32.4 ,22.7, 44.9,28 , 2 , 74,8,72.7
+"Hancock County(2)",28045,Urban,27 ,21.3, 33.8,54 , 15 , 74,18,59.1
+"Harrison County(2)",28047,Urban,29.8 ,26.7, 33.1,40 , 18 , 59,74,61.1
+"Hinds County(2)",28049,Urban,29.9 ,26.8, 33.2,39 , 18 , 58,75,63.7
+"Holmes County(2)",28051,Urban,44 ,31.4, 60.1,4 , 1 , 64,9,66.2
+"Humphreys County(2)",28053,Rural,44.2 ,27.1, 68.8,3 , 1 , 73,5,56.1
+"Itawamba County(2)",28057,Rural,32.7 ,23.9, 43.8,25 , 3 , 73,10,65.3
+"Jackson County(2)",28059,Urban,31.6 ,27.8, 35.7,32 , 13 , 56,54,68.2
+"Jasper County(2)",28061,Rural,24.9 ,15.9, 37.6,62 , 7 , 75,5,68.4
+"Jefferson Davis County(2)",28065,Rural,31.3 ,19.5, 48.2,35 , 2 , 75,5,58.5
+"Jones County(2)",28067,Rural,25.5 ,20.7, 31.3,59 , 23 , 74,20,63.0
+"Kemper County(2)",28069,Rural,29.5 ,16.9, 48.7,42 , 1 , 75,4,58.1
+"Lafayette County(2)",28071,Rural,28.6 ,22.4, 35.9,44 , 11 , 73,16,72.5
+"Lamar County(2)",28073,Urban,24 ,19.2, 29.6,67 , 26 , 75,18,62.5
+"Lauderdale County(2)",28075,Rural,24.5 ,20, 29.7,63 , 27 , 74,22,53.3
+"Lawrence County(2)",28077,Rural,32.8 ,21.1, 49.2,24 , 1 , 75,5,66.7
+"Leake County(2)",28079,Rural,36.1 ,26.5, 48.2,15 , 2 , 70,10,65.8
+"Lee County(2)",28081,Rural,31.3 ,26.4, 36.9,33 , 9 , 63,30,64.7
+"Leflore County(2)",28083,Rural,28.1 ,20.5, 37.7,50 , 7 , 75,10,47.1
+"Lincoln County(2)",28085,Rural,30 ,23, 38.5,38 , 7 , 73,13,69.1
+"Lowndes County(2)",28087,Rural,31.3 ,25.4, 38.2,34 , 8 , 68,21,71.4
+"Madison County(2)",28089,Urban,23.1 ,19.3, 27.3,68 , 39 , 75,28,59.0
+"Marion County(2)",28091,Rural,26 ,18.5, 35.7,57 , 10 , 75,8,60.0
+"Marshall County(2)",28093,Urban,30.7 ,23.6, 39.3,37 , 6 , 72,14,64.8
+"Monroe County(2)",28095,Rural,31.6 ,24.7, 40.1,31 , 6 , 70,15,65.2
+"Montgomery County(2)",28097,Rural,26.1 ,14.8, 43.3,56 , 3 , 75,4,48.6
+"Neshoba County(2)",28099,Rural,38.6 ,29.7, 49.3,11 , 1 , 59,14,64.2
+"Newton County(2)",28101,Rural,34.5 ,24.6, 47.2,21 , 2 , 73,8,61.8
+"Noxubee County(2)",28103,Rural,32.5 ,19.4, 51.4,27 , 1 , 75,4,60.6
+"Oktibbeha County(2)",28105,Rural,25 ,18.7, 32.7,61 , 16 , 75,11,61.5
+"Panola County(2)",28107,Rural,33.9 ,26.3, 43.2,23 , 3 , 67,14,69.9
+"Pearl River County(2)",28109,Rural,28.1 ,22.8, 34.4,49 , 14 , 72,21,68.0
+"Pike County(2)",28113,Rural,26.1 ,19.8, 33.8,55 , 15 , 75,12,60.2
+"Pontotoc County(2)",28115,Rural,32.1 ,23.9, 42.1,30 , 4 , 72,11,62.8
+"Prentiss County(2)",28117,Rural,27.9 ,20, 38,52 , 6 , 75,9,65.2
+"Quitman County(2)",28119,Rural,43.5 ,25.4, 71,6 , 1 , 75,4,66.7
+"Rankin County(2)",28121,Urban,21.1 ,18.2, 24.3,71 , 52 , 75,39,61.9
+"Scott County(2)",28123,Urban,34.2 ,25.4, 45.1,22 , 2 , 71,11,70.7
+"Simpson County(2)",28127,Urban,32.5 ,24.1, 43,26 , 3 , 71,11,63.2
+"Smith County(2)",28129,Rural,32.2 ,21.6, 46.6,29 , 2 , 75,6,69.6
+"Stone County(2)",28131,Urban,20.8 ,13.3, 31.5,73 , 15 , 75,5,67.6
+"Sunflower County(2)",28133,Rural,34.8 ,25.5, 46.3,20 , 2 , 70,10,58.8
+"Tallahatchie County(2)",28135,Rural,40.9 ,27.1, 59.5,8 , 1 , 72,6,75.0
+"Tate County(2)",28137,Urban,36.8 ,27.8, 47.8,13 , 1 , 65,12,79.2
+"Tippah County(2)",28139,Rural,35.2 ,25.7, 47.3,19 , 2 , 72,10,75.0
+"Tishomingo County(2)",28141,Rural,28.6 ,20.4, 39.5,46 , 6 , 75,8,62.7
+"Tunica County(2)",28143,Urban,48.7 ,30.2, 74.3,2 , 1 , 71,5,71.9
+"Union County(2)",28145,Rural,29.6 ,21.9, 39.3,41 , 6 , 74,10,65.4
+"Walthall County(2)",28147,Rural,21.4 ,13.2, 33.5,70 , 14 , 75,5,60.5
+"Warren County(2)",28149,Rural,25.2 ,19.4, 32.1,60 , 18 , 75,14,64.3
+"Washington County(2)",28151,Rural,24.1 ,18.4, 31.1,65 , 22 , 75,14,52.7
+"Wayne County(2)",28153,Rural,35.7 ,25.5, 48.8,16 , 1 , 72,9,70.5
+"Webster County(2)",28155,Rural,43.8 ,29.2, 63.7,5 , 1 , 68,6,66.7
+"Wilkinson County(2)",28157,Rural,35.5 ,21.2, 56.6,18 , 1 , 75,4,66.7
+"Winston County(2)",28159,Rural,24.3 ,16.3, 35.4,64 , 10 , 75,6,71.1
+"Yalobusha County(2)",28161,Rural,24 ,13.9, 38.8,66 , 5 , 75,4,43.5
+"Yazoo County(2)",28163,Urban,38.4 ,28.7, 50.4,12 , 1 , 63,11,64.3
+"Benton County(2)",28009,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Claiborne County(2)",28021,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Franklin County(2)",28037,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Issaquena County(2)",28055,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Jefferson County(2)",28063,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Perry County(2)",28111,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Sharkey County(2)",28125,Rural,* ,*, *,* , * , *,3 or fewer,*
+
+
+Notes:
+
+Created by statecancerprofiles.cancer.gov on 11/08/2026 6:51 pm.
+
+"State Cancer Registries [ https://www.cdc.gov/national-program-cancer-registries/contact/index.html ] may provide more current or more local data."
+
+"
+
+Trend
+   Rising when 95% confidence interval of average annual percent change is above 0.
+   Stable when 95% confidence interval of average annual percent change includes 0.
+   Falling when 95% confidence interval of average annual percent change is below 0.
+"
+
+"[rate note] Incidence rates (cases per 100,000 population per year) are age-adjusted to the 2000 US standard population [ http://www.seer.cancer.gov/stdpopulations/ ] (SEER areas use 20 age groups and NPCR areas use 19 age groups). Rates are for invasive cancer only (except for bladder cancer which is invasive and in situ) or unless otherwise specified. Rates calculated using SEER*Stat [ https://seer.cancer.gov/seerstat/ ]. Population counts for denominators are based on Census populations as modified [https://seer.cancer.gov/popdata/] by NCI. The US Population Data File [https://seer.cancer.gov/popdata/] is used for SEER and NPCR incidence rates."
+
+"Rates are computed using cancers classified as malignant based on ICD-O-3. For more information see malignant.html."
+
+"[stage note] Late Stage is defined as cases determined to be regional or distant. Due to changes in stage coding, Combined Summary Stage with Expanded Regional Codes (2004+) is used for data from Surveillance, Epidemiology, and End Results (SEER) databases and Merged Summary Stage is used for data from National Program of Cancer Registries [ https://www.cdc.gov/cancer/npcr/index.htm ] databases. Due to the increased complexity with staging, other staging variables maybe used if necessary."
+
+"[rank note] Results presented with the CI*Rank statistics help show the usefulness of ranks. For example, ranks for relatively rare diseases or less populated areas may be essentially meaningless because of their large variability, but ranks for more common diseases in densely populated regions can be very useful. The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas. More information about methodology can be found on the CI*Rank website [ https://surveillance.cancer.gov/cirank/ ]."
+
+"[rural urban note] Rural–urban county classifications are based on the 2023 USDA Rural–Urban Continuum Codes [ https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/ ] (except for Connecticut Counties which use 2013 codes). State-level cancer rates for rural areas are calculated using cancer cases registered exclusively in rural counties, while state-level cancer rates for urban areas are calculated using cases registered exclusively in urban counties."
+
+"(1) Source: National Program of Cancer Registries [ https://www.cdc.gov/cancer/npcr/index.htm ] and Surveillance, Epidemiology, and End Results [ http://seer.cancer.gov ] SEER*Stat Database - United States Department of Health and Human Services, Centers for Disease Control and Prevention and National Cancer Institute. Based on the 2025 submission."
+
+"(2) Source: National Program of Cancer Registries SEER*Stat Database - United States Department of Health and Human Services, Centers for Disease Control and Prevention (based on the 2025 submission).  [ https://www.cdc.gov/cancer/npcr/index.htm ]"
+
+"* Data has been suppressed to ensure confidentiality and stability of rate estimates.  Counts are suppressed if fewer than 16 records were reported in a specific area-sex-race category."
+
+"Data for United States does not include Puerto Rico."

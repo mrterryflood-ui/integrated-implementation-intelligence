@@ -14,16 +14,19 @@ def build_demo():
     if validate_edges(graph["edges"]):
         raise ValueError("invalid ChainWeb graph")
     pilot = next(x for x in contract["records"] if x["comparison_id"] == "hinds-harris-crc-2019-2023")
+    period = pilot.get("period")
+    if not isinstance(period, str) or not period.strip():
+        raise ValueError("pilot record requires a nonempty period")
     a,b=pilot["late_stage_rate_per_100k"]
     x,y=pilot["late_stage_share_percent"]
     return {
         "demo_type":"aggregate_descriptive_calibration",
         "case":"hinds-harris-crc-2019-2023",
-        "period":"2019-2023",
+        "period":period,
         "late_stage_incidence_rate_difference_per_100k":round(a-b,1),
         "late_stage_share_difference_percentage_points":round(x-y,1),
         "comparison_status":pilot["comparison_status"],
-        "source_validation":"accepted prior archive reproduction; no new source download performed",
+        "source_validation":"local comparability contract read; this demo does not download or validate source archives",
         "individual_missed_opportunities_observed":None,
         "clinical_harms_prevented_observed":None,
         "causal_harm_established":False,

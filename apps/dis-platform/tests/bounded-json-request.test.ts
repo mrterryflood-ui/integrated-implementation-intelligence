@@ -1,6 +1,7 @@
 import test from "node:test";import assert from "node:assert/strict";
 import {readBoundedJsonRequest,BoundedJsonRequestError} from "../lib/bounded-json-request";
-import {POST as mcpPost,dispatch} from "../app/api/mcp/route";
+import {POST as mcpPost} from "../app/api/mcp/route";
+import {dispatch} from "../app/api/mcp/dispatch";
 const req=(body:string,headers:Record<string,string>={})=>new Request("https://example.invalid/api/mcp",{method:"POST",headers:{"content-type":"application/json",...headers},body});
 test("actual bytes bound absent and understated Content-Length before public MCP dispatch",async()=>{
  for(const headers of [{},{"content-length":"1"}] as Record<string,string>[]){

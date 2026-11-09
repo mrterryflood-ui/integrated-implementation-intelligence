@@ -2,8 +2,8 @@
 import {useState} from "react";
 import {reviewCrossStudyMeasurements,type BoundMeasure,type CrossStudyReview} from "../../../lib/evidence-action-bridge";
 
-export default function CrossStudyPanel({baseline}:{baseline:readonly BoundMeasure[]}){
-  const [raw,setRaw]=useState("");
+export default function CrossStudyPanel({baseline,raw,onRawChange}:{baseline:readonly BoundMeasure[];raw:string;onRawChange:(value:string)=>void}){
+  const setRaw=onRawChange;
   const [review,setReview]=useState<CrossStudyReview|null>(null);
   const [error,setError]=useState("");
   const example=()=>{

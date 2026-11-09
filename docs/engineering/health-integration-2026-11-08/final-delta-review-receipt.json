@@ -1,0 +1,33 @@
+{
+  "reviewer": "/root/integration_review",
+  "kind": "INDEPENDENT_AI_ENGINEERING_REVIEW",
+  "reviewedSha": "1969e2e7af73f8ba65ab48fe1e761a1a9f4222b0",
+  "previousReviewedSha": "039761a706534e8d21ffdbe71c616646ee9ef539",
+  "timestamp": "2026-11-09T00:01:27Z",
+  "disposition": "ALLOW_SCOPED_ENGINEERING_INTEGRATION",
+  "closedFindings": [
+    "DIS-IR-01",
+    "inherited formatted-report recovery limitation"
+  ],
+  "changedFiles": 6,
+  "routeAndRecoveryTests": {
+    "passed": 33,
+    "failed": 0,
+    "skipped": 0
+  },
+  "independentAdversarialControls": {
+    "passed": 35,
+    "failed": 0
+  },
+  "independentTypecheck": {
+    "command": "node node_modules/typescript/bin/tsc --noEmit --incremental false",
+    "exitCode": 0
+  },
+  "diffCheck": {
+    "exitCode": 0
+  },
+  "trackedWorkingTreeClean": true,
+  "clinicalAcceptance": false,
+  "productionDeploymentVerified": false,
+  "liveAuthenticatedExchangeVerified": false
+}

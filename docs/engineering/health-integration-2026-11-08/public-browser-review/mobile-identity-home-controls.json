@@ -1,0 +1,48 @@
+{
+  "kind": "SYNTHETIC_ACTUAL_HOME_COMPONENT_EXECUTION",
+  "sourceSha256": "1ba7ca11f41f6919439fbf9a1a664db2c260fb8c483ae63dfd425c43a58769ea",
+  "cases": [
+    {
+      "id": "production_missing",
+      "privateReady": false,
+      "authCalls": 0,
+      "passed": true
+    },
+    {
+      "id": "production_test_pair",
+      "privateReady": false,
+      "authCalls": 0,
+      "passed": true
+    },
+    {
+      "id": "production_mixed_pair",
+      "privateReady": false,
+      "authCalls": 0,
+      "passed": true
+    },
+    {
+      "id": "production_live_pair",
+      "privateReady": true,
+      "authCalls": 1,
+      "passed": true
+    },
+    {
+      "id": "preview_test_pair",
+      "privateReady": false,
+      "authCalls": 1,
+      "passed": true
+    },
+    {
+      "id": "preview_live_pair",
+      "privateReady": true,
+      "authCalls": 1,
+      "passed": true
+    }
+  ],
+  "passed": 6,
+  "failed": 0,
+  "liveIdentityVerified": false,
+  "browserExecuted": false,
+  "externalNetworkCalls": 0,
+  "limitations": "Presentation modules and auth() stubbed; actual Home expression and release-gates implementation bundled unchanged."
+}

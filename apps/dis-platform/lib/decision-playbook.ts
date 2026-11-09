@@ -1,4 +1,4 @@
-export type WorkItem={id:string,phase:string,title:string,why:string,success:string,owner:string,due:string|null,done:boolean,evidence:string,review:string|null};
+export type WorkItem={id:string,phase:string,title:string,why:string,success:string,owner:string,due:string|null,done:boolean,evidence:string,review:string|null,sourceGapId?:string};
 export type Measure={id:string,label:string,baseline:string,target:string,observed:string,unit:string,verified:boolean,source?:string,observedAt?:string};
 export type Playbook={objective:string,decision:string,assumptions:string[],alternatives:string[],tasks:WorkItem[],metrics:Measure[],nextReview:string,progressNotes:string[],evidenceLevel:string,version:number,learningReview?:{knowledge:string,skills:string,strategy:string,nextExperiment:string}};
 const phases=[
@@ -17,7 +17,7 @@ export function buildPlaybook(question:string,report:unknown):Playbook{
  const proposed=(proposalState==="MODEL_PROPOSED_UNVERIFIED"||proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED")?candidate as {tasks?:unknown,metrics?:unknown}:null;
  // Research archive retains the full ledger; editable projection respects existing 35/25 validation limits.
  const taskCap=proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED"?28:6,metricCap=proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED"?20:5;
- const tailoredTasks=Array.isArray(proposed?.tasks)?proposed.tasks.slice(0,taskCap).flatMap((v:unknown,i:number)=>{if(!v||typeof v!=="object")return [];const x=v as Record<string,unknown>;if(typeof x.title!=="string"||typeof x.success!=="string")return [];return [{id:"proposed-"+(i+1),phase:"proposed",title:x.title.slice(0,180),why:String(x.why||"Validate before implementation").slice(0,350),success:x.success.slice(0,350),owner:"Unassigned",due:null,done:false,evidence:"",review:null}]}):[];
+ const tailoredTasks=Array.isArray(proposed?.tasks)?proposed.tasks.slice(0,taskCap).flatMap((v:unknown,i:number)=>{if(!v||typeof v!=="object")return [];const x=v as Record<string,unknown>;if(typeof x.title!=="string"||typeof x.success!=="string")return [];return [{id:"proposed-"+(i+1),phase:"proposed",title:x.title.slice(0,180),why:String(x.why||"Validate before implementation").slice(0,350),success:x.success.slice(0,proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED"?790:350),owner:"Unassigned",due:null,done:false,evidence:"",review:null,...(proposalState==="RESEARCH_GAP_SCAFFOLD_UNVERIFIED"&&typeof x.sourceGapId==="string"&&x.sourceGapId.length<=100?{sourceGapId:x.sourceGapId}:{})}]}):[];
  const tailoredMetrics=Array.isArray(proposed?.metrics)?proposed.metrics.slice(0,metricCap).flatMap((v:unknown,i:number)=>{if(!v||typeof v!=="object")return [];const m=v as Record<string,unknown>;if(typeof m.label!=="string")return [];return [{id:"proposed-"+(i+1),label:m.label.slice(0,140),baseline:String(m.baseline||"Not measured").slice(0,120),target:String(m.target||"To be agreed").slice(0,120),observed:"",unit:String(m.unit||"User-defined").slice(0,60),verified:false}]}):[];
  return {objective:question,decision:"UNDECIDED — evidence and user authorization required",assumptions:["Question interpretation and end state need user validation","Selected council lenses are not human advice or endorsements","Research metadata or abstracts alone do not verify each claim"],
  alternatives:["Improve existing approach","Test a different intervention","Retain current state pending evidence"],
@@ -35,7 +35,8 @@ export function validatePlaybook(value:unknown):value is Playbook{
  const x=value as Record<string,unknown>;
  if(typeof x.objective!=="string"||x.objective.length>3000||typeof x.decision!=="string"||x.decision.length>2000)return false;
  if(!Array.isArray(x.tasks)||x.tasks.length>35||!Array.isArray(x.metrics)||x.metrics.length>25||!Array.isArray(x.progressNotes)||x.progressNotes.length>80)return false;
- if(!x.tasks.every(t=>t&&typeof t==="object"&&typeof t.id==="string"&&typeof t.title==="string"&&t.title.length<500&&typeof t.done==="boolean"&&typeof t.evidence==="string"&&t.evidence.length<=2000&&typeof t.owner==="string"&&t.owner.length<150&&typeof t.success==="string"&&t.success.length<800))return false;
+ if(!x.tasks.every(t=>t&&typeof t==="object"&&typeof t.id==="string"&&t.id.length>0&&t.id.length<=100&&typeof t.title==="string"&&t.title.trim().length>0&&t.title.length<500&&typeof t.why==="string"&&t.why.length<=2000&&typeof t.done==="boolean"&&typeof t.evidence==="string"&&t.evidence.length<=2000&&typeof t.owner==="string"&&t.owner.length<150&&typeof t.success==="string"&&t.success.length<800&&(t.sourceGapId===undefined||(typeof t.sourceGapId==="string"&&t.sourceGapId.length>0&&t.sourceGapId.length<=100))))return false;
+ if(new Set(x.tasks.map(t=>t.id)).size!==x.tasks.length)return false;
  if(!x.metrics.every(m=>{
   if(!m||typeof m!=="object"||typeof m.id!=="string"||typeof m.label!=="string"||
      m.label.length>=200||typeof m.observed!=="string"||m.observed.length>=250||
@@ -57,4 +58,19 @@ export function summarizeProgress(p:Playbook){
  const accepted=p.metrics.filter(m=>m.verified).length;
  const unknown=p.metrics.filter(m=>!m.verified).length;
  return {completed,total:p.tasks.length,percentage:p.tasks.length?Math.round(100*completed/p.tasks.length):0,measuresVerified:accepted,measuresUnverified:unknown,reviewDue:p.nextReview};
+}
+/** A changed task definition needs renewed completion, while its prior state
+ * remains in the server journal. A client cannot carry completion across scope. */
+export function reconcileTaskCompletion(previous:unknown,next:Playbook){
+ const prior=previous&&typeof previous==="object"&&(previous as {tasks?:unknown}).tasks;
+ const tasks=Array.isArray(prior)?prior:[];
+ const reopenedTaskIds:string[]=[];
+ const playbook={...next,tasks:next.tasks.map(task=>{
+  const matches=tasks.filter(value=>value&&typeof value==="object"&&value.id===task.id);
+  const changed=matches.some(value=>["title","why","success"].some(key=>value[key]!==task[key as "title"|"why"|"success"]));
+  if(!changed)return task;
+  if(task.done||matches.some(value=>value.done===true))reopenedTaskIds.push(task.id);
+  return {...task,done:false};
+ })};
+ return {playbook,reopenedTaskIds};
 }

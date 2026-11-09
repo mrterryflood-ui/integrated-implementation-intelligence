@@ -1,0 +1,74 @@
+[
+  {
+    "id": "hinds_all_export",
+    "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "retrieved_at": "2026-11-08T23:51:01.694402+00:00",
+    "historical_definition_availability_proven": false,
+    "http_status": 200,
+    "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "content_type": "text/csv; charset=iso-8859-1",
+    "bytes": 11812,
+    "path": "hinds_all_export.csv",
+    "sha256": "34ebb729828bb03454daddc69e708d902faca33958e95c8dcbe6c58612ae05b2"
+  },
+  {
+    "id": "hinds_late_export",
+    "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "retrieved_at": "2026-11-08T23:51:01.695183+00:00",
+    "historical_definition_availability_proven": false,
+    "http_status": 200,
+    "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "content_type": "text/csv; charset=iso-8859-1",
+    "bytes": 9838,
+    "path": "hinds_late_export.csv",
+    "sha256": "d5cbbfc1c2f96f9ecb7c5274cb37540975e74ffdc0c3e26e9ef38c6b61d5f284"
+  },
+  {
+    "id": "harris_all_export",
+    "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "retrieved_at": "2026-11-08T23:51:01.695884+00:00",
+    "historical_definition_availability_proven": false,
+    "http_status": 200,
+    "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "content_type": "text/csv; charset=iso-8859-1",
+    "bytes": 25637,
+    "path": "harris_all_export.csv",
+    "sha256": "82c21ab022d4598139d61d15fcac3a4f3756eb38991db7ecd4569ec188da7665"
+  },
+  {
+    "id": "harris_late_export",
+    "url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "retrieved_at": "2026-11-08T23:51:06.487200+00:00",
+    "historical_definition_availability_proven": false,
+    "http_status": 200,
+    "final_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+    "content_type": "text/csv; charset=iso-8859-1",
+    "bytes": 21262,
+    "path": "harris_late_export.csv",
+    "sha256": "551a3c9c2fdcb37b6875877d3211ebcf86cb30aae4dc24e6e2abf1f5292bfd5f"
+  },
+  {
+    "id": "standard20",
+    "url": "https://seer.cancer.gov/stdpopulations/stdpop.20ages.html",
+    "retrieved_at": "2026-11-08T23:51:06.991152+00:00",
+    "historical_definition_availability_proven": false,
+    "http_status": 200,
+    "final_url": "https://seer.cancer.gov/stdpopulations/stdpop.20ages.html",
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 35713,
+    "path": "standard20.html",
+    "sha256": "d872ed0f8a2127ce7b97ef60c4edd03aa683455ebf838cf3f784a4baeb223e19"
+  },
+  {
+    "id": "standard19",
+    "url": "https://seer.cancer.gov/stdpopulations/stdpop.19ages.html",
+    "retrieved_at": "2026-11-08T23:51:07.051900+00:00",
+    "historical_definition_availability_proven": false,
+    "http_status": 200,
+    "final_url": "https://seer.cancer.gov/stdpopulations/stdpop.19ages.html",
+    "content_type": "text/html; charset=UTF-8",
+    "bytes": 44466,
+    "path": "standard19.html",
+    "sha256": "4b834ce6513af9393dc78db15c127bd8d0888e38c0d275fd0aa4a58007f1d733"
+  }
+]

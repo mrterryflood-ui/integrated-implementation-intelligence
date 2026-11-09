@@ -1,0 +1,51 @@
+▶ research case handlers retain complete inputs, enforce boundaries and recover atomic revisions
+  ✔ missing identity, missing/foreign origin and supplied replacement reports are denied before writes (20.58476ms)
+  ✔ the registered create path cannot write into another subject's workspace (23.104672ms)
+  ✔ typed create saves all editor inputs and the dated baseline together, then reloads them (38.227557ms)
+  ✔ research revision retains the current playbook and archives the complete predecessor (36.673091ms)
+  ✔ stale, foreign-owner, wrong-type version, supplied-plan and foreign-origin revisions cannot overwrite the saved case (10.799077ms)
+  ✔ the existing recovery route restores an earlier research record and preserves the current plan (25.744983ms)
+  ✔ an audit insert failure rolls back the report, version and event count together (40.943507ms)
+  ✔ oversized editor combinations are rejected without changing the saved record or truncating the request (6.871168ms)
+  ✔ a writer arriving between the source read and mutation causes a conflict rather than a lost update (12.592173ms)
+  ✔ changed or removed research labels cannot admit forged source or outcome claims (7.731583ms)
+  ✔ legacy compatibility creates reject credential-bearing source links and duplicate source identifiers (10.384124ms)
+  ✔ legacy source leads and notes survive two unrelated workflow revisions (79.345463ms)
+  ✔ attaching a discovery lead retains the gap identity referenced by an older note (42.06336ms)
+  ✖ a report admitted at the compact limit remains editable after JSONB spacing and UTF-8 expansion (38.691341ms)
+  ✔ an older oversized stored report is refused without replacing or truncating its contents (25.938119ms)
+  ✔ editing a retained research layer preserves exact source numbers and archives the old council interpretation (38.042535ms)
+  ✔ task reconciliation preserves progress and both plan versions through atomic writes, denied attempts and database restart (317.017713ms)
+  ✔ an admitted near-limit Unicode plan remains editable after JSONB formatting, with bounded legacy reads (220.938113ms)
+  ✔ committed research inputs and history remain available after closing and reopening the database (196.97787ms)
+✖ research case handlers retain complete inputs, enforce boundaries and recover atomic revisions (4302.263425ms)
+ℹ tests 20
+ℹ suites 0
+ℹ pass 18
+ℹ fail 2
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4898.606993
+
+✖ failing tests:
+
+test at tests/research-case-routes.test.ts:23:15469
+✖ a report admitted at the compact limit remains editable after JSONB spacing and UTF-8 expansion (38.691341ms)
+  AssertionError [ERR_ASSERTION]: an admitted report must permit a smaller valid revision
+  
+  413 !== 200
+  
+      at TestContext.<anonymous> (/workspace/scratch/ad20f6f1a514/dis-integration/apps/dis-platform/tests/research-case-routes.test.ts:227:11)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async TestContext.<anonymous> (/workspace/scratch/ad20f6f1a514/dis-integration/apps/dis-platform/tests/research-case-routes.test.ts:214:3)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async startSubtestAfterBootstrap (node:internal/test_runner/harness:387:3) {
+    generatedMessage: false,
+    code: 'ERR_ASSERTION',
+    actual: 413,
+    expected: 200,
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
