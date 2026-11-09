@@ -1,0 +1,19 @@
+▶ research report JSONB expansion does not lock an admitted investigation
+  ✔ ASCII: old handler rejects smaller edit, repaired handler preserves archive and succeeds (199.872922ms)
+  ✔ Unicode: old handler rejects smaller edit, repaired handler preserves archive and succeeds (134.901105ms)
+  ✔ owner, origin and stale-version gates remain unchanged (9.227212ms)
+  ✔ oversized legacy storage is still refused without mutation (26.771829ms)
+  ✔ compact submission and transport limits are not increased (0.905349ms)
+✔ research report JSONB expansion does not lock an admitted investigation (2680.968179ms)
+ℹ Reconstructed old handler Git blob: 9479c6b2c3222b0575ba68de0a4207dd11dca3b9
+ℹ ASCII compact=127984 storedChars=130497 storedBytes=130555 old=413 new=200
+ℹ Unicode compact=127984 storedChars=130497 storedBytes=247447 old=413 new=200
+ℹ tests 6
+ℹ suites 0
+ℹ pass 6
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3257.925145
+

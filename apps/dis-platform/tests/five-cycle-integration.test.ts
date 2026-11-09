@@ -4,7 +4,7 @@ import {planOwnedCapabilities,invokeOwnedCapabilities} from '../lib/owned-capabi
 import {sanitizeIntake} from '../lib/consultation';import {buildPackage} from '../lib/consultation-package';
 import {exportDocx,exportPptx} from '../lib/consultation-export';import {buildPlaybook} from '../lib/decision-playbook';
 import {buildLearningCheckpoint} from '../lib/longitudinal-learning';import {DISCIPLINES,designEnterpriseMission} from '../lib/enterprise-mission';
-import {buildGraphData} from '../app/api/consultation/graph/route';import {dispatch} from '../app/api/mcp/route';
+import {buildGraphData} from '../app/api/consultation/graph/graph-data';import {dispatch} from '../app/api/mcp/dispatch';
 import {boundedConversation} from '../lib/conversation-context';import {reviewAnswer,learningRecord} from '../lib/answer-quality';
 import JSZip from 'jszip';
 const topics=['household learning','caregiver support','public transport','municipal water','university teaching','culture museums','agriculture irrigation','manufacturing quality','emergency preparedness','workforce training','housing access','digital accessibility','community safety','energy efficiency','ecosystem restoration','public administration','nonprofit collaboration','school attendance','youth coaching','cultural heritage','research methodology','organizational learning','software reliability','clinical healthcare','unknown emerging domain'];

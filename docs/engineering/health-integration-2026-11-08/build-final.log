@@ -1,0 +1,69 @@
+▲ Next.js 16.4.5 (Turbopack)
+✓ Running next.config.mjs took 36ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 13.4s
+  Running TypeScript ...
+  Finished TypeScript in 11.9s ...
+  Collecting page data using 8 workers ...
+  Generating static pages using 8 workers (0/36) ...
+  Generating static pages using 8 workers (9/36) 
+  Generating static pages using 8 workers (18/36) 
+  Generating static pages using 8 workers (27/36) 
+✓ Generating static pages using 8 workers (36/36) in 210ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ƒ /
+├ ƒ /_not-found
+├ ƒ /api/autonomy-preview
+├ ƒ /api/capability-fabric
+├ ƒ /api/cases
+├ ƒ /api/cases/recheck
+├ ƒ /api/cases/restore
+├ ƒ /api/consultation/diagnostics
+├ ƒ /api/consultation/export
+├ ƒ /api/consultation/graph
+├ ƒ /api/consultation/health
+├ ƒ /api/consultation/opportunity
+├ ƒ /api/consultation/parallax
+├ ƒ /api/consultation/realty-audit
+├ ƒ /api/consultation/research
+├ ƒ /api/consultation/sessions
+├ ƒ /api/council
+├ ƒ /api/council/health
+├ ƒ /api/council/provider-debug
+├ ƒ /api/dis/standard
+├ ƒ /api/documents
+├ ƒ /api/documents/download
+├ ƒ /api/documents/search
+├ ƒ /api/mcp
+├ ƒ /api/organizations
+├ ƒ /api/organizations/council
+├ ƒ /api/organizations/export
+├ ƒ /api/organizations/research
+├ ƒ /api/organizations/uploads
+├ ƒ /api/organizations/uploads/download
+├ ƒ /api/organizations/uploads/import
+├ ƒ /api/organizations/uploads/token
+├ ƒ /api/planning/template
+├ ƒ /api/realty/parcel
+├ ƒ /api/research-program/evidence-search
+├ ƒ /api/research-program/specialist
+├ ƒ /api/workspaces
+├ ƒ /council
+├ ƒ /decision-lab
+├ ƒ /integrations
+├ ƒ /planning
+├ ƒ /realty-atlas
+├ ƒ /research-program
+├ ƒ /research-program/evidence-action
+├ ƒ /research-program/method-validation
+├ ƒ /workspace
+└ ƒ /workspace/case
+
+
+ƒ Proxy (Middleware)
+
+ƒ  (Dynamic)  server-rendered on demand
+

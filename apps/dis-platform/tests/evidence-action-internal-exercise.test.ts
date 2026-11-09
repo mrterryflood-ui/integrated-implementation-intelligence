@@ -70,5 +70,5 @@ test("malformed runtime panel does not escape into a crash or descriptive arithm
 });
 test("investigation exercise is connected to existing research save and preview buttons",()=>{
  const ui=readFileSync("app/research-program/evidence-action/private-case-handoff.tsx","utf8");
- assert.match(ui,/reviewOutcomeEquity/);assert.match(ui,/Preview complete investigation record/);assert.match(ui,/Stage synthetic subgroup challenge/);assert.match(ui,/publicAggregateConfirmed:confirmed/);assert.match(ui,/historyRecorded!==true/);
+ assert.match(ui,/reviewOutcomeEquity/);assert.match(ui,/Preview complete investigation record/);assert.match(ui,/Stage synthetic subgroup challenge/);assert.match(ui,/researchWorkflow:workflow/);assert.match(ui,/historyRecorded!==true/);
 });

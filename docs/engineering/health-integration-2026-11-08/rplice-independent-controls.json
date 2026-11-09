@@ -1,0 +1,362 @@
+{
+  "head": "c052856141f74ab09dfc91f7d358ebdc19f0378c",
+  "sourceGitBlob": "ca238c69b8c53e1862be0dcc142dd2c6ed178150",
+  "results": [
+    {
+      "name": "source matched",
+      "expectedRejectCount": 0,
+      "schemaVersion": "2026-11-08.2",
+      "status": "PROVISIONAL_REVIEW_CANDIDATES",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "PROVISIONAL_REVIEW_CANDIDATE",
+          "reasons": [],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 0,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "wrong comparator",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "COMPARATOR_DOES_NOT_MATCH_CURATED_CONTRAST"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "descriptive wrong comparator",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "COMPARATOR_DOES_NOT_MATCH_CURATED_CONTRAST"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "null descriptive",
+      "expectedRejectCount": 0,
+      "schemaVersion": "2026-11-08.2",
+      "status": "PROVISIONAL_REVIEW_CANDIDATES",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "PROVISIONAL_REVIEW_CANDIDATE",
+          "reasons": [],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 0,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "false equivalence",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "NON_SIGNIFICANCE_NOT_EQUIVALENCE_OR_ZERO_EFFECT"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "clinical endpoint",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "CLAIMED_ENDPOINT_NOT_MEASURED"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "self review",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "SELF_DECLARED_REVIEW_IS_NOT_INDEPENDENT_ADJUDICATION"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "malformed numeric",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "NUMERICAL_CONTRAST_CONTEXT_NOT_REGISTERED",
+            "INVALID_OR_MISSING_EFFECT_INTERVAL",
+            "NUMERICAL_RESULT_NOT_IN_CURATED_REFERENCE"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "unregistered difference",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "NUMERICAL_CONTRAST_CONTEXT_NOT_REGISTERED",
+            "INVALID_OR_MISSING_EFFECT_INTERVAL",
+            "NUMERICAL_RESULT_NOT_IN_CURATED_REFERENCE"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "negated comparator",
+      "expectedRejectCount": 1,
+      "schemaVersion": "2026-11-08.2",
+      "status": "REQUIRES_CORRECTION",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "REJECTED_UNSUPPORTED",
+          "reasons": [
+            "COMPARATOR_DOES_NOT_MATCH_CURATED_CONTRAST"
+          ],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 1,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "allowed punctuation",
+      "expectedRejectCount": 0,
+      "schemaVersion": "2026-11-08.2",
+      "status": "PROVISIONAL_REVIEW_CANDIDATES",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "US23",
+          "status": "PROVISIONAL_REVIEW_CANDIDATE",
+          "reasons": [],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 0,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    },
+    {
+      "name": "other study",
+      "expectedRejectCount": 0,
+      "schemaVersion": "2026-11-08.2",
+      "status": "PROVISIONAL_REVIEW_CANDIDATES",
+      "casesRegistered": 8,
+      "claims": [
+        {
+          "claimId": "independent-control",
+          "caseId": "NC24",
+          "status": "PROVISIONAL_REVIEW_CANDIDATE",
+          "reasons": [],
+          "sourceState": "PINNED_CITATION_NOT_PUBLISHER_VERIFIED"
+        }
+      ],
+      "claimCount": 1,
+      "rejectedCount": 0,
+      "independentOriginalSourceVerification": false,
+      "independentHumanReviewVerified": false,
+      "causalValidityEstablished": false,
+      "methodSuperiorityEstablished": false,
+      "notes": [
+        "Local, deterministic consistency checks against curated citations only; original study text and row-level outcomes are not independently re-extracted.",
+        "An entered reviewer ID, signature string, quote, or source URL is NOT verification of reviewer independence or publisher authenticity.",
+        "A supported trial result in one population is not a ChainWeb effect, a mortality benefit, or evidence of transfer to every condition.",
+        "US23 numerical comparisons are bound to the cited 120-day adjusted intention-to-treat contrasts. Other study comparators still require source review; no target-population or horizon transfer is verified."
+      ]
+    }
+  ]
+}

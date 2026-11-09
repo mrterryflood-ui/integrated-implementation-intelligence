@@ -1,0 +1,337 @@
+state,county,ruralurban,all_rate,all_lo,all_hi,all_count,trend_label,trend_cell,late_rate,late_lo,late_hi,late_count,share
+MS,Adams County,Rural,38.8,30.4,49.0,17,stable,"-1.7 (-4.6, 0.9)",18.9,13.1,26.6,8,48.2
+MS,Alcorn County,Rural,42.6,34.2,52.5,19,stable,"-1.2 (-3.4, 1.0)",28.5,21.8,36.9,13,66.7
+MS,Amite County,Rural,48.6,34.0,67.8,9,stable,"-0.1 (-2.6, 2.3)",28.8,18.1,44.1,6,60.9
+MS,Attala County,Rural,55.9,42.8,72.1,13,stable,"2.2 (-1.3, 13.6)",36.2,25.9,49.7,9,65.2
+MS,Benton County,Urban,47.9,30.3,72.8,5,stable,"0.4 (-3.7, 4.4)",,,,,
+MS,Bolivar County,Rural,53.3,43.1,65.2,20,falling,"-2.7 (-12.2, -0.5)",22.9,16.6,31.0,9,45.1
+MS,Calhoun County,Rural,73.8,56.3,95.4,13,stable,"1.8 (-0.6, 4.4)",54.3,39.3,73.5,10,72.7
+MS,Carroll County,Rural,40.3,26.7,59.6,6,stable,"-0.1 (-5.4, 5.9)",19.3,10.8,33.6,3,51.6
+MS,Chickasaw County,Rural,66.2,51.3,84.4,14,stable,"0.9 (-1.5, 3.5)",42.2,30.5,57.1,9,63.9
+MS,Choctaw County,Rural,47.6,31.5,70.3,6,stable,"1.4 (-4.3, 7.6)",35.7,22.6,55.1,5,80.0
+MS,Claiborne County,Rural,43.1,25.9,67.6,4,stable,"-1.4 (-6.4, 3.2)",,,,,
+MS,Clarke County,Rural,57.9,43.0,76.4,12,stable,"-0.5 (-4.0, 2.8)",28.1,18.1,41.8,6,48.3
+MS,Clay County,Rural,53.0,40.4,68.4,13,stable,"0.4 (-2.0, 2.9)",39.9,28.9,53.8,10,72.7
+MS,Coahoma County,Rural,60.7,47.3,76.9,15,stable,"0.5 (-2.2, 3.1)",39.4,28.7,52.8,10,64.5
+MS,Copiah County,Urban,44.8,35.7,55.7,18,stable,"-1.8 (-4.8, 1.1)",25.7,19.0,34.2,11,58.9
+MS,Covington County,Rural,60.5,46.4,77.7,13,stable,"2.0 (-1.2, 5.5)",31.1,21.4,43.8,7,53.0
+MS,DeSoto County,Urban,43.9,39.8,48.3,87,stable,"-0.7 (-1.6, 0.3)",28.5,25.2,32.2,57,65.0
+MS,Forrest County,Urban,38.1,32.2,44.7,31,stable,"-0.9 (-2.7, 0.8)",21.1,16.8,26.2,17,55.5
+MS,Franklin County,Rural,41.0,25.4,63.7,5,stable,"0.4 (-4.4, 5.5)",,,,,
+MS,George County,Rural,41.0,30.6,53.9,12,stable,"-0.6 (-3.9, 3.2)",27.5,19.2,38.4,8,65.5
+MS,Greene County,Rural,41.9,29.2,58.6,7,stable,"-1.5 (-17.3, 1.9)",28.6,18.2,43.1,5,66.7
+MS,Grenada County,Rural,42.2,31.3,55.9,11,falling,"-3.2 (-6.1, -0.7)",32.4,22.7,44.9,8,72.7
+MS,Hancock County,Urban,45.4,38.0,54.0,30,stable,"-0.1 (-1.9, 1.9)",27.0,21.3,33.8,18,59.1
+MS,Harrison County,Urban,49.2,45.2,53.4,121,stable,"1.3 (-0.3, 6.0)",29.8,26.7,33.1,74,61.1
+MS,Hinds County,Urban,46.4,42.6,50.5,118,falling,"-2.1 (-2.7, -1.5)",29.9,26.8,33.2,75,63.7
+MS,Holmes County,Urban,66.9,51.1,86.2,13,falling,"-2.4 (-4.4, -0.6)",44.0,31.4,60.1,9,66.2
+MS,Humphreys County,Rural,79.0,55.4,110.0,8,stable,"0.5 (-3.9, 5.1)",44.2,27.1,68.8,5,56.1
+MS,Itawamba County,Rural,50.0,39.1,63.3,15,stable,"-1.1 (-3.5, 1.3)",32.7,23.9,43.8,10,65.3
+MS,Jackson County,Urban,46.1,41.6,51.0,80,stable,"3.2 (-1.0, 11.0)",31.6,27.8,35.7,54,68.2
+MS,Jasper County,Rural,34.7,24.1,48.7,8,falling,"-2.9 (-5.5, -0.6)",24.9,15.9,37.6,5,68.4
+MS,Jefferson County,Rural,44.3,26.4,70.4,4,stable,"-1.0 (-4.2, 2.2)",,,,,
+MS,Jefferson Davis County,Rural,52.3,36.6,73.2,8,stable,"0.4 (-3.0, 3.8)",31.3,19.5,48.2,5,58.5
+MS,Jones County,Rural,40.7,34.4,47.7,32,stable,"-0.6 (-2.8, 1.6)",25.5,20.7,31.3,20,63.0
+MS,Kemper County,Rural,52.5,34.6,76.9,6,stable,"-0.4 (-4.7, 3.8)",29.5,16.9,48.7,4,58.1
+MS,Lafayette County,Rural,40.0,32.6,48.5,22,stable,"-0.7 (-3.4, 2.2)",28.6,22.4,35.9,16,72.5
+MS,Lamar County,Urban,39.2,32.9,46.3,29,stable,"-0.2 (-1.7, 1.5)",24.0,19.2,29.6,18,62.5
+MS,Lauderdale County,Rural,45.2,39.0,52.0,42,stable,"0.0 (-1.1, 1.2)",24.5,20.0,29.7,22,53.3
+MS,Lawrence County,Rural,49.5,34.8,68.8,8,stable,"0.1 (-2.3, 2.6)",32.8,21.1,49.2,5,66.7
+MS,Leake County,Rural,55.1,43.1,69.6,15,stable,"-0.5 (-3.5, 2.6)",36.1,26.5,48.2,10,65.8
+MS,Lee County,Rural,48.7,42.5,55.5,46,stable,"-0.1 (-1.6, 1.4)",31.3,26.4,36.9,30,64.7
+MS,Leflore County,Rural,64.3,52.1,78.5,20,stable,"-0.6 (-2.4, 1.0)",28.1,20.5,37.7,10,47.1
+MS,Lincoln County,Rural,44.5,35.9,54.8,19,stable,"-0.8 (-3.4, 1.7)",30.0,23.0,38.5,13,69.1
+MS,Lowndes County,Rural,43.3,36.4,51.2,29,stable,"-1.0 (-2.7, 0.6)",31.3,25.4,38.2,21,71.4
+MS,Madison County,Urban,38.8,33.9,44.2,48,falling,"-1.9 (-3.2, -0.5)",23.1,19.3,27.3,28,59.0
+MS,Marion County,Rural,43.2,33.4,55.2,14,stable,"0.3 (-3.7, 4.2)",26.0,18.5,35.7,8,60.0
+MS,Marshall County,Urban,48.8,39.7,59.6,22,stable,"-0.4 (-2.0, 1.2)",30.7,23.6,39.3,14,64.8
+MS,Monroe County,Rural,49.1,40.2,59.5,23,stable,"13.2 (-0.7, 21.4)",31.6,24.7,40.1,15,65.2
+MS,Montgomery County,Rural,48.3,33.3,68.6,7,stable,"-1.4 (-4.1, 1.1)",26.1,14.8,43.3,4,48.6
+MS,Neshoba County,Rural,60.3,49.0,73.4,21,stable,"1.5 (0.0, 3.3)",38.6,29.7,49.3,14,64.2
+MS,Newton County,Rural,56.5,43.5,72.3,14,stable,"0.8 (-3.0, 4.8)",34.5,24.6,47.2,8,61.8
+MS,Noxubee County,Rural,52.1,35.2,74.5,7,stable,"0.3 (-3.2, 4.0)",32.5,19.4,51.4,4,60.6
+MS,Oktibbeha County,Rural,39.4,31.5,48.7,18,stable,"-1.1 (-3.3, 1.1)",25.0,18.7,32.7,11,61.5
+MS,Panola County,Rural,47.9,38.8,58.6,21,falling,"-2.3 (-4.3, -0.4)",33.9,26.3,43.2,14,69.9
+MS,Pearl River County,Rural,41.6,35.0,49.1,31,stable,"-1.2 (-3.1, 0.8)",28.1,22.8,34.4,21,68.0
+MS,Perry County,Urban,31.0,19.0,48.1,5,stable,"-3.0 (-7.4, 1.2)",,,,,
+MS,Pike County,Rural,43.0,34.8,52.6,21,stable,"-0.7 (-3.2, 1.7)",26.1,19.8,33.8,12,60.2
+MS,Pontotoc County,Rural,49.5,39.3,61.5,17,stable,"0.6 (-1.7, 3.0)",32.1,23.9,42.1,11,62.8
+MS,Prentiss County,Rural,42.0,32.3,54.0,13,stable,"-2.0 (-4.8, 0.5)",27.9,20.0,38.0,9,65.2
+MS,Quitman County,Rural,66.7,43.4,99.4,5,*,*,43.5,25.4,71.0,4,66.7
+MS,Rankin County,Urban,33.7,30.0,37.7,64,falling,"-2.2 (-3.1, -1.4)",21.1,18.2,24.3,39,61.9
+MS,Scott County,Urban,48.3,37.7,60.9,15,stable,"-1.8 (-4.3, 0.5)",34.2,25.4,45.1,11,70.7
+MS,Simpson County,Urban,51.4,40.8,64.1,17,stable,"0.7 (-1.6, 3.2)",32.5,24.1,43.0,11,63.2
+MS,Smith County,Rural,45.6,32.9,62.0,9,stable,"-1.2 (-4.5, 2.0)",32.2,21.6,46.6,6,69.6
+MS,Stone County,Urban,29.6,20.6,41.7,7,stable,"-1.5 (-4.4, 1.7)",20.8,13.3,31.5,5,67.6
+MS,Sunflower County,Rural,58.8,46.6,73.2,17,stable,"0.2 (-1.7, 2.1)",34.8,25.5,46.3,10,58.8
+MS,Tallahatchie County,Rural,53.7,37.9,74.2,8,stable,"0.1 (-3.6, 4.0)",40.9,27.1,59.5,6,75.0
+MS,Tate County,Urban,45.9,35.9,58.0,15,stable,"-1.1 (-2.7, 0.4)",36.8,27.8,47.8,12,79.2
+MS,Tippah County,Rural,45.8,35.0,59.2,13,stable,"1.0 (-0.6, 2.7)",35.2,25.7,47.3,10,75.0
+MS,Tishomingo County,Rural,45.6,35.1,58.8,13,falling,"-18.6 (-30.9, -5.5)",28.6,20.4,39.5,8,62.7
+MS,Tunica County,Urban,65.2,43.8,93.3,6,stable,"0.4 (-2.1, 2.9)",48.7,30.2,74.3,5,71.9
+MS,Union County,Rural,45.7,35.9,57.4,16,stable,"-1.0 (-3.4, 1.4)",29.6,21.9,39.3,10,65.4
+MS,Walthall County,Rural,36.9,25.5,52.1,8,stable,"-0.6 (-4.5, 3.6)",21.4,13.2,33.5,5,60.5
+MS,Warren County,Rural,40.1,32.7,48.7,22,stable,"-1.8 (-3.8, 0.0)",25.2,19.4,32.1,14,64.3
+MS,Washington County,Rural,45.8,37.9,55.0,26,falling,"-5.9 (-12.2, -3.0)",24.1,18.4,31.1,14,52.7
+MS,Wayne County,Rural,50.1,37.9,65.2,12,stable,"-0.2 (-2.7, 2.2)",35.7,25.5,48.8,9,70.5
+MS,Webster County,Rural,66.8,48.2,90.8,9,stable,"0.4 (-3.5, 4.4)",43.8,29.2,63.7,6,66.7
+MS,Wilkinson County,Rural,51.7,34.4,75.6,6,stable,"-2.2 (-5.7, 0.9)",35.5,21.2,56.6,4,66.7
+MS,Winston County,Rural,33.7,24.1,46.2,9,stable,"-1.7 (-4.5, 1.0)",24.3,16.3,35.4,6,71.1
+MS,Yalobusha County,Rural,51.0,36.5,69.8,9,stable,"0.7 (-2.7, 4.2)",24.0,13.9,38.8,4,43.5
+MS,Yazoo County,Urban,59.2,47.0,73.6,17,stable,"0.4 (-2.0, 2.9)",38.4,28.7,50.4,11,64.3
+MS,Issaquena County,Rural,,,,,*,*,,,,,
+MS,Sharkey County,Rural,,,,,*,*,,,,,
+TX,Anderson County,Rural,39.6,33.2,46.9,28,stable,"-1.1 (-2.8, 0.5)",26.3,21.1,32.4,19,66.4
+TX,Andrews County,Rural,44.6,31.2,61.7,8,stable,"-0.2 (-2.7, 2.7)",29.3,18.6,44.0,5,63.2
+TX,Angelina County,Rural,48.8,42.9,55.4,51,stable,"0.1 (-1.2, 1.6)",27.1,22.7,32.2,28,54.5
+TX,Aransas County,Urban,38.9,30.4,49.5,17,stable,"-0.4 (-2.0, 1.1)",24.8,18.2,33.4,11,66.3
+TX,Archer County,Urban,42.1,26.3,64.6,5,stable,"0.0 (-4.4, 4.4)",28.0,15.9,46.5,4,72.0
+TX,Atascosa County,Urban,52.4,44.2,61.7,30,rising,"5.4 (1.1, 15.9)",33.1,26.7,40.7,19,63.6
+TX,Austin County,Urban,31.1,23.7,40.2,13,stable,"-1.7 (-3.3, 3.1)",19.3,13.6,26.8,8,62.7
+TX,Bandera County,Urban,29.6,22.3,39.4,12,stable,"2.3 (-2.6, 17.4)",16.6,11.1,24.6,7,54.8
+TX,Bastrop County,Urban,39.8,34.6,45.6,44,stable,"-1.2 (-2.4, 0.1)",23.8,19.7,28.4,26,58.6
+TX,Bee County,Rural,51.5,40.7,64.4,16,stable,"0.4 (-1.7, 2.4)",33.6,24.9,44.3,10,64.6
+TX,Bell County,Urban,37.4,34.5,40.4,129,falling,"-1.5 (-2.3, -0.5)",21.4,19.2,23.7,74,57.5
+TX,Bexar County,Urban,38.0,36.8,39.3,769,stable,"0.0 (-0.9, 3.1)",22.6,21.7,23.6,461,59.9
+TX,Blanco County,Rural,33.9,22.3,50.4,6,stable,"-1.5 (-5.0, 2.1)",22.1,12.6,36.7,4,62.5
+TX,Bosque County,Urban,42.8,32.7,55.7,14,stable,"0.0 (-2.1, 2.0)",25.4,17.5,36.1,8,57.4
+TX,Bowie County,Urban,45.7,40.2,51.8,52,falling,"-1.9 (-3.1, -0.7)",25.4,21.2,30.1,28,54.0
+TX,Brazoria County,Urban,39.8,37.0,42.8,156,stable,"-0.2 (-1.4, 3.6)",24.6,22.4,26.9,96,61.6
+TX,Brazos County,Urban,36.0,32.2,40.2,65,stable,"4.5 (-2.3, 9.9)",23.6,20.5,27.0,43,66.4
+TX,Brewster County,Rural,30.3,18.2,48.3,4,*,*,25.5,14.4,42.8,3,81.0
+TX,Brooks County,Rural,60.9,38.7,91.4,5,stable,"1.5 (-2.3, 5.9)",37.6,21.6,61.5,3,68.0
+TX,Brown County,Rural,51.4,42.6,61.5,27,stable,"-0.7 (-2.0, 0.5)",27.5,21.1,35.2,14,53.0
+TX,Burleson County,Urban,53.5,41.6,68.1,15,stable,"0.1 (-1.9, 2.3)",33.3,24.0,45.5,9,61.3
+TX,Burnet County,Rural,40.9,34.1,48.8,30,stable,"-0.7 (-2.3, 0.9)",26.5,21.0,33.2,19,62.0
+TX,Caldwell County,Urban,38.1,31.0,46.4,21,falling,"-1.8 (-3.4, -0.3)",24.6,18.9,31.4,14,64.8
+TX,Calhoun County,Rural,47.7,35.8,62.3,12,stable,"-1.7 (-4.4, 0.6)",30.0,20.7,42.3,7,61.7
+TX,Callahan County,Urban,40.0,28.1,55.7,8,stable,"0.5 (-2.5, 3.4)",24.9,16.0,37.7,5,65.0
+TX,Cameron County,Urban,43.5,40.8,46.4,190,stable,"0.4 (-0.5, 1.4)",25.5,23.4,27.8,110,57.8
+TX,Camp County,Rural,60.5,42.8,83.1,9,stable,"0.6 (-2.0, 3.3)",38.6,24.9,57.2,6,65.1
+TX,Cass County,Rural,53.1,43.4,64.6,23,stable,"0.1 (-1.6, 1.8)",28.7,21.7,37.5,12,54.4
+TX,Chambers County,Urban,51.2,42.1,61.5,24,stable,"-1.2 (-4.5, 2.6)",33.2,26.1,41.7,16,66.4
+TX,Cherokee County,Rural,38.0,31.5,45.6,25,stable,"0.1 (-2.5, 2.8)",25.6,20.3,31.9,17,67.7
+TX,Clay County,Urban,60.2,43.1,82.6,9,stable,"1.2 (-1.4, 3.9)",43.5,28.8,63.6,6,69.6
+TX,Coke County,Rural,63.2,33.8,110.4,3,*,*,,,,,
+TX,Coleman County,Rural,61.1,42.2,86.9,8,rising,"2.8 (0.1, 5.6)",43.4,27.5,66.3,5,69.2
+TX,Collin County,Urban,32.1,30.6,33.7,350,stable,"-0.4 (-1.4, 1.8)",19.3,18.1,20.5,212,60.6
+TX,Colorado County,Rural,49.0,37.9,62.6,15,stable,"-1.3 (-3.6, 0.8)",27.8,19.9,38.2,9,59.2
+TX,Comal County,Urban,33.1,29.7,36.8,76,falling,"-1.5 (-2.3, -0.6)",18.4,15.9,21.2,43,56.2
+TX,Comanche County,Rural,45.8,32.6,63.1,9,stable,"-0.3 (-13.7, 3.9)",25.4,15.5,39.6,5,53.3
+TX,Cooke County,Rural,50.3,41.7,60.2,26,stable,"-0.3 (-1.9, 1.2)",30.6,23.9,38.7,16,59.1
+TX,Coryell County,Urban,35.2,29.3,41.9,26,stable,"-2.4 (-4.6, 0.0)",19.8,15.5,25.0,15,57.4
+TX,Dallas County,Urban,37.1,36.0,38.2,926,stable,"-0.2 (-0.9, 1.0)",23.2,22.4,24.1,583,63.0
+TX,Dawson County,Rural,53.9,37.4,75.3,7,stable,"0.4 (-1.2, 2.0)",37.3,23.8,55.6,5,69.4
+TX,DeWitt County,Rural,54.0,42.5,68.1,16,stable,"0.5 (-1.4, 2.3)",35.3,26.1,47.0,10,65.4
+TX,Deaf Smith County,Rural,45.6,32.8,61.7,9,rising,"3.7 (0.8, 9.8)",24.4,15.3,36.8,5,53.5
+TX,Delta County,Rural,66.4,43.1,99.4,5,stable,"1.8 (-1.5, 5.5)",48.9,29.3,78.4,4,74.1
+TX,Denton County,Urban,30.4,28.8,32.1,281,stable,"-0.7 (-2.0, 3.0)",18.3,17.0,19.6,168,59.9
+TX,Dimmit County,Rural,68.1,47.1,95.7,7,stable,"2.6 (-1.1, 7.0)",33.3,19.7,53.4,4,51.4
+TX,Duval County,Rural,62.4,43.5,87.0,7,rising,"9.2 (1.7, 32.0)",39.0,24.1,59.9,4,59.5
+TX,Eastland County,Rural,44.3,33.1,58.4,12,stable,"-0.3 (-2.9, 2.2)",29.7,20.8,41.6,8,67.8
+TX,Ector County,Urban,54.2,48.7,60.1,74,stable,"0.8 (-0.4, 2.1)",36.8,32.2,41.7,50,67.4
+TX,El Paso County,Urban,38.0,36.2,39.9,330,stable,"0.4 (-0.6, 4.5)",21.7,20.3,23.2,190,57.4
+TX,Ellis County,Urban,37.0,33.3,41.0,77,falling,"-2.1 (-3.0, -1.1)",21.8,19.0,24.9,46,58.9
+TX,Erath County,Rural,39.4,31.5,48.8,18,stable,"-0.5 (-2.1, 1.2)",22.4,16.5,29.6,10,57.1
+TX,Falls County,Urban,41.5,30.0,56.3,9,falling,"-2.3 (-4.9, -0.1)",32.4,22.2,46.0,7,76.1
+TX,Fannin County,Rural,45.1,36.9,54.7,22,stable,"-0.2 (-2.3, 1.9)",27.2,21.0,34.9,14,60.7
+TX,Fayette County,Rural,45.7,36.1,57.4,19,falling,"-2.2 (-4.4, -0.2)",31.0,23.1,41.0,13,66.0
+TX,Floyd County,Rural,57.1,31.6,94.6,3,stable,"0.1 (-3.1, 2.9)",,,,,
+TX,Fort Bend County,Urban,35.7,33.9,37.7,310,stable,"1.2 (-0.8, 6.2)",21.4,20.0,22.9,187,60.5
+TX,Franklin County,Rural,50.6,35.1,71.2,8,stable,"-0.1 (-2.7, 2.4)",21.2,12.0,35.7,3,44.7
+TX,Freestone County,Rural,45.1,34.3,58.4,13,stable,"4.9 (-0.4, 27.0)",25.9,17.9,36.6,7,57.1
+TX,Frio County,Rural,49.3,35.3,66.9,8,stable,"2.1 (-0.4, 5.2)",26.3,16.4,39.9,4,53.7
+TX,Gaines County,Rural,30.8,19.8,45.4,5,stable,"-0.8 (-3.0, 1.4)",,,,,
+TX,Galveston County,Urban,40.9,38.2,43.9,170,stable,"2.3 (-0.9, 10.7)",26.5,24.3,28.9,110,64.6
+TX,Gillespie County,Rural,38.9,30.0,49.9,18,stable,"-15.0 (-25.9, 2.1)",19.6,13.0,28.5,8,43.8
+TX,Goliad County,Urban,47.0,29.9,71.7,5,stable,"-0.9 (-5.0, 3.1)",38.2,22.9,61.2,4,81.5
+TX,Gonzales County,Rural,49.4,37.4,64.2,12,stable,"16.2 (-0.6, 28.8)",33.5,23.9,46.0,8,68.9
+TX,Gray County,Rural,38.9,28.8,51.7,10,stable,"-1.3 (-3.3, 0.5)",27.6,19.2,38.6,7,72.0
+TX,Grayson County,Urban,41.0,36.7,45.7,72,stable,"-1.1 (-2.2, 0.0)",24.0,20.7,27.6,41,57.3
+TX,Gregg County,Urban,54.1,48.6,60.0,75,stable,"8.2 (-0.3, 17.1)",29.1,25.1,33.6,40,53.6
+TX,Grimes County,Rural,39.1,30.8,49.1,16,stable,"-1.2 (-3.9, 1.7)",22.8,16.5,30.8,9,57.3
+TX,Guadalupe County,Urban,36.0,32.3,40.0,71,falling,"-1.9 (-2.9, -0.8)",21.6,18.8,24.8,43,59.7
+TX,Hale County,Rural,39.0,30.3,49.5,14,stable,"-0.2 (-1.7, 1.4)",21.7,15.4,29.8,8,57.1
+TX,Hamilton County,Rural,47.6,31.4,70.3,6,stable,"-0.3 (-3.8, 3.1)",24.4,13.5,42.1,3,53.1
+TX,Hardin County,Urban,37.7,31.4,45.0,26,stable,"-1.1 (-2.8, 0.7)",24.8,19.7,30.9,17,64.4
+TX,Harris County,Urban,38.0,37.2,38.9,1732,rising,"2.1 (0.3, 3.4)",23.9,23.3,24.6,1098,63.4
+TX,Harrison County,Urban,39.7,33.8,46.4,35,falling,"-2.5 (-3.9, -1.1)",21.1,16.8,26.1,18,52.0
+TX,Haskell County,Rural,54.6,35.0,84.0,5,stable,"1.2 (-1.7, 3.9)",,,,,
+TX,Hays County,Urban,34.2,30.9,37.9,82,stable,"-1.1 (-2.3, 0.3)",20.9,18.3,23.8,50,60.9
+TX,Henderson County,Rural,45.2,39.7,51.4,55,stable,"-1.3 (-2.6, 0.0)",28.6,24.2,33.6,34,62.5
+TX,Hidalgo County,Urban,38.8,36.9,40.8,311,rising,"4.7 (3.2, 6.6)",23.6,22.1,25.2,188,60.5
+TX,Hill County,Rural,42.6,34.5,52.2,21,stable,"-1.3 (-3.1, 0.4)",27.2,20.8,35.1,13,63.2
+TX,Hockley County,Urban,55.6,42.9,70.9,14,stable,"1.5 (-1.7, 5.1)",32.9,23.3,45.2,8,58.8
+TX,Hood County,Rural,42.0,35.8,49.0,41,stable,"7.3 (-1.1, 22.9)",25.6,20.7,31.3,24,58.1
+TX,Hopkins County,Rural,47.7,39.0,57.9,23,stable,"-0.7 (-2.2, 0.8)",29.7,22.8,38.1,14,60.2
+TX,Houston County,Rural,40.1,31.0,51.3,14,stable,"0.7 (-1.0, 2.5)",24.0,17.0,33.3,8,58.6
+TX,Howard County,Rural,46.6,37.0,58.1,17,stable,"0.3 (-2.1, 2.5)",31.0,23.3,40.5,11,67.5
+TX,Hunt County,Urban,43.0,37.9,48.7,53,stable,"-0.6 (-1.6, 0.5)",27.0,22.9,31.5,34,62.9
+TX,Hutchinson County,Rural,42.3,31.7,55.5,11,stable,"-1.4 (-3.1, 0.1)",27.1,18.8,37.9,7,64.9
+TX,Jackson County,Rural,38.8,26.9,54.2,8,stable,"-3.4 (-20.8, 1.1)",21.9,13.2,34.5,4,55.3
+TX,Jasper County,Rural,48.5,39.4,59.3,22,stable,"-0.1 (-1.3, 1.1)",31.0,23.8,39.7,14,64.5
+TX,Jefferson County,Urban,39.2,35.9,42.6,113,falling,"-1.8 (-2.6, -1.1)",24.2,21.7,27.0,70,61.8
+TX,Jim Hogg County,Rural,74.7,43.2,119.9,4,stable,"0.2 (-3.6, 3.8)",,,,,
+TX,Jim Wells County,Rural,61.4,51.5,72.7,28,stable,"0.7 (-1.0, 2.5)",39.5,31.6,48.9,18,63.4
+TX,Johnson County,Urban,43.2,39.2,47.6,88,falling,"-1.2 (-2.0, -0.3)",26.9,23.8,30.4,56,63.0
+TX,Jones County,Urban,41.3,30.4,55.0,10,stable,"0.4 (-1.5, 2.5)",25.2,16.8,36.6,6,59.2
+TX,Karnes County,Rural,35.7,24.1,51.4,6,stable,"-1.8 (-3.8, 0.0)",28.4,18.0,42.8,5,77.4
+TX,Kaufman County,Urban,42.9,38.2,48.0,64,stable,"-1.2 (-2.7, 0.5)",25.9,22.2,29.9,39,60.9
+TX,Kendall County,Urban,28.8,23.1,35.7,19,falling,"-3.0 (-5.5, -0.3)",17.6,13.1,23.1,11,61.3
+TX,Kerr County,Rural,34.0,28.1,40.7,30,stable,"-1.1 (-2.7, 0.4)",21.2,16.6,26.9,18,59.9
+TX,Kimble County,Rural,79.1,47.0,125.8,5,stable,"-16.1 (-33.3, 17.3)",53.7,28.8,93.0,3,70.8
+TX,Kleberg County,Rural,47.7,37.2,60.2,15,stable,"-0.9 (-2.9, 1.1)",34.9,25.9,46.1,10,71.2
+TX,La Salle County,Rural,93.5,63.5,133.0,6,stable,"1.9 (-0.9, 5.4)",58.5,35.4,91.3,4,62.5
+TX,Lamar County,Rural,43.7,36.6,51.8,29,stable,"-0.4 (-1.6, 0.8)",27.5,22.0,34.2,18,62.3
+TX,Lamb County,Rural,41.5,28.4,58.9,7,stable,"0.6 (-3.2, 4.7)",31.6,20.4,47.1,5,76.5
+TX,Lampasas County,Urban,52.3,40.8,66.3,16,stable,"1.1 (-1.0, 3.5)",32.9,23.8,44.6,10,61.5
+TX,Lavaca County,Rural,41.8,31.7,54.5,13,falling,"-2.1 (-4.1, -0.3)",31.1,22.3,42.5,10,72.7
+TX,Lee County,Rural,44.2,33.1,58.3,11,stable,"-0.8 (-3.5, 2.0)",31.4,22.1,43.7,8,71.9
+TX,Leon County,Rural,54.4,40.4,71.8,12,rising,"5.3 (1.0, 21.4)",35.8,24.7,50.5,8,66.1
+TX,Liberty County,Urban,48.3,42.1,55.2,46,stable,"0.6 (-0.6, 2.0)",31.8,26.9,37.4,31,67.1
+TX,Limestone County,Rural,56.1,44.2,70.4,17,stable,"-0.2 (-2.8, 2.4)",38.3,28.5,50.5,12,67.4
+TX,Live Oak County,Rural,35.3,22.7,52.7,5,stable,"0.4 (-3.8, 5.1)",23.2,13.3,38.2,4,66.7
+TX,Llano County,Rural,27.2,19.3,37.9,11,falling,"-2.6 (-5.0, -0.7)",16.4,10.1,25.7,6,54.4
+TX,Lubbock County,Urban,43.1,39.8,46.6,132,rising,"7.5 (1.8, 11.8)",27.7,25.1,30.5,85,64.3
+TX,Madison County,Rural,36.8,24.4,53.6,6,stable,"0.0 (-3.0, 3.1)",23.5,13.8,37.6,4,64.3
+TX,Marion County,Rural,54.5,37.5,77.6,9,stable,"1.0 (-0.8, 2.9)",38.9,24.5,59.7,6,69.8
+TX,Matagorda County,Rural,47.7,39.0,58.0,22,stable,"-1.0 (-3.0, 0.9)",29.7,22.9,37.9,14,63.1
+TX,Maverick County,Urban,54.0,45.5,63.6,29,rising,"2.7 (1.2, 4.5)",34.3,27.6,42.2,19,63.3
+TX,McCulloch County,Rural,46.6,30.1,70.0,6,stable,"0.8 (-3.0, 4.9)",30.8,17.2,52.0,3,60.7
+TX,McLennan County,Urban,40.5,37.1,44.1,113,stable,"1.0 (-0.7, 3.8)",25.4,22.7,28.3,70,62.0
+TX,Medina County,Urban,41.2,34.3,49.0,27,stable,"0.2 (-1.6, 2.1)",23.4,18.3,29.5,16,57.4
+TX,Midland County,Urban,37.0,32.7,41.6,57,falling,"-2.1 (-3.4, -0.8)",22.7,19.3,26.4,35,60.5
+TX,Milam County,Rural,44.7,35.1,56.4,16,stable,"-0.7 (-1.9, 0.4)",27.8,20.3,37.3,10,62.0
+TX,Mitchell County,Rural,41.8,25.3,65.3,4,stable,"1.0 (-3.1, 5.5)",,,,,
+TX,Montague County,Rural,49.1,37.9,63.0,15,stable,"-1.0 (-2.9, 0.9)",29.7,21.1,40.9,9,60.3
+TX,Montgomery County,Urban,35.2,33.2,37.3,243,stable,"0.9 (-1.5, 5.7)",21.6,20.0,23.2,151,62.2
+TX,Moore County,Rural,32.0,21.5,45.6,6,stable,"-9.1 (-20.9, 3.1)",17.8,10.4,28.3,4,58.1
+TX,Morris County,Rural,52.8,37.1,73.1,9,stable,"-0.2 (-3.1, 2.5)",36.2,23.6,53.4,6,69.8
+TX,Nacogdoches County,Rural,45.3,38.4,53.0,33,falling,"-1.4 (-2.7, -0.1)",25.2,20.1,31.2,18,55.2
+TX,Navarro County,Rural,39.2,32.4,47.2,24,falling,"-1.5 (-3.0, -0.2)",23.0,17.7,29.4,14,56.6
+TX,Newton County,Rural,58.7,42.7,79.2,11,*,*,38.1,24.8,56.4,6,58.5
+TX,Nolan County,Rural,43.5,31.2,59.3,9,stable,"-1.3 (-3.3, 0.7)",25.7,16.5,38.6,5,58.1
+TX,Nueces County,Urban,37.9,35.2,40.8,153,stable,"-0.1 (-1.2, 2.2)",23.1,21.0,25.3,93,60.7
+TX,Ochiltree County,Rural,38.1,22.6,60.2,4,stable,"-2.3 (-6.9, 1.8)",,,,,
+TX,Orange County,Urban,47.4,41.4,54.0,47,falling,"-1.1 (-2.0, -0.1)",29.4,24.7,34.7,29,61.6
+TX,Palo Pinto County,Rural,57.3,46.5,69.9,22,stable,"8.0 (-0.6, 20.3)",40.6,31.5,51.6,15,69.1
+TX,Panola County,Rural,43.8,33.9,56.0,14,stable,"-1.9 (-4.7, 0.7)",22.9,16.1,32.2,7,52.9
+TX,Parker County,Urban,41.0,36.8,45.5,74,falling,"-1.2 (-2.1, -0.1)",23.3,20.1,26.8,42,57.1
+TX,Parmer County,Rural,35.6,21.1,56.3,4,stable,"0.3 (-2.8, 3.5)",,,,,
+TX,Pecos County,Rural,44.8,31.1,62.6,7,stable,"-0.1 (-3.2, 3.0)",29.7,18.7,44.8,5,65.7
+TX,Polk County,Rural,67.9,57.6,79.5,41,rising,"1.6 (0.1, 3.2)",34.7,28.0,42.6,23,56.0
+TX,Potter County,Urban,43.7,38.5,49.4,53,stable,"-1.0 (-2.2, 0.2)",25.5,21.6,30.0,31,58.3
+TX,Presidio County,Rural,48.4,27.2,79.7,4,*,*,,,,,
+TX,Rains County,Rural,36.1,25.2,51.1,8,stable,"-1.8 (-5.0, 1.5)",23.0,14.4,36.0,5,61.5
+TX,Randall County,Urban,37.3,33.1,41.9,59,stable,"1.9 (-0.4, 10.6)",23.4,20.1,27.2,37,62.2
+TX,Real County,Rural,65.4,33.6,119.6,3,*,*,,,,,
+TX,Red River County,Rural,36.9,25.2,53.2,7,stable,"-1.1 (-3.9, 1.5)",29.9,19.5,44.7,6,80.6
+TX,Reeves County,Rural,53.0,36.4,74.5,7,stable,"0.8 (-2.3, 4.0)",40.2,25.9,59.4,5,75.8
+TX,Refugio County,Rural,41.2,24.6,66.2,4,stable,"-1.0 (-4.5, 2.3)",,,,,
+TX,Robertson County,Urban,39.0,27.7,53.6,9,stable,"22.9 (-1.2, 46.8)",24.5,15.6,36.8,5,62.8
+TX,Rockwall County,Urban,32.9,28.4,38.0,40,stable,"-1.6 (-2.8, 0.0)",20.1,16.6,24.1,25,61.5
+TX,Runnels County,Rural,51.8,35.1,74.0,7,stable,"-0.1 (-3.5, 3.1)",34.0,20.4,53.6,4,61.8
+TX,Rusk County,Urban,42.6,35.7,50.6,28,falling,"-1.6 (-3.1, -0.3)",23.3,18.2,29.3,16,55.3
+TX,Sabine County,Rural,42.9,30.4,60.7,9,falling,"-4.9 (-12.5, -0.9)",23.9,14.5,39.0,5,52.3
+TX,San Augustine County,Rural,59.7,40.0,86.7,8,stable,"0.7 (-2.7, 4.0)",40.7,23.5,65.9,5,59.0
+TX,San Jacinto County,Urban,42.1,32.9,53.3,17,stable,"-0.9 (-2.6, 0.8)",29.9,22.4,39.4,12,73.5
+TX,San Patricio County,Urban,40.5,34.3,47.5,32,falling,"-1.6 (-2.9, -0.4)",23.5,18.8,29.0,18,57.6
+TX,San Saba County,Rural,47.9,27.8,78.2,4,stable,"0.1 (-3.7, 3.9)",,,,,
+TX,Scurry County,Rural,50.6,37.1,67.5,10,stable,"0.2 (-2.9, 3.3)",31.9,21.3,45.9,6,62.5
+TX,Shelby County,Rural,43.8,34.0,55.7,14,stable,"-0.2 (-2.0, 1.5)",24.4,17.2,33.8,8,55.6
+TX,Smith County,Urban,39.5,36.2,43.0,113,stable,"-0.2 (-1.8, 5.5)",23.9,21.3,26.6,68,60.2
+TX,Somervell County,Rural,38.1,23.5,58.8,5,*,*,,,,,
+TX,Starr County,Rural,38.2,31.4,45.9,23,stable,"-6.5 (-22.3, 0.1)",21.0,16.0,26.9,12,54.9
+TX,Stephens County,Rural,56.2,38.9,79.3,7,rising,"32.8 (8.4, 55.3)",33.3,20.1,52.4,4,56.8
+TX,Swisher County,Rural,47.8,28.7,75.2,4,stable,"-0.8 (-5.5, 3.3)",,,,,
+TX,Tarrant County,Urban,36.7,35.5,37.9,778,stable,"0.1 (-1.1, 3.3)",22.3,21.4,23.3,478,61.4
+TX,Taylor County,Urban,43.1,38.5,48.1,67,stable,"-0.9 (-2.1, 0.2)",26.2,22.7,30.2,41,61.3
+TX,Terry County,Rural,47.2,32.0,67.3,6,stable,"-0.8 (-3.4, 1.5)",33.1,20.3,51.1,4,65.6
+TX,Titus County,Rural,36.7,27.9,47.3,12,stable,"-1.1 (-3.4, 1.2)",21.4,14.8,30.1,7,56.5
+TX,Tom Green County,Urban,42.1,37.2,47.5,58,stable,"-1.0 (-2.4, 0.3)",25.8,22.0,30.1,35,60.4
+TX,Travis County,Urban,34.2,32.7,35.8,412,stable,"0.8 (-0.3, 3.1)",21.4,20.2,22.7,261,63.3
+TX,Trinity County,Rural,40.9,29.4,56.2,10,stable,"-1.7 (-5.1, 1.2)",17.2,9.6,29.1,4,38.0
+TX,Tyler County,Rural,46.3,35.5,59.8,14,stable,"1.4 (-0.4, 3.3)",27.9,19.5,39.0,8,59.4
+TX,Upshur County,Urban,52.9,44.1,63.0,28,stable,"0.0 (-1.6, 1.6)",32.9,26.0,41.1,17,61.4
+TX,Uvalde County,Rural,49.5,38.4,62.8,14,stable,"0.9 (-0.9, 2.7)",30.0,21.6,40.6,9,62.0
+TX,Val Verde County,Rural,49.7,41.2,59.5,24,stable,"0.9 (-1.1, 3.1)",30.2,23.6,38.0,15,60.3
+TX,Van Zandt County,Rural,44.6,38.1,52.0,37,stable,"-0.7 (-2.3, 0.8)",29.2,23.9,35.3,24,64.3
+TX,Victoria County,Urban,47.1,41.2,53.5,50,stable,"7.6 (-1.1, 14.3)",32.2,27.4,37.6,34,68.7
+TX,Walker County,Rural,44.5,38.3,51.5,38,stable,"3.3 (-0.2, 13.6)",24.8,20.2,30.1,21,56.3
+TX,Waller County,Urban,45.9,37.8,55.1,24,rising,"8.4 (1.5, 25.4)",27.1,21.0,34.3,14,59.5
+TX,Ward County,Rural,45.3,29.4,66.7,5,falling,"-3.2 (-7.8, -1.0)",32.3,19.0,51.3,4,69.2
+TX,Washington County,Rural,44.5,36.3,54.2,23,falling,"-2.2 (-4.4, -0.1)",30.6,23.6,39.1,15,65.8
+TX,Webb County,Urban,41.0,37.3,44.9,94,rising,"1.1 (0.2, 2.1)",26.7,23.8,29.9,61,65.0
+TX,Wharton County,Rural,56.8,47.8,67.1,30,stable,"0.8 (-0.8, 2.4)",36.8,29.6,45.3,19,64.2
+TX,Wichita County,Urban,44.1,39.3,49.3,65,stable,"-0.9 (-2.3, 0.5)",25.5,21.8,29.6,37,56.3
+TX,Wilbarger County,Rural,43.3,30.2,60.6,8,stable,"-2.2 (-4.9, 0.1)",25.9,16.1,39.9,5,60.5
+TX,Willacy County,Rural,50.9,37.8,67.1,10,stable,"0.4 (-1.9, 3.0)",25.9,16.9,38.0,5,51.9
+TX,Williamson County,Urban,33.5,31.6,35.6,221,stable,"-3.3 (-6.8, 0.2)",20.2,18.7,21.8,134,60.9
+TX,Wilson County,Urban,39.5,32.7,47.3,25,stable,"-0.9 (-2.3, 0.8)",22.5,17.5,28.7,14,56.3
+TX,Winkler County,Rural,69.1,45.2,101.3,5,*,*,48.2,28.8,76.1,4,70.4
+TX,Wise County,Urban,46.7,40.2,53.9,40,stable,"0.7 (-0.5, 2.1)",29.8,24.6,35.7,25,63.3
+TX,Wood County,Rural,39.3,32.7,47.0,30,stable,"-1.3 (-2.9, 0.2)",25.9,20.5,32.4,20,64.5
+TX,Yoakum County,Rural,43.0,25.2,69.0,4,*,*,,,,,
+TX,Young County,Rural,55.7,42.3,72.3,13,stable,"-0.7 (-3.9, 2.1)",33.1,23.1,46.1,8,61.5
+TX,Zapata County,Rural,43.6,29.3,62.5,6,stable,"1.3 (-1.1, 4.1)",32.9,20.7,49.5,5,76.7
+TX,Zavala County,Rural,67.2,46.1,94.7,7,rising,"2.6 (0.1, 5.7)",43.5,27.3,66.1,5,67.6
+TX,Armstrong County,Urban,,,,,*,*,,,,,
+TX,Bailey County,Rural,,,,,*,*,,,,,
+TX,Baylor County,Rural,,,,,*,*,,,,,
+TX,Borden County,Rural,,,,,*,*,,,,,
+TX,Briscoe County,Rural,,,,,*,*,,,,,
+TX,Carson County,Urban,,,,,*,*,,,,,
+TX,Castro County,Rural,,,,,*,*,,,,,
+TX,Childress County,Rural,,,,,*,*,,,,,
+TX,Cochran County,Urban,,,,,*,*,,,,,
+TX,Collingsworth County,Rural,,,,,*,*,,,,,
+TX,Concho County,Rural,,,,,*,*,,,,,
+TX,Cottle County,Rural,,,,,*,*,,,,,
+TX,Crane County,Rural,,,,,*,*,,,,,
+TX,Crockett County,Rural,,,,,*,*,,,,,
+TX,Crosby County,Urban,,,,,*,*,,,,,
+TX,Culberson County,Rural,,,,,*,*,,,,,
+TX,Dallam County,Rural,,,,,*,*,,,,,
+TX,Dickens County,Rural,,,,,*,*,,,,,
+TX,Donley County,Rural,,,,,*,*,,,,,
+TX,Edwards County,Rural,,,,,*,*,,,,,
+TX,Fisher County,Rural,,,,,*,*,,,,,
+TX,Foard County,Rural,,,,,*,*,,,,,
+TX,Garza County,Urban,,,,,*,*,,,,,
+TX,Glasscock County,Rural,,,,,*,*,,,,,
+TX,Hall County,Rural,,,,,*,*,,,,,
+TX,Hansford County,Rural,,,,,*,*,,,,,
+TX,Hardeman County,Rural,,,,,*,*,,,,,
+TX,Hartley County,Rural,,,,,*,*,,,,,
+TX,Hemphill County,Rural,,,,,*,*,,,,,
+TX,Hudspeth County,Urban,,,,,*,*,,,,,
+TX,Irion County,Urban,,,,,*,*,,,,,
+TX,Jack County,Rural,,,,,*,*,,,,,
+TX,Jeff Davis County,Rural,,,,,*,*,,,,,
+TX,Kenedy County,Rural,,,,,*,*,,,,,
+TX,Kent County,Rural,,,,,*,*,,,,,
+TX,King County,Rural,,,,,*,*,,,,,
+TX,Kinney County,Rural,,,,,*,*,,,,,
+TX,Knox County,Rural,,,,,*,*,,,,,
+TX,Lipscomb County,Rural,,,,,*,*,,,,,
+TX,Loving County,Rural,,,,,*,*,,,,,
+TX,Lynn County,Urban,,,,,*,*,,,,,
+TX,Martin County,Urban,,,,,*,*,,,,,
+TX,Mason County,Rural,,,,,*,*,,,,,
+TX,McMullen County,Rural,,,,,*,*,,,,,
+TX,Menard County,Rural,,,,,*,*,,,,,
+TX,Mills County,Rural,,,,,*,*,,,,,
+TX,Motley County,Rural,,,,,*,*,,,,,
+TX,Oldham County,Urban,,,,,*,*,,,,,
+TX,Reagan County,Rural,,,,,*,*,,,,,
+TX,Roberts County,Rural,,,,,*,*,,,,,
+TX,Schleicher County,Rural,,,,,*,*,,,,,
+TX,Shackelford County,Rural,,,,,*,*,,,,,
+TX,Sherman County,Rural,,,,,*,*,,,,,
+TX,Sterling County,Rural,,,,,*,*,,,,,
+TX,Stonewall County,Rural,,,,,*,*,,,,,
+TX,Sutton County,Rural,,,,,*,*,,,,,
+TX,Terrell County,Rural,,,,,*,*,,,,,
+TX,Throckmorton County,Rural,,,,,*,*,,,,,
+TX,Upton County,Rural,,,,,*,*,,,,,
+TX,Wheeler County,Rural,,,,,*,*,,,,,

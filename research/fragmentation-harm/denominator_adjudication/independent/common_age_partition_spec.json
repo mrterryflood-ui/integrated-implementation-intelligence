@@ -1,0 +1,269 @@
+{
+  "schema": "dis-common-age-partition-spec-v1",
+  "status": "SPECIFICATION_IDENTIFIED; COUNTY_RECOMPUTATION_DATA_NOT_IDENTIFIED",
+  "standard": "2000 U.S. Standard Population (Census P25-1130), actual population column, not Standard Million",
+  "sources": {
+    "standard19": {
+      "path": "source_retrieval/standard19.html",
+      "sha256": "4b834ce6513af9393dc78db15c127bd8d0888e38c0d275fd0aa4a58007f1d733",
+      "column": "2000 U.S. Standard Population (Census P25-1130)",
+      "counts": {
+        "00 years": 3794901,
+        "01-04 years": 15191619,
+        "05-09 years": 19919840,
+        "10-14 years": 20056779,
+        "15-19 years": 19819518,
+        "20-24 years": 18257225,
+        "25-29 years": 17722067,
+        "30-34 years": 19511370,
+        "35-39 years": 22179956,
+        "40-44 years": 22479229,
+        "45-49 years": 19805793,
+        "50-54 years": 17224359,
+        "55-59 years": 13307234,
+        "60-64 years": 10654272,
+        "65-69 years": 9409940,
+        "70-74 years": 8725574,
+        "75-79 years": 7414559,
+        "80-84 years": 4900234,
+        "85+ years": 4259173
+      },
+      "total": 274633642
+    },
+    "standard20": {
+      "path": "source_retrieval/standard20.html",
+      "sha256": "d872ed0f8a2127ce7b97ef60c4edd03aa683455ebf838cf3f784a4baeb223e19",
+      "column": "2000 U.S. Standard Population (Census P25-1130)",
+      "counts": {
+        "00 years": 3794901,
+        "01-04 years": 15191619,
+        "05-09 years": 19919840,
+        "10-14 years": 20056779,
+        "15-19 years": 19819518,
+        "20-24 years": 18257225,
+        "25-29 years": 17722067,
+        "30-34 years": 19511370,
+        "35-39 years": 22179956,
+        "40-44 years": 22479229,
+        "45-49 years": 19805793,
+        "50-54 years": 17224359,
+        "55-59 years": 13307234,
+        "60-64 years": 10654272,
+        "65-69 years": 9409940,
+        "70-74 years": 8725574,
+        "75-79 years": 7414559,
+        "80-84 years": 4900234,
+        "85-89 years": 2678567,
+        "90+ years": 1580606
+      },
+      "total": 274633642
+    }
+  },
+  "target_partition": [
+    {
+      "age_group": "00 years",
+      "standard_population": 3794901,
+      "normalized_weight_numerator": 3794901,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "00 years"
+      ]
+    },
+    {
+      "age_group": "01-04 years",
+      "standard_population": 15191619,
+      "normalized_weight_numerator": 15191619,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "01-04 years"
+      ]
+    },
+    {
+      "age_group": "05-09 years",
+      "standard_population": 19919840,
+      "normalized_weight_numerator": 19919840,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "05-09 years"
+      ]
+    },
+    {
+      "age_group": "10-14 years",
+      "standard_population": 20056779,
+      "normalized_weight_numerator": 20056779,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "10-14 years"
+      ]
+    },
+    {
+      "age_group": "15-19 years",
+      "standard_population": 19819518,
+      "normalized_weight_numerator": 19819518,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "15-19 years"
+      ]
+    },
+    {
+      "age_group": "20-24 years",
+      "standard_population": 18257225,
+      "normalized_weight_numerator": 18257225,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "20-24 years"
+      ]
+    },
+    {
+      "age_group": "25-29 years",
+      "standard_population": 17722067,
+      "normalized_weight_numerator": 17722067,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "25-29 years"
+      ]
+    },
+    {
+      "age_group": "30-34 years",
+      "standard_population": 19511370,
+      "normalized_weight_numerator": 19511370,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "30-34 years"
+      ]
+    },
+    {
+      "age_group": "35-39 years",
+      "standard_population": 22179956,
+      "normalized_weight_numerator": 22179956,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "35-39 years"
+      ]
+    },
+    {
+      "age_group": "40-44 years",
+      "standard_population": 22479229,
+      "normalized_weight_numerator": 22479229,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "40-44 years"
+      ]
+    },
+    {
+      "age_group": "45-49 years",
+      "standard_population": 19805793,
+      "normalized_weight_numerator": 19805793,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "45-49 years"
+      ]
+    },
+    {
+      "age_group": "50-54 years",
+      "standard_population": 17224359,
+      "normalized_weight_numerator": 17224359,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "50-54 years"
+      ]
+    },
+    {
+      "age_group": "55-59 years",
+      "standard_population": 13307234,
+      "normalized_weight_numerator": 13307234,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "55-59 years"
+      ]
+    },
+    {
+      "age_group": "60-64 years",
+      "standard_population": 10654272,
+      "normalized_weight_numerator": 10654272,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "60-64 years"
+      ]
+    },
+    {
+      "age_group": "65-69 years",
+      "standard_population": 9409940,
+      "normalized_weight_numerator": 9409940,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "65-69 years"
+      ]
+    },
+    {
+      "age_group": "70-74 years",
+      "standard_population": 8725574,
+      "normalized_weight_numerator": 8725574,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "70-74 years"
+      ]
+    },
+    {
+      "age_group": "75-79 years",
+      "standard_population": 7414559,
+      "normalized_weight_numerator": 7414559,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "75-79 years"
+      ]
+    },
+    {
+      "age_group": "80-84 years",
+      "standard_population": 4900234,
+      "normalized_weight_numerator": 4900234,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "80-84 years"
+      ]
+    },
+    {
+      "age_group": "85+ years",
+      "standard_population": 4259173,
+      "normalized_weight_numerator": 4259173,
+      "normalized_weight_denominator": 274633642,
+      "source20_groups": [
+        "85-89 years",
+        "90+ years"
+      ]
+    }
+  ],
+  "combination_rule": "For each target group sum source event counts and matched person-years before computing rate; use the target standard weight.",
+  "rate_rule": "100000 * sum((standard_population_g / 274633642) * (late_cases_g / person_years_g))",
+  "scope_requirements": [
+    "same county identity and geographic boundary",
+    "CRC site definition and eligible behavior consistent",
+    "2019-2023",
+    "all races including Hispanic, both sexes",
+    "identical late-stage and exclusion rules",
+    "same population revision and residence definition",
+    "agency-valid variance estimator"
+  ],
+  "per_county_input_columns": [
+    "county_fips",
+    "source_release",
+    "diagnosis_period",
+    "age_group",
+    "late_stage_event_count",
+    "matching_person_years",
+    "suppression_state",
+    "population_revision",
+    "stage_definition",
+    "exclusion_rule"
+  ],
+  "no_imputation": true,
+  "unknowns": [
+    "age-specific county late-stage counts",
+    "matched county age-specific person-years",
+    "exact source-specific exclusion rules",
+    "method-equivalent interval computation"
+  ],
+  "historical_definition_availability_proven": false,
+  "empirical_county_rates_recomputed": false,
+  "clinical_acceptance": false
+}

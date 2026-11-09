@@ -1,0 +1,68 @@
+{
+  "schema": "dis-supporting-catalog-audit-v1",
+  "date": "2026-11-08",
+  "scope": "Read-only source-code catalog/schema audit; not live database enumeration, clinical appraisal, independent review or operational integration proof.",
+  "core_drivers": ["DIS", "RPLICE"],
+  "supporting_catalogs": {
+    "HerHealth": {
+      "owner_stated_scope_conditions": 93,
+      "role": "collaborative_starting_point_tertiary_support",
+      "repository": "mrterryflood-ui/Herhealthcare",
+      "source_commit": "e1cb788383b777afa1df956435da6ace4b9c738f",
+      "source_path": "artifacts/api-server/src/lib/canonical-conditions.ts",
+      "source_blob_sha": "670d524fce4c94cefdb8898a276c5ca0f2442541",
+      "source_blob_recomputed_and_matched": true,
+      "observed_source_tags": 97,
+      "observed_unique_source_tags": 97,
+      "live_database_count": null,
+      "scope_reconciliation": "OPEN: preserve owner scope93 separately from code tags97; version, selection and counting unit not yet adjudicated.",
+      "named_next_domain_tags_present": ["endometriosis", "lupus", "rheumatoid-arthritis", "multiple-sclerosis", "sjogrens"],
+      "other_relevant_tags_present": ["iron-deficiency-anemia", "depression", "anxiety", "ptsd", "substance-use"],
+      "presence_does_not_establish_disparity_or_clinical_validity": true
+    },
+    "Mental_health": {
+      "owner_stated_scope_conditions": 60,
+      "role": "collaborative_starting_point_tertiary_support",
+      "repository": "mrterryflood-ui/Mentalhealthplatform",
+      "source_commit": "bb413441d2ae4079ddd0270104ff1694b9e4afc6",
+      "source_path": "lib/db/src/schema/content.ts",
+      "source_blob_sha": "333ea500103125990067ebb4074e2245ed126029",
+      "source_blob_recomputed_and_matched": true,
+      "observed_schema_fields": ["id", "slug", "title", "hub", "summary", "whatItIs", "signsByAge", "culturalConsiderations", "coOccurringConditions", "whatHelps", "barriers", "supportOptions", "providerGuidance", "familyGuidance", "schoolGuidance", "relatedSlugs", "ageGroups", "tags", "priority", "updatedAt", "createdAt"],
+      "observed_schema_field_count": 21,
+      "live_database_count": null,
+      "identity_boundary": "Mental health is not men's health; do not substitute the latter.",
+      "schema_presence_does_not_establish_populated_or_validated_content": true
+    }
+  },
+  "schema_to_core_crosswalk": [
+    {"source_field": "signsByAge", "core_use": "candidate life-course warning-signal concepts", "not_established": "observed patient event, diagnostic accuracy, screening threshold or justified starting age"},
+    {"source_field": "coOccurringConditions", "core_use": "candidate connected-condition relationships", "not_established": "causation, prevalence, validated comorbidity or transfer effect"},
+    {"source_field": "culturalConsiderations", "core_use": "candidate contextual modifiers and community questions", "not_established": "the lived experience of every person in a group"},
+    {"source_field": "barriers", "core_use": "candidate access, capacity and institutional mechanism questions", "not_established": "a local observed barrier or attributable effect"},
+    {"source_field": "supportOptions", "core_use": "candidate implementation resources and referral options", "not_established": "confirmed eligibility, current availability or completed handoff"},
+    {"source_field": "priority", "core_use": "existing content ordering to inspect", "not_established": "a validated research, population-need or clinical priority score"},
+    {"source_field": "updatedAt/createdAt", "core_use": "content-record version times", "not_established": "symptom onset, evidence publication or availability at a historical decision"}
+  ],
+  "requirements_for_evidence_promotion": [
+    "Preserve source identity, version, license/access basis, original lineage and the exact supported claim.",
+    "Separate owner-described disproportionate impact from a source-verified population/period-specific disparity estimate.",
+    "Resolve aliases, topics and condition concepts before computing catalog union or overlap; do not announce153 unique conditions.",
+    "Trace original studies, methods, populations, denominators, instruments, availability time and uncertainty.",
+    "Count repeated original evidence once; platform agreement is not automatic independent corroboration.",
+    "Test condition-specific earliest signals, appropriate action, outcomes, competing explanations, equity and harms.",
+    "Return reviewed findings to supporting platforms through tested authorized interfaces; do not promote catalog content directly into clinical advice."
+  ],
+  "execution_receipt": {
+    "github_source_blob_matches": 2,
+    "source_catalog_count_executed": true,
+    "schema_field_extraction_executed": true,
+    "herhealth_duplicate_source_tags": 0,
+    "unique_condition_union_computed": false,
+    "database_or_app_written": false,
+    "clinical_records_read": false,
+    "live_cross_platform_exchange_executed": false,
+    "external_message_or_spend": false,
+    "independent_judge_acceptance": "PENDING"
+  }
+}

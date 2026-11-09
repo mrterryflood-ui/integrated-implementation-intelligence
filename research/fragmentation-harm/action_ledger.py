@@ -38,6 +38,7 @@ def validate(events: list[dict[str, Any]]) -> list[str]:
     last_type: dict[str, int] = {}
     last_time: dict[str, datetime] = {}
     case_gates: dict[str, dict[str, bool]] = {}
+    case_events: dict[str, dict[str, dict[str, Any]]] = {}
     for n, e in enumerate(events):
         p = f"events[{n}]"
         if not isinstance(e, dict):
@@ -83,12 +84,13 @@ def validate(events: list[dict[str, Any]]) -> list[str]:
             errors.append(f"{p}: duplicate or regressing case stage")
         last_type[cid] = idx
         gates = case_gates.setdefault(cid, {"comparison": False, "owner": False, "authorization": False})
+        prior = case_events.setdefault(cid, {})
         if kind == "comparability_reviewed":
             if e.get("comparison_status") not in STATUS:
                 errors.append(f"{p}: missing/invalid comparison_status")
             gates["comparison"] = e.get("comparison_status") == "PASS"
         if kind == "owner_assigned":
-            if not e.get("decision_owner_role"):
+            if not isinstance(e.get("decision_owner_role"), str) or not e["decision_owner_role"].strip():
                 errors.append(f"{p}: accountable decision owner role required")
             else:
                 gates["owner"] = True
@@ -104,8 +106,35 @@ def validate(events: list[dict[str, Any]]) -> list[str]:
             errors.append(f"{p}: action recorded without prior authorization")
         if kind == "outcome_observed" and e.get("outcome_status") not in OUTCOMES:
             errors.append(f"{p}: outcome_status required; unknown is allowed")
-        if kind == "case_closed" and e.get("closure_basis") not in {"completed", "no_action", "insufficient_evidence"}:
-            errors.append(f"{p}: closure_basis required")
+        if kind == "case_closed":
+            basis = e.get("closure_basis")
+            if not isinstance(basis, str) or basis not in {"completed", "no_action", "insufficient_evidence"}:
+                errors.append(f"{p}: closure_basis required")
+            if "signal_detected" not in prior or not gates["owner"]:
+                errors.append(f"{p}: closure requires a recorded signal and accountable owner")
+            if not e["evidence_refs"]:
+                errors.append(f"{p}: closure requires evidence references")
+            if basis == "completed":
+                # Work completion is distinct from a beneficial or resolved outcome.
+                # An explicit unknown outcome remains valid; missing observation does not.
+                if not gates["authorization"] or "action_recorded" not in prior or "outcome_observed" not in prior:
+                    errors.append(f"{p}: completed closure requires authorized action and outcome status records")
+                if not prior.get("action_recorded", {}).get("evidence_refs"):
+                    errors.append(f"{p}: completed closure requires action evidence references")
+            elif basis == "no_action":
+                decision = prior.get("action_authorized", {}).get("decision")
+                if not gates["authorization"] or not isinstance(decision, str) or decision not in {"monitor", "defer", "reject"}:
+                    errors.append(f"{p}: no_action closure requires an approved non-intervention decision")
+                if "action_recorded" in prior:
+                    errors.append(f"{p}: no_action closure conflicts with a recorded action")
+            elif basis == "insufficient_evidence":
+                review = prior.get("comparability_reviewed", {}).get("comparison_status")
+                if not isinstance(review, str) or review not in {"UNKNOWN", "CONDITIONAL", "FAIL"} or "action_recorded" in prior:
+                    errors.append(f"{p}: insufficient_evidence closure requires unresolved review and no action")
+            if isinstance(basis, str) and basis in {"no_action", "insufficient_evidence"}:
+                if not isinstance(e.get("closure_reason"), str) or not e["closure_reason"].strip():
+                    errors.append(f"{p}: non-completion closure requires an explicit reason")
+        prior[kind] = e
     return errors
 
 def canonical_receipt(events: list[dict[str, Any]]) -> dict[str, Any]:
@@ -114,7 +143,7 @@ def canonical_receipt(events: list[dict[str, Any]]) -> dict[str, Any]:
     if errors:
         raise ValueError("; ".join(errors))
     data = json.dumps(events, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
-    return {"schema_version": "0.1", "event_count": len(events),
+    return {"schema_version": "0.2", "event_count": len(events),
             "sha256": hashlib.sha256(data.encode("utf-8")).hexdigest(),
             "contains_patient_data": False}
 
@@ -136,4 +165,6 @@ def case_summary(events: list[dict[str, Any]], case_id: str) -> dict[str, Any]:
             "signal_to_action_hours": interval("signal_detected", "action_recorded"),
             "signal_to_authorization_hours": interval("signal_detected", "action_authorized"),
             "outcome": by_type.get("outcome_observed", {}).get("outcome_status", "unknown"),
+            "work_completion_recorded": by_type.get("case_closed", {}).get("closure_basis") == "completed",
+            "clinical_benefit_established": False,
             "causal_harm_established": False}

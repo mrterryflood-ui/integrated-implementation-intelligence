@@ -2,13 +2,11 @@ import { auth } from "@clerk/nextjs/server";
 import { neon } from "@neondatabase/serverless";
 import { get } from "@vercel/blob";
 
+import {attachmentFilename} from "./attachment-filename";
+
 export const runtime = "nodejs";
 export const maxDuration = 30;
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-export function attachmentFilename(name: string): string {
-  return name.replace(/[^\x20-\x7E]/g, "_").replace(/["\\]/g, "_").slice(0, 110) || "document";
-}
 
 export async function GET(request: Request) {
   const { userId } = await auth();

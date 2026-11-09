@@ -1,0 +1,57 @@
+field,level,meaning,missing_state,verification_requirement
+case_id,case,Pseudonymous local case identifier,required,Approved local identity mapping outside public research workspace
+episode_id,episode,Linked episode containing one or more clinical questions and actions,required,Stable identity across parallel actions and revisions
+diagnostic_question_id,action,Clinical question that this action addresses,required_for_diagnostic_action,Multiple questions may remain open in one episode
+action_id,action,Stable identifier for each distinct offered or indicated action,required,Parallel or repeated actions cannot overwrite one another
+site_id,case,Authorized participating site,required,Recorded site acceptance
+track,case,CRC screening or CRC symptomatic evaluation or suspected endometriosis,required,Clinician confirmed pathway selection
+eligibility_rule_version,case,Frozen population definition and exceptions,required,Local clinical and methods approval
+eligibility_knowable_at,case,Earliest time eligibility criteria were evidenced,unknown_allowed,Source event and availability retained independently of assessment time
+eligibility_assessed_at,case,Time a responsible reviewer actually assessed eligibility,unknown_allowed,Assessment evidence and capture time retained
+eligible_status,case,Eligible or ineligible or unresolved,unresolved,Include exclusion reason and its source
+index_event_type,case,Prespecified start of primary interval,required,Not selected after observing completion
+index_event_at,case,Timestamp for the primary interval,unknown_allowed,Do not substitute enrollment time silently
+patient_reported_onset,event,Reported symptom onset or interval,unknown_allowed,Patient report with recall uncertainty
+first_recorded_presentation_at,event,First observable clinical presentation,unknown_allowed,Record data-system observation boundary
+event_id,event,Unique source-linked event,required,No duplicate event counted as another action
+event_type,event,Signal review offer acceptance referral completion result communication or reassessment,required,Versioned code and retained source
+event_at,event,When event occurred,unknown_allowed,Distinguish from when entered
+captured_at,event,When evidence was recorded,required,Audit timestamp
+source_kind,event,Clinical record patient report staff report or external evidence,required,Source permission and access recorded
+source_reference,event,Pointer to authorized evidence,unknown_allowed,No public clinical identifiers or unapproved record transfer
+clinical_owner,action,Qualified person accountable for clinical choice,required_before_action,Accepted role and covering arrangement
+operational_owner,action,Person responsible for next step,required_before_action,Accepted role and escalation route
+guideline_version,action,Selected local clinical rule and effective date,required_before_action,Full applicable guidance reviewed locally
+appropriate_action,action,Clinician-selected action and reason,unresolved_allowed,Independent adjudication separate from originating decision
+urgency_and_due_at,action,Clinician-governed urgency and due date,required_before_action,Local rule and patient-specific rationale
+action_offered_at,action,Accessible action offered and explained,unknown_allowed,Communication evidence
+patient_choice,action,Accepted declined deferred undecided or unknown,unknown_allowed,Choice does not equal completed evaluation
+barrier_codes,action,Supported access process clinical or preference factors,unknown_allowed,Multiple factors allowed with source and uncertainty
+referral_accepted_at,action,Receiving service accepted responsibility,unknown_allowed,Order sent alone is insufficient
+scheduled_at,action,Appointment arranged,unknown_allowed,Booking is not completion
+action_completed_at,action,Chosen action occurred,unknown_allowed,Source-linked completion evidence
+completion_verified_at,action,Authorized verification that the selected action occurred,unknown_allowed,Verifier identity source evidence and scope; does not establish appropriateness
+appropriateness_adjudicator,action,Qualified independent reviewer of the clinical action,required_for_primary_endpoint,Independence from originating decision and conflicts recorded
+appropriateness_rubric_version,action,Frozen rule used to judge the action,required_for_primary_endpoint,Locked before comparative evaluation
+appropriateness_decision,action,Appropriate inappropriate unresolved or not assessed,not_assessed,Completion evidence cannot substitute for this decision
+appropriateness_adjudicated_at,action,Time of independent appropriateness judgment,unknown_allowed,Reviewer evidence reason and audit record
+adjudication_disagreement,action,Reviewer disagreement and its resolution,not_assessed,Retain both judgments and prespecified resolution process
+result_communicated_at,action,Findings and next steps communicated,unknown_allowed,Accessible communication and recipient confirmation where feasible
+diagnostic_status,outcome,Working diagnosis confirmed diagnosis alternative unresolved or unknown,unknown_allowed,Qualified clinical evidence and endpoint definition
+closure_scope,event,Action diagnostic question or clinical episode affected by this event,required_for_closure,Separate status fields and linked identities remain authoritative
+action_closure_status,outcome,Status of the linked action,unresolved,Completed action does not automatically close a question or episode
+diagnostic_question_closure_status,outcome,Status of the linked diagnostic question,unresolved,Qualified clinical resolution with retained differential and evidence
+episode_closure_status,outcome,Status of the linked clinical episode,unresolved,Requires the explicit episode closure rule and remaining follow-up
+followup_due_at,outcome,Next reassessment or follow-through time,not_applicable_allowed,Reason needed when no follow-up indicated
+function_measure,outcome,Approved validated patient-reported function instrument,not_collected_allowed,Version language licensing and scoring documented
+function_value,outcome,Observed instrument value,unknown_allowed,No missing-to-zero conversion
+adverse_event,outcome,Observed safety event with severity and relationship assessment,not_assessed_allowed,Use local safety reporting and adjudication
+disposition,outcome,Resolved reassess declined lost contact transfer pending or administrative end,required_at_observation_end,Clinical resolution must satisfy its explicit scope
+transfer_status,outcome,Transfer proposed accepted or evidence reconciliation pending,none_or_unknown,Transfer alone does not mean the endpoint cannot occur elsewhere
+competing_event,outcome,Prespecified event that precludes the clinical endpoint,none_or_unknown,Do not classify transfer as competing solely because observation ended
+observation_end_reason,outcome,Administrative end loss of observation or verified endpoint-precluding event,unknown_allowed,Censoring and informative missingness handled as prespecified
+last_observed_at,outcome,Last date with valid observation,unknown_allowed,Censoring is explicit
+staff_minutes,resource,Measured work time attributable to the process,not_measured_allowed,Observation method and shared work allocation recorded
+patient_burden,resource,Patient time travel cost or reported burden,not_measured_allowed,Do not infer from completion alone
+record_version,audit,Version associated with every consequential update,required,Append-only change history with reason
+authorization_reference,audit,Applicable site data-use and consent or waiver authority,required_before_collection,Actual accepted authority not a template signature

@@ -1,7 +1,7 @@
 # DIS–RPLICE ChainWeb | Comparative Implementation-Science Methods Validation
 
-**Research status:** evidence preflight complete; matched comparative exercise prepared, NOT conducted; no independent rater outcomes, clinical impact, or method-superiority finding.  
-**Date:** 2026-11-06. **Citations:** AMA style. **Human review before any external communication.**
+**Research status:** the November6 selected-casebook preflight is recorded below; matched comparative exercise prepared, NOT conducted; no independent rater outcomes, clinical impact, or method-superiority finding. The November8 preparation addendum remains **HOLD_FOR_FREEZE**, with all11 existing freeze gates pending.
+**Date:** 2026-11-06; bounded reconciliation added2026-11-08. **Citations:** AMA style. **Human review before any external communication.**
 
 ## Primary question and explicit separation
 
@@ -83,3 +83,47 @@ No effect-size pooling is permitted across unlike outcomes/periods. None proves 
 | G5: Transfer and sustainment | NOT OBSERVED | Longitudinal site-specific fidelity, cost, safety, equity and beneficiary effect |
 
 **No email, clinical action, RPLICE private invocation, recruitment, or submission has occurred.**
+
+## November8 reconciliation — preparation feasibility before effectiveness claims
+
+This section incorporates the independent evaluation lane's documentary reconciliation into the existing acceptance design. It preserves the eight-study/nine-contrast exercise and its G0–G5 history above. The separate two-case preparation addendum has **not been frozen or run**. It does not create another approval registry or convert software/artifact review into qualified human acceptance.
+
+### Inspectable corpus and its unresolved binding
+
+`research/fragmentation-harm/STANDARDIZATION_DEVELOPMENT_PACKET_DELTA_2026-11-08.json` (Git blob `5b27d3538fd46402b6110770f7827aebac415901` at research head `5fd243d745f19486d34955c6e36fbad4779cfdd9`) contains four inspectable development drafts: **CRC-A-D, CRC-N-D, ENDO-S-D and AUTO-S-D**. Each `independent_acceptance` is null. The delta reports24 planned slots:12 development, including8 unfilled, and12 reserved; zero accepted packets and zero evaluated user outputs. Slots and published-study appraisal packets are not patients or completed evaluations.
+
+The delta references base-register SHA-256 `9cba813fb4dfcf2b1e38c7bcd3fefe15e7e26583104defcf345051239594f147` but does not embed the full register. Its uniqueness and unchanged-reserve flags remain author-reported assertions. **Closure requires locating the complete register and integrity receipt, verifying the referenced bytes, independently recounting unique slots and allocations, and checking retained reserved records against their baseline.** The statement that the full register is in an execution packet does not itself supply that evidence.
+
+### Bounded objective, case mapping and fair comparison
+
+For **CRC-H01 and VAPE-H01**, the preparation addendum's objective is to assess whether matched preparation, a competent comparator, source controls, scoring anchors and adjudication can be executed fairly. Describe each packet's quality, material errors, time, feasibility, burden and cost to expose operational failures and refine later evaluation. This replaces an effectiveness-estimation interpretation of the earlier opening objective. **Two cases and four allocated preparations are a development exercise, not an estimate of DIS effectiveness, a validated performance threshold or four independent cases.** Within-case differences remain descriptive and retain residual analyst differences. Pilot variability alone is an unstable basis for powering a later study.
+
+Under the existing `holdout_contamination` gate, map CRC-H01/VAPE-H01 to the full corpus register or document them as separate development exercises. Do not silently add them to the24 slots or assume they are two of the four drafts. The `H01` names do not confer holdout status. Cases, sources or answers exposed during development or rater rehearsal are ineligible as untouched validation material. Exclude live CRC calibration content and its feedback; preserve the12 reserved slots without exposure pending documented access and contamination checks.
+
+Match evidence bytes, decision-time cutoff, elapsed time, staffing, common AI access and resource allowances. Independently accept the competent comparator before viewing outputs. Credit equivalent reasoning and justified alternative frameworks regardless of vocabulary; preserve appropriate nonchange and explicit uncertainty. Keep patient-experienced onset, first recorded signal and first decision-available information distinct. Do not supply later facts to an earlier decision.
+
+### Three distinct objects of evaluation
+
+| Object | Claim that requires its own evidence | Boundary |
+|---|---|---|
+| Clinical or service intervention | Effect of a particular recognition, outreach, navigation or follow-through change in a defined eligible population, against a named comparator, with capacity, follow-up and harms. | Published effects from different populations, outcomes or overlapping packages cannot be added or assigned to DIS. |
+| DIS support | Incremental contribution of integration, evidence review, decision support, coordination and learning versus competent current practice under equal conditions. | An effective service intervention does not establish that DIS improves its selection, delivery or outcomes. |
+| Software operation | Persistence, history, recovery, export, permissions, source meaning and authority states on an identified revision. | Software checks do not establish scientifically appropriate recommendations, human usability, decision superiority or patient benefit. |
+
+These distinctions also govern P0–P4 research comparisons: additional components do not imply improvement, and a combined package does not identify each component's effect. A witnessed CRC software journey and AI artifact review may support only their particular records, revision and tested behaviors. They do not close this evaluation's human-review or source-lock gates; a later software repair requires a new exact-revision receipt.
+
+### Practical value, vaping and sustainment
+
+The three-hour target is **a complete, reviewable, source-supported packet submitted within180 minutes**. Report every allocated attempt, including failed, partial and empty submissions; retain correction/review work, recovery delays, person-minutes and actual costs. Proposed score thresholds and weights require qualified human rehearsal and acceptance; they are not validated cut points. Burden shifted to reviewers, staff, patients or families remains part of practical value. Do not equate a polished document with a feasible plan.
+
+VAPE-H01 must exercise substantive product work: define the population, setting and prevention/cessation decision; use relevant dated evidence; compare alternatives; justify framework selection; and produce measures, eligible denominators, resources, cost assumptions, authority, tracking and sustainment. Local prevalence, capacity and stakeholder acceptance remain unknown unless evidenced. Explicitly fictional planning constraints are not observed local data. Prevention can begin before symptoms. CFIR and RE-AIM may be combined when their respective roles are justified; naming them alone earns no reasoning credit. Successful interface operation and a scientifically appropriate vaping packet are distinct checks; neither establishes vaping-related health benefit.
+
+Decision quality, material errors, preparation time, feasibility, burden and cost are initial value questions. Implementation performance and patient benefit require separately authorized comparisons with observed outcomes, harms, equity, capacity, follow-up and uncertainty. The80% implementation-success target remains unvalidated until the denominator of all eligible initiated implementations, success criteria, time horizon, withdrawals and missing outcomes are fixed and independently ascertained. Autoimmune disease and endometriosis need their own validation cases, clocks and outcomes.
+
+The existing `versions_resources` gate also needs actual role acceptance, recurring resources, maintenance/backup ownership, source/policy refresh responsibility, retention/recovery arrangements, review cadence and adaptation/suspension/retirement triggers. For this preparation exercise, those obligations cover evidence access, evaluation integrity and tool support. Later service delivery additionally requires delivery capacity, training renewal, handoffs, patient/staff burden, equity monitoring and continuing resources. Proposed roles and settings are not accepted staffing, commitments or site enrollment.
+
+### Existing freeze record and next closure evidence
+
+The inspected addendum files are `PROTOCOL.md` (SHA-256 `65716c9327b6359037615f1bb6a753727916c970357bac8a8a043179974cb732`) and `freeze_checklist.json` (SHA-256 `fd0bc8bfdecd0635e899f6fd85fb5c44b0cf2d4764aad2d6c0a0a94b02544799`) in the owner's evaluation proof package. The documentary proposal is `reconciliation_proposal.md` (SHA-256 `cdba94206dfd1849bf56d4437dab3ca798ddae195b2a042a105ac9e38071a25b`). These identify the inspected versions, not immutable approval or a replacement register. Reconcile this section's objective, contamination and sustainment clarifications into the addendum before final freeze; record new hashes and retain prior versions.
+
+**All11 gates remain pending, each with a null receipt.** Retain the existing checklist as the sole addendum gate record. In particular, `source_pack_lock`, `reference_key_lock`, `competent_comparator`, `raters_conflicts`, `rubric_rehearsal`, contamination, resources and protocol registration require their stated evidence. Qualified independent human raters and an adjudicator cannot be replaced by AI review or role labels. The independent evaluation coordinator owns assembly and verification; actual human role acceptance remains to be obtained. No gate closes merely because this reconciliation is committed. Source exceptions, full-register integrity, practical value, clinical implementation and patient benefit remain separately unresolved.

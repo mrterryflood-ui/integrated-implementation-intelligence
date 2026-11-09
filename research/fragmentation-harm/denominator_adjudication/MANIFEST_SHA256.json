@@ -1,0 +1,135 @@
+{
+  "schema": "dis-denominator-handoff-manifest-v1",
+  "created_at": "2026-11-08T23:59:00.421988+00:00",
+  "files": {
+    "DENOMINATOR_ADJUDICATION_2026-11-08.md": {
+      "sha256": "5fe280677b2b29a4dd33ce4baabc42dd6a33f56dd9b002fc32fe5f8324c43525",
+      "bytes": 22373
+    },
+    "DENOMINATOR_GATE_ADJUDICATION.json": {
+      "sha256": "10e4f78de892d750d4907ad1e2f7fd1f0e5decc400404947cfc85bd742df58d2",
+      "bytes": 4898
+    },
+    "POLICY_ADOPTION_RECEIPT.json": {
+      "sha256": "545bc9a24706dab031483b2a4cd941f7c64c6da2d39dc1c33ff00ba2ba8fea46",
+      "bytes": 5793
+    },
+    "VALIDATION_RECEIPT.json": {
+      "sha256": "e46c6288348d33fb2784fee53d9983eee39500efd1578449efa59976a6d5ec6b",
+      "bytes": 4597
+    },
+    "adjudicate_denominators.py": {
+      "sha256": "154e350375d190efc295730cfe2f1b095b5eb9412b741787000ae4184802a1ba",
+      "bytes": 16801
+    },
+    "compare_current_exports.py": {
+      "sha256": "af5f1c1dd652e01092fcd8afb4312319d0f4ae5e85beb44a301f7ef120710625",
+      "bytes": 6175
+    },
+    "independent/common_age_partition_spec.json": {
+      "sha256": "8211b5c764078fb15ce293432d9bd5d653c9543afd5aef2747fbde318793a77f",
+      "bytes": 7916
+    },
+    "independent/county_missingness_audit.csv": {
+      "sha256": "a1a6773106743fedf33e9af5ff33ef1ed7a356bcd68334916cd7c2593d0cae38",
+      "bytes": 44559
+    },
+    "independent/current_export_county_identity.csv": {
+      "sha256": "e08a0c736aab8db3a824dc471383e3db688ee1707af380143334feae96f36235",
+      "bytes": 33608
+    },
+    "independent/current_report_alignment.json": {
+      "sha256": "18c233b306ed1dcc4e1a363b3205640df48c2541bbb9140636dd8574c302a4f4",
+      "bytes": 5628
+    },
+    "independent/independent_denominator_results.json": {
+      "sha256": "140f08a7e805cf4e401d3c7a2d9f244af35e9af52dce901d6a595ee70a4c6265",
+      "bytes": 37392
+    },
+    "pinned/denominator_age_sensitivity.py": {
+      "sha256": "e0d054861d4f32f4e1aba3f94593c20f1dc5695b58248134d4abfab3e2c9b5b9",
+      "bytes": 9371
+    },
+    "pinned/expanded_county_test.py": {
+      "sha256": "ca48c73a4428e44ab7e97c3c844d47a475c93a3b2a0f2bb20997c0a1e1ca6342",
+      "bytes": 10586
+    },
+    "pinned/source_receipt.json": {
+      "sha256": "d9de478bb71d2477354a6097d75eb44b676d0619ddddf77ef1e091215d75ad90",
+      "bytes": 755
+    },
+    "replay/county_extract.csv": {
+      "sha256": "dc444255fdf094c9996e974199a53577c7779ddb3f97ef5dfed680c9a8f50af0",
+      "bytes": 26872
+    },
+    "replay/expanded_county_results.json": {
+      "sha256": "4ef44be6c841999b0596d66c744260b937fa278466a67c7f0167a3d21af7bbac",
+      "bytes": 6284
+    },
+    "replay/within_state_near_share_pairs.csv": {
+      "sha256": "5a9829db1eb8423dc8cde2817add037b5d0ae6dfda3e6840536e1219d235a314",
+      "bytes": 65963
+    },
+    "retrieve_report_metadata.py": {
+      "sha256": "f4651d70c7fee3cbf9df28b08820ce2b4e415765d980bdcab4996a8f8f5c5b9a",
+      "bytes": 2809
+    },
+    "source_retrieval/export_and_standard_retrieval_receipt.json": {
+      "sha256": "0294054c586dcfd852f9c0f318dcddf6994ff3aedf3715a803196ec1efd9d169",
+      "bytes": 4376
+    },
+    "source_retrieval/harris_all_export.csv": {
+      "sha256": "82c21ab022d4598139d61d15fcac3a4f3756eb38991db7ecd4569ec188da7665",
+      "bytes": 25637
+    },
+    "source_retrieval/harris_late_export.csv": {
+      "sha256": "551a3c9c2fdcb37b6875877d3211ebcf86cb30aae4dc24e6e2abf1f5292bfd5f",
+      "bytes": 21262
+    },
+    "source_retrieval/harris_report_interpretation.html": {
+      "sha256": "7d0041e7e2522790d5a111ca2169eb9a4b26eb7117ae894235e4aa7372dd7900",
+      "bytes": 175046
+    },
+    "source_retrieval/hinds_all_export.csv": {
+      "sha256": "34ebb729828bb03454daddc69e708d902faca33958e95c8dcbe6c58612ae05b2",
+      "bytes": 11812
+    },
+    "source_retrieval/hinds_late_export.csv": {
+      "sha256": "d5cbbfc1c2f96f9ecb7c5274cb37540975e74ffdc0c3e26e9ef38c6b61d5f284",
+      "bytes": 9838
+    },
+    "source_retrieval/hinds_report_interpretation.html": {
+      "sha256": "51ac357e38fac45fef00fa31ba33b26a4c986cdefdc1c6c6cdcaf8caaa3ffb87",
+      "bytes": 67589
+    },
+    "source_retrieval/retrieval_receipt.json": {
+      "sha256": "b968d52ff4d6465d89bcd6df41b24a4296149777e4af937ac53bd02a84ff84d0",
+      "bytes": 1824
+    },
+    "source_retrieval/standard19.html": {
+      "sha256": "4b834ce6513af9393dc78db15c127bd8d0888e38c0d275fd0aa4a58007f1d733",
+      "bytes": 44466
+    },
+    "source_retrieval/standard20.html": {
+      "sha256": "d872ed0f8a2127ce7b97ef60c4edd03aa683455ebf838cf3f784a4baeb223e19",
+      "bytes": 35713
+    },
+    "test_adjudicate_denominators.py": {
+      "sha256": "e4907bf374457518ee00c7895ea177e8cb10aa821c1f0060f515a973042777c6",
+      "bytes": 5166
+    },
+    "validation_current_export_comparison.log": {
+      "sha256": "3cdcf0f2755304ba17746a4f547abde25b8759189ee573e489f5544390243e31",
+      "bytes": 178
+    },
+    "validation_unittest.log": {
+      "sha256": "c7e143d9fcc7881ea131003a309fa22a5dbe91b8bf51a334e2e1eddec60573d4",
+      "bytes": 1947
+    }
+  },
+  "excluded": [
+    "MANIFEST_SHA256.json itself",
+    "Python bytecode caches"
+  ],
+  "external_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a"
+}

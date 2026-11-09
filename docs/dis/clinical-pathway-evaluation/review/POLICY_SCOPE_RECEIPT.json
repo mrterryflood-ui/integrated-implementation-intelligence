@@ -1,0 +1,73 @@
+{
+  "schema": "dis-clinical-review-policy-scope-v1",
+  "reviewer": "/root/diagnostic_evidence",
+  "recorded_at": "2026-11-09T00:12:57.930035+00:00",
+  "loaded_policies_unchanged": [
+    {
+      "path": "AGENTS.md",
+      "source_commit": "039761a706534e8d21ffdbe71c616646ee9ef539",
+      "git_blob": "d0d0e4bddc0c43dcfc00b1ce737a1e8c4c0d0514",
+      "sha256": "cde8a90b65600b16855225f9ad6c1f8e3c222e0bb2c5828e3dca067153f1220a",
+      "bytes": 10025,
+      "version_lines": []
+    },
+    {
+      "path": "docs/engineering/IRON-ENG-001.md",
+      "source_commit": "039761a706534e8d21ffdbe71c616646ee9ef539",
+      "git_blob": "00e0b3d8583c4248743518e403bc5d4598c1cfe4",
+      "sha256": "60301dc8d8dd2443443e7afdffd8f1c33e199309668e7e8e6ebdc77932ac4c8b",
+      "bytes": 9126,
+      "version_lines": [
+        "**Version:** 1.0.0.  "
+      ]
+    },
+    {
+      "path": "docs/dis/PLATFORM-STAKEHOLDER-ASSURANCE-STANDARD.md",
+      "source_commit": "039761a706534e8d21ffdbe71c616646ee9ef539",
+      "git_blob": "f272b69d5d51aa815418a4b57227d2f9945ffc99",
+      "sha256": "a078c8734d61be967c8365d7811be76933ced690ab0140c5958914f3d8a463af",
+      "bytes": 7715,
+      "version_lines": [
+        "Version1.1 | November8 2026 UTC | Owner Terry Flood | Applies to this repository when loaded",
+        "| Interoperability and external systems | Can another system preserve meaning and authority through API/MCP? | Versioned contracts, bounded actual-byte transport, input/output validation, denial paths, source/evidence state and permission preservation; exercised authenticated exchange before operational claims |"
+      ]
+    },
+    {
+      "path": "docs/dis/FEDERATED-EVIDENCE-AND-DECISION-STANDARD.md",
+      "source_commit": "039761a706534e8d21ffdbe71c616646ee9ef539",
+      "git_blob": "e36430b2f309e4a9093603b132faef49acedf974",
+      "sha256": "ea45285f6209a15041154bcd6d24478a3750fc2f02635bfa62afb76dcfe744e1",
+      "bytes": 7737,
+      "version_lines": [
+        "Version 1.0 | 2026-11-05 | Status: source-metadata preflight implemented; cross-provider live operational validation incomplete.",
+        "6. **Temporal stewardship and revision:** Version the observed world state, beliefs, instrument/model assumptions, and legitimate goals. Evaluate past inheritance, the current decision, the day after success, plausible successors' future, and feedback that would require reversing, retiring or fundamentally redefining the objective."
+      ]
+    },
+    {
+      "path": "docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md",
+      "source_commit": "039761a706534e8d21ffdbe71c616646ee9ef539",
+      "git_blob": "ad15fd9760fa7df01798503a56b40e6d12b0be27",
+      "sha256": "ba23c2eb994edd6d9d5cca31355dda33d7b31ab2bea4e21ccf34ce870dd68d2c",
+      "bytes": 14842,
+      "version_lines": [
+        "Version: 2026-11-05.1 | Applies to ChatGPT sessions, scheduled agents, repository agents, and specialist-platform delegations when loaded and authorized."
+      ]
+    }
+  ],
+  "scope": "Independent document and static-code specification review, output directory only",
+  "no_authority_claimed": [
+    "qualified clinical approval",
+    "patient data ingestion",
+    "enrollment",
+    "production clinical use",
+    "external correspondence",
+    "repo edits or release"
+  ],
+  "required_evidence_produced": [
+    "exact before/after identities",
+    "individual scenario findings",
+    "source-checked guidance boundaries",
+    "document-correction independent recheck",
+    "remaining gate distinctions"
+  ]
+}

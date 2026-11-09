@@ -1,0 +1,253 @@
+{
+  "head": "1969e2e7af73f8ba65ab48fe1e761a1a9f4222b0",
+  "reviewedParent": "039761a706534e8d21ffdbe71c616646ee9ef539",
+  "count": 35,
+  "allPassed": true,
+  "results": [
+    {
+      "name": "valid boundary quoted suffix 0",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383939
+    },
+    {
+      "name": "one-over quoted suffix 0",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383940
+    },
+    {
+      "name": "valid boundary quoted suffix 1",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383933
+    },
+    {
+      "name": "one-over quoted suffix 1",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383934
+    },
+    {
+      "name": "valid boundary quoted suffix 2",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383937
+    },
+    {
+      "name": "one-over quoted suffix 2",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383938
+    },
+    {
+      "name": "valid boundary quoted suffix 3",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383929
+    },
+    {
+      "name": "one-over quoted suffix 3",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383930
+    },
+    {
+      "name": "valid boundary quoted suffix 4",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383925
+    },
+    {
+      "name": "one-over quoted suffix 4",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383926
+    },
+    {
+      "name": "valid boundary quoted suffix 5",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383921
+    },
+    {
+      "name": "one-over quoted suffix 5",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383922
+    },
+    {
+      "name": "valid boundary quoted suffix 6",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383929
+    },
+    {
+      "name": "one-over quoted suffix 6",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383930
+    },
+    {
+      "name": "valid boundary quoted suffix 7",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383909
+    },
+    {
+      "name": "one-over quoted suffix 7",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383910
+    },
+    {
+      "name": "valid boundary quoted suffix 8",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383941
+    },
+    {
+      "name": "one-over quoted suffix 8",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383942
+    },
+    {
+      "name": "valid boundary quoted suffix 9",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383939
+    },
+    {
+      "name": "one-over quoted suffix 9",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383940
+    },
+    {
+      "name": "valid boundary quoted suffix 10",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383941
+    },
+    {
+      "name": "one-over quoted suffix 10",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383942
+    },
+    {
+      "name": "valid boundary quoted suffix 11",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 128007,
+      "bytes": 383927
+    },
+    {
+      "name": "one-over quoted suffix 11",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 383928
+    },
+    {
+      "name": "numeric exponent cannot shrink through parsing",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128008,
+      "bytes": 128008
+    },
+    {
+      "name": "numeric integer cannot shrink through parsing",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128006,
+      "bytes": 128006
+    },
+    {
+      "name": "escaped unicode cannot shrink through parsing",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 128012,
+      "bytes": 128012
+    },
+    {
+      "name": "non-JSON formatting whitespace fails",
+      "expected": 409,
+      "actual": 409,
+      "textCodeUnits": 8,
+      "bytes": 8
+    },
+    {
+      "name": "invalid trailing comma fails",
+      "expected": 409,
+      "actual": 409,
+      "textCodeUnits": 8,
+      "bytes": 8
+    },
+    {
+      "name": "unclosed escaped quote fails",
+      "expected": 409,
+      "actual": 409,
+      "textCodeUnits": 8,
+      "bytes": 8
+    },
+    {
+      "name": "stored bytes exact bound",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 512000,
+      "bytes": 512000
+    },
+    {
+      "name": "stored bytes one over",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 512001,
+      "bytes": 512001
+    },
+    {
+      "name": "mismatched byte receipt fails",
+      "expected": 503,
+      "actual": 503,
+      "textCodeUnits": 9,
+      "bytes": 11
+    },
+    {
+      "name": "oversized current report fails",
+      "expected": 413,
+      "actual": 413,
+      "textCodeUnits": 2,
+      "bytes": 2
+    },
+    {
+      "name": "original independently retained failing fixture now recoverable",
+      "expected": "accepted",
+      "actual": "accepted",
+      "textCodeUnits": 130274,
+      "bytes": 130332
+    }
+  ]
+}

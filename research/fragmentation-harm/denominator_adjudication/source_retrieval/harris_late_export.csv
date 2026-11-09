@@ -1,0 +1,298 @@
+Incidence Rate Report for Texas by County
+
+"Colon & Rectum (Late Stage^), 2019-2023"
+
+"All Races (includes Hispanic), Both Sexes, All Ages"
+
+Sorted by Name
+
+County,FIPS,2023 Rural-Urban Continuum Codes([rural urban note]),"Age-Adjusted Incidence Rate([rate note]) - cases per 100,000","Lower 95% Confidence Interval","Upper 95% Confidence Interval","CI*Rank([rank note])","Lower CI (CI*Rank)","Upper CI (CI*Rank)",Average Annual Count,Percent of Cases with Late Stage
+"Texas(7)",48000,N/A,23.7 ,23.4, 23.9,N/A , N/A , N/A,7286,61.5
+"US (SEER+NPCR)(1)",00000,N/A,22.3 ,22.2, 22.3,N/A , N/A , N/A,89163,60.2
+"Anderson County(7)",48001,Rural,26.3 ,21.1, 32.4,92 , 23 , 173,19,66.4
+"Andrews County(7)",48003,Rural,29.3 ,18.6, 44,67 , 3 , 179,5,63.2
+"Angelina County(7)",48005,Rural,27.1 ,22.7, 32.2,85 , 27 , 165,28,54.5
+"Aransas County(7)",48007,Urban,24.8 ,18.2, 33.4,116 , 19 , 178,11,66.3
+"Archer County(7)",48009,Urban,28 ,15.9, 46.5,74 , 2 , 179,4,72.0
+"Atascosa County(7)",48013,Urban,33.1 ,26.7, 40.7,34 , 6 , 137,19,63.6
+"Austin County(7)",48015,Urban,19.3 ,13.6, 26.8,172 , 56 , 179,8,62.7
+"Bandera County(7)",48019,Urban,16.6 ,11.1, 24.6,178 , 75 , 179,7,54.8
+"Bastrop County(7)",48021,Urban,23.8 ,19.7, 28.4,130 , 47 , 173,26,58.6
+"Bee County(7)",48025,Rural,33.6 ,24.9, 44.3,29 , 4 , 168,10,64.6
+"Bell County(7)",48027,Urban,21.4 ,19.2, 23.7,161 , 100 , 173,74,57.5
+"Bexar County(7)",48029,Urban,22.6 ,21.7, 23.6,147 , 111 , 157,461,59.9
+"Blanco County(7)",48031,Rural,22.1 ,12.6, 36.7,151 , 9 , 179,4,62.5
+"Bosque County(7)",48035,Urban,25.4 ,17.5, 36.1,111 , 12 , 179,8,57.4
+"Bowie County(7)",48037,Urban,25.4 ,21.2, 30.1,110 , 36 , 168,28,54.0
+"Brazoria County(7)",48039,Urban,24.6 ,22.4, 26.9,119 , 69 , 153,96,61.6
+"Brazos County(7)",48041,Urban,23.6 ,20.5, 27,131 , 65 , 170,43,66.4
+"Brewster County(7)",48043,Rural,25.5 ,14.4, 42.8,104 , 4 , 179,3,81.0
+"Brooks County(7)",48047,Rural,37.6 ,21.6, 61.5,18 , 1 , 179,3,68.0
+"Brown County(7)",48049,Rural,27.5 ,21.1, 35.2,81 , 14 , 175,14,53.0
+"Burleson County(7)",48051,Urban,33.3 ,24, 45.5,31 , 3 , 169,9,61.3
+"Burnet County(7)",48053,Rural,26.5 ,21, 33.2,90 , 20 , 174,19,62.0
+"Caldwell County(7)",48055,Urban,24.6 ,18.9, 31.4,118 , 22 , 177,14,64.8
+"Calhoun County(7)",48057,Rural,30 ,20.7, 42.3,57 , 5 , 177,7,61.7
+"Callahan County(7)",48059,Urban,24.9 ,16, 37.7,114 , 9 , 179,5,65.0
+"Cameron County(7)",48061,Urban,25.5 ,23.4, 27.8,105 , 60 , 145,110,57.8
+"Camp County(7)",48063,Rural,38.6 ,24.9, 57.2,14 , 1 , 175,6,65.1
+"Cass County(7)",48067,Rural,28.7 ,21.7, 37.5,71 , 9 , 174,12,54.4
+"Chambers County(7)",48071,Urban,33.2 ,26.1, 41.7,32 , 6 , 156,16,66.4
+"Cherokee County(7)",48073,Rural,25.6 ,20.3, 31.9,102 , 28 , 175,17,67.7
+"Clay County(7)",48077,Urban,43.5 ,28.8, 63.6,5 , 1 , 158,6,69.6
+"Coleman County(7)",48083,Rural,43.4 ,27.5, 66.3,7 , 1 , 171,5,69.2
+"Collin County(7)",48085,Urban,19.3 ,18.1, 20.5,171 , 146 , 175,212,60.6
+"Colorado County(7)",48089,Rural,27.8 ,19.9, 38.2,78 , 9 , 178,9,59.2
+"Comal County(7)",48091,Urban,18.4 ,15.9, 21.2,173 , 130 , 179,43,56.2
+"Comanche County(7)",48093,Rural,25.4 ,15.5, 39.6,108 , 5 , 179,5,53.3
+"Cooke County(7)",48097,Rural,30.6 ,23.9, 38.7,54 , 8 , 167,16,59.1
+"Coryell County(7)",48099,Urban,19.8 ,15.5, 25,169 , 73 , 179,15,57.4
+"Dallas County(7)",48113,Urban,23.2 ,22.4, 24.1,140 , 107 , 150,583,63.0
+"Dawson County(7)",48115,Rural,37.3 ,23.8, 55.6,19 , 1 , 178,5,69.4
+"DeWitt County(7)",48123,Rural,35.3 ,26.1, 47,24 , 2 , 161,10,65.4
+"Deaf Smith County(7)",48117,Rural,24.4 ,15.3, 36.8,123 , 8 , 179,5,53.5
+"Delta County(7)",48119,Rural,48.9 ,29.3, 78.4,3 , 1 , 176,4,74.1
+"Denton County(7)",48121,Urban,18.3 ,17, 19.6,174 , 154 , 178,168,59.9
+"Dimmit County(7)",48127,Rural,33.3 ,19.7, 53.4,37 , 1 , 179,4,51.4
+"Duval County(7)",48131,Rural,39 ,24.1, 59.9,12 , 1 , 176,4,59.5
+"Eastland County(7)",48133,Rural,29.7 ,20.8, 41.6,63 , 4 , 176,8,67.8
+"Ector County(7)",48135,Urban,36.8 ,32.2, 41.7,21 , 6 , 66,50,67.4
+"El Paso County(7)",48141,Urban,21.7 ,20.3, 23.2,155 , 114 , 166,190,57.4
+"Ellis County(7)",48139,Urban,21.8 ,19, 24.9,153 , 80 , 175,46,58.9
+"Erath County(7)",48143,Rural,22.4 ,16.5, 29.6,149 , 33 , 179,10,57.1
+"Falls County(7)",48145,Urban,32.4 ,22.2, 46,42 , 2 , 176,7,76.1
+"Fannin County(7)",48147,Rural,27.2 ,21, 34.9,82 , 18 , 175,14,60.7
+"Fayette County(7)",48149,Rural,31 ,23.1, 41,51 , 5 , 169,13,66.0
+"Fort Bend County(7)",48157,Urban,21.4 ,20, 22.9,160 , 116 , 168,187,60.5
+"Franklin County(7)",48159,Rural,21.2 ,12, 35.7,162 , 11 , 179,3,44.7
+"Freestone County(7)",48161,Rural,25.9 ,17.9, 36.6,98 , 10 , 179,7,57.1
+"Frio County(7)",48163,Rural,26.3 ,16.4, 39.9,93 , 4 , 179,4,53.7
+"Galveston County(7)",48167,Urban,26.5 ,24.3, 28.9,91 , 53 , 133,110,64.6
+"Gillespie County(7)",48171,Rural,19.6 ,13, 28.5,170 , 39 , 179,8,43.8
+"Goliad County(7)",48175,Urban,38.2 ,22.9, 61.2,16 , 1 , 178,4,81.5
+"Gonzales County(7)",48177,Rural,33.5 ,23.9, 46,30 , 3 , 173,8,68.9
+"Gray County(7)",48179,Rural,27.6 ,19.2, 38.6,79 , 8 , 178,7,72.0
+"Grayson County(7)",48181,Urban,24 ,20.7, 27.6,126 , 59 , 170,41,57.3
+"Gregg County(7)",48183,Urban,29.1 ,25.1, 33.6,70 , 23 , 137,40,53.6
+"Grimes County(7)",48185,Rural,22.8 ,16.5, 30.8,145 , 29 , 179,9,57.3
+"Guadalupe County(7)",48187,Urban,21.6 ,18.8, 24.8,156 , 84 , 175,43,59.7
+"Hale County(7)",48189,Rural,21.7 ,15.4, 29.8,154 , 31 , 179,8,57.1
+"Hamilton County(7)",48193,Rural,24.4 ,13.5, 42.1,122 , 5 , 179,3,53.1
+"Hardin County(7)",48199,Urban,24.8 ,19.7, 30.9,115 , 35 , 175,17,64.4
+"Harris County(7)",48201,Urban,23.9 ,23.3, 24.6,127 , 101 , 138,1098,63.4
+"Harrison County(7)",48203,Urban,21.1 ,16.8, 26.1,164 , 58 , 179,18,52.0
+"Hays County(7)",48209,Urban,20.9 ,18.3, 23.8,165 , 96 , 176,50,60.9
+"Henderson County(7)",48213,Rural,28.6 ,24.2, 33.6,72 , 20 , 149,34,62.5
+"Hidalgo County(7)",48215,Urban,23.6 ,22.1, 25.2,132 , 90 , 155,188,60.5
+"Hill County(7)",48217,Rural,27.2 ,20.8, 35.1,84 , 13 , 175,13,63.2
+"Hockley County(7)",48219,Urban,32.9 ,23.3, 45.2,40 , 3 , 176,8,58.8
+"Hood County(7)",48221,Rural,25.6 ,20.7, 31.3,103 , 28 , 173,24,58.1
+"Hopkins County(7)",48223,Rural,29.7 ,22.8, 38.1,62 , 7 , 169,14,60.2
+"Houston County(7)",48225,Rural,24 ,17, 33.3,125 , 19 , 179,8,58.6
+"Howard County(7)",48227,Rural,31 ,23.3, 40.5,50 , 6 , 170,11,67.5
+"Hunt County(7)",48231,Urban,27 ,22.9, 31.5,86 , 31 , 159,34,62.9
+"Hutchinson County(7)",48233,Rural,27.1 ,18.8, 37.9,83 , 8 , 179,7,64.9
+"Jackson County(7)",48239,Rural,21.9 ,13.2, 34.5,152 , 16 , 179,4,55.3
+"Jasper County(7)",48241,Rural,31 ,23.8, 39.7,52 , 7 , 167,14,64.5
+"Jefferson County(7)",48245,Urban,24.2 ,21.7, 27,124 , 67 , 162,70,61.8
+"Jim Wells County(7)",48249,Rural,39.5 ,31.6, 48.9,11 , 2 , 96,18,63.4
+"Johnson County(7)",48251,Urban,26.9 ,23.8, 30.4,88 , 39 , 146,56,63.0
+"Jones County(7)",48253,Urban,25.2 ,16.8, 36.6,112 , 10 , 179,6,59.2
+"Karnes County(7)",48255,Rural,28.4 ,18, 42.8,73 , 4 , 179,5,77.4
+"Kaufman County(7)",48257,Urban,25.9 ,22.2, 29.9,97 , 42 , 162,39,60.9
+"Kendall County(7)",48259,Urban,17.6 ,13.1, 23.1,176 , 84 , 179,11,61.3
+"Kerr County(7)",48265,Rural,21.2 ,16.6, 26.9,163 , 56 , 179,18,59.9
+"Kimble County(7)",48267,Rural,53.7 ,28.8, 93,2 , 1 , 179,3,70.8
+"Kleberg County(7)",48273,Rural,34.9 ,25.9, 46.1,25 , 2 , 165,10,71.2
+"La Salle County(7)",48283,Rural,58.5 ,35.4, 91.3,1 , 1 , 154,4,62.5
+"Lamar County(7)",48277,Rural,27.5 ,22, 34.2,80 , 18 , 170,18,62.3
+"Lamb County(7)",48279,Rural,31.6 ,20.4, 47.1,47 , 2 , 179,5,76.5
+"Lampasas County(7)",48281,Urban,32.9 ,23.8, 44.6,38 , 3 , 169,10,61.5
+"Lavaca County(7)",48285,Rural,31.1 ,22.3, 42.5,49 , 4 , 174,10,72.7
+"Lee County(7)",48287,Rural,31.4 ,22.1, 43.7,48 , 4 , 176,8,71.9
+"Leon County(7)",48289,Rural,35.8 ,24.7, 50.5,23 , 1 , 173,8,66.1
+"Liberty County(7)",48291,Urban,31.8 ,26.9, 37.4,45 , 13 , 124,31,67.1
+"Limestone County(7)",48293,Rural,38.3 ,28.5, 50.5,15 , 2 , 142,12,67.4
+"Live Oak County(7)",48297,Rural,23.2 ,13.3, 38.2,137 , 7 , 179,4,66.7
+"Llano County(7)",48299,Rural,16.4 ,10.1, 25.7,179 , 60 , 179,6,54.4
+"Lubbock County(7)",48303,Urban,27.7 ,25.1, 30.5,77 , 41 , 127,85,64.3
+"Madison County(7)",48313,Rural,23.5 ,13.8, 37.6,136 , 9 , 179,4,64.3
+"Marion County(7)",48315,Rural,38.9 ,24.5, 59.7,13 , 1 , 177,6,69.8
+"Matagorda County(7)",48321,Rural,29.7 ,22.9, 37.9,65 , 9 , 170,14,63.1
+"Maverick County(7)",48323,Urban,34.3 ,27.6, 42.2,27 , 4 , 131,19,63.3
+"McCulloch County(7)",48307,Rural,30.8 ,17.2, 52,53 , 1 , 179,3,60.7
+"McLennan County(7)",48309,Urban,25.4 ,22.7, 28.3,109 , 52 , 153,70,62.0
+"Medina County(7)",48325,Urban,23.4 ,18.3, 29.5,135 , 39 , 178,16,57.4
+"Midland County(7)",48329,Urban,22.7 ,19.3, 26.4,146 , 68 , 175,35,60.5
+"Milam County(7)",48331,Rural,27.8 ,20.3, 37.3,76 , 11 , 177,10,62.0
+"Montague County(7)",48337,Rural,29.7 ,21.1, 40.9,64 , 6 , 177,9,60.3
+"Montgomery County(7)",48339,Urban,21.6 ,20, 23.2,157 , 114 , 169,151,62.2
+"Moore County(7)",48341,Rural,17.8 ,10.4, 28.3,175 , 34 , 179,4,58.1
+"Morris County(7)",48343,Rural,36.2 ,23.6, 53.4,22 , 1 , 175,6,69.8
+"Nacogdoches County(7)",48347,Rural,25.2 ,20.1, 31.2,113 , 26 , 174,18,55.2
+"Navarro County(7)",48349,Rural,23 ,17.7, 29.4,143 , 37 , 179,14,56.6
+"Newton County(7)",48351,Rural,38.1 ,24.8, 56.4,17 , 1 , 175,6,58.5
+"Nolan County(7)",48353,Rural,25.7 ,16.5, 38.6,101 , 8 , 179,5,58.1
+"Nueces County(7)",48355,Urban,23.1 ,21, 25.3,142 , 83 , 165,93,60.7
+"Orange County(7)",48361,Urban,29.4 ,24.7, 34.7,68 , 18 , 150,29,61.6
+"Palo Pinto County(7)",48363,Rural,40.6 ,31.5, 51.6,8 , 1 , 96,15,69.1
+"Panola County(7)",48365,Rural,22.9 ,16.1, 32.2,144 , 20 , 179,7,52.9
+"Parker County(7)",48367,Urban,23.3 ,20.1, 26.8,138 , 66 , 169,42,57.1
+"Pecos County(7)",48371,Rural,29.7 ,18.7, 44.8,66 , 3 , 179,5,65.7
+"Polk County(7)",48373,Rural,34.7 ,28, 42.6,26 , 5 , 125,23,56.0
+"Potter County(7)",48375,Urban,25.5 ,21.6, 30,107 , 38 , 167,31,58.3
+"Rains County(7)",48379,Rural,23 ,14.4, 36,141 , 13 , 179,5,61.5
+"Randall County(7)",48381,Urban,23.4 ,20.1, 27.2,134 , 57 , 172,37,62.2
+"Red River County(7)",48387,Rural,29.9 ,19.5, 44.7,59 , 4 , 178,6,80.6
+"Reeves County(7)",48389,Rural,40.2 ,25.9, 59.4,10 , 1 , 176,5,75.8
+"Robertson County(7)",48395,Urban,24.5 ,15.6, 36.8,120 , 5 , 179,5,62.8
+"Rockwall County(7)",48397,Urban,20.1 ,16.6, 24.1,168 , 82 , 179,25,61.5
+"Runnels County(7)",48399,Rural,34 ,20.4, 53.6,28 , 1 , 179,4,61.8
+"Rusk County(7)",48401,Urban,23.3 ,18.2, 29.3,139 , 39 , 177,16,55.3
+"Sabine County(7)",48403,Rural,23.9 ,14.5, 39,129 , 9 , 179,5,52.3
+"San Augustine County(7)",48405,Rural,40.7 ,23.5, 65.9,9 , 1 , 179,5,59.0
+"San Jacinto County(7)",48407,Urban,29.9 ,22.4, 39.4,61 , 7 , 174,12,73.5
+"San Patricio County(7)",48409,Urban,23.5 ,18.8, 29,133 , 44 , 177,18,57.6
+"Scurry County(7)",48415,Rural,31.9 ,21.3, 45.9,46 , 3 , 178,6,62.5
+"Shelby County(7)",48419,Rural,24.4 ,17.2, 33.8,121 , 17 , 179,8,55.6
+"Smith County(7)",48423,Urban,23.9 ,21.3, 26.6,128 , 65 , 163,68,60.2
+"Starr County(7)",48427,Rural,21 ,16, 26.9,166 , 59 , 179,12,54.9
+"Stephens County(7)",48429,Rural,33.3 ,20.1, 52.4,33 , 1 , 179,4,56.8
+"Tarrant County(7)",48439,Urban,22.3 ,21.4, 23.3,150 , 115 , 158,478,61.4
+"Taylor County(7)",48441,Urban,26.2 ,22.7, 30.2,94 , 37 , 162,41,61.3
+"Terry County(7)",48445,Rural,33.1 ,20.3, 51.1,35 , 1 , 179,4,65.6
+"Titus County(7)",48449,Rural,21.4 ,14.8, 30.1,158 , 30 , 179,7,56.5
+"Tom Green County(7)",48451,Urban,25.8 ,22, 30.1,99 , 36 , 165,35,60.4
+"Travis County(7)",48453,Urban,21.4 ,20.2, 22.7,159 , 121 , 167,261,63.3
+"Trinity County(7)",48455,Rural,17.2 ,9.6, 29.1,177 , 31 , 179,4,38.0
+"Tyler County(7)",48457,Rural,27.9 ,19.5, 39,75 , 9 , 178,8,59.4
+"Upshur County(7)",48459,Urban,32.9 ,26, 41.1,41 , 7 , 152,17,61.4
+"Uvalde County(7)",48463,Rural,30 ,21.6, 40.6,58 , 6 , 178,9,62.0
+"Val Verde County(7)",48465,Rural,30.2 ,23.6, 38,56 , 9 , 166,15,60.3
+"Van Zandt County(7)",48467,Rural,29.2 ,23.9, 35.3,69 , 14 , 161,24,64.3
+"Victoria County(7)",48469,Urban,32.2 ,27.4, 37.6,44 , 11 , 120,34,68.7
+"Walker County(7)",48471,Rural,24.8 ,20.2, 30.1,117 , 34 , 174,21,56.3
+"Waller County(7)",48473,Urban,27.1 ,21, 34.3,87 , 17 , 175,14,59.5
+"Ward County(7)",48475,Rural,32.3 ,19, 51.3,43 , 1 , 179,4,69.2
+"Washington County(7)",48477,Rural,30.6 ,23.6, 39.1,55 , 6 , 167,15,65.8
+"Webb County(7)",48479,Urban,26.7 ,23.8, 29.9,89 , 41 , 145,61,65.0
+"Wharton County(7)",48481,Rural,36.8 ,29.6, 45.3,20 , 3 , 110,19,64.2
+"Wichita County(7)",48485,Urban,25.5 ,21.8, 29.6,106 , 42 , 166,37,56.3
+"Wilbarger County(7)",48487,Rural,25.9 ,16.1, 39.9,95 , 6 , 179,5,60.5
+"Willacy County(7)",48489,Rural,25.9 ,16.9, 38,100 , 6 , 179,5,51.9
+"Williamson County(7)",48491,Urban,20.2 ,18.7, 21.8,167 , 130 , 173,134,60.9
+"Wilson County(7)",48493,Urban,22.5 ,17.5, 28.7,148 , 38 , 178,14,56.3
+"Winkler County(7)",48495,Rural,48.2 ,28.8, 76.1,4 , 1 , 172,4,70.4
+"Wise County(7)",48497,Urban,29.8 ,24.6, 35.7,60 , 16 , 151,25,63.3
+"Wood County(7)",48499,Rural,25.9 ,20.5, 32.4,96 , 23 , 174,20,64.5
+"Young County(7)",48503,Rural,33.1 ,23.1, 46.1,36 , 2 , 173,8,61.5
+"Zapata County(7)",48505,Rural,32.9 ,20.7, 49.5,39 , 1 , 179,5,76.7
+"Zavala County(7)",48507,Rural,43.5 ,27.3, 66.1,6 , 1 , 172,5,67.6
+"Armstrong County(7)",48011,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Bailey County(7)",48017,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Baylor County(7)",48023,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Borden County(7)",48033,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Briscoe County(7)",48045,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Carson County(7)",48065,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Castro County(7)",48069,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Childress County(7)",48075,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Cochran County(7)",48079,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Coke County(7)",48081,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Collingsworth County(7)",48087,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Concho County(7)",48095,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Cottle County(7)",48101,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Crane County(7)",48103,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Crockett County(7)",48105,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Crosby County(7)",48107,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Culberson County(7)",48109,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Dallam County(7)",48111,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Dickens County(7)",48125,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Donley County(7)",48129,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Edwards County(7)",48137,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Fisher County(7)",48151,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Floyd County(7)",48153,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Foard County(7)",48155,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Gaines County(7)",48165,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Garza County(7)",48169,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Glasscock County(7)",48173,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Hall County(7)",48191,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Hansford County(7)",48195,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Hardeman County(7)",48197,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Hartley County(7)",48205,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Haskell County(7)",48207,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Hemphill County(7)",48211,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Hudspeth County(7)",48229,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Irion County(7)",48235,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Jack County(7)",48237,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Jeff Davis County(7)",48243,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Jim Hogg County(7)",48247,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Kenedy County(7)",48261,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Kent County(7)",48263,Rural,* ,*, *,* , * , *,3 or fewer,*
+"King County(7)",48269,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Kinney County(7)",48271,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Knox County(7)",48275,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Lipscomb County(7)",48295,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Loving County(7)",48301,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Lynn County(7)",48305,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Martin County(7)",48317,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Mason County(7)",48319,Rural,* ,*, *,* , * , *,3 or fewer,*
+"McMullen County(7)",48311,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Menard County(7)",48327,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Mills County(7)",48333,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Mitchell County(7)",48335,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Motley County(7)",48345,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Ochiltree County(7)",48357,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Oldham County(7)",48359,Urban,* ,*, *,* , * , *,3 or fewer,*
+"Parmer County(7)",48369,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Presidio County(7)",48377,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Reagan County(7)",48383,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Real County(7)",48385,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Refugio County(7)",48391,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Roberts County(7)",48393,Rural,* ,*, *,* , * , *,3 or fewer,*
+"San Saba County(7)",48411,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Schleicher County(7)",48413,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Shackelford County(7)",48417,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Sherman County(7)",48421,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Somervell County(7)",48425,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Sterling County(7)",48431,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Stonewall County(7)",48433,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Sutton County(7)",48435,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Swisher County(7)",48437,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Terrell County(7)",48443,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Throckmorton County(7)",48447,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Upton County(7)",48461,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Wheeler County(7)",48483,Rural,* ,*, *,* , * , *,3 or fewer,*
+"Yoakum County(7)",48501,Rural,* ,*, *,* , * , *,3 or fewer,*
+
+
+Notes:
+
+Created by statecancerprofiles.cancer.gov on 11/08/2026 6:51 pm.
+
+"State Cancer Registries [ https://www.cdc.gov/national-program-cancer-registries/contact/index.html ] may provide more current or more local data."
+
+"
+
+Trend
+   Rising when 95% confidence interval of average annual percent change is above 0.
+   Stable when 95% confidence interval of average annual percent change includes 0.
+   Falling when 95% confidence interval of average annual percent change is below 0.
+"
+
+"[rate note] Incidence rates (cases per 100,000 population per year) are age-adjusted to the 2000 US standard population [ http://www.seer.cancer.gov/stdpopulations/ ] (SEER areas use 20 age groups and NPCR areas use 19 age groups). Rates are for invasive cancer only (except for bladder cancer which is invasive and in situ) or unless otherwise specified. Rates calculated using SEER*Stat [ https://seer.cancer.gov/seerstat/ ]. Population counts for denominators are based on Census populations as modified [https://seer.cancer.gov/popdata/] by NCI. The US Population Data File [https://seer.cancer.gov/popdata/] is used for SEER and NPCR incidence rates."
+
+"Rates are computed using cancers classified as malignant based on ICD-O-3. For more information see malignant.html."
+
+"[stage note] Late Stage is defined as cases determined to be regional or distant. Due to changes in stage coding, Combined Summary Stage with Expanded Regional Codes (2004+) is used for data from Surveillance, Epidemiology, and End Results (SEER) databases and Merged Summary Stage is used for data from National Program of Cancer Registries [ https://www.cdc.gov/cancer/npcr/index.htm ] databases. Due to the increased complexity with staging, other staging variables maybe used if necessary."
+
+"[rank note] Results presented with the CI*Rank statistics help show the usefulness of ranks. For example, ranks for relatively rare diseases or less populated areas may be essentially meaningless because of their large variability, but ranks for more common diseases in densely populated regions can be very useful. The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas. More information about methodology can be found on the CI*Rank website [ https://surveillance.cancer.gov/cirank/ ]."
+
+"[rural urban note] Rural–urban county classifications are based on the 2023 USDA Rural–Urban Continuum Codes [ https://www.ers.usda.gov/data-products/rural-urban-continuum-codes/ ] (except for Connecticut Counties which use 2013 codes). State-level cancer rates for rural areas are calculated using cancer cases registered exclusively in rural counties, while state-level cancer rates for urban areas are calculated using cases registered exclusively in urban counties."
+
+"(1) Source: National Program of Cancer Registries [ https://www.cdc.gov/cancer/npcr/index.htm ] and Surveillance, Epidemiology, and End Results [ http://seer.cancer.gov ] SEER*Stat Database - United States Department of Health and Human Services, Centers for Disease Control and Prevention and National Cancer Institute. Based on the 2025 submission."
+
+"(7) Source: SEER [ http://seer.cancer.gov ] November 2025 submission."
+
+"* Data has been suppressed to ensure confidentiality and stability of rate estimates.  Counts are suppressed if fewer than 16 records were reported in a specific area-sex-race category."
+
+"Data for United States does not include Puerto Rico."

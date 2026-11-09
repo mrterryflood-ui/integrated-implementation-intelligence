@@ -1,0 +1,39 @@
+{
+  "schema": "dis-s1c-rounding-age-sensitivity-v1",
+  "zip_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+  "manifest_entries_verified": 18,
+  "original_html_csv_rows_matched": 4,
+  "count_rounding_assumption": "Five years; nearest integer annual mean; nearest 0.1 percentage point share; same all-case denominator",
+  "count_compatibility": {
+    "hinds": {"pair_count": 3, "pairs": [[375,589],[376,590],[377,592]], "selected_true_pair": null},
+    "harris": {"pair_count": 25, "late_count_range_inclusive": [5488,5492], "all_count_range_inclusive": [8658,8662], "all_cartesian_pairs_compatible": true, "selected_true_pair": null}
+  },
+  "age_partition": {
+    "county_adjusted_rate": null,
+    "grade": "CONDITIONAL_ALGEBRA_NOT_EMPIRICAL_EFFECT",
+    "required_age_specific_difference_for_5_9": 604.92736892525,
+    "required_age_specific_difference_for_6": 615.1803751782203,
+    "standard_85_89": 2678567,
+    "standard_90_plus": 1580606,
+    "standard_total": 274633642,
+    "weight_85_plus": 0.01550856249432107
+  },
+  "provenance": {
+    "acquisition_blob_at_both_commits": "a21c038476807262db6122d09593afcdb2387205",
+    "code_blob_equivalence_is_not_runtime_attestation": true,
+    "job_id": 128521759514,
+    "logged_acquisition_env_revision": "312577b8e43efadaceb4b834dc524dc11368d3fe",
+    "logged_checkout_revision": "312577b8e43efadaceb4b834dc524dc11368d3fe",
+    "receipt_revision": "73455a439f950ffa0644d5714843b06b173f029a",
+    "receipt_revision_is_merge_parented_by_checkout": true,
+    "state": "CONTRADICTORY_REVISION_EVIDENCE_REQUIRES_ADJUDICATION"
+  },
+  "unknown_stage_denominator": "SOURCE_SPECIFIC_MEMBERSHIP_NOT_VERIFIED",
+  "clinical_causal_effect": null,
+  "prevented_harm": null,
+  "local_validation": {"tests": 18, "passed": 18, "failed": 0, "skipped": 0, "original_archive_supplied": true},
+  "full_output_sha256": "119749b24ec2c3323d171e6beca55f2f466769c1c6836439e2592cb57eae3c6c",
+  "script_sha256": "5a3370679c80318360b8ce59d93a410d8108bcd3b2c7d59f96a09626ee4e7f70",
+  "tests_sha256": "474e37561777f83fbc26b7342a6d3f23de2b1736bd8ece96c9717b8cfe38ebae",
+  "local_log_sha256": "4f2cbe0ead5dffffdd16703dedd73d9a98b18fe44fe5771573e4813e0344dde9"
+}

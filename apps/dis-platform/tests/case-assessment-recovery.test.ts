@@ -34,6 +34,20 @@ test("legacy malformed and oversized reports cannot pass recovery preflight",()=
  assert.throws(()=>validateAssessmentSource({...row("{}"),current_report_bytes:900000},3),failure(413));
 });
 
+test("recovery discounts JSON formatting while retaining evidence whitespace and numeric-token limits",()=>{
+ const row=(text:string)=>({version:3,previous_version:"1",report_text:text,report_bytes:Buffer.byteLength(text),current_report_bytes:50,playbook_bytes:50});
+ const suffix=' an escaped quote: " and backslash: \\; retained spaces   ';
+ const template={note:suffix,clinicalActionAuthorized:false};
+ const fill=CASE_REPORT_MAX_CHARS-JSON.stringify(template).length;
+ const report={...template,note:"é".repeat(fill)+suffix};
+ assert.equal(JSON.stringify(report).length,CASE_REPORT_MAX_CHARS);
+ const formatted=JSON.stringify(report,null,2);assert.ok(formatted.length>CASE_REPORT_MAX_CHARS);
+ validateAssessmentSource(row(formatted),3);
+ assert.throws(()=>validateAssessmentSource(row(JSON.stringify({note:" ".repeat(CASE_REPORT_MAX_CHARS)},null,2)),3),failure(413));
+ const oversizedNumeric='{\n  "retainedNumber" : '+"9".repeat(CASE_REPORT_MAX_CHARS+1)+'\n}';
+ assert.throws(()=>validateAssessmentSource(row(oversizedNumeric),3),failure(413));
+});
+
 test("actual durable recovery SQL retains history, exact JSON, current plan and tenant boundaries",async t=>{
  const path=mkdtempSync(join(tmpdir(),"dis-case-recovery-"));let db=new PGlite(path);await db.waitReady;
  const q=async<T=Record<string,unknown>>(sql:string,params:unknown[]=[])=>db.query<T>(sql,params);
