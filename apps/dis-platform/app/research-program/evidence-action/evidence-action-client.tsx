@@ -197,9 +197,20 @@ function EvidenceActionEditor({caseId}:{caseId:string}){
       </label>
       <div className="rp-buttons"><button type="button" disabled={searchBusy} onClick={()=>void search()}>{searchBusy?"Searching index…":"Search published research"}</button></div>
       {searchState&&<p role="status" aria-live="polite">{searchState}</p>}
+      {bridge.literature.length>0&&<p>Paper count is not an independent-study count. Shared registration references below are connections to review; missing connections leave study independence unresolved.</p>}
       {bridge.literature.length>0&&<div className="rp-card-grid">{bridge.literature.map(x=><article className="rp-card" key={x.id}>
         <h3>{x.title}</h3><p>OpenAlex metadata only; source content, methods and applicability not independently verified.</p>
         <a href={x.url} target="_blank" rel="noreferrer">Inspect source</a>
+        {!!x.lineage?.registrationMentions.length&&<details>
+          <summary>Study registration references</summary>
+          <p>These IDs occur in the retained metadata. They may refer to this study or to a study it cites. Compare the original methods, cohorts and outcomes before treating reports as independent or combining their results.</p>
+          <ul>{x.lineage.registrationMentions.map(mention=><li key={mention.registrationId}>
+            <a href={"https://clinicaltrials.gov/study/"+mention.registrationId} target="_blank" rel="noreferrer">{mention.registrationId}</a> — found in {mention.fields.join(", ")}.
+          </li>)}</ul>
+          {x.lineage.candidateConnections.length>0&&<><p>Other retained papers mention the same registration:</p><ul>{x.lineage.candidateConnections.map((connection,index)=><li key={connection.registrationId+":"+index}>
+            <a href={connection.otherUrl} target="_blank" rel="noreferrer">{connection.otherTitle}</a> ({connection.registrationId})
+          </li>)}</ul></>}
+        </details>}
       </article>)}</div>}
     </section>
     <CrossStudyPanel baseline={bridge.measures} raw={workflow.studyText} onRawChange={value=>update({studyText:value})}/>
