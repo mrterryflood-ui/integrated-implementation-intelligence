@@ -8,6 +8,7 @@
  */
 import type {ResearchProgram,ResearchIndicator} from "./research-program";
 import type {IntelligenceRecord} from "./consultation-research";
+import {reviewLiteratureLineage,type LiteratureLineage} from "./literature-lineage";
 
 export const BRIDGE_VERSION="dis-evidence-action-v1" as const;
 export type Construct=
@@ -45,6 +46,8 @@ export type LiteratureLead={
   id:string;title:string;url:string;sourceIndex:string;
   sourceStatus:"DISCOVERY_ONLY";
   claimVerified:false;independentConfirmation:false;
+  /** Optional so archived leads remain readable; recomputed from retained metadata. */
+  lineage?:LiteratureLineage;
 };
 export type HypothesisTest={
   id:string;hypothesis:string;alternative:string;discriminatingTest:string;
@@ -86,6 +89,7 @@ const sourceIdentity=(url:string)=>{
 export function boundDiscoveryLeads(records:readonly IntelligenceRecord[]):LiteratureLead[]{
   const seen=new Set<string>();
   const result:LiteratureLead[]=[];
+  const retained:Pick<IntelligenceRecord,"id"|"title"|"summary"|"url">[]=[];
   for(const record of records.slice(0,60)){
     if(record.kind!=="SCHOLARLY"||!webUrl(record.url)||!record.title.trim())continue;
     const identity=sourceIdentity(record.url);
@@ -94,8 +98,10 @@ export function boundDiscoveryLeads(records:readonly IntelligenceRecord[]):Liter
     result.push({id:record.id,title:record.title.slice(0,260),url:record.url,
       sourceIndex:record.source,sourceStatus:"DISCOVERY_ONLY",
       claimVerified:false,independentConfirmation:false});
+    retained.push({id:record.id,title:record.title,summary:record.summary,url:record.url});
   }
-  return result;
+  const lineage=reviewLiteratureLineage(retained);
+  return result.map((lead,index)=>({...lead,lineage:lineage[index]}));
 }
 function gap(id:string,severity:EvidenceGap["severity"],problem:string,ownerRole:string,nextEvidence:string):EvidenceGap{
   return{id,severity,problem,ownerRole,nextEvidence};

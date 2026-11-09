@@ -1,6 +1,7 @@
 import {auth} from "@clerk/nextjs/server";
 import {productionIdentityBlocked} from "../../../../lib/release-gates";
 import {research} from "../../../../lib/council-runtime";
+import {retainedAbstractSummary} from "../../../../lib/literature-lineage";
 import {looksLikePrivateRecord} from "../../../../lib/answer-release-policy";
 import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
 
@@ -33,7 +34,7 @@ export async function POST(request:Request){
     return Response.json({status:"PROVIDER_UNAVAILABLE",leads:[],error:found.error||"Scholarly index unavailable"},{status:503,headers});
   const leads=found.sources.slice(0,6).filter(s=>/^https:\/\//.test(s.url)).map((s,i)=>({
     id:"OPENALEX-"+(i+1),kind:"SCHOLARLY" as const,title:s.title.slice(0,260),
-    summary:(s.abstract||"Abstract unavailable; inspect original source.").slice(0,600),
+    summary:retainedAbstractSummary(s.abstract,s.abstractTruncated),
     source:"OpenAlex six-year discovery index",url:s.url,
     retrievedAt:new Date().toISOString(),sourceStatus:"DISCOVERY_ONLY" as const
   }));
