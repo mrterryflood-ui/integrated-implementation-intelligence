@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {buildGraphData} from "../app/api/consultation/graph/route";
+import {buildGraphData} from "../app/api/consultation/graph/graph-data";
 const sessionId="00000000-0000-4000-8000-000000000001";
 test("knowledge graph derives problem, organization and evidence leads without promoting findings",()=>{
  const nodes=buildGraphData(sessionId,{mission:"Increase access to preventive care",organization:"Example Ventures",audience:"Rural clinicians",desiredOutcome:"Faster appropriate referrals"},{

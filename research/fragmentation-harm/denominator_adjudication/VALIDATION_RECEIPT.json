@@ -1,0 +1,118 @@
+{
+  "schema": "dis-independent-denominator-validation-v1",
+  "agent": "/root/diagnostic_evidence",
+  "started_at": "2026-11-08T23:55:53.513015+00:00",
+  "finished_at": "2026-11-08T23:55:54.814067+00:00",
+  "python": "3.12.14 (main, Aug 25 2026, 14:00:49) [Clang 22.1.3 ]",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+  "archive_path": "/workspace/scratch/757b435145c4/dis-research-reconciled/.git/research-integration-2026-11-08/county-originals-ddee039a.zip",
+  "archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+  "archive_modified": false,
+  "commands": [
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "-m",
+        "unittest",
+        "-v",
+        "test_adjudicate_denominators.py"
+      ],
+      "cwd": "/workspace/scratch/ad20f6f1a514/denominator_adjudication",
+      "started_at": "2026-11-08T23:55:53.513114+00:00",
+      "finished_at": "2026-11-08T23:55:54.547548+00:00",
+      "exit_code": 0,
+      "log": "validation_unittest.log",
+      "log_sha256": "c7e143d9fcc7881ea131003a309fa22a5dbe91b8bf51a334e2e1eddec60573d4",
+      "tests_run": 13,
+      "failures": 0,
+      "skipped": 0
+    },
+    {
+      "argv": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python",
+        "compare_current_exports.py",
+        "/workspace/scratch/757b435145c4/dis-research-reconciled/.git/research-integration-2026-11-08/county-originals-ddee039a.zip",
+        "--sources",
+        "source_retrieval",
+        "--out",
+        "independent"
+      ],
+      "cwd": "/workspace/scratch/ad20f6f1a514/denominator_adjudication",
+      "started_at": "2026-11-08T23:55:54.547756+00:00",
+      "finished_at": "2026-11-08T23:55:54.813385+00:00",
+      "exit_code": 0,
+      "log": "validation_current_export_comparison.log",
+      "log_sha256": "3cdcf0f2755304ba17746a4f547abde25b8759189ee573e489f5544390243e31"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "adjudicate_denominators.py",
+      "sha256": "154e350375d190efc295730cfe2f1b095b5eb9412b741787000ae4184802a1ba",
+      "bytes": 16801
+    },
+    {
+      "path": "compare_current_exports.py",
+      "sha256": "af5f1c1dd652e01092fcd8afb4312319d0f4ae5e85beb44a301f7ef120710625",
+      "bytes": 6175
+    },
+    {
+      "path": "retrieve_report_metadata.py",
+      "sha256": "f4651d70c7fee3cbf9df28b08820ce2b4e415765d980bdcab4996a8f8f5c5b9a",
+      "bytes": 2809
+    },
+    {
+      "path": "test_adjudicate_denominators.py",
+      "sha256": "e4907bf374457518ee00c7895ea177e8cb10aa821c1f0060f515a973042777c6",
+      "bytes": 5166
+    },
+    {
+      "path": "pinned/denominator_age_sensitivity.py",
+      "sha256": "e0d054861d4f32f4e1aba3f94593c20f1dc5695b58248134d4abfab3e2c9b5b9",
+      "bytes": 9371
+    },
+    {
+      "path": "pinned/expanded_county_test.py",
+      "sha256": "ca48c73a4428e44ab7e97c3c844d47a475c93a3b2a0f2bb20997c0a1e1ca6342",
+      "bytes": 10586
+    },
+    {
+      "path": "independent/independent_denominator_results.json",
+      "sha256": "140f08a7e805cf4e401d3c7a2d9f244af35e9af52dce901d6a595ee70a4c6265",
+      "bytes": 37392
+    },
+    {
+      "path": "independent/county_missingness_audit.csv",
+      "sha256": "a1a6773106743fedf33e9af5ff33ef1ed7a356bcd68334916cd7c2593d0cae38",
+      "bytes": 44559
+    },
+    {
+      "path": "independent/current_report_alignment.json",
+      "sha256": "18c233b306ed1dcc4e1a363b3205640df48c2541bbb9140636dd8574c302a4f4",
+      "bytes": 5628
+    },
+    {
+      "path": "independent/current_export_county_identity.csv",
+      "sha256": "e08a0c736aab8db3a824dc471383e3db688ee1707af380143334feae96f36235",
+      "bytes": 33608
+    },
+    {
+      "path": "independent/common_age_partition_spec.json",
+      "sha256": "8211b5c764078fb15ce293432d9bd5d653c9543afd5aef2747fbde318793a77f",
+      "bytes": 7916
+    }
+  ],
+  "validation_kind": "PUBLIC_AGGREGATE_REAL_SOURCE_REPLAY_PLUS_LABELED_SYNTHETIC_FAILURE_FIXTURES",
+  "independent_clinical_acceptance": false,
+  "new_audit_code_review": "PENDING_ROOT",
+  "additional_source_derived_spec_check": {
+    "result": "PASS",
+    "source_column": "2000 U.S. Standard Population (Census P25-1130)",
+    "nineteen_group_total": 274633642,
+    "twenty_group_total": 274633642,
+    "younger_groups_identical": true,
+    "85_plus_equals_two_oldest_groups": true,
+    "empirical_county_rate_recomputed": false,
+    "method": "Parse retained standard19/20 tables using independent TableParser; select named actual population column; check all group sums and top-age identity; serialize the full 19-group mapping."
+  }
+}

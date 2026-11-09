@@ -1,0 +1,39 @@
+{
+  "schema": "dis-development-rehearsal-public-summary-v1",
+  "evidence_class": "AI_ONLY_PROMPT_LEVEL_DEVELOPMENTAL_REHEARSAL",
+  "case_responses": 24,
+  "exposed_questions": 12,
+  "source_families": 10,
+  "conditions": [
+    {
+      "name": "Competent ordinary appraisal",
+      "points": 118,
+      "maximum": 120,
+      "case_responses": 12
+    },
+    {
+      "name": "DIS-added reasoning prompt",
+      "points": 119,
+      "maximum": 120,
+      "case_responses": 12
+    }
+  ],
+  "paired_totals_tied": 11,
+  "maximum_score_responses": 21,
+  "total_rated_responses": 24,
+  "human_participants": 0,
+  "human_raters": 0,
+  "AI_judges": 1,
+  "full_masking_achieved": false,
+  "dis_superiority_established": false,
+  "equivalence_established": false,
+  "product_effect_estimated": false,
+  "clinical_effect_estimated": false,
+  "speed_or_cost_savings_estimated": false,
+  "independent_human_study_completed": false,
+  "original_private_register_modified": false,
+  "reserved_cases_populated": false,
+  "handoff_sha256": "8fa3bdd488fca2ed251ef7508fe717d7eec777b79ea32cf1ee33eb993758858e",
+  "raw_material_location": "Owner-held development handoff; no original private register or reserved case contents published",
+  "next_instrument_requirement": "Resolve source/key gaps and develop a prespecified discriminating human instrument using untouched case sources, actual tradeoffs and resource constraints."
+}

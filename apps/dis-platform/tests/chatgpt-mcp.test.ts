@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import {dispatch} from "../app/api/mcp/route";
+import {dispatch} from "../app/api/mcp/dispatch";
 import {CONNECTOR_REGISTRY,connectorSummary} from "../lib/integration-registry";
 const request=(method:string,params:any={})=>({jsonrpc:"2.0",id:"t1",method,params});
 test("ChatGPT plugin MCP initializes and lists tools",async()=>{

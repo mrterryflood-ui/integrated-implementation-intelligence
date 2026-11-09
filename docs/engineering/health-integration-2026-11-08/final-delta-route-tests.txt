@@ -1,0 +1,45 @@
+✔ assessment restoration rejects missing and foreign browser origins (4.853592ms)
+✔ recovery accepts only an archived event reference and exact current integer version (1.344333ms)
+✔ legacy malformed and oversized reports cannot pass recovery preflight (7.268729ms)
+✔ recovery discounts JSON formatting while retaining evidence whitespace and numeric-token limits (4.524034ms)
+
+▶ actual durable recovery SQL retains history, exact JSON, current plan and tenant boundaries
+  ✔ another tenant cannot read or restore the case, or reuse its source event (19.490509ms)
+  ✔ restore creates one review revision and journals displaced report without changing the current plan (36.328408ms)
+  ✔ stale/repeated requests cannot overwrite the recovered revision or add events (15.14056ms)
+  ✔ committed recovery survives database close and reopen with exact retained original number (251.169719ms)
+  ✔ the displaced report can itself be restored as another append-only revision (20.199066ms)
+  ✔ journal failure rolls back the report and version together (27.684995ms)
+  ✔ runtime role cannot alter or delete historical evidence (7.458363ms)
+✔ actual durable recovery SQL retains history, exact JSON, current plan and tenant boundaries (4101.068333ms)
+▶ research case handlers retain complete inputs, enforce boundaries and recover atomic revisions
+  ✔ missing identity, missing/foreign origin and supplied replacement reports are denied before writes (22.649683ms)
+  ✔ the registered create path cannot write into another subject's workspace (18.245535ms)
+  ✔ typed create saves all editor inputs and the dated baseline together, then reloads them (39.694985ms)
+  ✔ research revision retains the current playbook and archives the complete predecessor (25.177339ms)
+  ✔ stale, foreign-owner, wrong-type version, supplied-plan and foreign-origin revisions cannot overwrite the saved case (14.245001ms)
+  ✔ the existing recovery route restores an earlier research record and preserves the current plan (39.352773ms)
+  ✔ an audit insert failure rolls back the report, version and event count together (52.131595ms)
+  ✔ oversized editor combinations are rejected without changing the saved record or truncating the request (8.889094ms)
+  ✔ a writer arriving between the source read and mutation causes a conflict rather than a lost update (15.683741ms)
+  ✔ changed or removed research labels cannot admit forged source or outcome claims (12.437423ms)
+  ✔ legacy compatibility creates reject credential-bearing source links and duplicate source identifiers (10.834203ms)
+  ✔ legacy source leads and notes survive two unrelated workflow revisions (75.425182ms)
+  ✔ attaching a discovery lead retains the gap identity referenced by an older note (36.354283ms)
+  ✔ a report admitted at the compact limit remains editable after JSONB spacing and UTF-8 expansion (86.641362ms)
+  ✔ the stored-report byte ceiling still rejects a large legacy wrapper before a shrinking revision (33.627986ms)
+  ✔ an older oversized stored report is refused without replacing or truncating its contents (35.292496ms)
+  ✔ editing a retained research layer preserves exact source numbers and archives the old council interpretation (40.254891ms)
+  ✔ task reconciliation preserves progress and both plan versions through atomic writes, denied attempts and database restart (303.988074ms)
+  ✔ an admitted near-limit Unicode plan remains editable after JSONB formatting, with bounded legacy reads (208.339848ms)
+  ✔ committed research inputs and history remain available after closing and reopening the database (194.900275ms)
+✔ research case handlers retain complete inputs, enforce boundaries and recover atomic revisions (4253.827429ms)
+ℹ tests 33
+ℹ suites 0
+ℹ pass 33
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 5430.969584
+

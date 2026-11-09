@@ -1,0 +1,29 @@
+{
+  "repository": "ISS-LLC22/bettersciencelab",
+  "pr": 118,
+  "head": "c052856141f74ab09dfc91f7d358ebdc19f0378c",
+  "base": "008c867ab5ea36b475263d967f6a917a112b5e77",
+  "prState": "open",
+  "draft": true,
+  "mergeable": true,
+  "workflow": {
+    "workflow_runs": [
+      {
+        "id": 42513552327,
+        "name": "CI",
+        "status": "completed",
+        "conclusion": "success",
+        "run_number": 275,
+        "jobs_url": "https://api.github.com/repos/ISS-LLC22/bettersciencelab/actions/runs/42513552327/jobs",
+        "logs_url": "https://api.github.com/repos/ISS-LLC22/bettersciencelab/actions/runs/42513552327/logs",
+        "workflow_id": 330628540
+      }
+    ]
+  },
+  "legacyStatuses": {
+    "statuses": []
+  },
+  "sourceBlob": "ca238c69b8c53e1862be0dcc142dd2c6ed178150",
+  "sourceSha256": "d470a5c656621fd51318fb0e9b3df1e6cfd6e0719c078ca3ef004754a847ce5a",
+  "observedAt": "2026-11-08T23:52:31Z"
+}

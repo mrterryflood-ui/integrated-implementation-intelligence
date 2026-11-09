@@ -2,7 +2,7 @@ import test from 'node:test';import assert from 'node:assert/strict';import {rea
 import {parseEngagement} from '../lib/ecosystem/contracts';import {planEngagement,publicPlan} from '../lib/ecosystem/planner';
 import {executeEngagement,serviceBindings} from '../lib/ecosystem/orchestrator';import {NetworkBudget,callMcpRead,parseRpc} from '../lib/ecosystem/transport';
 import {buildEngagementPackage} from '../lib/ecosystem/deliverables';import {FUNDING_AUTHORITY} from '../lib/ecosystem/catalog';
-import {dispatch} from '../app/api/mcp/route';
+import {dispatch} from '../app/api/mcp/dispatch';
 const input={problem:'Assess community impact, CEDS alignment, economic development and funding.',audience:'City and community stakeholders',geography:{kind:'city',label:'Manor',stateFips:'48',countyFips:'48453'},domains:['community','civic','funding','business','research'],externalConsent:true};
 const json=(v:unknown,status=200)=>new Response(JSON.stringify(v),{status,headers:{'content-type':'application/json'}});
 function fixtureFetch(calls:string[]):typeof fetch{return async(raw,options)=>{const u=new URL(String(raw));calls.push(u.href);assert.equal(u.origin,'https://thrivingcommunitiesforall.com');assert.equal(new Headers(options?.headers).has('authorization'),false);assert.equal(options?.body,undefined);assert.ok(!u.href.includes(encodeURIComponent(input.problem)));

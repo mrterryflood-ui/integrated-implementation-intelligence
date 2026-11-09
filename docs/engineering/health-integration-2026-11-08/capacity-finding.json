@@ -1,0 +1,10 @@
+{
+  "base": "06f21b4ef5fa3007c22acfaee453f8ee0ef0d452",
+  "reviewedHead": "039761a706534e8d21ffdbe71c616646ee9ef539",
+  "workflowChars": 65518,
+  "compactReportChars": 128000,
+  "stored_chars": 130274,
+  "stored_bytes": 130332,
+  "originalRevisionReadWouldAccept": false,
+  "description": "Valid typed create report reaches the admitted compact boundary but JSONB formatting exceeds the new revision read bound."
+}

@@ -1,0 +1,106 @@
+{
+  "schema": "dis-denominator-gate-adjudication-v1",
+  "recorded_at": "2026-11-08T23:59:00.421988+00:00",
+  "reviewer": "/root/diagnostic_evidence",
+  "reviewed_science_commit": "18823969ffee9f6eb393891f65e00941e102b9d6",
+  "source_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+  "scientific_use": "CONDITIONALLY_DESCRIPTIVE",
+  "blanket_denominator_closure": false,
+  "clinical_acceptance": false,
+  "causal_effect_identified": false,
+  "new_audit_code_independent_review": "PENDING_ROOT_REVIEW",
+  "gates": [
+    {
+      "id": "DEN01",
+      "disposition": "PARTIALLY_RESOLVED",
+      "verified": [
+        "archived exact report scope and printed values",
+        "retrieved-current report-specific all-stage denominator description",
+        "current export alignment for 336 counties and 3696 core cells",
+        "rounding compatibility with all-case denominator for all 254 complete counties"
+      ],
+      "unidentified": [
+        "exact unknown-stage membership",
+        "exact DCO/autopsy membership",
+        "unrounded case totals",
+        "historical availability of retrieved wording"
+      ],
+      "closure_evidence": "Release-specific authoritative selection/session plus explicit exclusions and privacy-compatible unrounded aggregate reconciliation",
+      "proposed_owner_role": "Registry/source-methods reviewer",
+      "must_resolve_before": "Exact-denominator or cross-source rank/causal claim"
+    },
+    {
+      "id": "DEN02",
+      "disposition": "COMMON_PARTITION_SPECIFIED_EMPIRICAL_HARMONIZATION_UNIDENTIFIED",
+      "verified": [
+        "source 19/20-group difference",
+        "full source-derived 19-group standard population mapping",
+        "correct count/person-time merge rule",
+        "signed and null effects and necessary-condition algebra"
+      ],
+      "unidentified": [
+        "county age-specific late-stage case counts",
+        "matching age-specific person-years and population revision",
+        "source-equivalent stage exclusions and interval estimator",
+        "empirical adjusted Hinds or Harris rate"
+      ],
+      "closure_evidence": "Authorized nonidentifying matching county age cells and source metadata; independently recomputed common-partition rates and valid intervals",
+      "proposed_owner_role": "Registry epidemiology/data-methods reviewer",
+      "must_resolve_before": "Corrected county rate or partition-attributed empirical explanation"
+    },
+    {
+      "id": "DEN03",
+      "disposition": "ARCHIVED_FRAME_MISSINGNESS_ADJUDICATED",
+      "verified": [
+        "336-county frame",
+        "254 complete and 82 incomplete comparisons",
+        "all incomplete comparisons tied to source suppression",
+        "state and rural/urban suppression breakdown",
+        "contemporaneous FIPS export alignment"
+      ],
+      "unidentified": [
+        "population/patient/case-weighted coverage",
+        "suppressed outcomes",
+        "geographic boundary vintage",
+        "magnitude and direction of selection bias"
+      ],
+      "closure_evidence": "Defined target population, source-bound geographic vintage and coverage-weighted sensitivity without disclosure",
+      "proposed_owner_role": "Epidemiology/equity reviewer",
+      "must_resolve_before": "Generalization beyond retained county frame"
+    },
+    {
+      "id": "DEN06",
+      "disposition": "STATE_SPECIFIC_SENSITIVITY_ADJUDICATED",
+      "verified": [
+        "pinned near-share/large-rate-gap results reproduced",
+        "three share windows and seven annual-count thresholds",
+        "distinct-county counts and selection composition",
+        "period suppression versus annual robustness threshold distinction"
+      ],
+      "unidentified": [
+        "mechanism attribution",
+        "independent causal effects",
+        "measurement equivalence",
+        "cross-source county ranking validity"
+      ],
+      "closure_evidence": "Prespecified compatible exposure/process/outcome evidence and appropriate independent effect analysis; neither pair counts nor test counts are effect estimates",
+      "proposed_owner_role": "Scientific/decision-study reviewer",
+      "must_resolve_before": "Causal, clinical-effect or equivalence claim"
+    }
+  ],
+  "other_gate_carried_forward": {
+    "id": "DEN04",
+    "status": "NOT_CLOSED_BY_THIS_REVIEW",
+    "issue": "Archive reported merge revision and logged runtime checkout/environment differ; identical acquisition code is not complete runtime attestation"
+  },
+  "authority_boundary": [
+    "No external correspondence",
+    "No new clinical data stream",
+    "No repo modifications outside isolated directory",
+    "No push, merge, deployment or paid agent",
+    "No suppressed count reconstruction"
+  ],
+  "policy_receipt": "POLICY_ADOPTION_RECEIPT.json",
+  "validation_receipt": "VALIDATION_RECEIPT.json",
+  "report": "DENOMINATOR_ADJUDICATION_2026-11-08.md"
+}

@@ -1,0 +1,103 @@
+{
+  "schema": "dis-rplice-source-grounded-development-delta-v1",
+  "date": "2026-11-08",
+  "base_register_sha256": "9cba813fb4dfcf2b1e38c7bcd3fefe15e7e26583104defcf345051239594f147",
+  "status": "SOURCE_GROUNDED_DRAFT_REVIEW_REQUIRED",
+  "counts": {
+    "existing_slots": 24,
+    "development_slots": 12,
+    "source_grounded_development_drafts": 4,
+    "unfilled_development_slots": 8,
+    "reserved_slots_unchanged": 12,
+    "independently_accepted_packets": 0,
+    "evaluated_user_outputs": 0,
+    "invented_patient_timestamps": 0,
+    "primary_source_and_guideline_records": 14
+  },
+  "packets": [
+    {
+      "slot_id": "CRC-A-D",
+      "allocation": "development",
+      "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC10565610/",
+      "doi": "10.1001/jama.2023.18755",
+      "extraction_level": "full_text_and_Table_2",
+      "population": "Published mixed-cancer overdue-abnormal-screening-result cohort; majority CRC, not a young symptomatic cohort",
+      "question": "Which process component improves follow-up compared with which actual alternative?",
+      "source_contrasts": [
+        {"intervention": "reminders plus outreach plus navigation", "comparator": "usual care", "adjusted_difference_pp": 8.5, "ci95_pp": [4.8, 12.0]},
+        {"intervention": "reminders plus outreach plus navigation", "comparator": "reminders plus outreach", "adjusted_difference_pp": 0.4, "ci95_pp": [-3.6, 4.2]}
+      ],
+      "followup_days": 120,
+      "interpretation": "Package and component effects are distinct; preserve uncertainty and do not add overlapping effects or infer mortality benefit.",
+      "scenario_kind": "published_trial_appraisal_not_patient_history",
+      "independent_acceptance": null
+    },
+    {
+      "slot_id": "CRC-N-D",
+      "allocation": "development",
+      "source": "https://pubmed.ncbi.nlm.nih.gov/39567181/",
+      "doi": "10.3399/BJGP.2024.0491",
+      "publication_year": 2025,
+      "extraction_level": "primary_abstract",
+      "population": "Australian primary-care patients selected by abnormal blood results; not CRC-only",
+      "question": "What does an imprecise adjusted CDS result establish about earlier recognition and follow-up?",
+      "adjusted_difference_pp": 2.6,
+      "ci95_pp": [-2.8, 7.9],
+      "interpretation": "Benefit not established; crude difference is not adjusted effect; neither equivalence nor universal CDS failure follows.",
+      "scenario_kind": "published_trial_appraisal_not_patient_history",
+      "independent_acceptance": null
+    },
+    {
+      "slot_id": "ENDO-S-D",
+      "allocation": "development",
+      "source": "https://www.nice.org.uk/guidance/ng73/chapter/Recommendations",
+      "extraction_level": "official_indexed_recommendations_amended2024",
+      "population": "Guideline-defined suspected endometriosis with actual persistence/referral criteria assessed",
+      "question": "Does normal examination or ultrasound justify discarding persistent warning-sign evidence?",
+      "interpretation": "A normal test does not exclude the condition; apply actual referral criteria and do not automatically recommend diagnosis or surgery.",
+      "outcome_domains": ["diagnostic_interval", "pain", "function", "experience", "unnecessary_investigation"],
+      "scenario_kind": "guideline_process_contrast_not_observed_outcome",
+      "independent_acceptance": null
+    },
+    {
+      "slot_id": "AUTO-S-D",
+      "allocation": "development",
+      "source": "https://www.nice.org.uk/guidance/ng100/chapter/Recommendations",
+      "extraction_level": "official_indexed_recommendation_1.1.1",
+      "population": "Persistent unexplained synovitis with specified clinical urgency criteria",
+      "question": "Can normal inflammatory markers or negative RF/anti-CCP override indicated specialist referral?",
+      "interpretation": "Qualifying clinical signs and urgency criteria remain relevant; do not extend the rule to all fatigue or aches.",
+      "outcome_domains": ["time_to_specialist_assessment", "appropriate_referral", "function", "burden", "capacity"],
+      "scenario_kind": "guideline_process_contrast_not_observed_outcome",
+      "independent_acceptance": null
+    }
+  ],
+  "integrity": {
+    "baseline_retained": true,
+    "all_24_slot_ids_unique": true,
+    "reserved_structured_records_equal_to_baseline": true,
+    "all_source_references_resolve_in_register": true,
+    "clinical_outcome_measured_by_this_execution": false,
+    "source_trial_outcomes_distinct_from_project_outcomes": true,
+    "used_sources_exposed_in_development_not_holdout_eligible": true
+  },
+  "related_engine_execution": {
+    "repository": "ISS-LLC22/bettersciencelab",
+    "original_commit": "008c867ab5ea36b475263d967f6a917a112b5e77",
+    "patch_commit": "c052856141f74ab09dfc91f7d358ebdc19f0378c",
+    "draft_pr": 118,
+    "actual_local_claim_cases": 18,
+    "expected_statuses_passed": 18,
+    "wrong_comparator_candidates_newly_rejected": 3,
+    "hosted_ci_run": 42513552327,
+    "hosted_ci_job": 128831566062,
+    "hosted_test_files_passed": 52,
+    "hosted_tests_passed": 373,
+    "new_comparator_tests_passed": 7,
+    "remote_authenticated_execution": false,
+    "deployed": false,
+    "clinical_effect_validated": false,
+    "independent_review_accepted": false
+  },
+  "next_review": "Independent source/context adjudication and blinded reserved-case design; actual authorized lifecycle and current-practice comparison remain separate acceptance requirements. No completed-case or effectiveness percentage is inferred."
+}

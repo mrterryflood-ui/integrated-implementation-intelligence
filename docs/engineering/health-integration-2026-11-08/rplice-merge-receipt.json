@@ -1,0 +1,15 @@
+{
+  "repository": "ISS-LLC22/bettersciencelab",
+  "pull_request": 118,
+  "reviewed_head": "c052856141f74ab09dfc91f7d358ebdc19f0378c",
+  "merge_commit": "8e9500ad49f4d0599782bf773a4c31300da8b27e",
+  "provider_result": "Pull Request successfully merged",
+  "merged": true,
+  "merge_method": "merge",
+  "exact_head_CI_run": 42513552327,
+  "CI_conclusion": "success",
+  "independent_controls_passed": 12,
+  "deployed_revision_established": false,
+  "human_scientific_acceptance": false,
+  "clinical_acceptance": false
+}

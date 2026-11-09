@@ -1,5 +1,5 @@
 "use client";
-import {useMemo,useState} from "react";
+import {useEffect,useMemo,useState} from "react";
 import Link from "next/link";
 import {colorectalEvidenceAction} from "../../../lib/evidence-action-colorectal";
 import {reviewCounterfactual,reviewCorrectionReceipt,type CounterfactualAudit,
@@ -8,6 +8,9 @@ import type {IntelligenceRecord} from "../../../lib/consultation-research";
 import CrossStudyPanel from "./cross-study-panel";
 import PrivateCaseHandoff from "./private-case-handoff";
 import CalibratedEvidencePanel from "./calibrated-evidence-panel";
+import WorkflowFoundation from "./workflow-foundation";
+import {emptyResearchWorkflow,retainedResearchReport,workflowFromSavedReport,savedWorkflowBridge,researchLeads,type ResearchWorkflow,type ResearchReport} from "../../../lib/research-workflow";
+export type SavedResearchCase={id:string;version:number;title:string;report:unknown};
 
 const SYNTHETIC_PANEL:CounterfactualRequest={
   condition:"colorectal",construct:"LATE_STAGE_INCIDENCE",unit:"synthetic units, not a cancer rate",
@@ -27,20 +30,45 @@ const SYNTHETIC_PANEL:CounterfactualRequest={
       {year:2020,value:11,denominator:100},{year:2021,value:11,denominator:100},
       {year:2022,value:12,denominator:100}]}
 };
-export default function EvidenceActionClient(){
-  const [query,setQuery]=useState("colorectal cancer disparities screening diagnostic follow-up");
-  const [leads,setLeads]=useState<IntelligenceRecord[]>([]);
+export default function EvidenceActionClient({caseId=""}:{caseId?:string}){
+  const canonicalCaseId=caseId.toLowerCase();
+  return <EvidenceActionEditor key={canonicalCaseId} caseId={canonicalCaseId}/>;
+}
+function EvidenceActionEditor({caseId}:{caseId:string}){
+  const [workflow,setWorkflow]=useState(emptyResearchWorkflow);
+  const [savedCase,setSavedCase]=useState<SavedResearchCase|null>(null);
+  const [savedReport,setSavedReport]=useState<ResearchReport|null>(null);
+  const [loadError,setLoadError]=useState("");
+  const update=(patch:Partial<ResearchWorkflow>)=>setWorkflow(old=>({...old,publicAggregateConfirmed:false,...patch}));
+  const query=workflow.searchQuery,leads=workflow.leads,panelText=workflow.counterfactualText,receiptText=workflow.correctionReceiptText,actionId=workflow.correctionActionId,focusIds=workflow.focusIds;
+  const setQuery=(value:string)=>update({searchQuery:value});
+  const setLeads=(value:IntelligenceRecord[])=>update({leads:researchLeads(value),retrievalQuery:query.trim()});
+  const setPanelText=(value:string)=>update({counterfactualText:value});
+  const setReceiptText=(value:string)=>update({correctionReceiptText:value});
+  const setActionId=(value:string)=>update({correctionActionId:value});
+  const setFocusIds=(fn:(old:string[])=>string[])=>setWorkflow(old=>({...old,publicAggregateConfirmed:false,focusIds:fn(old.focusIds)}));
+  useEffect(()=>{
+    if(!caseId)return;let active=true;const controller=new AbortController();
+    if(!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(caseId)){setLoadError("Invalid saved case identifier.");return;}
+    fetch("/api/cases?id="+encodeURIComponent(caseId),{credentials:"same-origin",cache:"no-store",signal:controller.signal}).then(async response=>{
+      const body=await response.json();if(!response.ok)throw Error(body.error||"Saved investigation unavailable.");
+      if(body.case?.id!==caseId||!Number.isSafeInteger(body.case?.version)||body.case.version<1)throw Error("Saved investigation response did not match the requested case and version.");
+      if(!active)return;const record=retainedResearchReport(body.case?.report);if(!record)throw Error("This saved case has no supported colorectal investigation.");
+      setWorkflow({...workflowFromSavedReport(record),publicAggregateConfirmed:false});setSavedReport(record);setSavedCase(body.case);
+    }).catch(e=>{if(active)setLoadError(e instanceof Error?e.message:"Saved investigation unavailable.");});
+    return()=>{active=false;controller.abort();};
+  },[caseId]);
+  function recorded(item:SavedResearchCase){const record=retainedResearchReport(item.report);if(record){setSavedReport(record);setSavedCase(item);}}
   const [searchState,setSearchState]=useState("");
   const [searchBusy,setSearchBusy]=useState(false);
-  const [panelText,setPanelText]=useState("");
   const [panelAudit,setPanelAudit]=useState<CounterfactualAudit|null>(null);
   const [panelError,setPanelError]=useState("");
-  const [actionId,setActionId]=useState("");
-  const [receiptText,setReceiptText]=useState("");
   const [receiptResult,setReceiptResult]=useState<ReturnType<typeof reviewCorrectionReceipt>|null>(null);
   const [receiptError,setReceiptError]=useState("");
-  const [focusIds,setFocusIds]=useState<string[]>([]);
-  const {program,bridge,comparisonSites,decisionBrief,calibratedEvidence,crcMarginalEvidence}=useMemo(()=>colorectalEvidenceAction(leads),[leads]);
+  const {program,bridge,comparisonSites,decisionBrief,calibratedEvidence,crcMarginalEvidence}=useMemo(()=>{
+    const current=colorectalEvidenceAction(leads);if(!savedReport)return current;
+    return {...current,bridge:savedWorkflowBridge(savedReport,leads),decisionBrief:savedReport.decisionBrief||current.decisionBrief,calibratedEvidence:savedReport.calibratedEvidence,crcMarginalEvidence:savedReport.crcMarginalEvidence};
+  },[leads,savedReport]);
   const selected=bridge.corrections.find(x=>x.id===(actionId||bridge.corrections[0]?.id));
   async function search(){
     if(query.trim().length<8||query.trim().length>200){setSearchState("Enter a public research question between 8 and 200 characters.");return;}
@@ -81,6 +109,7 @@ export default function EvidenceActionClient(){
       setReceiptResult(reviewCorrectionReceipt(selected,data));
     }catch(e){setReceiptError(e instanceof Error?e.message:"Invalid receipt JSON.");}
   }
+  if(caseId&&!savedCase)return <main className="rp-root"><Link href="/workspace">My workspaces</Link><h1>Resume research investigation</h1><p role="status">{loadError||"Loading your saved evidence and working inputs…"}</p></main>;
   return <main className="rp-root">
     <nav aria-label="Research navigation" className="rp-back"><Link href="/research-program">Research Studio</Link> · <Link href="/research-program/method-validation">Methods validation</Link> · <Link href="/">DIS home</Link></nav>
     <header className="rp-head">
@@ -95,6 +124,8 @@ export default function EvidenceActionClient(){
         <div><span>Independent outcome closures</span><strong>{bridge.verifiedCorrections}</strong></div>
       </div></details>
     </header>
+    {savedCase&&<p role="status">Editing saved case revision {savedCase.version}. The retained source snapshot is shown; saving creates a new revision and keeps the earlier record.</p>}
+    <WorkflowFoundation workflow={workflow} onChange={update}/>
     <section className="rp-program" aria-labelledby="decision-heading">
       <h2 id="decision-heading">Start with the decision</h2>
       <div className="rp-focus"><h3>{decisionBrief.decisionNow}</h3>
@@ -121,7 +152,7 @@ export default function EvidenceActionClient(){
           <p><strong>Exit evidence:</strong> {decisionBrief.workPackages.find(w=>w.hypothesisId===h.id)?.exitEvidence}</p>
         </article>)}
       </div>
-      <p className="rp-subtle">Focus choices are local to this view. The case record retains the complete candidate set and decision brief; no focus choice assigns work or records a test result.</p>
+      <p className="rp-subtle">Your selected study focuses are saved with the complete candidate set. A selection does not assign work or record a test result.</p>
       <details><summary>What would justify implementation and a claim of benefit?</summary>
         <p>{decisionBrief.implementationCondition}</p><p>{decisionBrief.comparison}</p>
         <p>{decisionBrief.signalValidation}</p><p>{decisionBrief.benefitEvidence}</p>
@@ -135,7 +166,7 @@ export default function EvidenceActionClient(){
         <p><strong>Value to prove:</strong> {decisionBrief.value.proof}.</p>
       </details>
     </section>
-    <CalibratedEvidencePanel snapshot={calibratedEvidence} marginals={crcMarginalEvidence}/>
+    {calibratedEvidence?<CalibratedEvidencePanel snapshot={calibratedEvidence} marginals={crcMarginalEvidence}/>:<p>The saved case has no calibrated supplement. Its original source layer is retained.</p>}
     <section className="rp-program" aria-labelledby="evidence-heading">
       <h2 id="evidence-heading">1. Preserve the measurement, not just the number</h2>
       <p>This retained legacy section supplies2018–2022 Hinds observations. Its historical gaps concern that accepted baseline; the newer supplement above adds source-matched all-stage rates and county contrasts in a separate period. Neither layer establishes clinical pathway performance. The crosswalk is explicit and colorectal-specific.</p>
@@ -171,7 +202,7 @@ export default function EvidenceActionClient(){
         <a href={x.url} target="_blank" rel="noreferrer">Inspect source</a>
       </article>)}</div>}
     </section>
-    <CrossStudyPanel baseline={bridge.measures}/>
+    <CrossStudyPanel baseline={bridge.measures} raw={workflow.studyText} onRawChange={value=>update({studyText:value})}/>
     <section className="rp-program" aria-labelledby="mechanisms-heading">
       <h2 id="mechanisms-heading">4. Challenge the explanation before choosing the correction</h2>
       <p>Each explanation from the existing DIS research program retains its rival, a test that could distinguish them, the instrument needed, and a reviewer role. None is established as the cause of Hinds or Harris outcomes.</p>
@@ -241,7 +272,7 @@ export default function EvidenceActionClient(){
       <p><strong>Next governed connection:</strong> follow the existing STELLAR 1 and implementation phases; human-select an appropriate RPLICE method and separately authorize any partner transfer. No specialist RPC is executed on this page.</p>
       <div className="rp-buttons"><Link href="/research-program">Return to full 20-phase research/implementation journey</Link><Link href="/research-program/method-validation">Compare established methods and ChainWeb</Link></div>
     </section>
-    <PrivateCaseHandoff program={program} bridge={bridge}/>
-    <footer className="rp-footer"><p>External source lookup requires an owner-initiated authenticated metadata search. A separately initiated private case save retains the declared investigation and any explicitly reviewed public or synthetic supplement. Other study, counterfactual and receipt editors are not automatically saved: deliberately include approved material in that supplement. Free text and source declarations are not privacy certification or independent scientific validation. Do not enter medical records or personal identifiers. No clinical action, signed approval, RPLICE execution or verified beneficiary outcome is implied. Live authenticated persistence and independent scientific review remain separate acceptance checks.</p></footer>
+    <PrivateCaseHandoff program={program} bridge={bridge} workflow={workflow} onChange={update} savedCase={savedCase} onSaved={recorded}/>
+    <footer className="rp-footer"><p>Save records the current project foundation, framework choices, source leads, study inputs, counterfactual, correction receipt and supplement together. Checks can be rerun after reopening. Enter public aggregate or explicitly synthetic information only. Saved declarations do not establish independent scientific validation, clinical authorization or a verified beneficiary outcome.</p></footer>
   </main>;
 }

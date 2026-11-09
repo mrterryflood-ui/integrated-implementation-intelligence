@@ -1,0 +1,70 @@
+{
+  "schema": "dis-clinical-guidance-check-v1",
+  "checked_at": "2026-11-09T00:12:57.930035+00:00",
+  "checks": [
+    {
+      "id": "ACS2026",
+      "doi": "10.3322/caac.70083",
+      "url": "https://acsjournals.onlinelibrary.wiley.com/doi/10.3322/caac.70083",
+      "access": "Publisher full text",
+      "web_refs": [
+        "turn28view0",
+        "turn29view0",
+        "turn29view2"
+      ],
+      "verified_scope": "Timely colonoscopy following positive noncolonoscopy test; preferred six-month interval from initial test; avoid repeating positive stool/blood screen before referral",
+      "local_clinical_approval": false
+    },
+    {
+      "id": "USPSTF2021",
+      "url": "https://www.uspreventiveservicestaskforce.org/uspstf/recommendation/colorectal-cancer-screening",
+      "access": "Official full statement",
+      "web_refs": [
+        "turn28view1"
+      ],
+      "verified_scope": "Asymptomatic average-risk population; screening eligibility is not symptomatic assessment"
+    },
+    {
+      "id": "NICE_NG73_2024",
+      "url": "https://www.nice.org.uk/guidance/ng73/chapter/Recommendations",
+      "access": "Official indexed current recommendations",
+      "web_refs": [
+        "turn27search4"
+      ],
+      "verified_scope": "Normal examination/ultrasound does not exclude; parallel investigation/initial management and referral criteria"
+    },
+    {
+      "id": "ACOG_ANNOUNCEMENT_2026",
+      "url": "https://www.acog.org/news/news-releases/2026/02/acog-publishes-new-endometriosis-clinical-guidance-aiming-shorten-time-diagnosis-improve-access-care",
+      "access": "Official indexed announcement; direct fetch access restricted",
+      "web_refs": [
+        "turn29search0",
+        "turn28view2"
+      ],
+      "verified_scope": "General clinician-made presumptive diagnosis and empiric care during continued evaluation; shared patient goals"
+    },
+    {
+      "id": "ACOG_CPG11",
+      "doi": "10.1097/AOG.0000000000006181",
+      "pmid": "41712950",
+      "url": "https://pubmed.ncbi.nlm.nih.gov/41712950/",
+      "access": "Abstract and identity; complete guideline restricted",
+      "web_refs": [
+        "turn27search6",
+        "turn29search1"
+      ],
+      "verified_scope": "Target population and scope; no claim of full recommendation-set review"
+    }
+  ],
+  "google_scholar_attempt": {
+    "query": "\"Colorectal cancer screening\" \"2026\" \"70083\"",
+    "result_id": "d616bb1f-a619-49c9-98b2-c2904fec281d",
+    "returned_title": "Cancer Trends in Transition",
+    "exact_target_match": false,
+    "google_scholar_verification_achieved": false
+  },
+  "not_reextracted_in_this_review": [
+    "Two diagnostic-delay review numerical estimates",
+    "Full ESHRE guideline recommendation set"
+  ]
+}

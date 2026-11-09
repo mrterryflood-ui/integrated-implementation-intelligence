@@ -1,0 +1,23 @@
+{
+  "kind": "INDEPENDENT_AI_ENGINEERING_NONAPPLICATION_DELTA_REVIEW",
+  "timestamp": "2026-11-09T00:09:50Z",
+  "applicationReviewedCommit": "1969e2e7af73f8ba65ab48fe1e761a1a9f4222b0",
+  "currentLocalCommit": "bb57033458b7e1555fbb2d0715b28e297b75d272",
+  "currentLocalCommittedTree": "810cdd7964b73de1c03c950f31ab06542188aa32",
+  "unchangedAppsTree": "d00e0cb4f49b435066dfbe3f115aa32f7cee402b",
+  "applicationTrackedWorkingTreeDrift": false,
+  "workflowGateWeakeningFound": false,
+  "localCommandResult": {
+    "discovered": 13,
+    "passed": 8,
+    "skipped": 5,
+    "exitCode": 0,
+    "archiveSupplied": false,
+    "python": "3.12.14"
+  },
+  "incomingDocsCommit": "fdcaaba15eaa3f6d074f1de5cd4a3b9dd40913bd",
+  "disposition": "ALLOW_INSPECTED_NONAPPLICATION_CONTENT_PENDING_PUBLICATION_TREE_BINDING",
+  "publishedCandidateCommit": null,
+  "publishedCandidateTree": null,
+  "clinicalReview": "SEPARATE_SCOPE"
+}

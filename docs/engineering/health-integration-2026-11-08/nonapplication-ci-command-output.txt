@@ -1,0 +1,19 @@
+test_age_partition_can_have_either_sign_or_no_effect (test_adjudicate_denominators.BoundaryChecks.test_age_partition_can_have_either_sign_or_no_effect) ... ok
+test_boolean_count_not_measurement (test_adjudicate_denominators.BoundaryChecks.test_boolean_count_not_measurement) ... ok
+test_malformed_rate_rejected (test_adjudicate_denominators.BoundaryChecks.test_malformed_rate_rejected) ... ok
+test_observed_zero_preserved (test_adjudicate_denominators.BoundaryChecks.test_observed_zero_preserved) ... ok
+test_period_threshold_differs_from_annual_filter (test_adjudicate_denominators.BoundaryChecks.test_period_threshold_differs_from_annual_filter) ... ok
+test_suppressed_count_is_not_three_or_zero (test_adjudicate_denominators.BoundaryChecks.test_suppressed_count_is_not_three_or_zero) ... ok
+test_suppressed_denominator_not_reconstructed (test_adjudicate_denominators.BoundaryChecks.test_suppressed_denominator_not_reconstructed) ... ok
+test_unknown_count_token_rejected (test_adjudicate_denominators.BoundaryChecks.test_unknown_count_token_rejected) ... ok
+test_independent_results_match_pinned_science_replay (test_adjudicate_denominators.OriginalArchiveChecks.test_independent_results_match_pinned_science_replay) ... skipped 'Original archive required; never silently substitute fixtures'
+test_original_manifest_and_all_county_cells (test_adjudicate_denominators.OriginalArchiveChecks.test_original_manifest_and_all_county_cells) ... skipped 'Original archive required; never silently substitute fixtures'
+test_source_suppression_and_county_selection_are_preserved (test_adjudicate_denominators.OriginalArchiveChecks.test_source_suppression_and_county_selection_are_preserved) ... skipped 'Original archive required; never silently substitute fixtures'
+test_tampered_archive_rejected (test_adjudicate_denominators.OriginalArchiveChecks.test_tampered_archive_rejected) ... skipped 'Original archive required; never silently substitute fixtures'
+test_two_denominator_conventions_fit_same_printed_counts (test_adjudicate_denominators.OriginalArchiveChecks.test_two_denominator_conventions_fit_same_printed_counts) ... skipped 'Original archive required; never silently substitute fixtures'
+
+----------------------------------------------------------------------
+Ran 13 tests in 0.001s
+
+OK (skipped=5)
+

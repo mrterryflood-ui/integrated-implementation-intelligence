@@ -1,0 +1,975 @@
+county_a,county_b,state_a,state_b,share_gap_pp,late_rate_gap_per_100k,rate_gap_at_least_5,rounding_robust_both_criteria,published_rate_intervals_disjoint,both_late_annual_counts_at_least_16
+Adams County,Clarke County,MS,MS,0.1,9.2,True,True,False,False
+Adams County,Montgomery County,MS,MS,0.4,7.2,True,True,False,False
+Alcorn County,Greene County,MS,MS,0.0,0.1,False,False,False,False
+Alcorn County,Holmes County,MS,MS,0.5,15.5,True,False,False,False
+Alcorn County,Lawrence County,MS,MS,0.0,4.3,False,False,False,False
+Alcorn County,Quitman County,MS,MS,0.0,15.0,True,True,False,False
+Alcorn County,Webster County,MS,MS,0.0,15.3,True,True,False,False
+Alcorn County,Wilkinson County,MS,MS,0.0,7.0,True,True,False,False
+Amite County,Harrison County,MS,MS,0.2,1.0,False,False,False,False
+Amite County,Noxubee County,MS,MS,0.3,3.7,False,False,False,False
+Amite County,Walthall County,MS,MS,0.4,7.4,True,True,False,False
+Attala County,DeSoto County,MS,MS,0.2,7.7,True,True,False,False
+Attala County,George County,MS,MS,0.3,8.7,True,True,False,False
+Attala County,Itawamba County,MS,MS,0.1,3.5,False,False,False,False
+Attala County,Lee County,MS,MS,0.5,4.9,False,False,False,False
+Attala County,Marshall County,MS,MS,0.4,5.5,True,True,False,False
+Attala County,Monroe County,MS,MS,0.0,4.6,False,False,False,False
+Attala County,Prentiss County,MS,MS,0.0,8.3,True,True,False,False
+Attala County,Union County,MS,MS,0.2,6.6,True,True,False,False
+Calhoun County,Clay County,MS,MS,0.0,14.4,True,True,False,False
+Calhoun County,Grenada County,MS,MS,0.0,21.9,True,True,False,False
+Calhoun County,Lafayette County,MS,MS,0.2,25.7,True,True,True,False
+Chickasaw County,Hinds County,MS,MS,0.2,12.3,True,True,False,False
+Chickasaw County,Neshoba County,MS,MS,0.3,3.6,False,False,False,False
+Chickasaw County,Warren County,MS,MS,0.4,17.0,True,True,False,False
+Chickasaw County,Yazoo County,MS,MS,0.4,3.8,False,False,False,False
+Clarke County,Montgomery County,MS,MS,0.3,2.0,False,False,False,False
+Clay County,Grenada County,MS,MS,0.0,7.5,True,True,False,False
+Clay County,Lafayette County,MS,MS,0.2,11.3,True,True,False,False
+Coahoma County,DeSoto County,MS,MS,0.5,10.9,True,False,False,False
+Coahoma County,Lee County,MS,MS,0.2,8.1,True,True,False,False
+Coahoma County,Marshall County,MS,MS,0.3,8.7,True,True,False,False
+Coahoma County,Neshoba County,MS,MS,0.3,0.8,False,False,False,False
+Coahoma County,Warren County,MS,MS,0.2,14.2,True,True,False,False
+Coahoma County,Yazoo County,MS,MS,0.2,1.0,False,False,False,False
+Copiah County,Hancock County,MS,MS,0.2,1.3,False,False,False,False
+Copiah County,Jefferson Davis County,MS,MS,0.4,5.6,True,True,False,False
+Copiah County,Madison County,MS,MS,0.1,2.6,False,False,False,False
+Copiah County,Sunflower County,MS,MS,0.1,9.1,True,True,False,False
+Covington County,Lauderdale County,MS,MS,0.3,6.6,True,True,False,False
+Covington County,Washington County,MS,MS,0.3,7.0,True,True,False,False
+DeSoto County,George County,MS,MS,0.5,1.0,False,False,False,False
+DeSoto County,Itawamba County,MS,MS,0.3,4.2,False,False,False,False
+DeSoto County,Lee County,MS,MS,0.3,2.8,False,False,False,True
+DeSoto County,Marshall County,MS,MS,0.2,2.2,False,False,False,False
+DeSoto County,Monroe County,MS,MS,0.2,3.1,False,False,False,False
+DeSoto County,Prentiss County,MS,MS,0.2,0.6,False,False,False,False
+DeSoto County,Union County,MS,MS,0.4,1.1,False,False,False,False
+George County,Itawamba County,MS,MS,0.2,5.2,True,True,False,False
+George County,Leake County,MS,MS,0.3,8.6,True,True,False,False
+George County,Monroe County,MS,MS,0.3,4.1,False,False,False,False
+George County,Prentiss County,MS,MS,0.3,0.4,False,False,False,False
+George County,Union County,MS,MS,0.1,2.1,False,False,False,False
+Greene County,Holmes County,MS,MS,0.5,15.4,True,False,False,False
+Greene County,Lawrence County,MS,MS,0.0,4.2,False,False,False,False
+Greene County,Quitman County,MS,MS,0.0,14.9,True,True,False,False
+Greene County,Webster County,MS,MS,0.0,15.2,True,True,False,False
+Greene County,Wilkinson County,MS,MS,0.0,6.9,True,True,False,False
+Grenada County,Lafayette County,MS,MS,0.2,3.8,False,False,False,False
+Hancock County,Madison County,MS,MS,0.1,3.9,False,False,False,True
+Hancock County,Sunflower County,MS,MS,0.3,7.8,True,True,False,False
+Harrison County,Noxubee County,MS,MS,0.5,2.7,False,False,False,False
+Harrison County,Oktibbeha County,MS,MS,0.4,4.8,False,False,False,False
+Hinds County,Neshoba County,MS,MS,0.5,8.7,True,False,False,False
+Hinds County,Simpson County,MS,MS,0.5,2.6,False,False,False,False
+Holmes County,Lawrence County,MS,MS,0.5,11.2,True,False,False,False
+Holmes County,Leake County,MS,MS,0.4,7.9,True,True,False,False
+Holmes County,Quitman County,MS,MS,0.5,0.5,False,False,False,False
+Holmes County,Webster County,MS,MS,0.5,0.2,False,False,False,False
+Holmes County,Wilkinson County,MS,MS,0.5,8.5,True,False,False,False
+Itawamba County,Leake County,MS,MS,0.5,3.4,False,False,False,False
+Itawamba County,Marshall County,MS,MS,0.5,2.0,False,False,False,False
+Itawamba County,Monroe County,MS,MS,0.1,1.1,False,False,False,False
+Itawamba County,Prentiss County,MS,MS,0.1,4.8,False,False,False,False
+Itawamba County,Union County,MS,MS,0.1,3.1,False,False,False,False
+Jackson County,Jasper County,MS,MS,0.2,6.7,True,True,False,False
+Jackson County,Pearl River County,MS,MS,0.2,3.5,False,False,False,True
+Jasper County,Pearl River County,MS,MS,0.4,3.2,False,False,False,False
+Jefferson Davis County,Kemper County,MS,MS,0.4,1.8,False,False,False,False
+Jefferson Davis County,Madison County,MS,MS,0.5,8.2,True,False,False,False
+Jefferson Davis County,Sunflower County,MS,MS,0.3,3.5,False,False,False,False
+Jones County,Lamar County,MS,MS,0.5,1.5,False,False,False,True
+Jones County,Pontotoc County,MS,MS,0.2,6.6,True,True,False,False
+Jones County,Simpson County,MS,MS,0.2,7.0,True,True,False,False
+Jones County,Tishomingo County,MS,MS,0.3,3.1,False,False,False,False
+Lamar County,Pontotoc County,MS,MS,0.3,8.1,True,True,False,False
+Lamar County,Tishomingo County,MS,MS,0.2,4.6,False,False,False,False
+Lawrence County,Quitman County,MS,MS,0.0,10.7,True,True,False,False
+Lawrence County,Webster County,MS,MS,0.0,11.0,True,True,False,False
+Lawrence County,Wilkinson County,MS,MS,0.0,2.7,False,False,False,False
+Leake County,Union County,MS,MS,0.4,6.5,True,True,False,False
+Lee County,Marshall County,MS,MS,0.1,0.6,False,False,False,False
+Lee County,Monroe County,MS,MS,0.5,0.3,False,False,False,False
+Lee County,Neshoba County,MS,MS,0.5,7.3,True,False,False,False
+Lee County,Prentiss County,MS,MS,0.5,3.4,False,False,False,False
+Lee County,Warren County,MS,MS,0.4,6.1,True,True,False,False
+Lee County,Yazoo County,MS,MS,0.4,7.1,True,True,False,False
+Lincoln County,Smith County,MS,MS,0.5,2.2,False,False,False,False
+Lowndes County,Tunica County,MS,MS,0.5,17.4,True,False,False,False
+Lowndes County,Winston County,MS,MS,0.3,7.0,True,True,False,False
+Madison County,Sunflower County,MS,MS,0.2,11.7,True,True,False,False
+Marion County,Pike County,MS,MS,0.2,0.1,False,False,False,False
+Marion County,Walthall County,MS,MS,0.5,4.6,False,False,False,False
+Marshall County,Monroe County,MS,MS,0.4,0.9,False,False,False,False
+Marshall County,Prentiss County,MS,MS,0.4,2.8,False,False,False,False
+Marshall County,Warren County,MS,MS,0.5,5.5,True,False,False,False
+Marshall County,Yazoo County,MS,MS,0.5,7.7,True,False,False,False
+Monroe County,Prentiss County,MS,MS,0.0,3.7,False,False,False,False
+Monroe County,Union County,MS,MS,0.2,2.0,False,False,False,False
+Neshoba County,Warren County,MS,MS,0.1,13.4,True,True,False,False
+Neshoba County,Yazoo County,MS,MS,0.1,0.2,False,False,False,False
+Newton County,Oktibbeha County,MS,MS,0.3,9.5,True,True,False,False
+Newton County,Rankin County,MS,MS,0.1,13.4,True,True,True,False
+Noxubee County,Pike County,MS,MS,0.4,6.4,True,True,False,False
+Noxubee County,Walthall County,MS,MS,0.1,11.1,True,True,False,False
+Oktibbeha County,Rankin County,MS,MS,0.4,3.9,False,False,False,False
+Panola County,Smith County,MS,MS,0.3,1.7,False,False,False,False
+Pearl River County,Stone County,MS,MS,0.4,7.3,True,True,False,False
+Pike County,Walthall County,MS,MS,0.3,4.7,False,False,False,False
+Pontotoc County,Simpson County,MS,MS,0.4,0.4,False,False,False,False
+Pontotoc County,Tishomingo County,MS,MS,0.1,3.5,False,False,False,False
+Prentiss County,Union County,MS,MS,0.2,1.7,False,False,False,False
+Quitman County,Webster County,MS,MS,0.0,0.3,False,False,False,False
+Quitman County,Wilkinson County,MS,MS,0.0,8.0,True,True,False,False
+Scott County,Wayne County,MS,MS,0.2,1.5,False,False,False,False
+Scott County,Winston County,MS,MS,0.4,9.9,True,True,False,False
+Simpson County,Tishomingo County,MS,MS,0.5,3.9,False,False,False,False
+Tallahatchie County,Tippah County,MS,MS,0.0,5.7,True,True,False,False
+Warren County,Yazoo County,MS,MS,0.0,13.2,True,True,False,False
+Webster County,Wilkinson County,MS,MS,0.0,8.3,True,True,False,False
+Anderson County,Aransas County,TX,TX,0.1,1.5,False,False,False,False
+Anderson County,Brazos County,TX,TX,0.0,2.7,False,False,False,True
+Anderson County,Chambers County,TX,TX,0.0,6.9,True,True,False,True
+Anderson County,Fayette County,TX,TX,0.4,4.7,False,False,False,False
+Anderson County,Leon County,TX,TX,0.3,9.5,True,True,False,False
+Anderson County,Live Oak County,TX,TX,0.3,3.1,False,False,False,False
+Andrews County,Atascosa County,TX,TX,0.4,3.8,False,False,False,False
+Andrews County,Austin County,TX,TX,0.5,10.0,True,False,False,False
+Andrews County,Dallas County,TX,TX,0.2,6.1,True,True,False,False
+Andrews County,Harris County,TX,TX,0.2,5.4,True,True,False,False
+Andrews County,Hill County,TX,TX,0.0,2.1,False,False,False,False
+Andrews County,Hunt County,TX,TX,0.3,2.3,False,False,False,False
+Andrews County,Jim Wells County,TX,TX,0.2,10.2,True,True,False,False
+Andrews County,Johnson County,TX,TX,0.2,2.4,False,False,False,False
+Andrews County,Matagorda County,TX,TX,0.1,0.4,False,False,False,False
+Andrews County,Maverick County,TX,TX,0.1,5.0,True,False,False,False
+Andrews County,Robertson County,TX,TX,0.4,4.8,False,False,False,False
+Andrews County,Travis County,TX,TX,0.1,7.9,True,True,False,False
+Andrews County,Wise County,TX,TX,0.1,0.5,False,False,False,False
+Angelina County,Bandera County,TX,TX,0.3,10.5,True,True,False,False
+Angelina County,Bowie County,TX,TX,0.5,1.7,False,False,False,True
+Angelina County,Cass County,TX,TX,0.1,1.6,False,False,False,False
+Angelina County,Llano County,TX,TX,0.1,10.7,True,True,False,False
+Angelina County,Starr County,TX,TX,0.4,6.1,True,True,False,False
+Aransas County,Brazos County,TX,TX,0.1,1.2,False,False,False,False
+Aransas County,Chambers County,TX,TX,0.1,8.4,True,True,False,False
+Aransas County,Fayette County,TX,TX,0.3,6.2,True,True,False,False
+Aransas County,Leon County,TX,TX,0.2,11.0,True,True,False,False
+Aransas County,Live Oak County,TX,TX,0.4,1.6,False,False,False,False
+Aransas County,Washington County,TX,TX,0.5,5.8,True,False,False,False
+Archer County,Gray County,TX,TX,0.0,0.4,False,False,False,False
+Archer County,Lee County,TX,TX,0.1,3.4,False,False,False,False
+Atascosa County,Harris County,TX,TX,0.2,9.2,True,True,True,True
+Atascosa County,Hill County,TX,TX,0.4,5.9,True,True,False,False
+Atascosa County,Jim Wells County,TX,TX,0.2,6.4,True,True,False,True
+Atascosa County,Matagorda County,TX,TX,0.5,3.4,False,False,False,False
+Atascosa County,Maverick County,TX,TX,0.3,1.2,False,False,False,True
+Atascosa County,Travis County,TX,TX,0.3,11.7,True,True,True,True
+Atascosa County,Wise County,TX,TX,0.3,3.3,False,False,False,True
+Austin County,Blanco County,TX,TX,0.2,2.8,False,False,False,False
+Austin County,Dallas County,TX,TX,0.3,3.9,False,False,False,False
+Austin County,Henderson County,TX,TX,0.2,9.3,True,True,False,False
+Austin County,Hill County,TX,TX,0.5,7.9,True,False,False,False
+Austin County,Hunt County,TX,TX,0.2,7.7,True,True,False,False
+Austin County,Johnson County,TX,TX,0.3,7.6,True,True,False,False
+Austin County,La Salle County,TX,TX,0.2,39.2,True,True,True,False
+Austin County,Lamar County,TX,TX,0.4,8.2,True,True,False,False
+Austin County,Matagorda County,TX,TX,0.4,10.4,True,True,False,False
+Austin County,Montgomery County,TX,TX,0.5,2.3,False,False,False,False
+Austin County,Randall County,TX,TX,0.5,4.1,False,False,False,False
+Austin County,Robertson County,TX,TX,0.1,5.2,True,True,False,False
+Austin County,Scurry County,TX,TX,0.2,12.6,True,True,False,False
+Bandera County,Cass County,TX,TX,0.4,12.1,True,True,False,False
+Bandera County,Jackson County,TX,TX,0.5,5.3,True,False,False,False
+Bandera County,Llano County,TX,TX,0.4,0.2,False,False,False,False
+Bandera County,Nacogdoches County,TX,TX,0.4,8.6,True,True,False,False
+Bandera County,Rusk County,TX,TX,0.5,6.7,True,False,False,False
+Bandera County,Starr County,TX,TX,0.1,4.4,False,False,False,False
+Bastrop County,Cooke County,TX,TX,0.5,6.8,True,False,False,True
+Bastrop County,Ellis County,TX,TX,0.3,2.0,False,False,False,True
+Bastrop County,Hockley County,TX,TX,0.2,9.1,True,True,False,False
+Bastrop County,Hood County,TX,TX,0.5,1.8,False,False,False,True
+Bastrop County,Houston County,TX,TX,0.0,0.2,False,False,False,False
+Bastrop County,Moore County,TX,TX,0.5,6.0,True,False,False,False
+Bastrop County,Newton County,TX,TX,0.1,14.3,True,True,False,False
+Bastrop County,Nolan County,TX,TX,0.5,1.9,False,False,False,False
+Bastrop County,Potter County,TX,TX,0.3,1.7,False,False,False,True
+Bastrop County,San Augustine County,TX,TX,0.4,16.9,True,True,False,False
+Bee County,Caldwell County,TX,TX,0.2,9.0,True,True,False,False
+Bee County,Callahan County,TX,TX,0.4,8.7,True,True,False,False
+Bee County,Camp County,TX,TX,0.5,5.0,True,False,False,False
+Bee County,Galveston County,TX,TX,0.0,7.1,True,True,False,False
+Bee County,Hardin County,TX,TX,0.2,8.8,True,True,False,False
+Bee County,Hutchinson County,TX,TX,0.3,6.5,True,True,False,False
+Bee County,Jasper County,TX,TX,0.1,2.6,False,False,False,False
+Bee County,Lubbock County,TX,TX,0.3,5.9,True,True,False,False
+Bee County,Madison County,TX,TX,0.3,10.1,True,True,False,False
+Bee County,Van Zandt County,TX,TX,0.3,4.4,False,False,False,False
+Bee County,Webb County,TX,TX,0.4,6.9,True,True,False,False
+Bee County,Wharton County,TX,TX,0.4,3.2,False,False,False,False
+Bee County,Wood County,TX,TX,0.1,7.7,True,True,False,False
+Bell County,Bosque County,TX,TX,0.1,4.0,False,False,False,False
+Bell County,Cameron County,TX,TX,0.3,4.1,False,False,False,True
+Bell County,Coryell County,TX,TX,0.1,1.6,False,False,False,False
+Bell County,El Paso County,TX,TX,0.1,0.3,False,False,False,True
+Bell County,Erath County,TX,TX,0.4,1.0,False,False,False,False
+Bell County,Freestone County,TX,TX,0.4,4.5,False,False,False,False
+Bell County,Grayson County,TX,TX,0.2,2.6,False,False,False,True
+Bell County,Grimes County,TX,TX,0.2,1.4,False,False,False,False
+Bell County,Hale County,TX,TX,0.4,0.3,False,False,False,False
+Bell County,Medina County,TX,TX,0.1,2.0,False,False,False,True
+Bell County,Parker County,TX,TX,0.4,1.9,False,False,False,True
+Bell County,San Patricio County,TX,TX,0.1,2.1,False,False,False,True
+Bexar County,Denton County,TX,TX,0.0,4.3,False,False,True,True
+Bexar County,Duval County,TX,TX,0.4,16.4,True,True,True,False
+Bexar County,Guadalupe County,TX,TX,0.2,1.0,False,False,False,True
+Bexar County,Hopkins County,TX,TX,0.3,7.1,True,True,False,False
+Bexar County,Kerr County,TX,TX,0.0,1.4,False,False,False,True
+Bexar County,Montague County,TX,TX,0.4,7.1,True,True,False,False
+Bexar County,Smith County,TX,TX,0.3,1.3,False,False,False,True
+Bexar County,Tom Green County,TX,TX,0.5,3.2,False,False,False,True
+Bexar County,Tyler County,TX,TX,0.5,5.3,True,False,False,False
+Bexar County,Val Verde County,TX,TX,0.4,7.6,True,True,False,False
+Bexar County,Waller County,TX,TX,0.4,4.5,False,False,False,False
+Blanco County,Burnet County,TX,TX,0.5,4.4,False,False,False,False
+Blanco County,Dallas County,TX,TX,0.5,1.1,False,False,False,False
+Blanco County,Henderson County,TX,TX,0.0,6.5,True,True,False,False
+Blanco County,Hunt County,TX,TX,0.4,4.9,False,False,False,False
+Blanco County,Johnson County,TX,TX,0.5,4.8,False,False,False,False
+Blanco County,La Salle County,TX,TX,0.0,36.4,True,True,False,False
+Blanco County,Lamar County,TX,TX,0.2,5.4,True,True,False,False
+Blanco County,McLennan County,TX,TX,0.5,3.3,False,False,False,False
+Blanco County,Milam County,TX,TX,0.5,5.7,True,False,False,False
+Blanco County,Montgomery County,TX,TX,0.3,0.5,False,False,False,False
+Blanco County,Randall County,TX,TX,0.3,1.3,False,False,False,False
+Blanco County,Robertson County,TX,TX,0.3,2.4,False,False,False,False
+Blanco County,Scurry County,TX,TX,0.0,9.8,True,True,False,False
+Blanco County,Uvalde County,TX,TX,0.5,7.9,True,False,False,False
+Bosque County,Cameron County,TX,TX,0.4,0.1,False,False,False,False
+Bosque County,Coryell County,TX,TX,0.0,5.6,True,True,False,False
+Bosque County,El Paso County,TX,TX,0.0,3.7,False,False,False,False
+Bosque County,Erath County,TX,TX,0.3,3.0,False,False,False,False
+Bosque County,Freestone County,TX,TX,0.3,0.5,False,False,False,False
+Bosque County,Grayson County,TX,TX,0.1,1.4,False,False,False,False
+Bosque County,Grimes County,TX,TX,0.1,2.6,False,False,False,False
+Bosque County,Hale County,TX,TX,0.3,3.7,False,False,False,False
+Bosque County,Medina County,TX,TX,0.0,2.0,False,False,False,False
+Bosque County,Parker County,TX,TX,0.3,2.1,False,False,False,False
+Bosque County,San Patricio County,TX,TX,0.2,1.9,False,False,False,False
+Bowie County,Cass County,TX,TX,0.4,3.3,False,False,False,False
+Bowie County,Deaf Smith County,TX,TX,0.5,1.0,False,False,False,False
+Bowie County,Frio County,TX,TX,0.3,0.9,False,False,False,False
+Bowie County,Gregg County,TX,TX,0.4,3.7,False,False,False,True
+Bowie County,Llano County,TX,TX,0.4,9.0,True,True,False,False
+Brazoria County,Burleson County,TX,TX,0.3,8.7,True,True,False,False
+Brazoria County,Burnet County,TX,TX,0.4,1.9,False,False,False,True
+Brazoria County,Calhoun County,TX,TX,0.1,5.4,True,True,False,False
+Brazoria County,Jefferson County,TX,TX,0.2,0.4,False,False,False,True
+Brazoria County,Kendall County,TX,TX,0.3,7.0,True,True,False,False
+Brazoria County,Lampasas County,TX,TX,0.1,8.3,True,True,False,False
+Brazoria County,McLennan County,TX,TX,0.4,0.8,False,False,False,True
+Brazoria County,Milam County,TX,TX,0.4,3.2,False,False,False,False
+Brazoria County,Orange County,TX,TX,0.0,4.8,False,False,False,True
+Brazoria County,Rains County,TX,TX,0.1,1.6,False,False,False,False
+Brazoria County,Rockwall County,TX,TX,0.1,4.5,False,False,False,True
+Brazoria County,Runnels County,TX,TX,0.2,9.4,True,True,False,False
+Brazoria County,Tarrant County,TX,TX,0.2,2.3,False,False,False,True
+Brazoria County,Taylor County,TX,TX,0.3,1.6,False,False,False,True
+Brazoria County,Upshur County,TX,TX,0.2,8.3,True,True,False,True
+Brazoria County,Uvalde County,TX,TX,0.4,5.4,True,True,False,False
+Brazoria County,Young County,TX,TX,0.1,8.5,True,True,False,False
+Brazos County,Chambers County,TX,TX,0.0,9.6,True,True,False,True
+Brazos County,Fayette County,TX,TX,0.4,7.4,True,True,False,False
+Brazos County,Leon County,TX,TX,0.3,12.2,True,True,False,False
+Brazos County,Live Oak County,TX,TX,0.3,0.4,False,False,False,False
+Brewster County,Goliad County,TX,TX,0.5,12.7,True,False,False,False
+Brewster County,Red River County,TX,TX,0.4,4.4,False,False,False,False
+Brooks County,Cherokee County,TX,TX,0.3,12.0,True,True,False,False
+Brooks County,Eastland County,TX,TX,0.2,7.9,True,True,False,False
+Brooks County,Howard County,TX,TX,0.5,6.6,True,False,False,False
+Brooks County,Zavala County,TX,TX,0.4,5.9,True,True,False,False
+Brown County,Comanche County,TX,TX,0.3,2.1,False,False,False,False
+Brown County,Deaf Smith County,TX,TX,0.5,3.1,False,False,False,False
+Brown County,Hamilton County,TX,TX,0.1,3.1,False,False,False,False
+Brown County,Panola County,TX,TX,0.1,4.6,False,False,False,False
+Burleson County,Calhoun County,TX,TX,0.4,3.3,False,False,False,False
+Burleson County,Hays County,TX,TX,0.4,12.4,True,True,True,False
+Burleson County,Jefferson County,TX,TX,0.5,9.1,True,False,False,False
+Burleson County,Kaufman County,TX,TX,0.4,7.4,True,True,False,False
+Burleson County,Kendall County,TX,TX,0.0,15.7,True,True,True,False
+Burleson County,Lampasas County,TX,TX,0.2,0.4,False,False,False,False
+Burleson County,Orange County,TX,TX,0.3,3.9,False,False,False,False
+Burleson County,Rains County,TX,TX,0.2,10.3,True,True,False,False
+Burleson County,Rockwall County,TX,TX,0.2,13.2,True,True,False,False
+Burleson County,Runnels County,TX,TX,0.5,0.7,False,False,False,False
+Burleson County,Tarrant County,TX,TX,0.1,11.0,True,True,True,False
+Burleson County,Taylor County,TX,TX,0.0,7.1,True,True,False,False
+Burleson County,Upshur County,TX,TX,0.1,0.4,False,False,False,False
+Burleson County,Williamson County,TX,TX,0.4,13.1,True,True,True,False
+Burleson County,Young County,TX,TX,0.2,0.2,False,False,False,False
+Burnet County,Calhoun County,TX,TX,0.3,3.5,False,False,False,False
+Burnet County,Henderson County,TX,TX,0.5,2.1,False,False,False,True
+Burnet County,Jefferson County,TX,TX,0.2,2.3,False,False,False,True
+Burnet County,La Salle County,TX,TX,0.5,32.0,True,False,True,False
+Burnet County,Lamar County,TX,TX,0.3,1.0,False,False,False,True
+Burnet County,Lampasas County,TX,TX,0.5,6.4,True,False,False,False
+Burnet County,McLennan County,TX,TX,0.0,1.1,False,False,False,True
+Burnet County,Milam County,TX,TX,0.0,1.3,False,False,False,False
+Burnet County,Montgomery County,TX,TX,0.2,4.9,False,False,False,True
+Burnet County,Orange County,TX,TX,0.4,2.9,False,False,False,True
+Burnet County,Rains County,TX,TX,0.5,3.5,False,False,False,False
+Burnet County,Randall County,TX,TX,0.2,3.1,False,False,False,True
+Burnet County,Rockwall County,TX,TX,0.5,6.4,True,False,False,True
+Burnet County,Runnels County,TX,TX,0.2,7.5,True,True,False,False
+Burnet County,Scurry County,TX,TX,0.5,5.4,True,False,False,False
+Burnet County,Uvalde County,TX,TX,0.0,3.5,False,False,False,False
+Burnet County,Young County,TX,TX,0.5,6.6,True,False,False,False
+Caldwell County,Callahan County,TX,TX,0.2,0.3,False,False,False,False
+Caldwell County,Camp County,TX,TX,0.3,14.0,True,True,False,False
+Caldwell County,Galveston County,TX,TX,0.2,1.9,False,False,False,False
+Caldwell County,Hardin County,TX,TX,0.4,0.2,False,False,False,False
+Caldwell County,Hutchinson County,TX,TX,0.1,2.5,False,False,False,False
+Caldwell County,Jasper County,TX,TX,0.3,6.4,True,True,False,False
+Caldwell County,Lubbock County,TX,TX,0.5,3.1,False,False,False,False
+Caldwell County,Madison County,TX,TX,0.5,1.1,False,False,False,False
+Caldwell County,Van Zandt County,TX,TX,0.5,4.6,False,False,False,False
+Caldwell County,Webb County,TX,TX,0.2,2.1,False,False,False,False
+Caldwell County,Wood County,TX,TX,0.3,1.3,False,False,False,False
+Calhoun County,Jefferson County,TX,TX,0.1,5.8,True,True,False,False
+Calhoun County,Kendall County,TX,TX,0.4,12.4,True,True,False,False
+Calhoun County,Lampasas County,TX,TX,0.2,2.9,False,False,False,False
+Calhoun County,McLennan County,TX,TX,0.3,4.6,False,False,False,False
+Calhoun County,Milam County,TX,TX,0.3,2.2,False,False,False,False
+Calhoun County,Montgomery County,TX,TX,0.5,8.4,True,False,False,False
+Calhoun County,Orange County,TX,TX,0.1,0.6,False,False,False,False
+Calhoun County,Rains County,TX,TX,0.2,7.0,True,True,False,False
+Calhoun County,Randall County,TX,TX,0.5,6.6,True,False,False,False
+Calhoun County,Rockwall County,TX,TX,0.2,9.9,True,True,False,False
+Calhoun County,Runnels County,TX,TX,0.1,4.0,False,False,False,False
+Calhoun County,Tarrant County,TX,TX,0.3,7.7,True,True,False,False
+Calhoun County,Taylor County,TX,TX,0.4,3.8,False,False,False,False
+Calhoun County,Upshur County,TX,TX,0.3,2.9,False,False,False,False
+Calhoun County,Uvalde County,TX,TX,0.3,0.0,False,False,False,False
+Calhoun County,Young County,TX,TX,0.2,3.1,False,False,False,False
+Callahan County,Camp County,TX,TX,0.1,13.7,True,True,False,False
+Callahan County,DeWitt County,TX,TX,0.4,10.4,True,True,False,False
+Callahan County,Galveston County,TX,TX,0.4,1.6,False,False,False,False
+Callahan County,Hutchinson County,TX,TX,0.1,2.2,False,False,False,False
+Callahan County,Jasper County,TX,TX,0.5,6.1,True,False,False,False
+Callahan County,Webb County,TX,TX,0.0,1.8,False,False,False,False
+Callahan County,Wood County,TX,TX,0.5,1.0,False,False,False,False
+Cameron County,Coryell County,TX,TX,0.4,5.7,True,True,False,False
+Cameron County,El Paso County,TX,TX,0.4,3.8,False,False,True,True
+Cameron County,Grayson County,TX,TX,0.5,1.5,False,False,False,True
+Cameron County,Grimes County,TX,TX,0.5,2.7,False,False,False,False
+Cameron County,Hood County,TX,TX,0.3,0.1,False,False,False,True
+Cameron County,Medina County,TX,TX,0.4,2.1,False,False,False,True
+Cameron County,Moore County,TX,TX,0.3,7.7,True,True,False,False
+Cameron County,Nolan County,TX,TX,0.3,0.2,False,False,False,False
+Cameron County,Potter County,TX,TX,0.5,0.0,False,False,False,True
+Cameron County,San Patricio County,TX,TX,0.2,2.0,False,False,False,True
+Camp County,DeWitt County,TX,TX,0.3,3.3,False,False,False,False
+Camp County,Galveston County,TX,TX,0.5,12.1,True,False,False,False
+Camp County,Hutchinson County,TX,TX,0.2,11.5,True,True,False,False
+Camp County,Terry County,TX,TX,0.5,5.5,True,False,False,False
+Camp County,Webb County,TX,TX,0.1,11.9,True,True,False,False
+Cass County,Llano County,TX,TX,0.0,12.3,True,True,False,False
+Cass County,Starr County,TX,TX,0.5,7.7,True,False,False,False
+Chambers County,Fayette County,TX,TX,0.4,2.2,False,False,False,False
+Chambers County,Leon County,TX,TX,0.3,2.6,False,False,False,False
+Chambers County,Live Oak County,TX,TX,0.3,10.0,True,True,False,False
+Cherokee County,Eastland County,TX,TX,0.1,4.1,False,False,False,False
+Cherokee County,Ector County,TX,TX,0.3,11.2,True,True,True,True
+Cherokee County,Howard County,TX,TX,0.2,5.4,True,True,False,False
+Cherokee County,Limestone County,TX,TX,0.3,12.7,True,True,False,False
+Cherokee County,Zavala County,TX,TX,0.1,17.9,True,True,False,False
+Clay County,Coleman County,TX,TX,0.4,0.1,False,False,False,False
+Clay County,Dawson County,TX,TX,0.2,6.2,True,True,False,False
+Clay County,Marion County,TX,TX,0.2,4.6,False,False,False,False
+Clay County,Morris County,TX,TX,0.2,7.3,True,True,False,False
+Clay County,Palo Pinto County,TX,TX,0.5,2.9,False,False,False,False
+Clay County,Ward County,TX,TX,0.4,11.2,True,True,False,False
+Coleman County,Dawson County,TX,TX,0.2,6.1,True,True,False,False
+Coleman County,Gonzales County,TX,TX,0.3,9.9,True,True,False,False
+Coleman County,Palo Pinto County,TX,TX,0.1,2.8,False,False,False,False
+Coleman County,Victoria County,TX,TX,0.5,11.2,True,False,False,False
+Coleman County,Ward County,TX,TX,0.0,11.1,True,True,False,False
+Collin County,Fannin County,TX,TX,0.1,7.9,True,True,True,False
+Collin County,Fort Bend County,TX,TX,0.1,2.1,False,False,False,True
+Collin County,Hays County,TX,TX,0.3,1.6,False,False,False,True
+Collin County,Hidalgo County,TX,TX,0.1,4.3,False,False,True,True
+Collin County,Hopkins County,TX,TX,0.4,10.4,True,True,True,False
+Collin County,Kaufman County,TX,TX,0.3,6.6,True,True,True,True
+Collin County,McCulloch County,TX,TX,0.1,11.5,True,True,False,False
+Collin County,Midland County,TX,TX,0.1,3.4,False,False,False,True
+Collin County,Montague County,TX,TX,0.3,10.4,True,True,True,False
+Collin County,Nueces County,TX,TX,0.1,3.8,False,False,True,True
+Collin County,Smith County,TX,TX,0.4,4.6,False,False,True,True
+Collin County,Tom Green County,TX,TX,0.2,6.5,True,True,True,True
+Collin County,Val Verde County,TX,TX,0.3,10.9,True,True,True,False
+Collin County,Wilbarger County,TX,TX,0.1,6.6,True,True,False,False
+Collin County,Williamson County,TX,TX,0.3,0.9,False,False,False,True
+Colorado County,Cooke County,TX,TX,0.1,2.8,False,False,False,False
+Colorado County,Duval County,TX,TX,0.3,11.2,True,True,False,False
+Colorado County,Ellis County,TX,TX,0.3,6.0,True,True,False,False
+Colorado County,Guadalupe County,TX,TX,0.5,6.2,True,False,False,False
+Colorado County,Hockley County,TX,TX,0.4,5.1,True,True,False,False
+Colorado County,Jones County,TX,TX,0.0,2.6,False,False,False,False
+Colorado County,San Augustine County,TX,TX,0.2,12.9,True,True,False,False
+Colorado County,Tyler County,TX,TX,0.2,0.1,False,False,False,False
+Colorado County,Waller County,TX,TX,0.3,0.7,False,False,False,False
+Comal County,Navarro County,TX,TX,0.4,4.6,False,False,False,False
+Comal County,Polk County,TX,TX,0.2,16.3,True,True,True,True
+Comal County,Titus County,TX,TX,0.3,3.0,False,False,False,False
+Comal County,Walker County,TX,TX,0.1,6.4,True,True,False,True
+Comal County,Wichita County,TX,TX,0.1,7.1,True,True,True,True
+Comal County,Wilson County,TX,TX,0.1,4.1,False,False,False,False
+Comanche County,Deaf Smith County,TX,TX,0.2,1.0,False,False,False,False
+Comanche County,Frio County,TX,TX,0.4,0.9,False,False,False,False
+Comanche County,Gregg County,TX,TX,0.3,3.7,False,False,False,False
+Comanche County,Hamilton County,TX,TX,0.2,1.0,False,False,False,False
+Comanche County,Panola County,TX,TX,0.4,2.5,False,False,False,False
+Cooke County,Duval County,TX,TX,0.4,8.4,True,True,False,False
+Cooke County,Ellis County,TX,TX,0.2,8.8,True,True,False,True
+Cooke County,Hockley County,TX,TX,0.3,2.3,False,False,False,False
+Cooke County,Houston County,TX,TX,0.5,6.6,True,False,False,False
+Cooke County,Jones County,TX,TX,0.1,5.4,True,True,False,False
+Cooke County,San Augustine County,TX,TX,0.1,10.1,True,True,False,False
+Cooke County,Tyler County,TX,TX,0.3,2.7,False,False,False,False
+Cooke County,Waller County,TX,TX,0.4,3.5,False,False,False,False
+Coryell County,El Paso County,TX,TX,0.0,1.9,False,False,False,False
+Coryell County,Erath County,TX,TX,0.3,2.6,False,False,False,False
+Coryell County,Freestone County,TX,TX,0.3,6.1,True,True,False,False
+Coryell County,Grayson County,TX,TX,0.1,4.2,False,False,False,False
+Coryell County,Grimes County,TX,TX,0.1,3.0,False,False,False,False
+Coryell County,Hale County,TX,TX,0.3,1.9,False,False,False,False
+Coryell County,Medina County,TX,TX,0.0,3.6,False,False,False,False
+Coryell County,Parker County,TX,TX,0.3,3.5,False,False,False,False
+Coryell County,San Patricio County,TX,TX,0.2,3.7,False,False,False,False
+Dallas County,Harris County,TX,TX,0.4,0.7,False,False,False,True
+Dallas County,Henderson County,TX,TX,0.5,5.4,True,False,True,True
+Dallas County,Hill County,TX,TX,0.2,4.0,False,False,False,False
+Dallas County,Hunt County,TX,TX,0.1,3.8,False,False,False,True
+Dallas County,Jim Wells County,TX,TX,0.4,16.3,True,True,True,True
+Dallas County,Johnson County,TX,TX,0.0,3.7,False,False,False,True
+Dallas County,La Salle County,TX,TX,0.5,35.3,True,False,True,False
+Dallas County,Matagorda County,TX,TX,0.1,6.5,True,True,False,False
+Dallas County,Maverick County,TX,TX,0.3,11.1,True,True,True,True
+Dallas County,Robertson County,TX,TX,0.2,1.3,False,False,False,False
+Dallas County,Scurry County,TX,TX,0.5,8.7,True,False,False,False
+Dallas County,Travis County,TX,TX,0.3,1.8,False,False,False,True
+Dallas County,Wise County,TX,TX,0.3,6.6,True,True,True,True
+Dawson County,Gonzales County,TX,TX,0.5,3.8,False,False,False,False
+Dawson County,Marion County,TX,TX,0.4,1.6,False,False,False,False
+Dawson County,Morris County,TX,TX,0.4,1.1,False,False,False,False
+Dawson County,Palo Pinto County,TX,TX,0.3,3.3,False,False,False,False
+Dawson County,Ward County,TX,TX,0.2,5.0,True,False,False,False
+DeWitt County,Hutchinson County,TX,TX,0.5,8.2,True,False,False,False
+DeWitt County,Pecos County,TX,TX,0.3,5.6,True,True,False,False
+DeWitt County,Terry County,TX,TX,0.2,2.2,False,False,False,False
+DeWitt County,Washington County,TX,TX,0.4,4.7,False,False,False,False
+DeWitt County,Webb County,TX,TX,0.4,8.6,True,True,False,False
+Deaf Smith County,Frio County,TX,TX,0.2,1.9,False,False,False,False
+Deaf Smith County,Gregg County,TX,TX,0.1,4.7,False,False,False,False
+Deaf Smith County,Hamilton County,TX,TX,0.4,0.0,False,False,False,False
+Denton County,Duval County,TX,TX,0.4,20.7,True,True,True,False
+Denton County,Guadalupe County,TX,TX,0.2,3.3,False,False,False,True
+Denton County,Hopkins County,TX,TX,0.3,11.4,True,True,True,False
+Denton County,Kerr County,TX,TX,0.0,2.9,False,False,False,True
+Denton County,Montague County,TX,TX,0.4,11.4,True,True,True,False
+Denton County,Smith County,TX,TX,0.3,5.6,True,True,True,True
+Denton County,Tom Green County,TX,TX,0.5,7.5,True,False,True,True
+Denton County,Tyler County,TX,TX,0.5,9.6,True,False,False,False
+Denton County,Val Verde County,TX,TX,0.4,11.9,True,True,True,False
+Denton County,Waller County,TX,TX,0.4,8.8,True,True,True,False
+Dimmit County,Willacy County,TX,TX,0.5,7.4,True,False,False,False
+Duval County,Guadalupe County,TX,TX,0.2,17.4,True,True,False,False
+Duval County,Jones County,TX,TX,0.3,13.8,True,True,False,False
+Duval County,Kerr County,TX,TX,0.4,17.8,True,True,False,False
+Duval County,San Augustine County,TX,TX,0.5,1.7,False,False,False,False
+Duval County,Tyler County,TX,TX,0.1,11.1,True,True,False,False
+Duval County,Waller County,TX,TX,0.0,11.9,True,True,False,False
+Eastland County,Ector County,TX,TX,0.4,7.1,True,True,False,False
+Eastland County,Howard County,TX,TX,0.3,1.3,False,False,False,False
+Eastland County,Limestone County,TX,TX,0.4,8.6,True,True,False,False
+Eastland County,Zavala County,TX,TX,0.2,13.8,True,True,False,False
+Ector County,Howard County,TX,TX,0.1,5.8,True,True,False,False
+Ector County,Liberty County,TX,TX,0.3,5.0,True,False,False,True
+Ector County,Limestone County,TX,TX,0.0,1.5,False,False,False,False
+Ector County,Zavala County,TX,TX,0.2,6.7,True,True,False,False
+El Paso County,Erath County,TX,TX,0.3,0.7,False,False,False,False
+El Paso County,Freestone County,TX,TX,0.3,4.2,False,False,False,False
+El Paso County,Grayson County,TX,TX,0.1,2.3,False,False,False,True
+El Paso County,Grimes County,TX,TX,0.1,1.1,False,False,False,False
+El Paso County,Hale County,TX,TX,0.3,0.0,False,False,False,False
+El Paso County,Medina County,TX,TX,0.0,1.7,False,False,False,True
+El Paso County,Parker County,TX,TX,0.3,1.6,False,False,False,True
+El Paso County,San Patricio County,TX,TX,0.2,1.8,False,False,False,True
+Ellis County,Hockley County,TX,TX,0.1,11.1,True,True,False,False
+Ellis County,Houston County,TX,TX,0.3,2.2,False,False,False,False
+Ellis County,Jones County,TX,TX,0.3,3.4,False,False,False,False
+Ellis County,Newton County,TX,TX,0.4,16.3,True,True,False,False
+Ellis County,San Augustine County,TX,TX,0.1,18.9,True,True,False,False
+Ellis County,Tyler County,TX,TX,0.5,6.1,True,False,False,False
+Erath County,Freestone County,TX,TX,0.0,3.5,False,False,False,False
+Erath County,Grayson County,TX,TX,0.2,1.6,False,False,False,False
+Erath County,Grimes County,TX,TX,0.2,0.4,False,False,False,False
+Erath County,Hale County,TX,TX,0.0,0.7,False,False,False,False
+Erath County,Medina County,TX,TX,0.3,1.0,False,False,False,False
+Erath County,Navarro County,TX,TX,0.5,0.6,False,False,False,False
+Erath County,Parker County,TX,TX,0.0,0.9,False,False,False,False
+Erath County,San Patricio County,TX,TX,0.5,1.1,False,False,False,False
+Erath County,Stephens County,TX,TX,0.3,10.9,True,True,False,False
+Falls County,Lamb County,TX,TX,0.4,0.8,False,False,False,False
+Falls County,Reeves County,TX,TX,0.3,7.8,True,True,False,False
+Fannin County,Fort Bend County,TX,TX,0.2,5.8,True,True,False,False
+Fannin County,Hays County,TX,TX,0.2,6.3,True,True,False,False
+Fannin County,Hidalgo County,TX,TX,0.2,3.6,False,False,False,False
+Fannin County,Hopkins County,TX,TX,0.5,2.5,False,False,False,False
+Fannin County,Kaufman County,TX,TX,0.2,1.3,False,False,False,False
+Fannin County,McCulloch County,TX,TX,0.0,3.6,False,False,False,False
+Fannin County,Midland County,TX,TX,0.2,4.5,False,False,False,False
+Fannin County,Montague County,TX,TX,0.4,2.5,False,False,False,False
+Fannin County,Nueces County,TX,TX,0.0,4.1,False,False,False,False
+Fannin County,Smith County,TX,TX,0.5,3.3,False,False,False,False
+Fannin County,Tom Green County,TX,TX,0.3,1.4,False,False,False,False
+Fannin County,Val Verde County,TX,TX,0.4,3.0,False,False,False,False
+Fannin County,Wilbarger County,TX,TX,0.2,1.3,False,False,False,False
+Fannin County,Williamson County,TX,TX,0.2,7.0,True,True,False,False
+Fayette County,Leon County,TX,TX,0.1,4.8,False,False,False,False
+Fayette County,Pecos County,TX,TX,0.3,1.3,False,False,False,False
+Fayette County,Terry County,TX,TX,0.4,2.1,False,False,False,False
+Fayette County,Washington County,TX,TX,0.2,0.4,False,False,False,False
+Fort Bend County,Hays County,TX,TX,0.4,0.5,False,False,False,True
+Fort Bend County,Hidalgo County,TX,TX,0.0,2.2,False,False,False,True
+Fort Bend County,Hopkins County,TX,TX,0.3,8.3,True,True,False,False
+Fort Bend County,Kaufman County,TX,TX,0.4,4.5,False,False,False,True
+Fort Bend County,McCulloch County,TX,TX,0.2,9.4,True,True,False,False
+Fort Bend County,Midland County,TX,TX,0.0,1.3,False,False,False,True
+Fort Bend County,Montague County,TX,TX,0.2,8.3,True,True,False,False
+Fort Bend County,Nueces County,TX,TX,0.2,1.7,False,False,False,True
+Fort Bend County,Smith County,TX,TX,0.3,2.5,False,False,False,True
+Fort Bend County,Tom Green County,TX,TX,0.1,4.4,False,False,False,True
+Fort Bend County,Val Verde County,TX,TX,0.2,8.8,True,True,True,False
+Fort Bend County,Wilbarger County,TX,TX,0.0,4.5,False,False,False,False
+Fort Bend County,Williamson County,TX,TX,0.4,1.2,False,False,False,True
+Freestone County,Grayson County,TX,TX,0.2,1.9,False,False,False,False
+Freestone County,Grimes County,TX,TX,0.2,3.1,False,False,False,False
+Freestone County,Hale County,TX,TX,0.0,4.2,False,False,False,False
+Freestone County,Medina County,TX,TX,0.3,2.5,False,False,False,False
+Freestone County,Navarro County,TX,TX,0.5,2.9,False,False,False,False
+Freestone County,Parker County,TX,TX,0.0,2.6,False,False,False,False
+Freestone County,San Patricio County,TX,TX,0.5,2.4,False,False,False,False
+Freestone County,Stephens County,TX,TX,0.3,7.4,True,True,False,False
+Frio County,Gregg County,TX,TX,0.1,2.8,False,False,False,False
+Galveston County,Hardin County,TX,TX,0.2,1.7,False,False,False,True
+Galveston County,Hutchinson County,TX,TX,0.3,0.6,False,False,False,False
+Galveston County,Jasper County,TX,TX,0.1,4.5,False,False,False,False
+Galveston County,Lubbock County,TX,TX,0.3,1.2,False,False,False,True
+Galveston County,Madison County,TX,TX,0.3,3.0,False,False,False,False
+Galveston County,Van Zandt County,TX,TX,0.3,2.7,False,False,False,True
+Galveston County,Webb County,TX,TX,0.4,0.2,False,False,False,True
+Galveston County,Wharton County,TX,TX,0.4,10.3,True,True,True,True
+Galveston County,Wood County,TX,TX,0.1,0.6,False,False,False,True
+Gonzales County,Palo Pinto County,TX,TX,0.2,7.1,True,True,False,False
+Gonzales County,Victoria County,TX,TX,0.2,1.3,False,False,False,False
+Gonzales County,Ward County,TX,TX,0.3,1.2,False,False,False,False
+Gray County,Lee County,TX,TX,0.1,3.8,False,False,False,False
+Grayson County,Grimes County,TX,TX,0.0,1.2,False,False,False,False
+Grayson County,Hale County,TX,TX,0.2,2.3,False,False,False,False
+Grayson County,Medina County,TX,TX,0.1,0.6,False,False,False,True
+Grayson County,Parker County,TX,TX,0.2,0.7,False,False,False,True
+Grayson County,San Patricio County,TX,TX,0.3,0.5,False,False,False,True
+Grayson County,Stephens County,TX,TX,0.5,9.3,True,False,False,False
+Gregg County,Hamilton County,TX,TX,0.5,4.7,False,False,False,False
+Grimes County,Hale County,TX,TX,0.2,1.1,False,False,False,False
+Grimes County,Medina County,TX,TX,0.1,0.6,False,False,False,False
+Grimes County,Parker County,TX,TX,0.2,0.5,False,False,False,False
+Grimes County,San Patricio County,TX,TX,0.3,0.7,False,False,False,False
+Grimes County,Stephens County,TX,TX,0.5,10.5,True,False,False,False
+Guadalupe County,Hopkins County,TX,TX,0.5,8.1,True,False,False,False
+Guadalupe County,Jones County,TX,TX,0.5,3.6,False,False,False,False
+Guadalupe County,Kerr County,TX,TX,0.2,0.4,False,False,False,True
+Guadalupe County,Smith County,TX,TX,0.5,2.3,False,False,False,True
+Guadalupe County,Tyler County,TX,TX,0.3,6.3,True,True,False,False
+Guadalupe County,Waller County,TX,TX,0.2,5.5,True,True,False,False
+Hale County,Medina County,TX,TX,0.3,1.7,False,False,False,False
+Hale County,Navarro County,TX,TX,0.5,1.3,False,False,False,False
+Hale County,Parker County,TX,TX,0.0,1.6,False,False,False,False
+Hale County,San Patricio County,TX,TX,0.5,1.8,False,False,False,False
+Hale County,Stephens County,TX,TX,0.3,11.6,True,True,False,False
+Hamilton County,Panola County,TX,TX,0.2,1.5,False,False,False,False
+Hardin County,Hutchinson County,TX,TX,0.5,2.3,False,False,False,False
+Hardin County,Jasper County,TX,TX,0.1,6.2,True,True,False,False
+Hardin County,Lubbock County,TX,TX,0.1,2.9,False,False,False,True
+Hardin County,Madison County,TX,TX,0.1,1.3,False,False,False,False
+Hardin County,Van Zandt County,TX,TX,0.1,4.4,False,False,False,True
+Hardin County,Wharton County,TX,TX,0.2,12.0,True,True,False,True
+Hardin County,Wood County,TX,TX,0.1,1.1,False,False,False,True
+Harris County,Hill County,TX,TX,0.2,3.3,False,False,False,False
+Harris County,Hunt County,TX,TX,0.5,3.1,False,False,False,True
+Harris County,Jim Wells County,TX,TX,0.0,15.6,True,True,True,True
+Harris County,Johnson County,TX,TX,0.4,3.0,False,False,False,True
+Harris County,Matagorda County,TX,TX,0.3,5.8,True,True,False,False
+Harris County,Maverick County,TX,TX,0.1,10.4,True,True,True,True
+Harris County,Travis County,TX,TX,0.1,2.5,False,False,True,True
+Harris County,Wise County,TX,TX,0.1,5.9,True,True,False,True
+Harrison County,Sabine County,TX,TX,0.3,2.8,False,False,False,False
+Harrison County,Willacy County,TX,TX,0.1,4.8,False,False,False,False
+Hays County,Hidalgo County,TX,TX,0.4,2.7,False,False,False,True
+Hays County,Kaufman County,TX,TX,0.0,5.0,True,False,False,True
+Hays County,Kendall County,TX,TX,0.4,3.3,False,False,False,False
+Hays County,McCulloch County,TX,TX,0.2,9.9,True,True,False,False
+Hays County,Midland County,TX,TX,0.4,1.8,False,False,False,True
+Hays County,Nueces County,TX,TX,0.2,2.2,False,False,False,True
+Hays County,Tarrant County,TX,TX,0.5,1.4,False,False,False,True
+Hays County,Taylor County,TX,TX,0.4,5.3,True,True,False,True
+Hays County,Tom Green County,TX,TX,0.5,4.9,False,False,False,True
+Hays County,Upshur County,TX,TX,0.5,12.0,True,False,True,True
+Hays County,Wilbarger County,TX,TX,0.4,5.0,True,False,False,False
+Hays County,Williamson County,TX,TX,0.0,0.7,False,False,False,True
+Henderson County,Hunt County,TX,TX,0.4,1.6,False,False,False,True
+Henderson County,Johnson County,TX,TX,0.5,1.7,False,False,False,True
+Henderson County,La Salle County,TX,TX,0.0,29.9,True,True,True,False
+Henderson County,Lamar County,TX,TX,0.2,1.1,False,False,False,True
+Henderson County,McLennan County,TX,TX,0.5,3.2,False,False,False,True
+Henderson County,Milam County,TX,TX,0.5,0.8,False,False,False,False
+Henderson County,Montgomery County,TX,TX,0.3,7.0,True,True,True,True
+Henderson County,Randall County,TX,TX,0.3,5.2,True,True,False,True
+Henderson County,Robertson County,TX,TX,0.3,4.1,False,False,False,False
+Henderson County,Scurry County,TX,TX,0.0,3.3,False,False,False,False
+Henderson County,Uvalde County,TX,TX,0.5,1.4,False,False,False,False
+Hidalgo County,Hopkins County,TX,TX,0.3,6.1,True,True,False,False
+Hidalgo County,Kaufman County,TX,TX,0.4,2.3,False,False,False,True
+Hidalgo County,McCulloch County,TX,TX,0.2,7.2,True,True,False,False
+Hidalgo County,Midland County,TX,TX,0.0,0.9,False,False,False,True
+Hidalgo County,Montague County,TX,TX,0.2,6.1,True,True,False,False
+Hidalgo County,Nueces County,TX,TX,0.2,0.5,False,False,False,True
+Hidalgo County,Smith County,TX,TX,0.3,0.3,False,False,False,True
+Hidalgo County,Tom Green County,TX,TX,0.1,2.2,False,False,False,True
+Hidalgo County,Val Verde County,TX,TX,0.2,6.6,True,True,False,False
+Hidalgo County,Wilbarger County,TX,TX,0.0,2.3,False,False,False,False
+Hidalgo County,Williamson County,TX,TX,0.4,3.4,False,False,True,True
+Hill County,Hunt County,TX,TX,0.3,0.2,False,False,False,False
+Hill County,Jim Wells County,TX,TX,0.2,12.3,True,True,False,False
+Hill County,Johnson County,TX,TX,0.2,0.3,False,False,False,False
+Hill County,Matagorda County,TX,TX,0.1,2.5,False,False,False,False
+Hill County,Maverick County,TX,TX,0.1,7.1,True,True,False,False
+Hill County,Robertson County,TX,TX,0.4,2.7,False,False,False,False
+Hill County,Travis County,TX,TX,0.1,5.8,True,True,False,False
+Hill County,Wise County,TX,TX,0.1,2.6,False,False,False,False
+Hockley County,Houston County,TX,TX,0.2,8.9,True,True,False,False
+Hockley County,Jones County,TX,TX,0.4,7.7,True,True,False,False
+Hockley County,Newton County,TX,TX,0.3,5.2,True,True,False,False
+Hockley County,Potter County,TX,TX,0.5,7.4,True,False,False,False
+Hockley County,San Augustine County,TX,TX,0.2,7.8,True,True,False,False
+Hood County,Houston County,TX,TX,0.5,1.6,False,False,False,False
+Hood County,Moore County,TX,TX,0.0,7.8,True,True,False,False
+Hood County,Newton County,TX,TX,0.4,12.5,True,True,False,False
+Hood County,Nolan County,TX,TX,0.0,0.1,False,False,False,False
+Hood County,Potter County,TX,TX,0.2,0.1,False,False,False,True
+Hood County,San Patricio County,TX,TX,0.5,2.1,False,False,False,True
+Hopkins County,Kerr County,TX,TX,0.3,8.5,True,True,False,False
+Hopkins County,McCulloch County,TX,TX,0.5,1.1,False,False,False,False
+Hopkins County,Midland County,TX,TX,0.3,7.0,True,True,False,False
+Hopkins County,Montague County,TX,TX,0.1,0.0,False,False,False,False
+Hopkins County,Nueces County,TX,TX,0.5,6.6,True,False,False,False
+Hopkins County,Smith County,TX,TX,0.0,5.8,True,True,False,False
+Hopkins County,Tom Green County,TX,TX,0.2,3.9,False,False,False,False
+Hopkins County,Val Verde County,TX,TX,0.1,0.5,False,False,False,False
+Hopkins County,Wilbarger County,TX,TX,0.3,3.8,False,False,False,False
+Houston County,Moore County,TX,TX,0.5,6.2,True,False,False,False
+Houston County,Newton County,TX,TX,0.1,14.1,True,True,False,False
+Houston County,Nolan County,TX,TX,0.5,1.7,False,False,False,False
+Houston County,Potter County,TX,TX,0.3,1.5,False,False,False,False
+Houston County,San Augustine County,TX,TX,0.4,16.7,True,True,False,False
+Howard County,Liberty County,TX,TX,0.4,0.8,False,False,False,False
+Howard County,Limestone County,TX,TX,0.1,7.3,True,True,False,False
+Howard County,Zavala County,TX,TX,0.1,12.5,True,True,False,False
+Hunt County,Jim Wells County,TX,TX,0.5,12.5,True,False,True,True
+Hunt County,Johnson County,TX,TX,0.1,0.1,False,False,False,True
+Hunt County,La Salle County,TX,TX,0.4,31.5,True,True,True,False
+Hunt County,Matagorda County,TX,TX,0.2,2.7,False,False,False,False
+Hunt County,Maverick County,TX,TX,0.4,7.3,True,True,False,True
+Hunt County,Robertson County,TX,TX,0.1,2.5,False,False,False,False
+Hunt County,Scurry County,TX,TX,0.4,4.9,False,False,False,False
+Hunt County,Travis County,TX,TX,0.4,5.6,True,True,True,True
+Hunt County,Wise County,TX,TX,0.4,2.8,False,False,False,True
+Hutchinson County,Jasper County,TX,TX,0.4,3.9,False,False,False,False
+Hutchinson County,Webb County,TX,TX,0.1,0.4,False,False,False,False
+Hutchinson County,Wood County,TX,TX,0.4,1.2,False,False,False,False
+Jackson County,Nacogdoches County,TX,TX,0.1,3.3,False,False,False,False
+Jackson County,Rusk County,TX,TX,0.0,1.4,False,False,False,False
+Jackson County,Shelby County,TX,TX,0.3,2.5,False,False,False,False
+Jackson County,Starr County,TX,TX,0.4,0.9,False,False,False,False
+Jasper County,Lubbock County,TX,TX,0.2,3.3,False,False,False,False
+Jasper County,Madison County,TX,TX,0.2,7.5,True,True,False,False
+Jasper County,Van Zandt County,TX,TX,0.2,1.8,False,False,False,False
+Jasper County,Webb County,TX,TX,0.5,4.3,False,False,False,False
+Jasper County,Wharton County,TX,TX,0.3,5.8,True,True,False,False
+Jasper County,Wood County,TX,TX,0.0,5.1,True,True,False,False
+Jefferson County,Kendall County,TX,TX,0.5,6.6,True,False,False,False
+Jefferson County,Lamar County,TX,TX,0.5,3.3,False,False,False,True
+Jefferson County,Lampasas County,TX,TX,0.3,8.7,True,True,False,False
+Jefferson County,McLennan County,TX,TX,0.2,1.2,False,False,False,True
+Jefferson County,Milam County,TX,TX,0.2,3.6,False,False,False,False
+Jefferson County,Montgomery County,TX,TX,0.4,2.6,False,False,False,True
+Jefferson County,Orange County,TX,TX,0.2,5.2,True,True,False,True
+Jefferson County,Rains County,TX,TX,0.3,1.2,False,False,False,False
+Jefferson County,Randall County,TX,TX,0.4,0.8,False,False,False,True
+Jefferson County,Rockwall County,TX,TX,0.3,4.1,False,False,False,True
+Jefferson County,Runnels County,TX,TX,0.0,9.8,True,True,False,False
+Jefferson County,Tarrant County,TX,TX,0.4,1.9,False,False,False,True
+Jefferson County,Taylor County,TX,TX,0.5,2.0,False,False,False,True
+Jefferson County,Upshur County,TX,TX,0.4,8.7,True,True,False,True
+Jefferson County,Uvalde County,TX,TX,0.2,5.8,True,True,False,False
+Jefferson County,Young County,TX,TX,0.3,8.9,True,True,False,False
+Jim Wells County,Johnson County,TX,TX,0.4,12.6,True,True,True,True
+Jim Wells County,Matagorda County,TX,TX,0.3,9.8,True,True,False,False
+Jim Wells County,Maverick County,TX,TX,0.1,5.2,True,True,False,True
+Jim Wells County,Travis County,TX,TX,0.1,18.1,True,True,True,True
+Jim Wells County,Wise County,TX,TX,0.1,9.7,True,True,False,True
+Johnson County,La Salle County,TX,TX,0.5,31.6,True,False,True,False
+Johnson County,Matagorda County,TX,TX,0.1,2.8,False,False,False,False
+Johnson County,Maverick County,TX,TX,0.3,7.4,True,True,False,True
+Johnson County,Robertson County,TX,TX,0.2,2.4,False,False,False,False
+Johnson County,Scurry County,TX,TX,0.5,5.0,True,False,False,False
+Johnson County,Travis County,TX,TX,0.3,5.5,True,True,True,True
+Johnson County,Wise County,TX,TX,0.3,2.9,False,False,False,True
+Jones County,San Augustine County,TX,TX,0.2,15.5,True,True,False,False
+Jones County,Tyler County,TX,TX,0.2,2.7,False,False,False,False
+Jones County,Waller County,TX,TX,0.3,1.9,False,False,False,False
+Kaufman County,Kendall County,TX,TX,0.4,8.3,True,True,False,False
+Kaufman County,McCulloch County,TX,TX,0.2,4.9,False,False,False,False
+Kaufman County,Midland County,TX,TX,0.4,3.2,False,False,False,True
+Kaufman County,Nueces County,TX,TX,0.2,2.8,False,False,False,True
+Kaufman County,Tarrant County,TX,TX,0.5,3.6,False,False,False,True
+Kaufman County,Taylor County,TX,TX,0.4,0.3,False,False,False,True
+Kaufman County,Tom Green County,TX,TX,0.5,0.1,False,False,False,True
+Kaufman County,Upshur County,TX,TX,0.5,7.0,True,False,False,True
+Kaufman County,Wilbarger County,TX,TX,0.4,0.0,False,False,False,False
+Kaufman County,Williamson County,TX,TX,0.0,5.7,True,True,True,True
+Kendall County,Lampasas County,TX,TX,0.2,15.3,True,True,True,False
+Kendall County,Orange County,TX,TX,0.3,11.8,True,True,True,False
+Kendall County,Rains County,TX,TX,0.2,5.4,True,True,False,False
+Kendall County,Rockwall County,TX,TX,0.2,2.5,False,False,False,False
+Kendall County,Runnels County,TX,TX,0.5,16.4,True,False,False,False
+Kendall County,Tarrant County,TX,TX,0.1,4.7,False,False,False,False
+Kendall County,Taylor County,TX,TX,0.0,8.6,True,True,False,False
+Kendall County,Upshur County,TX,TX,0.1,15.3,True,True,True,False
+Kendall County,Williamson County,TX,TX,0.4,2.6,False,False,False,False
+Kendall County,Young County,TX,TX,0.2,15.5,True,True,False,False
+Kerr County,Montague County,TX,TX,0.4,8.5,True,True,False,False
+Kerr County,Smith County,TX,TX,0.3,2.7,False,False,False,True
+Kerr County,Tom Green County,TX,TX,0.5,4.6,False,False,False,True
+Kerr County,Tyler County,TX,TX,0.5,6.7,True,False,False,False
+Kerr County,Val Verde County,TX,TX,0.4,9.0,True,True,False,False
+Kerr County,Waller County,TX,TX,0.4,5.9,True,True,False,False
+Kimble County,Kleberg County,TX,TX,0.4,18.8,True,True,False,False
+Kimble County,Winkler County,TX,TX,0.4,5.5,True,True,False,False
+La Salle County,Lamar County,TX,TX,0.2,31.0,True,True,True,False
+La Salle County,McLennan County,TX,TX,0.5,33.1,True,False,True,False
+La Salle County,Milam County,TX,TX,0.5,30.7,True,False,False,False
+La Salle County,Montgomery County,TX,TX,0.3,36.9,True,True,True,False
+La Salle County,Randall County,TX,TX,0.3,35.1,True,True,True,False
+La Salle County,Robertson County,TX,TX,0.3,34.0,True,True,False,False
+La Salle County,Scurry County,TX,TX,0.0,26.6,True,True,False,False
+La Salle County,Uvalde County,TX,TX,0.5,28.5,True,False,False,False
+Lamar County,McLennan County,TX,TX,0.3,2.1,False,False,False,True
+Lamar County,Milam County,TX,TX,0.3,0.3,False,False,False,False
+Lamar County,Montgomery County,TX,TX,0.1,5.9,True,True,False,True
+Lamar County,Randall County,TX,TX,0.1,4.1,False,False,False,True
+Lamar County,Robertson County,TX,TX,0.5,3.0,False,False,False,False
+Lamar County,Runnels County,TX,TX,0.5,6.5,True,False,False,False
+Lamar County,Scurry County,TX,TX,0.2,4.4,False,False,False,False
+Lamar County,Uvalde County,TX,TX,0.3,2.5,False,False,False,False
+Lamb County,Zapata County,TX,TX,0.2,1.3,False,False,False,False
+Lampasas County,McLennan County,TX,TX,0.5,7.5,True,False,False,False
+Lampasas County,Milam County,TX,TX,0.5,5.1,True,False,False,False
+Lampasas County,Orange County,TX,TX,0.1,3.5,False,False,False,False
+Lampasas County,Rains County,TX,TX,0.0,9.9,True,True,False,False
+Lampasas County,Rockwall County,TX,TX,0.0,12.8,True,True,False,False
+Lampasas County,Runnels County,TX,TX,0.3,1.1,False,False,False,False
+Lampasas County,Tarrant County,TX,TX,0.1,10.6,True,True,True,False
+Lampasas County,Taylor County,TX,TX,0.2,6.7,True,True,False,False
+Lampasas County,Upshur County,TX,TX,0.1,0.0,False,False,False,False
+Lampasas County,Uvalde County,TX,TX,0.5,2.9,False,False,False,False
+Lampasas County,Young County,TX,TX,0.0,0.2,False,False,False,False
+Leon County,Pecos County,TX,TX,0.4,6.1,True,True,False,False
+Leon County,Terry County,TX,TX,0.5,2.7,False,False,False,False
+Leon County,Washington County,TX,TX,0.3,5.2,True,True,False,False
+Liberty County,Limestone County,TX,TX,0.3,6.5,True,True,False,False
+Liberty County,Live Oak County,TX,TX,0.4,8.6,True,True,False,False
+Liberty County,Zavala County,TX,TX,0.5,11.7,True,False,False,False
+Limestone County,Zavala County,TX,TX,0.2,5.2,True,True,False,False
+Llano County,Starr County,TX,TX,0.5,4.6,False,False,False,False
+Lubbock County,Madison County,TX,TX,0.0,4.2,False,False,False,False
+Lubbock County,Van Zandt County,TX,TX,0.0,1.5,False,False,False,True
+Lubbock County,Wharton County,TX,TX,0.1,9.1,True,True,False,True
+Lubbock County,Wood County,TX,TX,0.2,1.8,False,False,False,True
+Madison County,Van Zandt County,TX,TX,0.0,5.7,True,True,False,False
+Madison County,Wharton County,TX,TX,0.1,13.3,True,True,False,False
+Madison County,Wood County,TX,TX,0.2,2.4,False,False,False,False
+Marion County,Morris County,TX,TX,0.0,2.7,False,False,False,False
+Matagorda County,Maverick County,TX,TX,0.2,4.6,False,False,False,False
+Matagorda County,Robertson County,TX,TX,0.3,5.2,True,True,False,False
+Matagorda County,Travis County,TX,TX,0.2,8.3,True,True,True,False
+Matagorda County,Wise County,TX,TX,0.2,0.1,False,False,False,False
+Maverick County,Robertson County,TX,TX,0.5,9.8,True,False,False,False
+Maverick County,Travis County,TX,TX,0.0,12.9,True,True,True,True
+Maverick County,Wise County,TX,TX,0.0,4.5,False,False,False,True
+McCulloch County,Midland County,TX,TX,0.2,8.1,True,True,False,False
+McCulloch County,Montague County,TX,TX,0.4,1.1,False,False,False,False
+McCulloch County,Nueces County,TX,TX,0.0,7.7,True,True,False,False
+McCulloch County,Smith County,TX,TX,0.5,6.9,True,False,False,False
+McCulloch County,Tom Green County,TX,TX,0.3,5.0,True,False,False,False
+McCulloch County,Val Verde County,TX,TX,0.4,0.6,False,False,False,False
+McCulloch County,Wilbarger County,TX,TX,0.2,4.9,False,False,False,False
+McCulloch County,Williamson County,TX,TX,0.2,10.6,True,True,False,False
+McLennan County,Milam County,TX,TX,0.0,2.4,False,False,False,False
+McLennan County,Montgomery County,TX,TX,0.2,3.8,False,False,False,True
+McLennan County,Orange County,TX,TX,0.4,4.0,False,False,False,True
+McLennan County,Rains County,TX,TX,0.5,2.4,False,False,False,False
+McLennan County,Randall County,TX,TX,0.2,2.0,False,False,False,True
+McLennan County,Rockwall County,TX,TX,0.5,5.3,True,False,False,True
+McLennan County,Runnels County,TX,TX,0.2,8.6,True,True,False,False
+McLennan County,Scurry County,TX,TX,0.5,6.5,True,False,False,False
+McLennan County,Uvalde County,TX,TX,0.0,4.6,False,False,False,False
+McLennan County,Young County,TX,TX,0.5,7.7,True,False,False,False
+Medina County,Parker County,TX,TX,0.3,0.1,False,False,False,True
+Medina County,San Patricio County,TX,TX,0.2,0.1,False,False,False,True
+Midland County,Montague County,TX,TX,0.2,7.0,True,True,False,False
+Midland County,Nueces County,TX,TX,0.2,0.4,False,False,False,True
+Midland County,Smith County,TX,TX,0.3,1.2,False,False,False,True
+Midland County,Tom Green County,TX,TX,0.1,3.1,False,False,False,True
+Midland County,Val Verde County,TX,TX,0.2,7.5,True,True,False,False
+Midland County,Wilbarger County,TX,TX,0.0,3.2,False,False,False,False
+Midland County,Williamson County,TX,TX,0.4,2.5,False,False,False,True
+Milam County,Montgomery County,TX,TX,0.2,6.2,True,True,False,False
+Milam County,Orange County,TX,TX,0.4,1.6,False,False,False,False
+Milam County,Rains County,TX,TX,0.5,4.8,False,False,False,False
+Milam County,Randall County,TX,TX,0.2,4.4,False,False,False,False
+Milam County,Rockwall County,TX,TX,0.5,7.7,True,False,False,False
+Milam County,Runnels County,TX,TX,0.2,6.2,True,True,False,False
+Milam County,Scurry County,TX,TX,0.5,4.1,False,False,False,False
+Milam County,Uvalde County,TX,TX,0.0,2.2,False,False,False,False
+Milam County,Young County,TX,TX,0.5,5.3,True,False,False,False
+Montague County,Nueces County,TX,TX,0.4,6.6,True,True,False,False
+Montague County,Smith County,TX,TX,0.1,5.8,True,True,False,False
+Montague County,Tom Green County,TX,TX,0.1,3.9,False,False,False,False
+Montague County,Val Verde County,TX,TX,0.0,0.5,False,False,False,False
+Montague County,Wilbarger County,TX,TX,0.2,3.8,False,False,False,False
+Montgomery County,Randall County,TX,TX,0.0,1.8,False,False,False,True
+Montgomery County,Runnels County,TX,TX,0.4,12.4,True,True,False,False
+Montgomery County,Scurry County,TX,TX,0.3,10.3,True,True,False,False
+Montgomery County,Uvalde County,TX,TX,0.2,8.4,True,True,False,False
+Moore County,Newton County,TX,TX,0.4,20.3,True,True,False,False
+Moore County,Nolan County,TX,TX,0.0,7.9,True,True,False,False
+Moore County,Potter County,TX,TX,0.2,7.7,True,True,False,False
+Moore County,San Patricio County,TX,TX,0.5,5.7,True,False,False,False
+Nacogdoches County,Rusk County,TX,TX,0.1,1.9,False,False,False,True
+Nacogdoches County,Shelby County,TX,TX,0.4,0.8,False,False,False,False
+Nacogdoches County,Starr County,TX,TX,0.3,4.2,False,False,False,False
+Navarro County,Parker County,TX,TX,0.5,0.3,False,False,False,False
+Navarro County,Stephens County,TX,TX,0.2,10.3,True,True,False,False
+Navarro County,Titus County,TX,TX,0.1,1.6,False,False,False,False
+Navarro County,Walker County,TX,TX,0.3,1.8,False,False,False,False
+Navarro County,Wichita County,TX,TX,0.3,2.5,False,False,False,False
+Navarro County,Wilson County,TX,TX,0.3,0.5,False,False,False,False
+Newton County,Nolan County,TX,TX,0.4,12.4,True,True,False,False
+Newton County,Potter County,TX,TX,0.2,12.6,True,True,False,False
+Newton County,San Augustine County,TX,TX,0.5,2.6,False,False,False,False
+Nolan County,Potter County,TX,TX,0.2,0.2,False,False,False,False
+Nolan County,San Patricio County,TX,TX,0.5,2.2,False,False,False,False
+Nueces County,Smith County,TX,TX,0.5,0.8,False,False,False,True
+Nueces County,Tom Green County,TX,TX,0.3,2.7,False,False,False,True
+Nueces County,Val Verde County,TX,TX,0.4,7.1,True,True,False,False
+Nueces County,Wilbarger County,TX,TX,0.2,2.8,False,False,False,False
+Nueces County,Williamson County,TX,TX,0.2,2.9,False,False,False,True
+Orange County,Rains County,TX,TX,0.1,6.4,True,True,False,False
+Orange County,Rockwall County,TX,TX,0.1,9.3,True,True,True,True
+Orange County,Runnels County,TX,TX,0.2,4.6,False,False,False,False
+Orange County,Tarrant County,TX,TX,0.2,7.1,True,True,True,True
+Orange County,Taylor County,TX,TX,0.3,3.2,False,False,False,True
+Orange County,Upshur County,TX,TX,0.2,3.5,False,False,False,True
+Orange County,Uvalde County,TX,TX,0.4,0.6,False,False,False,False
+Orange County,Young County,TX,TX,0.1,3.7,False,False,False,False
+Palo Pinto County,Victoria County,TX,TX,0.4,8.4,True,True,False,False
+Palo Pinto County,Ward County,TX,TX,0.1,8.3,True,True,False,False
+Parker County,San Patricio County,TX,TX,0.5,0.2,False,False,False,True
+Parker County,Stephens County,TX,TX,0.3,10.0,True,True,False,False
+Pecos County,Terry County,TX,TX,0.1,3.4,False,False,False,False
+Pecos County,Washington County,TX,TX,0.1,0.9,False,False,False,False
+Polk County,Shelby County,TX,TX,0.4,10.3,True,True,False,False
+Polk County,Titus County,TX,TX,0.5,13.3,True,False,False,False
+Polk County,Walker County,TX,TX,0.3,9.9,True,True,False,True
+Polk County,Wichita County,TX,TX,0.3,9.2,True,True,False,True
+Polk County,Wilson County,TX,TX,0.3,12.2,True,True,False,False
+Rains County,Rockwall County,TX,TX,0.0,2.9,False,False,False,False
+Rains County,Runnels County,TX,TX,0.3,11.0,True,True,False,False
+Rains County,Tarrant County,TX,TX,0.1,0.7,False,False,False,False
+Rains County,Taylor County,TX,TX,0.2,3.2,False,False,False,False
+Rains County,Upshur County,TX,TX,0.1,9.9,True,True,False,False
+Rains County,Uvalde County,TX,TX,0.5,7.0,True,False,False,False
+Rains County,Young County,TX,TX,0.0,10.1,True,True,False,False
+Randall County,Runnels County,TX,TX,0.4,10.6,True,True,False,False
+Randall County,Scurry County,TX,TX,0.3,8.5,True,True,False,False
+Randall County,Uvalde County,TX,TX,0.2,6.6,True,True,False,False
+Robertson County,Scurry County,TX,TX,0.3,7.4,True,True,False,False
+Robertson County,Travis County,TX,TX,0.5,3.1,False,False,False,False
+Robertson County,Wise County,TX,TX,0.5,5.3,True,False,False,False
+Rockwall County,Runnels County,TX,TX,0.3,13.9,True,True,False,False
+Rockwall County,Tarrant County,TX,TX,0.1,2.2,False,False,False,True
+Rockwall County,Taylor County,TX,TX,0.2,6.1,True,True,False,True
+Rockwall County,Upshur County,TX,TX,0.1,12.8,True,True,True,True
+Rockwall County,Uvalde County,TX,TX,0.5,9.9,True,False,False,False
+Rockwall County,Young County,TX,TX,0.0,13.0,True,True,False,False
+Runnels County,Tarrant County,TX,TX,0.4,11.7,True,True,False,False
+Runnels County,Taylor County,TX,TX,0.5,7.8,True,False,False,False
+Runnels County,Upshur County,TX,TX,0.4,1.1,False,False,False,False
+Runnels County,Uvalde County,TX,TX,0.2,4.0,False,False,False,False
+Runnels County,Young County,TX,TX,0.3,0.9,False,False,False,False
+Rusk County,Shelby County,TX,TX,0.3,1.1,False,False,False,False
+Rusk County,Starr County,TX,TX,0.4,2.3,False,False,False,False
+Sabine County,Willacy County,TX,TX,0.4,2.0,False,False,False,False
+San Augustine County,Tyler County,TX,TX,0.4,12.8,True,True,False,False
+San Augustine County,Waller County,TX,TX,0.5,13.6,True,False,False,False
+Scurry County,Uvalde County,TX,TX,0.5,1.9,False,False,False,False
+Smith County,Tom Green County,TX,TX,0.2,1.9,False,False,False,True
+Smith County,Val Verde County,TX,TX,0.1,6.3,True,True,False,False
+Smith County,Wilbarger County,TX,TX,0.3,2.0,False,False,False,False
+Stephens County,Titus County,TX,TX,0.3,11.9,True,True,False,False
+Stephens County,Walker County,TX,TX,0.5,8.5,True,False,False,False
+Stephens County,Wichita County,TX,TX,0.5,7.8,True,False,False,False
+Stephens County,Wilson County,TX,TX,0.5,10.8,True,False,False,False
+Tarrant County,Taylor County,TX,TX,0.1,3.9,False,False,False,True
+Tarrant County,Upshur County,TX,TX,0.0,10.6,True,True,True,True
+Tarrant County,Williamson County,TX,TX,0.5,2.1,False,False,False,True
+Tarrant County,Young County,TX,TX,0.1,10.8,True,True,False,False
+Taylor County,Upshur County,TX,TX,0.1,6.7,True,True,False,True
+Taylor County,Williamson County,TX,TX,0.4,6.0,True,True,True,True
+Taylor County,Young County,TX,TX,0.2,6.9,True,True,False,False
+Terry County,Washington County,TX,TX,0.2,2.5,False,False,False,False
+Titus County,Walker County,TX,TX,0.2,3.4,False,False,False,False
+Titus County,Wichita County,TX,TX,0.2,4.1,False,False,False,False
+Titus County,Wilson County,TX,TX,0.2,1.1,False,False,False,False
+Tom Green County,Val Verde County,TX,TX,0.1,4.4,False,False,False,False
+Tom Green County,Wilbarger County,TX,TX,0.1,0.1,False,False,False,False
+Tom Green County,Williamson County,TX,TX,0.5,5.6,True,False,True,True
+Travis County,Wise County,TX,TX,0.0,8.4,True,True,True,True
+Tyler County,Waller County,TX,TX,0.1,0.8,False,False,False,False
+Upshur County,Williamson County,TX,TX,0.5,12.7,True,False,True,True
+Upshur County,Young County,TX,TX,0.1,0.2,False,False,False,False
+Uvalde County,Young County,TX,TX,0.5,3.1,False,False,False,False
+Val Verde County,Wilbarger County,TX,TX,0.2,4.3,False,False,False,False
+Van Zandt County,Wharton County,TX,TX,0.1,7.6,True,True,False,True
+Van Zandt County,Wood County,TX,TX,0.2,3.3,False,False,False,True
+Victoria County,Ward County,TX,TX,0.5,0.1,False,False,False,False
+Walker County,Wichita County,TX,TX,0.0,0.7,False,False,False,True
+Walker County,Wilson County,TX,TX,0.0,2.3,False,False,False,False
+Webb County,Wood County,TX,TX,0.5,0.8,False,False,False,True
+Wharton County,Wood County,TX,TX,0.3,10.9,True,True,False,True
+Wichita County,Wilson County,TX,TX,0.0,3.0,False,False,False,False
+Wilbarger County,Williamson County,TX,TX,0.4,5.7,True,True,False,False

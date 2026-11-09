@@ -1,0 +1,45 @@
+{
+  "schema": "dis-clinical-specification-review-inputs-v1",
+  "recorded_at": "2026-11-09T00:08:06.085568+00:00",
+  "reviewer": "/root/diagnostic_evidence",
+  "review_class": "INDEPENDENT_AI_DOCUMENT_WALKTHROUGH",
+  "repository_head_at_review": "1969e2e7af73f8ba65ab48fe1e761a1a9f4222b0",
+  "modified_or_untracked_files_are_hash_bound_not_commit_bound": true,
+  "files": [
+    {
+      "path": "docs/dis/EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md",
+      "sha256": "8bf20eef2481eedbad00f57af9028d78b21540d7cfb4ca8f94d1dc6abe6fba45",
+      "bytes": 26945,
+      "reviewed_snapshot": "reviewed_sources/docs/dis/EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md"
+    },
+    {
+      "path": "docs/dis/clinical-pathway-evaluation/clinical_pathway_acceptance.json",
+      "sha256": "b031c35ec11178b0a7dbeb8b3244d9d28f78f72a459b4e1be2dbb1f6b5df0b44",
+      "bytes": 5411,
+      "reviewed_snapshot": "reviewed_sources/docs/dis/clinical-pathway-evaluation/clinical_pathway_acceptance.json"
+    },
+    {
+      "path": "docs/dis/clinical-pathway-evaluation/clinical_pathway_event_dictionary.csv",
+      "sha256": "d72bd62184b85fdcf261092f5955045d64f4e3363cc04a9491a8c67df0e4d5e6",
+      "bytes": 5259,
+      "reviewed_snapshot": "reviewed_sources/docs/dis/clinical-pathway-evaluation/clinical_pathway_event_dictionary.csv"
+    },
+    {
+      "path": "docs/dis/clinical-pathway-evaluation/clinical_pathway_tabletop.json",
+      "sha256": "4344fd8a2104e1743a98a05d22b077bea258114c2321f0c84f2030e72b1ae3f6",
+      "bytes": 3640,
+      "reviewed_snapshot": "reviewed_sources/docs/dis/clinical-pathway-evaluation/clinical_pathway_tabletop.json"
+    },
+    {
+      "path": "apps/dis-platform/lib/research-workflow.ts",
+      "sha256": "4c622ef4e5480eb438634ae15ba7d9ab2cd43106742e88df83a9471c1ac50d7f",
+      "bytes": 15652,
+      "reviewed_snapshot": "reviewed_sources/apps/dis-platform/lib/research-workflow.ts",
+      "review_scope": "Static inspection of schema and builder condition restriction only; no runtime test executed"
+    }
+  ],
+  "clinical_review_qualified": false,
+  "live_workflow_test": false,
+  "clinical_patient_data": false,
+  "root_integration_files_modified_by_reviewer": false
+}

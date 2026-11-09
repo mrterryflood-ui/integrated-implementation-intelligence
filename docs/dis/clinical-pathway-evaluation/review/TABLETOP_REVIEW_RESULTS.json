@@ -1,0 +1,181 @@
+{
+  "schema": "dis-independent-clinical-tabletop-review-v1",
+  "input_sha256": "4344fd8a2104e1743a98a05d22b077bea258114c2321f0c84f2030e72b1ae3f6",
+  "review_class": "DOCUMENT_REVIEW_ONLY",
+  "synthetic_scenarios_reviewed": 10,
+  "clinical_cases_executed": null,
+  "clinical_cases_execution_state": "NOT_EXECUTED",
+  "clinical_pathway_accepted": false,
+  "cases": [
+    {
+      "id": "CP-T01",
+      "input_situation": "An abnormal stool screening result is followed by a referral order and a repeat negative stool test; no colonoscopy completion evidence is available.",
+      "input_required_boundary": "Keep diagnostic evaluation unresolved; a referral or repeat stool result does not verify indicated diagnostic completion.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Guidance-concordant unresolved diagnostic evaluation",
+        "reasoning": "Repeat stool testing and referral alone do not verify the indicated follow-up. Procedure adequacy, results and follow-through require the clinical rubric.",
+        "limitation_or_required_future_check": "Clinical completion and diagnostic-question closure remain distinct.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T02",
+      "input_situation": "A person below usual screening eligibility age presents with concerning symptoms.",
+      "input_required_boundary": "Route to qualified clinical assessment using symptomatic guidance; do not use average-risk screening age to dismiss the concern.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Screening and symptomatic cohorts correctly separated",
+        "reasoning": "Preserve symptomatic assessment irrespective of routine screening age; do not select a test or urgency autonomously.",
+        "limitation_or_required_future_check": "Do not remove the person from a symptomatic denominator because screening criteria are unmet.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T03",
+      "input_situation": "A person has persistent pelvic symptoms and functional impact despite a normal ultrasound.",
+      "input_required_boundary": "Preserve differential and reassessment; normal imaging alone cannot close suspected endometriosis.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Negative imaging does not automatically close persistent symptoms",
+        "reasoning": "Preserve differential, symptoms/function and clinician-governed reassessment/referral.",
+        "limitation_or_required_future_check": "A completed ultrasound does not imply episode resolution.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T04",
+      "input_situation": "A person declines an offered action after an accessible discussion and wants later reassessment.",
+      "input_required_boundary": "Record informed choice and follow-up preferences; do not label diagnostic evaluation complete or infer harm.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Informed choice retained without fabricated completion or harm",
+        "reasoning": "Record reassessment preference and subsequent choice changes without coercion.",
+        "limitation_or_required_future_check": "Keep the prespecified eligible cohort; decline is not automatically permanent competing risk.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T05",
+      "input_situation": "A patient reports an outside procedure but no authorized result or receiving-team handoff has been reconciled.",
+      "input_required_boundary": "Retain patient report as evidence and seek permitted reconciliation; distinguish reported completion from verified completion and transfer acceptance.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Reported outside care retained separately from verified completion",
+        "reasoning": "Authorized reconciliation and receiving-team acceptance remain distinct from actual care and data visibility.",
+        "limitation_or_required_future_check": "Transfer alone is not an endpoint-precluding event; corrected fields now preserve that distinction.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T06",
+      "input_situation": "Patient-reported onset predates the first observable record by years and the onset date is uncertain.",
+      "input_required_boundary": "Retain both times and uncertainty; do not set unknown onset to zero or measure delay only among confirmed diagnoses.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Onset uncertainty and observation boundary preserved",
+        "reasoning": "Retain recalled onset interval and first recorded presentation separately.",
+        "limitation_or_required_future_check": "Do not use only confirmed cases or silently impute onset/time zero.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T07",
+      "input_situation": "A public research case is proposed as the destination for identifiable clinical information.",
+      "input_required_boundary": "Do not ingest; require the accepted clinical data boundary and actual local authority.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Public workspace prohibition is appropriate",
+        "reasoning": "No clinical identifiers should be ingested into public research casework.",
+        "limitation_or_required_future_check": "A document rule and public-aggregate checkbox do not establish a witnessed technical privacy control.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T08",
+      "input_situation": "Outreach increases while the receiving service has no additional capacity and the unresolved queue grows.",
+      "input_required_boundary": "Measure capacity and burden; revisit the intervention and resources rather than infer benefit from additional alerts or referrals.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Capacity and burden are necessary balancing measures",
+        "reasoning": "Backlog and displacement must inform resources/adaptation; do not count alerts as benefit.",
+        "limitation_or_required_future_check": "Comparator staffing/contact/capacity must be balanced or named intervention components.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T09",
+      "input_situation": "An urgent concern arises while a research prompt is waiting for review.",
+      "input_required_boundary": "Use the established clinical triage and responsible covering team; the research queue cannot replace urgent care governance.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Existing clinical triage remains authoritative",
+        "reasoning": "Use responsible covering clinical service; do not suspend ordinary care when research-enabled actions stop.",
+        "limitation_or_required_future_check": "No urgent response, handoff or recovery was executed in this review.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    },
+    {
+      "id": "CP-T10",
+      "input_situation": "An endometriosis case is entered through the current CRC-specific research builder.",
+      "input_required_boundary": "Reject this as a valid condition-specific implementation; do not attach a CRC baseline or claim an accepted endometriosis workflow.",
+      "observed_review": {
+        "reviewer": "/root/diagnostic_evidence",
+        "review_type": "SYNTHETIC_DOCUMENT_WALKTHROUGH",
+        "required_boundary_concordant_with_final_protocol": true,
+        "finding": "Document restriction is correct; runtime guard not demonstrated",
+        "reasoning": "Static builder always attaches the CRC baseline and lacks a typed condition discriminator.",
+        "limitation_or_required_future_check": "No live rejection test occurred; do not represent an endometriosis workflow as implemented or accepted.",
+        "reviewed_at": "2026-11-09T00:12:57.930035+00:00",
+        "live_case_or_product_execution": "NOT_EXECUTED",
+        "qualified_human_clinical_review": "NOT_EXECUTED",
+        "patient_outcome": null
+      }
+    }
+  ]
+}

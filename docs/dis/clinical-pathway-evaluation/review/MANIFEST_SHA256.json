@@ -1,0 +1,70 @@
+{
+  "schema": "dis-clinical-review-handoff-manifest-v1",
+  "created_at": "2026-11-09T00:12:57.930035+00:00",
+  "files": {
+    "CLINICAL_SPECIFICATION_REVIEW_RECEIPT.json": {
+      "sha256": "cbd0fff8df1569df7a4bc82f7149e213c968c0795114562e9f90a3390b785555",
+      "bytes": 6644
+    },
+    "GUIDANCE_VERIFICATION_RECEIPT.json": {
+      "sha256": "33e399f307265b43364ef5f85b04ee2944dba2c5ec953ffae5777a7bc6219dc4",
+      "bytes": 2741
+    },
+    "INDEPENDENT_CLINICAL_SPECIFICATION_REVIEW_2026-11-09.md": {
+      "sha256": "1fc1287c5ef75f53efbe50e16271fee37fa4e0fe1d783c5a8b9384aac2c4805c",
+      "bytes": 21025
+    },
+    "POLICY_SCOPE_RECEIPT.json": {
+      "sha256": "9cdad07c684dff92c95837389979eb5ba037ca1ace57cd1123bc7033f11937e9",
+      "bytes": 3512
+    },
+    "REVIEW_INPUT_MANIFEST.json": {
+      "sha256": "f57a53e47a59c50ec029b0d513739fc5d7e953ac1b5cc32f9edde69607676fbb",
+      "bytes": 2234
+    },
+    "TABLETOP_REVIEW_RESULTS.json": {
+      "sha256": "39b6b78f4fb3c767154ffdca18b279f2c62596f40c93461b304012de58ab0c28",
+      "bytes": 11057
+    },
+    "reviewed_sources/apps/dis-platform/lib/research-workflow.ts": {
+      "sha256": "4c622ef4e5480eb438634ae15ba7d9ab2cd43106742e88df83a9471c1ac50d7f",
+      "bytes": 15652
+    },
+    "reviewed_sources/docs/dis/EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md": {
+      "sha256": "8bf20eef2481eedbad00f57af9028d78b21540d7cfb4ca8f94d1dc6abe6fba45",
+      "bytes": 26945
+    },
+    "reviewed_sources/docs/dis/clinical-pathway-evaluation/clinical_pathway_acceptance.json": {
+      "sha256": "b031c35ec11178b0a7dbeb8b3244d9d28f78f72a459b4e1be2dbb1f6b5df0b44",
+      "bytes": 5411
+    },
+    "reviewed_sources/docs/dis/clinical-pathway-evaluation/clinical_pathway_event_dictionary.csv": {
+      "sha256": "d72bd62184b85fdcf261092f5955045d64f4e3363cc04a9491a8c67df0e4d5e6",
+      "bytes": 5259
+    },
+    "reviewed_sources/docs/dis/clinical-pathway-evaluation/clinical_pathway_tabletop.json": {
+      "sha256": "4344fd8a2104e1743a98a05d22b077bea258114c2321f0c84f2030e72b1ae3f6",
+      "bytes": 3640
+    },
+    "reviewed_sources_final/apps/dis-platform/lib/research-workflow.ts": {
+      "sha256": "4c622ef4e5480eb438634ae15ba7d9ab2cd43106742e88df83a9471c1ac50d7f",
+      "bytes": 15652
+    },
+    "reviewed_sources_final/docs/dis/EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOSURE-PROTOCOL-2026-11-07.md": {
+      "sha256": "dccc6c36f5713810b312af6b2e857c43765449af2aac2ff18a68d5d4441b444d",
+      "bytes": 28653
+    },
+    "reviewed_sources_final/docs/dis/clinical-pathway-evaluation/clinical_pathway_acceptance.json": {
+      "sha256": "b031c35ec11178b0a7dbeb8b3244d9d28f78f72a459b4e1be2dbb1f6b5df0b44",
+      "bytes": 5411
+    },
+    "reviewed_sources_final/docs/dis/clinical-pathway-evaluation/clinical_pathway_event_dictionary.csv": {
+      "sha256": "32f89aac6f6f4b290997bf46f934d0c6b48ff946db84438d10a5bfbf565cd410",
+      "bytes": 7628
+    },
+    "reviewed_sources_final/docs/dis/clinical-pathway-evaluation/clinical_pathway_tabletop.json": {
+      "sha256": "4344fd8a2104e1743a98a05d22b077bea258114c2321f0c84f2030e72b1ae3f6",
+      "bytes": 3640
+    }
+  }
+}

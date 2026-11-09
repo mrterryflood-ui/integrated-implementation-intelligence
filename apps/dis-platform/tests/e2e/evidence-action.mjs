@@ -41,7 +41,7 @@ for(const [label,engine,device] of [["desktop",chromium,{viewport:{width:1280,he
   await page.getByText("Group B (synthetic): -10.0 pp",{exact:true}).waitFor();
   await page.getByRole("button",{name:"Preview complete investigation record"}).click();
   await page.getByText(/Explicit public-aggregate confirmation is required/).waitFor();
-  await page.getByRole("checkbox",{name:/I reviewed this supplement/}).check();
+  await page.getByRole("checkbox",{name:/I reviewed this investigation and supplement/}).check();
   await page.getByRole("button",{name:"Preview complete investigation record"}).click();
   const archive=page.locator("#private-case-heading").locator("..").locator("pre");
   const snapshot=JSON.parse(await archive.innerText());

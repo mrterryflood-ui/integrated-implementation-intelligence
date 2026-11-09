@@ -1,0 +1,1146 @@
+{
+  "schema": "dis-independent-denominator-adjudication-v1",
+  "analysis_scope": "DESCRIPTIVE_PUBLIC_AGGREGATE_ONLY",
+  "provenance": {
+    "archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+    "manifest_entries_verified": 18,
+    "html_csv_cells_verified": 4368,
+    "source_receipts": {
+      "hinds_all": {
+        "sha256": "83484db2208ea5914aa588e19118ca150645d69fba35316aa9688198ce2f1aa6",
+        "county_rows": 82
+      },
+      "hinds_late": {
+        "sha256": "130843a055b089fb0471ab559fb214ee3b7efda90b18f94727ef8e09d64226ca",
+        "county_rows": 82
+      },
+      "harris_all": {
+        "sha256": "aec6d2b4d7e9c7ac7ddbf2a30c7d700286ac6eab4e8a0ff88ca4a1c983feb456",
+        "county_rows": 254
+      },
+      "harris_late": {
+        "sha256": "a04b3b49759d680ccd4bb508e5bd68713e1a6516bb9c8c951c5c21a623522af3",
+        "county_rows": 254
+      }
+    },
+    "archive_reported_acquisition_revision": "73455a439f950ffa0644d5714843b06b173f029a",
+    "acquisition_runtime_revision_adjudicated_by_this_script": false,
+    "sources_acquired_at": "2026-11-07T20:37:41.234665+00:00"
+  },
+  "denominator": {
+    "assumption": "5-year period; nearest integer annual average; nearest 0.1pp share; same numerator across tables",
+    "complete_counties_checked": 254,
+    "same_denominator_rounding_incompatible_counties": [],
+    "unknown_stage_rule_identified": false,
+    "autopsy_or_dco_exclusion_rule_identified": false,
+    "targets": {
+      "Hinds County": {
+        "same_all_case_denominator_compatible_pairs": 3,
+        "arithmetic_witness_without_exclusion": {
+          "all_period_count": 589,
+          "late_period_count": 375,
+          "share_denominator": 589,
+          "excluded_count": 0
+        },
+        "arithmetic_witness_with_exclusion": {
+          "all_period_count": 588,
+          "late_period_count": 373,
+          "share_denominator": 586,
+          "excluded_count": 2
+        },
+        "maximum_compatible_exclusion_under_assumptions": 6,
+        "are_recovered_counts": false,
+        "are_estimated_unknown_stage_counts": false,
+        "meaning": "Nonidentification counterexample under shared numerator and nearest rounding, not a source selection rule"
+      },
+      "Harris County": {
+        "same_all_case_denominator_compatible_pairs": 25,
+        "arithmetic_witness_without_exclusion": {
+          "all_period_count": 8658,
+          "late_period_count": 5488,
+          "share_denominator": 8658,
+          "excluded_count": 0
+        },
+        "arithmetic_witness_with_exclusion": {
+          "all_period_count": 8658,
+          "late_period_count": 5488,
+          "share_denominator": 8650,
+          "excluded_count": 8
+        },
+        "maximum_compatible_exclusion_under_assumptions": 12,
+        "are_recovered_counts": false,
+        "are_estimated_unknown_stage_counts": false,
+        "meaning": "Nonidentification counterexample under shared numerator and nearest rounding, not a source selection rule"
+      }
+    }
+  },
+  "age_partition": {
+    "standard_population_total": 274633642,
+    "standard_85_89": 2678567,
+    "standard_90_plus": 1580606,
+    "common_partition_specifiable": "19 groups, with 85+ merged",
+    "county_common_partition_rates_identifiable_from_retained_tables": false,
+    "required_data": [
+      "Age-specific late-stage counts for all 20 groups",
+      "Matching age-specific person-years for the same county, race, sex and 2019\u20132023 period",
+      "Exact stage/exclusion and source revision definition",
+      "Agency uncertainty estimator and standard-population identity"
+    ],
+    "collapse_rule": "Sum 85\u201389 and 90+ event counts and person-years, then calculate the combined rate; never average their published rates",
+    "necessary_abs_top_age_rate_gap_to_explain_6_only_by_partition": 615.1803751782203,
+    "necessary_abs_top_age_rate_gap_for_5_9_rounding_infimum": 604.92736892525,
+    "bound_is_sufficient_or_empirical": false,
+    "signed_fixtures": [
+      {
+        "observed_85_89_person_time_fraction_fixture": 0.5,
+        "rate85_fixture": 200,
+        "rate90_fixture": 100,
+        "R20_minus_R19": 0.19989557579402453,
+        "observed_patient_data": false
+      },
+      {
+        "observed_85_89_person_time_fraction_fixture": 0.8,
+        "rate85_fixture": 200,
+        "rate90_fixture": 100,
+        "R20_minus_R19": -0.26536129903560757,
+        "observed_patient_data": false
+      },
+      {
+        "observed_85_89_person_time_fraction_fixture": 0.628893684290354,
+        "rate85_fixture": 200,
+        "rate90_fixture": 100,
+        "R20_minus_R19": 0.0,
+        "observed_patient_data": false
+      },
+      {
+        "observed_85_89_person_time_fraction_fixture": 0.5,
+        "rate85_fixture": 150,
+        "rate90_fixture": 150,
+        "R20_minus_R19": 0.0,
+        "observed_patient_data": false
+      }
+    ],
+    "adjusted_hinds_rate": null,
+    "adjusted_harris_rate": null
+  },
+  "completeness": {
+    "MS": {
+      "ALL": {
+        "eligible_counties": 82,
+        "complete_counties": 75,
+        "incomplete_counties": 7,
+        "incomplete_fraction": 0.08536585365853659,
+        "all_and_late_suppressed": 2,
+        "late_only_suppressed": 5
+      },
+      "Rural": {
+        "eligible_counties": 62,
+        "complete_counties": 57,
+        "incomplete_counties": 5,
+        "incomplete_fraction": 0.08064516129032258,
+        "all_and_late_suppressed": 2,
+        "late_only_suppressed": 3
+      },
+      "Urban": {
+        "eligible_counties": 20,
+        "complete_counties": 18,
+        "incomplete_counties": 2,
+        "incomplete_fraction": 0.1,
+        "all_and_late_suppressed": 0,
+        "late_only_suppressed": 2
+      }
+    },
+    "TX": {
+      "ALL": {
+        "eligible_counties": 254,
+        "complete_counties": 179,
+        "incomplete_counties": 75,
+        "incomplete_fraction": 0.2952755905511811,
+        "all_and_late_suppressed": 60,
+        "late_only_suppressed": 15
+      },
+      "Rural": {
+        "eligible_counties": 168,
+        "complete_counties": 103,
+        "incomplete_counties": 65,
+        "incomplete_fraction": 0.3869047619047619,
+        "all_and_late_suppressed": 50,
+        "late_only_suppressed": 15
+      },
+      "Urban": {
+        "eligible_counties": 86,
+        "complete_counties": 76,
+        "incomplete_counties": 10,
+        "incomplete_fraction": 0.11627906976744186,
+        "all_and_late_suppressed": 10,
+        "late_only_suppressed": 0
+      }
+    }
+  },
+  "annual_count_filter_sensitivity": {
+    "MS": {
+      "0": {
+        "0.3": {
+          "county_count": 75,
+          "rural_count": 57,
+          "near_share_pairs": 84,
+          "large_rate_gap_pairs": 42,
+          "unique_counties_in_large_gap_pairs": 49,
+          "rounding_robust_large_gap_pairs": 33,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 75,
+          "rural_count": 57,
+          "near_share_pairs": 130,
+          "large_rate_gap_pairs": 65,
+          "unique_counties_in_large_gap_pairs": 58,
+          "rounding_robust_large_gap_pairs": 54,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 75,
+          "rural_count": 57,
+          "near_share_pairs": 238,
+          "large_rate_gap_pairs": 129,
+          "unique_counties_in_large_gap_pairs": 67,
+          "rounding_robust_large_gap_pairs": 118,
+          "large_gap_pairs_with_disjoint_intervals": 4,
+          "independent_observations": false
+        }
+      },
+      "4": {
+        "0.3": {
+          "county_count": 74,
+          "rural_count": 56,
+          "near_share_pairs": 84,
+          "large_rate_gap_pairs": 42,
+          "unique_counties_in_large_gap_pairs": 49,
+          "rounding_robust_large_gap_pairs": 33,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 74,
+          "rural_count": 56,
+          "near_share_pairs": 130,
+          "large_rate_gap_pairs": 65,
+          "unique_counties_in_large_gap_pairs": 58,
+          "rounding_robust_large_gap_pairs": 54,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 74,
+          "rural_count": 56,
+          "near_share_pairs": 238,
+          "large_rate_gap_pairs": 129,
+          "unique_counties_in_large_gap_pairs": 67,
+          "rounding_robust_large_gap_pairs": 118,
+          "large_gap_pairs_with_disjoint_intervals": 4,
+          "independent_observations": false
+        }
+      },
+      "8": {
+        "0.3": {
+          "county_count": 52,
+          "rural_count": 36,
+          "near_share_pairs": 56,
+          "large_rate_gap_pairs": 25,
+          "unique_counties_in_large_gap_pairs": 30,
+          "rounding_robust_large_gap_pairs": 19,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 52,
+          "rural_count": 36,
+          "near_share_pairs": 84,
+          "large_rate_gap_pairs": 37,
+          "unique_counties_in_large_gap_pairs": 32,
+          "rounding_robust_large_gap_pairs": 31,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 52,
+          "rural_count": 36,
+          "near_share_pairs": 155,
+          "large_rate_gap_pairs": 76,
+          "unique_counties_in_large_gap_pairs": 35,
+          "rounding_robust_large_gap_pairs": 66,
+          "large_gap_pairs_with_disjoint_intervals": 3,
+          "independent_observations": false
+        }
+      },
+      "10": {
+        "0.3": {
+          "county_count": 40,
+          "rural_count": 25,
+          "near_share_pairs": 29,
+          "large_rate_gap_pairs": 14,
+          "unique_counties_in_large_gap_pairs": 17,
+          "rounding_robust_large_gap_pairs": 11,
+          "large_gap_pairs_with_disjoint_intervals": 1,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 40,
+          "rural_count": 25,
+          "near_share_pairs": 47,
+          "large_rate_gap_pairs": 22,
+          "unique_counties_in_large_gap_pairs": 21,
+          "rounding_robust_large_gap_pairs": 17,
+          "large_gap_pairs_with_disjoint_intervals": 1,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 40,
+          "rural_count": 25,
+          "near_share_pairs": 84,
+          "large_rate_gap_pairs": 42,
+          "unique_counties_in_large_gap_pairs": 26,
+          "rounding_robust_large_gap_pairs": 37,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        }
+      },
+      "16": {
+        "0.3": {
+          "county_count": 15,
+          "rural_count": 6,
+          "near_share_pairs": 3,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 15,
+          "rural_count": 6,
+          "near_share_pairs": 4,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 15,
+          "rural_count": 6,
+          "near_share_pairs": 8,
+          "large_rate_gap_pairs": 1,
+          "unique_counties_in_large_gap_pairs": 2,
+          "rounding_robust_large_gap_pairs": 1,
+          "large_gap_pairs_with_disjoint_intervals": 1,
+          "independent_observations": false
+        }
+      },
+      "25": {
+        "0.3": {
+          "county_count": 7,
+          "rural_count": 1,
+          "near_share_pairs": 1,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 7,
+          "rural_count": 1,
+          "near_share_pairs": 1,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 7,
+          "rural_count": 1,
+          "near_share_pairs": 3,
+          "large_rate_gap_pairs": 1,
+          "unique_counties_in_large_gap_pairs": 2,
+          "rounding_robust_large_gap_pairs": 1,
+          "large_gap_pairs_with_disjoint_intervals": 1,
+          "independent_observations": false
+        }
+      },
+      "50": {
+        "0.3": {
+          "county_count": 4,
+          "rural_count": 0,
+          "near_share_pairs": 0,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 4,
+          "rural_count": 0,
+          "near_share_pairs": 0,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 4,
+          "rural_count": 0,
+          "near_share_pairs": 0,
+          "large_rate_gap_pairs": 0,
+          "unique_counties_in_large_gap_pairs": 0,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 0,
+          "independent_observations": false
+        }
+      }
+    },
+    "TX": {
+      "0": {
+        "0.3": {
+          "county_count": 179,
+          "rural_count": 103,
+          "near_share_pairs": 551,
+          "large_rate_gap_pairs": 234,
+          "unique_counties_in_large_gap_pairs": 135,
+          "rounding_robust_large_gap_pairs": 159,
+          "large_gap_pairs_with_disjoint_intervals": 39,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 179,
+          "rural_count": 103,
+          "near_share_pairs": 844,
+          "large_rate_gap_pairs": 377,
+          "unique_counties_in_large_gap_pairs": 153,
+          "rounding_robust_large_gap_pairs": 295,
+          "large_gap_pairs_with_disjoint_intervals": 63,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 179,
+          "rural_count": 103,
+          "near_share_pairs": 1609,
+          "large_rate_gap_pairs": 738,
+          "unique_counties_in_large_gap_pairs": 171,
+          "rounding_robust_large_gap_pairs": 649,
+          "large_gap_pairs_with_disjoint_intervals": 117,
+          "independent_observations": false
+        }
+      },
+      "4": {
+        "0.3": {
+          "county_count": 173,
+          "rural_count": 97,
+          "near_share_pairs": 535,
+          "large_rate_gap_pairs": 224,
+          "unique_counties_in_large_gap_pairs": 132,
+          "rounding_robust_large_gap_pairs": 151,
+          "large_gap_pairs_with_disjoint_intervals": 39,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 173,
+          "rural_count": 97,
+          "near_share_pairs": 816,
+          "large_rate_gap_pairs": 361,
+          "unique_counties_in_large_gap_pairs": 146,
+          "rounding_robust_large_gap_pairs": 283,
+          "large_gap_pairs_with_disjoint_intervals": 63,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 173,
+          "rural_count": 97,
+          "near_share_pairs": 1554,
+          "large_rate_gap_pairs": 709,
+          "unique_counties_in_large_gap_pairs": 167,
+          "rounding_robust_large_gap_pairs": 624,
+          "large_gap_pairs_with_disjoint_intervals": 117,
+          "independent_observations": false
+        }
+      },
+      "8": {
+        "0.3": {
+          "county_count": 119,
+          "rural_count": 51,
+          "near_share_pairs": 337,
+          "large_rate_gap_pairs": 130,
+          "unique_counties_in_large_gap_pairs": 84,
+          "rounding_robust_large_gap_pairs": 87,
+          "large_gap_pairs_with_disjoint_intervals": 34,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 119,
+          "rural_count": 51,
+          "near_share_pairs": 496,
+          "large_rate_gap_pairs": 199,
+          "unique_counties_in_large_gap_pairs": 97,
+          "rounding_robust_large_gap_pairs": 165,
+          "large_gap_pairs_with_disjoint_intervals": 51,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 119,
+          "rural_count": 51,
+          "near_share_pairs": 919,
+          "large_rate_gap_pairs": 374,
+          "unique_counties_in_large_gap_pairs": 103,
+          "rounding_robust_large_gap_pairs": 329,
+          "large_gap_pairs_with_disjoint_intervals": 95,
+          "independent_observations": false
+        }
+      },
+      "10": {
+        "0.3": {
+          "county_count": 101,
+          "rural_count": 37,
+          "near_share_pairs": 250,
+          "large_rate_gap_pairs": 97,
+          "unique_counties_in_large_gap_pairs": 67,
+          "rounding_robust_large_gap_pairs": 63,
+          "large_gap_pairs_with_disjoint_intervals": 31,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 101,
+          "rural_count": 37,
+          "near_share_pairs": 368,
+          "large_rate_gap_pairs": 139,
+          "unique_counties_in_large_gap_pairs": 82,
+          "rounding_robust_large_gap_pairs": 118,
+          "large_gap_pairs_with_disjoint_intervals": 45,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 101,
+          "rural_count": 37,
+          "near_share_pairs": 687,
+          "large_rate_gap_pairs": 265,
+          "unique_counties_in_large_gap_pairs": 89,
+          "rounding_robust_large_gap_pairs": 228,
+          "large_gap_pairs_with_disjoint_intervals": 80,
+          "independent_observations": false
+        }
+      },
+      "16": {
+        "0.3": {
+          "county_count": 72,
+          "rural_count": 16,
+          "near_share_pairs": 140,
+          "large_rate_gap_pairs": 45,
+          "unique_counties_in_large_gap_pairs": 43,
+          "rounding_robust_large_gap_pairs": 30,
+          "large_gap_pairs_with_disjoint_intervals": 22,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 72,
+          "rural_count": 16,
+          "near_share_pairs": 207,
+          "large_rate_gap_pairs": 63,
+          "unique_counties_in_large_gap_pairs": 48,
+          "rounding_robust_large_gap_pairs": 51,
+          "large_gap_pairs_with_disjoint_intervals": 33,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 72,
+          "rural_count": 16,
+          "near_share_pairs": 407,
+          "large_rate_gap_pairs": 129,
+          "unique_counties_in_large_gap_pairs": 61,
+          "rounding_robust_large_gap_pairs": 109,
+          "large_gap_pairs_with_disjoint_intervals": 59,
+          "independent_observations": false
+        }
+      },
+      "25": {
+        "0.3": {
+          "county_count": 49,
+          "rural_count": 2,
+          "near_share_pairs": 73,
+          "large_rate_gap_pairs": 17,
+          "unique_counties_in_large_gap_pairs": 24,
+          "rounding_robust_large_gap_pairs": 9,
+          "large_gap_pairs_with_disjoint_intervals": 11,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 49,
+          "rural_count": 2,
+          "near_share_pairs": 119,
+          "large_rate_gap_pairs": 24,
+          "unique_counties_in_large_gap_pairs": 26,
+          "rounding_robust_large_gap_pairs": 18,
+          "large_gap_pairs_with_disjoint_intervals": 16,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 49,
+          "rural_count": 2,
+          "near_share_pairs": 224,
+          "large_rate_gap_pairs": 42,
+          "unique_counties_in_large_gap_pairs": 31,
+          "rounding_robust_large_gap_pairs": 34,
+          "large_gap_pairs_with_disjoint_intervals": 29,
+          "independent_observations": false
+        }
+      },
+      "50": {
+        "0.3": {
+          "county_count": 25,
+          "rural_count": 0,
+          "near_share_pairs": 27,
+          "large_rate_gap_pairs": 2,
+          "unique_counties_in_large_gap_pairs": 4,
+          "rounding_robust_large_gap_pairs": 0,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "0.5": {
+          "county_count": 25,
+          "rural_count": 0,
+          "near_share_pairs": 42,
+          "large_rate_gap_pairs": 2,
+          "unique_counties_in_large_gap_pairs": 4,
+          "rounding_robust_large_gap_pairs": 2,
+          "large_gap_pairs_with_disjoint_intervals": 2,
+          "independent_observations": false
+        },
+        "1.0": {
+          "county_count": 25,
+          "rural_count": 0,
+          "near_share_pairs": 76,
+          "large_rate_gap_pairs": 6,
+          "unique_counties_in_large_gap_pairs": 9,
+          "rounding_robust_large_gap_pairs": 4,
+          "large_gap_pairs_with_disjoint_intervals": 6,
+          "independent_observations": false
+        }
+      }
+    }
+  },
+  "retained_large_gap_pairs_at_annual16_sharewindow0_5": {
+    "MS": [],
+    "TX": [
+      {
+        "county_a": "Anderson County",
+        "county_b": "Chambers County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 6.9,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Atascosa County",
+        "county_b": "Harris County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 9.2,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Atascosa County",
+        "county_b": "Jim Wells County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 6.4,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Atascosa County",
+        "county_b": "Travis County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 11.7,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Bastrop County",
+        "county_b": "Cooke County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 6.8,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Brazoria County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 8.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Brazos County",
+        "county_b": "Chambers County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 9.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Burnet County",
+        "county_b": "Rockwall County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 6.4,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Cherokee County",
+        "county_b": "Ector County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 11.2,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Collin County",
+        "county_b": "Kaufman County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 6.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Collin County",
+        "county_b": "Tom Green County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 6.5,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Comal County",
+        "county_b": "Polk County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 16.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Comal County",
+        "county_b": "Walker County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 6.4,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Comal County",
+        "county_b": "Wichita County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 7.1,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Cooke County",
+        "county_b": "Ellis County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 8.8,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Dallas County",
+        "county_b": "Henderson County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 5.4,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Dallas County",
+        "county_b": "Jim Wells County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 16.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Dallas County",
+        "county_b": "Maverick County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 11.1,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Dallas County",
+        "county_b": "Wise County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 6.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Denton County",
+        "county_b": "Smith County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 5.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Denton County",
+        "county_b": "Tom Green County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 7.5,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Ector County",
+        "county_b": "Liberty County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 5.0,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Galveston County",
+        "county_b": "Wharton County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 10.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Hardin County",
+        "county_b": "Wharton County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 12.0,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Harris County",
+        "county_b": "Jim Wells County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 15.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Harris County",
+        "county_b": "Maverick County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 10.4,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Harris County",
+        "county_b": "Wise County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 5.9,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Hays County",
+        "county_b": "Kaufman County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 5.0,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Hays County",
+        "county_b": "Taylor County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 5.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Hays County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 12.0,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Henderson County",
+        "county_b": "Montgomery County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 7.0,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Henderson County",
+        "county_b": "Randall County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 5.2,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Hunt County",
+        "county_b": "Jim Wells County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 12.5,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Hunt County",
+        "county_b": "Maverick County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 7.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Hunt County",
+        "county_b": "Travis County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 5.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Jefferson County",
+        "county_b": "Orange County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 5.2,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Jefferson County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 8.7,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Jim Wells County",
+        "county_b": "Johnson County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 12.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Jim Wells County",
+        "county_b": "Maverick County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 5.2,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Jim Wells County",
+        "county_b": "Travis County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 18.1,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Jim Wells County",
+        "county_b": "Wise County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 9.7,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Johnson County",
+        "county_b": "Maverick County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 7.4,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Johnson County",
+        "county_b": "Travis County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 5.5,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Kaufman County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 7.0,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Kaufman County",
+        "county_b": "Williamson County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 5.7,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Lamar County",
+        "county_b": "Montgomery County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 5.9,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Lubbock County",
+        "county_b": "Wharton County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 9.1,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Maverick County",
+        "county_b": "Travis County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 12.9,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "McLennan County",
+        "county_b": "Rockwall County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 5.3,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Orange County",
+        "county_b": "Rockwall County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 9.3,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Orange County",
+        "county_b": "Tarrant County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 7.1,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Polk County",
+        "county_b": "Walker County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 9.9,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Polk County",
+        "county_b": "Wichita County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 9.2,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Rockwall County",
+        "county_b": "Taylor County",
+        "share_gap_pp": 0.2,
+        "late_rate_gap_per_100000": 6.1,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Rockwall County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 12.8,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Tarrant County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 10.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Taylor County",
+        "county_b": "Upshur County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 6.7,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Taylor County",
+        "county_b": "Williamson County",
+        "share_gap_pp": 0.4,
+        "late_rate_gap_per_100000": 6.0,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Tom Green County",
+        "county_b": "Williamson County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 5.6,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Travis County",
+        "county_b": "Wise County",
+        "share_gap_pp": 0.0,
+        "late_rate_gap_per_100000": 8.4,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Upshur County",
+        "county_b": "Williamson County",
+        "share_gap_pp": 0.5,
+        "late_rate_gap_per_100000": 12.7,
+        "rounding_robust": false,
+        "disjoint_marginal_intervals": true
+      },
+      {
+        "county_a": "Van Zandt County",
+        "county_b": "Wharton County",
+        "share_gap_pp": 0.1,
+        "late_rate_gap_per_100000": 7.6,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      },
+      {
+        "county_a": "Wharton County",
+        "county_b": "Wood County",
+        "share_gap_pp": 0.3,
+        "late_rate_gap_per_100000": 10.9,
+        "rounding_robust": true,
+        "disjoint_marginal_intervals": false
+      }
+    ]
+  },
+  "suppression_imputed": false,
+  "patient_effect_estimated": false,
+  "clinical_acceptance": false
+}
