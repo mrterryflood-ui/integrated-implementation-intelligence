@@ -5,7 +5,9 @@
  * that a real iPhone visitor reported as broken.
  *
  * Run from apps/dis-platform after installing Playwright browsers:
- *   DIS_E2E_BASE_URL=https://dynamicintel.io node tests/e2e/public-site.mjs
+ *   DIS_E2E_BASE_URL=https://dynamicintel.io DIS_E2E_EXPECT_IDENTITY_MODE=live-production node tests/e2e/public-site.mjs
+ * The isolated candidate defaults to public-only. An explicit expectation,
+ * not the page's own claim, selects the acceptance contract.
  */
 import assert from "node:assert/strict";
 import {chromium, webkit, devices} from "playwright";
@@ -14,6 +16,9 @@ import {join} from "node:path";
 
 const base=(process.env.DIS_E2E_BASE_URL||"https://dynamicintel.io").replace(/\/$/,"");
 const out=process.env.DIS_E2E_ARTIFACT_DIR||"test-results/dis-public-browser";
+const expectedIdentity=process.env.DIS_E2E_EXPECT_IDENTITY_MODE??"public-only";
+assert.ok(["public-only","live-production"].includes(expectedIdentity),"explicit supported identity expectation required");
+const publicOnly=expectedIdentity==="public-only";
 const sites=[
  ["funding-contracts","Funding & contracts"],
  ["research-healthcare","Research & healthcare"],
@@ -54,10 +59,9 @@ async function journey(browserType,label){
    assert.ok(res && res.status()===200,"GET "+url+" must respond 200");
    const chosen=page.getByRole("region",{name:"Selected focus: "+name});
    await chosen.waitFor({state:"visible"});
-   // The root layout must agree with the dynamic page on identity release.
-   if(await page.getByText("Private workspace pending").count()>0){
-    assert.equal(await page.locator("body").getAttribute("data-dis-identity"),"public-only","root layout must use production release gate");
-   }
+   assert.equal(await page.locator("body").getAttribute("data-dis-identity"),publicOnly?"public-only":"clerk-enabled","root identity must match the declared test environment");
+   assert.equal(await page.getByText("Private workspace pending",{exact:true}).count()>0,publicOnly,"home and root must agree on identity release");
+   if(!publicOnly)assert.equal(await page.getByRole("button",{name:"Sign in",exact:true}).isVisible(),true,"live test remains an anonymous visitor");
    const example=chosen.getByRole("button",{name:/Explore example:/}).first();
    await clickAndObserve(page,example,"example from "+name);
    const result=page.getByRole("heading",{name:"Design studio and finished draft package"});
@@ -78,7 +82,7 @@ async function journey(browserType,label){
    if(id==="software-technology"){
     // Private DIS integrations must remain fail-closed while the public-only
     // release is serving test identity. Exercise HTTP, not an inert button.
-    if(await page.getByText("Private workspace pending").count()>0){
+    if(publicOnly){
      const denied=await page.request.post(base+"/api/capability-fabric",{data:{problem:"Evaluate the science of implementation",mode:"invoke",externalConsent:true}});
      assert.equal(denied.status(),503,"production must deny private specialist calls before Clerk live identity exists");
     }
@@ -93,9 +97,22 @@ async function journey(browserType,label){
     assert.ok(question.length>8&&question.toLowerCase().includes("platform"),"example must persist in editable question");
     await clickAndObserve(page,page.getByRole("tab",{name:"2. Investigate"}),"Investigate tab");
     const research=page.getByRole("button",{name:"Search live public records"});
-    assert.equal(await research.isDisabled(),true,"unreleased research must not pretend it works");
+    assert.equal(await research.isDisabled(),publicOnly,"research control must match configured release state");
+    if(!publicOnly){
+     assert.equal(await page.getByRole("checkbox",{name:/^I consent to sending this consultation question/}).isChecked(),false,"research consent starts unchecked");
+     await clickAndObserve(page,research,"research without external consent");
+     await page.getByRole("alert").filter({hasText:"Give permission before sending this question to external research services."}).waitFor({state:"visible"});
+     assert.deepEqual(outgoing,[],"unchecked research consent must block all requests");
+    }
     await clickAndObserve(page,page.getByRole("tab",{name:"3. Council review"}),"Council tab");
-    assert.equal(await page.getByRole("button",{name:/Run council review/}).isDisabled(),true,"unreleased council must not pretend it works");
+    const councilControl=page.getByRole("button",{name:/Run council review/});
+    assert.equal(await councilControl.isDisabled(),publicOnly,"council control must match configured release state");
+    if(!publicOnly){
+     assert.equal(await page.getByRole("checkbox",{name:/^I authorize external AI and scholarly discovery/}).isChecked(),false,"council consent starts unchecked");
+     await clickAndObserve(page,councilControl,"council without external consent");
+     await page.getByRole("alert").filter({hasText:"Give separate permission before sending your question for external council analysis."}).waitFor({state:"visible"});
+     assert.deepEqual(outgoing,[],"unchecked council consent must block all requests");
+    }
     await clickAndObserve(page,page.getByRole("tab",{name:"1. Consult"}),"Return to consultation");
     await page.locator("#ci-mission").waitFor({state:"visible"});
     await page.locator("#ci-mission").fill("Evaluate and improve a real multi-organization workflow with evidence");
@@ -107,7 +124,7 @@ async function journey(browserType,label){
    }
    console.log("PASS "+label+" "+id+": tap -> real draft -> visible output");
   }
-  if(await page.locator("body").getAttribute("data-dis-identity")==="public-only"){
+  if(publicOnly){
    // Bypassing Clerk's public handshake must NEVER unblock private endpoints.
    for(const route of ["/api/workspaces","/api/capability-fabric","/api/consultation/parallax"]){
     const response=await page.request.get(base+route);
@@ -115,6 +132,30 @@ async function journey(browserType,label){
    }
    const council=await page.request.post(base+"/api/council",{data:{prompt:"Public-only gate test"}});
    assert.equal(council.status(),503,"council execution must remain fail-closed");
+  }else{
+   // Use actual anonymous HTTP boundaries, with external consent deliberately
+   // false. No credentials, private records or external inference are requested.
+   const workspace=await page.request.get(base+"/api/workspaces");
+   assert.equal(workspace.status(),401,"live workspaces require authentication");
+   assert.deepEqual(await workspace.json(),{error:"Unauthorized"},"anonymous response must not contain workspace records");
+   const probes=[
+    ["/api/consultation/research",{intake:{mission:"Synthetic public release assurance"},externalConsent:false},"Sign in to investigate"],
+    ["/api/capability-fabric",{problem:"Synthetic public release assurance",mode:"plan",externalConsent:false},"Authentication required"],
+    ["/api/consultation/parallax",{scenario:"Synthetic public release assurance",stakeholders:[],externalConsent:false},"Sign in required"]
+   ];
+   for(const [route,data,error] of probes){
+    const denied=await page.request.post(base+route,{data});
+    assert.equal(denied.status(),401,route+" requires authentication before research or exchange");
+    const response=await denied.json();
+    assert.deepEqual(response,{error},route+" must explain denial without private or research results");
+   }
+   const council=await page.request.post(base+"/api/council",{data:{prompt:"Synthetic public release assurance",allowExternalResearch:false}});
+   assert.equal(council.status(),200,"anonymous council returns its documented public preview");
+   const preview=await council.json();
+   assert.equal(preview.state,"SIGN_IN_REQUIRED","public council preview is not an executed deliberation");
+   for(const key of ["deliberation","intelligence","evidenceSnapshot","modelProvenance","actionPlan","sources","sourceReceipts"])assert.equal(Object.hasOwn(preview,key),false,"anonymous council must not contain executed "+key);
+   assert.match(preview.notice,/does not consume paid inference/,"public preview must explain its execution boundary");
+   console.log("PASS "+label+": live identity, anonymous401 denials, unexecuted council preview and consent-blocked controls");
   }
   assert.deepEqual(outgoing,[],"offline example must not send prompts to external AI/research services");
   if(devIdentityRequests.length){
