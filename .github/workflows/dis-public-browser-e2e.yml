@@ -5,6 +5,10 @@ on:
     paths:
       - "apps/dis-platform/**"
       - ".github/workflows/dis-public-browser-e2e.yml"
+  pull_request:
+    paths:
+      - "apps/dis-platform/tests/e2e/public-site.mjs"
+      - ".github/workflows/dis-public-browser-e2e.yml"
   workflow_dispatch:
 permissions:
   contents: read
@@ -32,6 +36,7 @@ jobs:
         run: node tests/e2e/public-site.mjs
         env:
           DIS_E2E_BASE_URL: https://dynamicintel.io
+          DIS_E2E_EXPECT_IDENTITY_MODE: live-production
           DIS_E2E_ARTIFACT_DIR: test-results/dis-public-browser
       - name: Retain screenshots from the browser test
         if: always()

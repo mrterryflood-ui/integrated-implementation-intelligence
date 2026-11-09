@@ -91,6 +91,7 @@ jobs:
           node tests/e2e/research-planning-handoff.mjs
         env:
           DIS_E2E_BASE_URL: http://127.0.0.1:3000
+          DIS_E2E_EXPECT_IDENTITY_MODE: public-only
           DIS_E2E_ARTIFACT_DIR: test-results/dis-candidate-browser
       - name: Retain candidate-browser receipts
         if: always()
