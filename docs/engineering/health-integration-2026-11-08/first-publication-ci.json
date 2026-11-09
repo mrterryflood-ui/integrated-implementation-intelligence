@@ -1,0 +1,56 @@
+{
+  "schema": "first-publication-ci-snapshot-v1",
+  "head": "80ef1c3906ebd56abeb9c61ff5b9c649fffa9799",
+  "tree": "61d8f77bc09b8ed0b41977604ed4c1385bf1acfa",
+  "supersededByPlannedPR89TestAddition": true,
+  "checks": [
+    {
+      "id": 128912590246,
+      "name": "Vercel Preview Comments",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mrterryflood-ui/integrated-implementation-intelligence/runs/128912590246",
+      "completed_at": "2026-11-09T00:24:23Z"
+    },
+    {
+      "id": 128912555906,
+      "name": "Vercel Agent Review",
+      "status": "completed",
+      "conclusion": "neutral",
+      "url": "https://github.com/mrterryflood-ui/integrated-implementation-intelligence/runs/128912555906",
+      "completed_at": "2026-11-09T00:27:52Z"
+    },
+    {
+      "id": 128912541458,
+      "name": "typecheck",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/42539985985/job/128912541458",
+      "completed_at": "2026-11-09T00:25:00Z"
+    },
+    {
+      "id": 128912541294,
+      "name": "candidate-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/42539985985/job/128912541294",
+      "completed_at": "2026-11-09T00:26:49Z"
+    },
+    {
+      "id": 128912540979,
+      "name": "engineering-receipt-validator-tests",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/42539986053/job/128912540979",
+      "completed_at": "2026-11-09T00:24:20Z"
+    },
+    {
+      "id": 128912540940,
+      "name": "contract",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/42539985992/job/128912540940",
+      "completed_at": "2026-11-09T00:24:21Z"
+    }
+  ]
+}

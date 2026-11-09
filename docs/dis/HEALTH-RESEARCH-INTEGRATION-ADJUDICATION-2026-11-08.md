@@ -6,7 +6,7 @@ Decision record: November 8, 2026, America/Chicago; execution continued into Nov
 
 | Workstream | Result | Acceptance scope |
 |---|---|---|
-| DIS application integration | Science, independent reconciliation, context assurance and saved-case lifecycle combined; discovered admitted-report edit/recovery defect corrected | Local engineering acceptance supported; published candidate CI and merge state must be checked separately |
+| DIS application integration | Science, independent reconciliation, context assurance and saved-case lifecycle combined; discovered admitted-report edit/recovery defect corrected | Local engineering acceptance supported; [PR90](https://github.com/mrterryflood-ui/integrated-implementation-intelligence/pull/90) records the exact published CI, merge and deployment state |
 | RPLICE comparator binding | PR118 merged at `8e9500ad49f4d0599782bf773a4c31300da8b27e` after exact-head CI and 12 independent controls | Narrow stateless source/comparator correction; no deployed endpoint or clinical-effect claim |
 | DEN01/02/03/06 | Original and current source values replay; missingness and state-specific sensitivity independently adjudicated | Bounded descriptive research accepted; exact exclusions and empirical age harmonization remain unidentified |
 | Decision-method development | Two fresh AI analysts produced 24 case responses; a third fresh AI reviewer rated them | Developmental prompt comparison complete; independent human study incomplete |
@@ -18,9 +18,9 @@ The integrated source retains evidence context across creation, revision, task g
 
 Independent review reproduced a report that could be created at the 128,000-character content limit but could not be revised because PostgreSQL's legitimate formatting exceeded that limit. The same boundary affected restoration. The correction separates the bounded 512,000-byte stored representation from submitted compact content, counts retained JSON tokens before parsing, and restores the archived JSONB directly. The original failing witness is retained. Source numbers, evidence whitespace, prior reports and current plans remain preserved; oversized legacy records still fail explicitly without truncation.
 
-The final reviewed application source is local commit `1969e2e7af73f8ba65ab48fe1e761a1a9f4222b0`, with complete `apps` subtree `d00e0cb4f49b435066dfbe3f115aa32f7cee402b`. Later changes in this package are research, CI discovery and documentation. The published commit must reproduce the frozen full candidate tree and this application subtree; a different commit identifier alone is not source drift, and a green check for another revision is not acceptance.
+The production correction was independently reviewed at local commit `1969e2e7af73f8ba65ab48fe1e761a1a9f4222b0`. Concurrent PR89 contributes one unchanged 137-line regression that runs the former and corrected handlers against the same near-limit ASCII and Unicode cases; its production route is identical to ours, and our additional recovery correction remains. The complete final `apps` subtree is `f70fac79ae889cc44aaf24441517fed256e05d32`. The prior `d00e0cb4f49b435066dfbe3f115aa32f7cee402b` subtree is retained as historical review evidence. Publication must reproduce the frozen full candidate tree and final application subtree; a different commit identifier alone is not source drift, and a green check for another revision is not acceptance.
 
-Incoming source heads: science PR85 `18823969ffee9f6eb393891f65e00941e102b9d6`; reconciliation PR86 `2f83595a30a4aa0623b9cb8c3b6cd0a5ff4aa05c`; lifecycle PR87 `a15397e74344cbcaaec66e96d781171a34428293`; assurance PR88 `fdcaaba15eaa3f6d074f1de5cd4a3b9dd40913bd`. PR88 advanced during integration with a documentation-only VA/Medicaid coverage clarification; that new head was fetched and incorporated rather than overwritten.
+Incoming source heads: science PR85 `18823969ffee9f6eb393891f65e00941e102b9d6`; reconciliation PR86 `2f83595a30a4aa0623b9cb8c3b6cd0a5ff4aa05c`; lifecycle PR87 `a15397e74344cbcaaec66e96d781171a34428293`; assurance PR88 `fdcaaba15eaa3f6d074f1de5cd4a3b9dd40913bd`. PR88 advanced during integration with a documentation-only VA/Medicaid coverage clarification; that new head was fetched and incorporated rather than overwritten. Concurrent PR89 `5f80be44d42133e37f2a31f2b7f83422f8146d04` is also retained in ancestry; only its useful additional regression changes the already corrected application tree.
 
 ## What the denominator adjudication establishes
 
@@ -63,7 +63,7 @@ The [protocol and primary guidance](EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOS
 
 | Evidence | Observed result | Practical limit |
 |---|---|---|
-| Full platform suite | 757 passed, zero failed/skipped | Controlled software tests; synthetic identity/database adapters where specified |
+| Full platform suite | 763 passed, zero failed/skipped after PR89 reconciliation | Controlled software tests; synthetic identity/database adapters where specified |
 | Typecheck and production build | Passed | Does not establish deployed configuration or patient benefit |
 | Independent defect review | 33 route/recovery tests and 35 adversarial controls passed | Overlap with the full suite; counts are not additive independent validations |
 | Research suite | 246 passed with retained archive | Source-dependent checks require the exact external archive |
@@ -72,7 +72,7 @@ The [protocol and primary guidance](EARLY-RECOGNITION-ACTION-AND-DIAGNOSTIC-CLOS
 | Decision rehearsal | 24 answers, 24 AI ratings; analysis reproduced | Developmental instrument, incomplete masking and no human study |
 | Clinical specification | 10 synthetic document scenarios; six corrections rechecked | No accepted site, patient enrollment, clinical rehearsal or observed clinical effect |
 
-Detailed engineering evidence is retained in [health-integration-2026-11-08](../engineering/health-integration-2026-11-08/). The initial local `tsx` CLI could not create its IPC socket; the same scripts ran through `node --import tsx` without changing assertions or gates. Published CI and deployment receipts must state their exact commit and scope separately.
+Detailed engineering evidence is retained in [health-integration-2026-11-08](../engineering/health-integration-2026-11-08/), including the historical 757-test run, final 763-test run and distinct concurrent-branch review. The first published candidate `80ef1c3906ebd56abeb9c61ff5b9c649fffa9799` passed hosted typecheck, candidate-browser, engineering-receipt and research-contract checks. Adding PR89's test requires a new exact-head CI binding; the [release record in PR90](https://github.com/mrterryflood-ui/integrated-implementation-intelligence/pull/90) supplies that later state. The initial local `tsx` CLI could not create its IPC socket; the same scripts ran through `node --import tsx` without changing assertions or gates. Published CI and deployment receipts must state their exact commit and scope separately.
 
 ### Required real-world handoffs
 
