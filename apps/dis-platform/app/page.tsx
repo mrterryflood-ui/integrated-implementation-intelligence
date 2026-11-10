@@ -29,7 +29,7 @@ export default async function Home(){
  <div className="hero-content">{identityBlocked&&<p role="status" style={{fontSize:14,maxWidth:580}}>Public research preview is available. Private accounts and uploads are pending production identity verification.</p>}<span className="eyebrow">INTRODUCING A DIFFERENT WAY TO THINK</span><h1>What if your next <em>great idea</em> had a council behind it?</h1>
  <p>One question can change a life, a business, or an entire system. Dynamic Intelligence brings diverse reasoning perspectives together to help investigate it—and understand what to do next.</p>
  <div className="hero-actions"><a className="hero-primary" href="#council">Convene your council</a><Link href="/research-program">Explore a real research-to-implementation case</Link><a href="#approach">Discover the method ↓</a></div>
- <div className="hero-proof">RESEARCH FIRST <span>·</span> CHALLENGE ASSUMPTIONS <span>·</span> ACT WITH EVIDENCE</div></div>
+ <p><Link href="/showcase/wichita-wraparound">Explore the Wichita community wraparound model</Link></p>\n <div className="hero-proof">RESEARCH FIRST <span>·</span> CHALLENGE ASSUMPTIONS <span>·</span> ACT WITH EVIDENCE</div></div>
  <div className="hero-art" aria-hidden="true"><div className="orbit one"/><div className="orbit two"/><div className="orbit three"/><div className="core">DI</div><div className="orbital-label a">?</div><div className="orbital-label b">∑</div><div className="orbital-label c">↗</div><div className="orbital-label d">∞</div></div>
  </section>
  <section className="manifesto"><span className="eyebrow">OUR BELIEF</span><p>Information is everywhere. <strong>Understanding takes perspective. Progress takes evidence, judgment, and action.</strong></p></section>
