@@ -67,8 +67,9 @@ export default function WholeSystemPanel({program,journey}:{program:ResearchProg
   {error&&<p role="alert">{error}</p>}
   {result&&<article className="rp-focus"><h4>RPLICE result — provisional analytic output</h4>
    <p>{result.assurance}</p><p><b>MCP tool:</b> {result.tool} · <b>Source:</b> {result.source}</p>
+   <p><b>RPLICE execution ID:</b> {result.executionReceipt?.executionId||"Not reported"} · <b>Persisted scientific run:</b> {result.executionReceipt?.persisted===false?"No":"Not established"} · <b>Independent verification:</b> {result.executionReceipt?.independentVerification===false?"No":"Not established"}</p>
    <pre style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{JSON.stringify(result.analysis?.result,null,2)}</pre>
-   <p><b>Timestamp:</b> {result.analysis?.provenance?.generated_at||"Not reported"}</p></article>}
+   <p><b>Timestamp:</b> {result.analysis?.provenance?.generated_at||"Not reported"}</p></article>
   <h3>Triple differences: evidence-dependent, not a decorative analysis</h3>
   {program.indicators.some(x=>x.site==="colorectal")&&<p>Historical NCI county-level late-stage colorectal rates (2018–2022): Hinds County, Mississippi 30.4 and Harris County, Texas 23.3 cases per 100,000. The shares of diagnosed cases classified as late-stage were 63.3% and 63.4%, respectively. These are different measures, not a before/after intervention panel. <a href="https://www.statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&stage=211&statefips=28&type=incd&year=0" target="_blank" rel="noreferrer">Mississippi NCI table</a> · <a href="https://www.statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&stage=211&statefips=48&type=incd&year=0" target="_blank" rel="noreferrer">Texas NCI table</a>.</p>}
   <p><strong>{exercise.ddd.status.replaceAll("_"," ")}</strong>: {exercise.ddd.interpretation}</p>
