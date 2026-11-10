@@ -159,10 +159,15 @@ export async function runSelectedRpliceMcp(
   if(payload?.error||payload?.result?.isError)throw Error("MCP reported a method error");
   analysis=JSON.parse(payload.result.content.find((c:any)=>c?.type==="text")?.text);
  }catch{throw new RpliceBridgeError(503,"RPLICE MCP result was invalid or declined.");}
+ const receipt=analysis?.executionReceipt;
  if(!analysis?.provenance?.generated_at||analysis.provenance.model!=="deterministic"||
      !analysis.result||typeof analysis.result!=="object"||
+     !receipt||typeof receipt.executionId!=="string"||!/^rplice_exec_[0-9a-f-]{36}$/.test(receipt.executionId)||
+     receipt.tool!==name||!["remote","embedded"].includes(String(receipt.runtime))||
+     typeof receipt.generatedAt!=="string"||Number.isNaN(Date.parse(receipt.generatedAt))||
+     receipt.persisted!==false||receipt.independentVerification!==false||
      (salp&&(!Array.isArray(analysis.result.anchors)||!Array.isArray(analysis.result.sensors))))
-    throw new RpliceBridgeError(503,"RPLICE MCP lacked required method provenance.");
- return {method:input.method,tool:name,analysis,source:"RPLICE authenticated MCP",
-   state:"HIL_SELECTED_PRELIMINARY_ANALYSIS",assurance:"Analytical output only. Anchors, causal mechanisms, local fit and decisions require independent evidence."};
+    throw new RpliceBridgeError(503,"RPLICE MCP lacked required method provenance or execution identity.");
+ return {method:input.method,tool:name,analysis,executionReceipt:receipt,source:"RPLICE authenticated MCP",
+   state:"HIL_SELECTED_PRELIMINARY_ANALYSIS",assurance:"Analytical output only. The execution receipt identifies this stateless RPLICE call; it is not a persisted scientific run or independent verification. Anchors, causal mechanisms, local fit and decisions require independent evidence."};
 }

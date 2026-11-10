@@ -67,6 +67,7 @@ export default function WholeSystemPanel({program,journey}:{program:ResearchProg
   {error&&<p role="alert">{error}</p>}
   {result&&<article className="rp-focus"><h4>RPLICE result — provisional analytic output</h4>
    <p>{result.assurance}</p><p><b>MCP tool:</b> {result.tool} · <b>Source:</b> {result.source}</p>
+   <p><b>RPLICE execution ID:</b> {result.executionReceipt?.executionId||"Not reported"} · <b>Persisted scientific run:</b> {result.executionReceipt?.persisted===false?"No":"Not established"} · <b>Independent verification:</b> {result.executionReceipt?.independentVerification===false?"No":"Not established"}</p>
    <pre style={{whiteSpace:"pre-wrap",overflowWrap:"anywhere"}}>{JSON.stringify(result.analysis?.result,null,2)}</pre>
    <p><b>Timestamp:</b> {result.analysis?.provenance?.generated_at||"Not reported"}</p></article>}
   <h3>Triple differences: evidence-dependent, not a decorative analysis</h3>
