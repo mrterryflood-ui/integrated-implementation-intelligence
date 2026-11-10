@@ -58,7 +58,8 @@ test("selected SALP uses authenticated MCP and checks a deterministic provenance
   return new Response(JSON.stringify({jsonrpc:"2.0",id:"dis-hil-selection",result:{
    content:[{type:"text",text:JSON.stringify({result:{
     anchors:[{name:"referral capacity",weight:4,sensitivity:3}],sensors:[],center_of_gravity:"referral capacity"
-   },provenance:{model:"deterministic",generated_at:"2026-11-06T12:00:00Z"}})}]}}),{status:200});
+   },provenance:{model:"deterministic",generated_at:"2026-11-06T12:00:00Z"},
+    executionReceipt:{executionId:"rplice_exec_123e4567-e89b-12d3-a456-426614174000",tool:"rplice_run_salp",runtime:"remote",generatedAt:"2026-11-10T15:40:00Z",persisted:false,independentVerification:false}})}]}}),{status:200});
  };
  const input={method:"SALP" as const,scenario:"Improve care access in site",purpose:"Identify proposed constraints",
    anchors:[{name:"referral capacity",weight:4,sensitivity:3}]};
@@ -67,6 +68,9 @@ test("selected SALP uses authenticated MCP and checks a deterministic provenance
  assert.equal(seen.body.params.name,"rplice_run_salp");
  assert.equal(seen.body.params.arguments.anchors.length,1);
  assert.equal(out.state,"HIL_SELECTED_PRELIMINARY_ANALYSIS");
+ assert.equal(out.executionReceipt.executionId,"rplice_exec_123e4567-e89b-12d3-a456-426614174000");
+ assert.equal(out.executionReceipt.persisted,false);
+ assert.match(out.assurance,/not a persisted scientific run/i);
 });
 test("selected methods fail closed on invalid anchors, absent credentials, or missing provenance",async()=>{
  const {runSelectedRpliceMcp}=await import("../lib/rplice-adapter");
@@ -77,5 +81,9 @@ test("selected methods fail closed on invalid anchors, absent credentials, or mi
   {RPLICE_API_KEY:"rplice_"+"a".repeat(64)}),/hypothetical anchors/);
  const mock=async()=>new Response(JSON.stringify({result:{
   content:[{type:"text",text:JSON.stringify({result:{anchors:[],sensors:[]}})}]}}),{status:200});
- await assert.rejects(runSelectedRpliceMcp(input,{RPLICE_API_KEY:"rplice_"+"a".repeat(64)},mock as typeof fetch),/provenance/);
+ await assert.rejects(runSelectedRpliceMcp(input,{RPLICE_API_KEY:"rplice_"+"a".repeat(64)},mock as typeof fetch),/provenance|execution identity/);
+ const missingReceipt=async()=>new Response(JSON.stringify({result:{
+  content:[{type:"text",text:JSON.stringify({result:{anchors:[{name:"Referral",weight:4,sensitivity:3}],sensors:[]},
+   provenance:{model:"deterministic",generated_at:"2026-11-10T15:40:00Z"}})}]}}),{status:200});
+ await assert.rejects(runSelectedRpliceMcp(input,{RPLICE_API_KEY:"rplice_"+"a".repeat(64)},missingReceipt as typeof fetch),/execution identity/);
 });
