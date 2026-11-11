@@ -6,8 +6,6 @@ on:
   pull_request:
     paths: ['apps/dis-platform/**', 'docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md', '.github/workflows/dis-platform-checks.yml']
   workflow_dispatch:
-  schedule:
-    - cron: '17 8 * * *'
 permissions:
   contents: read
 concurrency:

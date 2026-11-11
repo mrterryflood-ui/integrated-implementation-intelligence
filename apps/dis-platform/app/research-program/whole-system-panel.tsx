@@ -91,6 +91,9 @@ export default function WholeSystemPanel({program,journey}:{program:ResearchProg
   <p>{exercise.statementOfReality.designed}</p><p>{exercise.statementOfReality.operational}</p><p>{exercise.statementOfReality.experienced}</p>
   <h4>Stakeholder voice and adaptation</h4>
   <p>{exercise.stakeholderPerspectives.length} distinct roles are identified for participation; none is claimed to have been interviewed. The transfer matrix examines site mechanisms, local resources and acceptable adaptations before recommending any replication.</p>
+  <h4>Reality reconciliation — HIL decides the course, pace and destination</h4>
+  <p>When the Designed, Operational and Experienced realities diverge, the next step is not automatically “implement harder.” Use the RPLICE Reality Reconciliation Studio to compare the ideal course, adapted paths and BATNA under internal/external constraints, resources, risk, cost-effectiveness, equity, burden and stressed scenarios. The engine may propose navigation; accountable people select whether to accelerate, maintain, slow, adapt, redirect, pause or stop, and may revise the end state when the facts justify a different destination.</p>
+  <p><a href="https://www.bettersciencelab.com/reality-reconciliation" target="_blank" rel="noreferrer">Open HIL Reality Reconciliation in RPLICE →</a></p>
   <h4>Day after success and the next ten years</h4>
   <p>Reconfirm ownership, financing, safety, participation, measurement quality, equity, succession, and emerging implementation conditions. The system must reopen unresolved gaps instead of treating initial success as mission completion.</p>
  </section>;
