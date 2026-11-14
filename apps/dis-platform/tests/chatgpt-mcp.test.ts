@@ -11,7 +11,7 @@ test("ChatGPT plugin MCP initializes and lists tools",async()=>{
  assert.deepEqual(advertised,new Set([
    "dis_ecosystem_plan","dis_consultation_plan","dis_select_council",
    "dis_available_sources","dis_handoff_template",
-   "dis_stellar_one","dis_research_implementation_blueprint"
+   "dis_stellar_one","dis_research_implementation_blueprint","dis_review_research_protocol"
  ]));
  assert.equal(list.result.tools.length,advertised.size);
  assert.ok(list.result.tools.every((t:any)=>t.annotations.readOnlyHint===true));
