@@ -3,6 +3,7 @@ import {useMemo,useState} from "react";
 import Link from "next/link";
 import {buildResearchProgram,type SiteKey} from "../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../lib/jackson-cancer-case";
+import {NEUROINCLUSIVE_TOPICS,getNeuroinclusiveTopic,neuroinclusiveResearchCase,type NeuroinclusiveTopicId} from "../../lib/neuroinclusive-exercise";
 import {buildImplementationJourney} from "../../lib/implementation-journey";
 import StellarOnePanel from "../stellar-one-panel";
 import WholeSystemPanel from "./whole-system-panel";
@@ -12,6 +13,7 @@ import {RPLICE_HIL_METHODS,buildChainMethodSelection,type RpliceHilMethodId} fro
 import "./research-program.css";
 
 type Pane="stellar"|"population"|"contributors"|"implementation"|"evaluation"|"sources"|"lifecycle"|"transport"|"hil";
+type ResearchMode="jackson"|"neuroinclusive"|"custom";
 const PANES:{id:Pane;label:string}[]=[
   {id:"stellar",label:"STELLAR 1 · Fact finding"},
   {id:"population",label:"Population and measures"},
@@ -29,7 +31,8 @@ const access:Record<string,string>={
   REQUIRES_AUTHORIZED_DATA:"Approved dataset needed"
 };
 export default function ResearchProgramStudio(){
-  const [mode,setMode]=useState<"jackson"|"custom">("jackson");
+  const [mode,setMode]=useState<ResearchMode>("jackson");
+  const [neuroTopic,setNeuroTopic]=useState<NeuroinclusiveTopicId>(NEUROINCLUSIVE_TOPICS[0].id);
   const [site,setSite]=useState<SiteKey>("colorectal");
   const [question,setQuestion]=useState("How can we prevent late-stage cancer diagnosis?");
   const [target,setTarget]=useState("Jackson, Mississippi");
@@ -42,7 +45,7 @@ export default function ResearchProgramStudio(){
   const [hilMethods,setHilMethods]=useState<RpliceHilMethodId[]>([]);
   const toggleMethod=(id:RpliceHilMethodId)=>setHilMethods(previous=>
     previous.includes(id)?previous.filter(x=>x!==id):[...previous,id]);
-  const caseSpec=useMemo(()=>mode==="jackson"?jacksonCancerCase(site):unsourcedResearchCase(question,target),[mode,site,question,target]);
+  const caseSpec=useMemo(()=>mode==="jackson"?jacksonCancerCase(site):mode==="neuroinclusive"?neuroinclusiveResearchCase(neuroTopic):unsourcedResearchCase(question,target),[mode,site,neuroTopic,question,target]);
   const program=useMemo(()=>buildResearchProgram(caseSpec),[caseSpec]);
   const journey=useMemo(()=>buildImplementationJourney(program,destination,stellarOverrides),[program,destination,stellarOverrides]);
   const methodSelection=useMemo(()=>buildChainMethodSelection(journey,hilMethods),[journey,hilMethods]);
@@ -136,8 +139,9 @@ export default function ResearchProgramStudio(){
         <div><div className="rp-kicker">01 · ORIENT</div><h2>What problem, population and disease?</h2></div>
       </div>
       <label className="rp-field"><span>Research scenario</span>
-        <select value={mode} onChange={e=>{setMode(e.target.value as "jackson"|"custom");setPane("stellar")}}>
+        <select value={mode} onChange={e=>{setMode(e.target.value as ResearchMode);setPane("stellar")}}>
           <option value="jackson">Demonstration · Late-stage cancer, Jackson, Mississippi</option>
+          <option value="neuroinclusive">Exercise · Neuroinclusive health, 10 evidence-to-action topics</option>
           <option value="custom">New question · methodological framework only (no retrieved statistics)</option>
         </select>
       </label>
@@ -150,6 +154,17 @@ export default function ResearchProgramStudio(){
           </select>
         </label>
         <p className="rp-subtle">Target: Jackson, Mississippi. Available historical proxy: <strong>Hinds County</strong>. Jackson County is a separate county and is not substituted. <strong>No Jackson city-level cancer incidence is asserted.</strong></p>
+      </div>:mode==="neuroinclusive"?<div className="rp-form" aria-label="Neuroinclusive health research exercise">
+        <label className="rp-field"><span>Health concern and population</span>
+          <select value={neuroTopic} onChange={e=>{setNeuroTopic(e.target.value as NeuroinclusiveTopicId);setPane("stellar");}}>
+            {NEUROINCLUSIVE_TOPICS.map(topic=><option value={topic.id} key={topic.id}>{topic.label}</option>)}
+          </select>
+        </label>
+        <p className="rp-subtle"><strong>Published study:</strong> {getNeuroinclusiveTopic(neuroTopic).studyFinding} <a href={"https://doi.org/"+getNeuroinclusiveTopic(neuroTopic).sourceDoi} target="_blank" rel="noreferrer">Read original research</a>.</p>
+        <p className="rp-subtle"><strong>Evidence limits:</strong> {getNeuroinclusiveTopic(neuroTopic).limitations}</p>
+        <p className="rp-subtle"><strong>Implementation question:</strong> {getNeuroinclusiveTopic(neuroTopic).question}</p>
+        <p className="rp-subtle"><strong>Candidate workflow to evaluate:</strong> {getNeuroinclusiveTopic(neuroTopic).proposedWorkflow}</p>
+        <div className="rp-warning" role="note">Published comparisons are not pilot-site baselines. No participant is enrolled, no clinical protocol is authorized, and no alerts or third-party messages are sent. Use synthetic examples only until clinical and data governance gates pass.</div>
       </div>:<div className="rp-form">
         <label className="rp-field"><span>Your research/implementation question</span>
           <textarea rows={2} maxLength={300} value={question} onChange={e=>setQuestion(e.target.value)} placeholder="What phenomenon and outcome need investigation?"/>
@@ -161,7 +176,7 @@ export default function ResearchProgramStudio(){
       </div>}
       <div className="rp-overview">
         <div><span>Target</span><strong>{program.population.targetName}</strong></div>
-        <div><span>Observed geography</span><strong>{mode==="jackson"?"Hinds County only":"Not verified"}</strong></div>
+        <div><span>Observed geography</span><strong>{mode==="jackson"?"Hinds County only":mode==="neuroinclusive"?"No pilot-site measurements":"Not verified"}</strong></div>
         <div><span>Source connection</span><strong>{program.sourceReviewStatus.replaceAll("_"," ").toLowerCase()}</strong></div>
         <div><span>Claim status</span><strong>Research design · not validated</strong></div>
       </div>
@@ -175,12 +190,12 @@ export default function ResearchProgramStudio(){
       {pane==="stellar"&&<StellarOnePanel review={journey.stellarOne} overrides={stellarOverrides} onChange={setStellarOverrides}/>}
       {pane==="population"&&<section aria-label="Population and indicators" className="rp-content">
         <h3>What is actually measured?</h3>
-        <p>All numbers shown below originate from published historical county tables. The rate, the share of incident cancers that were late-stage, and the average annual count have different denominators.</p>
+        <p>{mode==="jackson"?"The historical cancer measures below apply to Hinds County only. Rates, case shares and annual counts have different denominators.":mode==="neuroinclusive"?"Published comparisons are listed under Sources and limits; no local population baseline or patient outcome has been measured. Missing data are not zeros.":"No public statistical baseline was provided; do not infer site-specific population rates."}</p>
         {program.indicators.length?<div className="rp-stats">{program.indicators.map(m=><article className="rp-stat" key={m.id}>
           <span>{m.label}</span><strong>{m.value?.toLocaleString("en-US")??"Not reported"}</strong><small>{m.unit}</small>
           <div className="rp-note">{m.geography} · {m.period}</div>
           {m.confidenceInterval&&<div className="rp-note">95% CI: {m.confidenceInterval[0]}–{m.confidenceInterval[1]}</div>}
-          <details><summary>Measure meaning and limitation</summary><p><b>Numerator:</b> {m.numeratorDefinition}</p><p><b>Denominator:</b> {m.denominatorDefinition}</p><p>{m.sourceLimit}</p><a href={m.sourceUrl} target="_blank" rel="noreferrer">Original NCI source</a></details>
+          <details><summary>Measure meaning and limitation</summary><p><b>Numerator:</b> {m.numeratorDefinition}</p><p><b>Denominator:</b> {m.denominatorDefinition}</p><p>{m.sourceLimit}</p><a href={m.sourceUrl} target="_blank" rel="noreferrer">Original measurement source</a></details>
         </article>)}</div>:<p className="rp-no-data">No verified observed population values have been supplied for this custom case. Define the source, period, geography, numerator and denominator first.</p>}
         <h3>Population stratification and unavailable cells</h3>
         <div className="rp-table-wrap"><table><thead><tr><th>Dimension</th><th>Grouping to assess</th><th>Evidence status</th><th>Why investigate</th></tr></thead>
