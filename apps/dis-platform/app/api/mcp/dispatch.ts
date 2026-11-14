@@ -10,7 +10,10 @@ import {buildResearchProgram} from "../../../lib/research-program";
 import {jacksonCancerCase,unsourcedResearchCase} from "../../../lib/jackson-cancer-case";
 import {buildImplementationJourney} from "../../../lib/implementation-journey";
 import {proposeRpliceHandoff} from "../../../lib/rplice-implementation-handoff";
+import {RESEARCH_PROTOCOL_REVIEW_INPUT_SCHEMA,reviewResearchProtocol,ResearchProtocolReviewError} from "../../../lib/research-protocol-review";
 const toolList=[
+
+ {name:"dis_review_research_protocol",description:"Review bounded public-source research metadata using the existing DIS inquiry method, bound to the caller's retained run, protocol and source-receipt fingerprints. Returns methodological findings and qualifications; does not retrieve source text, save data, establish independent validation or grant action authority.",annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:false},inputSchema:RESEARCH_PROTOCOL_REVIEW_INPUT_SCHEMA},
 
  {name:"dis_stellar_one",description:"Run STELLAR 1: what, for whom, what outcome, where, duration, counterfactual, center of inquiry, history, stakeholders, demographic dimensions and missing environmental/chain evidence. Read-only, source-unverified and no operational authority.",annotations:{readOnlyHint:true,destructiveHint:false,idempotentHint:true,openWorldHint:true},inputSchema:{type:"object",properties:{
   problem:{type:"string",minLength:8,maxLength:1200},
@@ -43,7 +46,7 @@ export async function dispatch(body:any){
  const validId=id===null||(typeof id==="string"&&id.length<=128)||(typeof id==="number"&&Number.isFinite(id)&&Math.abs(id)<=Number.MAX_SAFE_INTEGER);
  if(!validId)return err(null,-32600,"Invalid Request ID");
  if(!body||typeof body!=="object"||Array.isArray(body)||body.jsonrpc!=="2.0"||typeof body.method!=="string")return err(id,-32600,"Invalid Request");
- if(body.method==="initialize")return rpc(id,{protocolVersion:"2025-06-18",capabilities:{tools:{listChanged:false}},serverInfo:{name:"dynamic-intelligence-public",version:"0.3.0"}});
+ if(body.method==="initialize")return rpc(id,{protocolVersion:"2025-06-18",capabilities:{tools:{listChanged:false}},serverInfo:{name:"dynamic-intelligence-public",version:"0.4.0"}});
  if(body.method==="notifications/initialized")return null;
  if(body.method==="ping")return rpc(id,{});
  if(body.method==="tools/list")return rpc(id,{tools:toolList});
@@ -59,7 +62,12 @@ export async function dispatch(body:any){
  }
  if(schema.required?.some(key=>!(key in args)))return err(id,-32602,"Required argument missing");
  let answer:unknown;
- if(name==="dis_stellar_one"){
+ if(name==="dis_review_research_protocol"){
+  try{answer=reviewResearchProtocol(args);}catch(error){
+   if(error instanceof ResearchProtocolReviewError)return err(id,-32602,error.message);
+   return err(id,-32603,"Research method review unavailable");
+  }
+ }else if(name==="dis_stellar_one"){
   answer=assessStellarOne({question:args.problem,
     whatDoing:args.whatDoing,forWhom:args.forWhom,understandOrDeliver:args.understandOrDeliver,
     where:args.where,howLong:args.howLong,intendedChange:args.intendedChange,
