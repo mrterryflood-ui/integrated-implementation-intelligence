@@ -1,34 +1,53 @@
 import { assessAnswer, multiplicationModel, reviewPlan } from "./core.mjs";
 
+function key(a, b) { return a + "x" + b; }
+function assertMode(mode) {
+  if (mode !== "guided" && mode !== "independent")
+    throw new RangeError("Unsupported practice mode");
+}
+
 /**
- * In-memory pedagogical state. No names, diagnoses, birthdates, uploaded files,
- * school IDs, storage calls, network calls, or authenticated-session claims.
- * Scores with visual answers revealed are GUIDED, never independent.
+ * Ephemeral pedagogical state. An attempt is independent only when its specific
+ * problem has not had worked-out answer cues exposed in this session.
  */
-export function startPractice(a = 23, b = 14) {
+export function startPractice(a = 23, b = 14, { mode = "guided" } = {}) {
   multiplicationModel(a, b);
+  assertMode(mode);
   return {
     problem: [a, b],
-    mode: "guided",
-    shownHelp: true,
+    mode,
+    shownHelp: mode === "guided",
+    helpedProblems: mode === "guided" ? [key(a, b)] : [],
     submissions: [],
     independentEvidence: [],
   };
 }
 
+/**
+ * Toggling from a previously-helped problem into independent mode does not
+ * magically remove prior exposure. Use changeProblem(...,{mode:"independent"})
+ * for a fresh question. This prevents false evidence.
+ */
 export function practiceMode(state, mode) {
-  if (mode !== "guided" && mode !== "independent") {
-    throw new RangeError("Unsupported practice mode");
-  }
+  assertMode(mode);
+  const assisted = mode === "guided" ||
+    state.helpedProblems.includes(key(...state.problem));
   return {
     ...state,
     mode,
-    shownHelp: mode !== "independent",
+    shownHelp: assisted,
+    helpedProblems: mode === "guided"
+      ? [...new Set([...state.helpedProblems, key(...state.problem)])]
+      : state.helpedProblems,
   };
 }
 
 export function requestHint(state) {
-  return { ...state, shownHelp: true };
+  return {
+    ...state,
+    shownHelp: true,
+    helpedProblems: [...new Set([...state.helpedProblems, key(...state.problem)])],
+  };
 }
 
 export function submitPractice(state, answer, day) {
@@ -38,21 +57,17 @@ export function submitPractice(state, answer, day) {
   if (!scored.correct && scored.state === "try-again") {
     return { state, result: scored, review: validated, counted: false };
   }
-  const independent = state.mode === "independent" && !state.shownHelp;
-  const submission = {
-    problemId: a + "x" + b,
-    day,
-    correct: scored.correct,
-    independent,
-  };
+  const independent = state.mode === "independent" &&
+    !state.shownHelp &&
+    !state.helpedProblems.includes(key(a, b));
+  const submission = { problemId: key(a,b), day, correct: scored.correct, independent };
   const next = {
     ...state,
     submissions: [...state.submissions, submission],
-    independentEvidence: [
-      ...state.independentEvidence,
-      ...(independent ? [submission] : []),
-    ],
+    independentEvidence: [...state.independentEvidence, ...(independent ? [submission] : [])],
     shownHelp: state.shownHelp || !scored.correct,
+    helpedProblems: scored.correct ? state.helpedProblems
+      : [...new Set([...state.helpedProblems, key(a,b)])],
   };
   return {
     state: next,
@@ -62,12 +77,18 @@ export function submitPractice(state, answer, day) {
   };
 }
 
-export function changeProblem(state, a, b) {
+export function changeProblem(state, a, b, { mode = "guided" } = {}) {
   multiplicationModel(a, b);
+  assertMode(mode);
+  const helped = state.helpedProblems.includes(key(a,b));
+  const helpShown = mode === "guided" || helped;
   return {
     ...state,
     problem: [a, b],
-    mode: "guided",
-    shownHelp: true,
+    mode,
+    shownHelp: helpShown,
+    helpedProblems: mode === "guided"
+      ? [...new Set([...state.helpedProblems, key(a,b)])]
+      : state.helpedProblems,
   };
 }
