@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   CORE_VERSION, beginGradeFour, suggestSupports, multiplicationModel,
   instructionalSequence, assessAnswer, adaptNextStep,
-  checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan
+  checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan, localCalendarDay
 } from "./core.mjs";
 
 test("grade four is implemented; other grades are not falsely advertised", () => {
@@ -122,6 +122,38 @@ test("understanding typed worksheet text never pretends OCR was performed", () =
   assert.deepEqual(understandHomeworkText("What is 23 x 14?").factors, [23,14]);
   assert.equal(understandHomeworkText("We use partial products").skill, "multiplication");
   assert.equal(understandHomeworkText("Poetry comprehension").state, "needs-review");
+});
+
+test("worksheet parser fails closed on negatives, decimals and larger operands", () => {
+  for (const text of ["-23 × 14", "−23 × 14", "23.5 × 14",
+    "23 × 14.5", "1,023 × 14", "1234 × 14", "23 × -14", "23 × 14.5"]) {
+    assert.notEqual(understandHomeworkText(text).state, "recognized-from-text", text);
+  }
+  assert.deepEqual(understandHomeworkText("23 x 14").factors, [23,14]);
+  assert.deepEqual(understandHomeworkText("Please solve 23 × 14?").factors, [23,14]);
+  assert.equal(understandHomeworkText("23 × 14 and 16 × 12").state, "choose-question");
+});
+
+test("future, invalid and impossible observation dates never manufacture retention", () => {
+  const data = [
+    {problemId:"a",day:"2026-11-18",correct:true,independent:true},
+    {problemId:"b",day:"2026-11-19",correct:true,independent:true},
+    {problemId:"c",day:"2026-02-30",correct:true,independent:true},
+    {problemId:"d",day:"2026-11-20",correct:true,independent:true},
+  ];
+  const plan=reviewPlan(data,"2026-11-18");
+  assert.equal(plan.uniqueIndependentProblems,1);
+  assert.equal(plan.separatePracticeDays,1);
+  assert.equal(plan.status,"learning-in-progress");
+  assert.throws(()=>reviewPlan([],"2026-02-30"),RangeError);
+  assert.throws(()=>reviewPlan([],"2026-11-31"),RangeError);
+  assert.throws(()=>reviewPlan([],"2026-13-01"),RangeError);
+});
+
+test("default review day follows today's date, not a frozen release date", () => {
+  const current=localCalendarDay();
+  const next=new Date(new Date(current+"T00:00:00.000Z").getTime()+86400000).toISOString().slice(0,10);
+  assert.equal(reviewPlan([]).nextReviewDay,next);
 });
 
 test("retention cannot be certified from a single correct response", () => {
