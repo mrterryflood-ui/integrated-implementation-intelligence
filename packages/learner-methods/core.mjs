@@ -143,6 +143,29 @@ export function adaptNextStep({ observations = {}, preferences = [] } = {}) {
 }
 
 const permittedMime = new Set(["image/jpeg", "image/png", "image/webp", "application/pdf"]);
+/**
+ * Identify image/PDF bytes before local preview. MIME/extension is untrusted.
+ * This is not antivirus scanning, OCR, upload authorization or full file parsing.
+ */
+export function verifyHomeworkFileHeader(declaredType, header) {
+  if (!(header instanceof Uint8Array) || header.length < 12) {
+    return { ok: false, reason: "The document header could not be verified." };
+  }
+  const at = (offset, values) => values.every((v, i) => header[offset + i] === v);
+  const isPdf = at(0, [37, 80, 68, 70, 45]); // %PDF-
+  const isPng = at(0, [137, 80, 78, 71, 13, 10, 26, 10]);
+  const isJpeg = at(0, [255, 216, 255]);
+  const isWebp = at(0, [82, 73, 70, 70]) && at(8, [87, 69, 66, 80]);
+  const actualType = isPdf ? "application/pdf"
+    : isPng ? "image/png"
+    : isJpeg ? "image/jpeg"
+    : isWebp ? "image/webp" : null;
+  if (!actualType || actualType !== declaredType) {
+    return { ok: false, reason: "The file content does not match its declared photo or PDF type." };
+  }
+  return { ok: true, reason: "Local signature is consistent; no private upload has occurred." };
+}
+
 export function checkLocalHomeworkFile({ name, size, type } = {}) {
   if (typeof name !== "string" || !name || /[\\/\u0000-\u001F]/.test(name)) {
     return { ok: false, reason: "Select a document or photo with a valid filename." };
