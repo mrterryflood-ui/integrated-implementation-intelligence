@@ -18,6 +18,19 @@ The owner-directed connected GitHub installation enumerated **57 repositories** 
 
 **Resolved by owner on November 18, 2026:** `mrterryflood-ui/GrantPath-Pro-PWA-Transfer` is the **sole authoritative GrantPath Pro/Funding Path Pro application repository**. `ISS-LLC22/Grants2` is **RETIRED — HISTORICAL SOURCE ONLY**. Its earlier conflicting October 25 repository claims are expressly superseded and must not be used for new product development, builds, CI promotion, hosting, data updates or customer-facing work. Preserve historical code/data and verify that any external auto-builds or hosting hooks have been disabled before marking operational retirement complete; this authority record does not claim those runtime steps have occurred.
 
+
+## Retirement operational inventory — owner correction, November 18, 2026
+
+**Ownership decision is resolved:** The PWA repository alone is authoritative, and Grants2 is retired. **Infrastructure retirement is a separate, not-yet-verified control task.** Connected-provider inspection found the following legacy Grants2-linked resources; none is an instruction to publish from the retired source:
+
+- Vercel `grantpathpro-canonical` project `prj_mWInTyREErH8bGcWqhkcToauwtsV` was returned for the `ISS-LLC22/Grants2` source filter. Project was reported not live; its latest production-target deployment `dpl_GWrezoBzrkXedFhi3w25aupC7pG8` was canceled. Git integration removal and permanent trigger disablement were not verified.
+- Railway `grantpathpro` production environment `010aa34e-b6f0-47f4-984d-993cbbd7d7df` contains service `grantpathpro-canonical` (`14fe1b39-c42f-495b-8004-bbc638d40715`) still configured to source `ISS-LLC22/Grants2` / `main`; latest deployment `b5eb0cd6-7ed8-4542-8e0a-8b16c5530a7b` reported **FAILED**. This is a configured old service, not proof of a healthy active production app.
+- Railway `grantpathpro-canonical-staging` environment `adfff327-6f2b-4cf4-a0ab-6f18fd77bcad` contains a `Grants2`-sourced `grantpathpro-api-staging` service (`8a0f473f-6e2d-447e-92ae-4ceee68f802f`) whose October 29 deployment succeeded, plus a distinct PostgreSQL service with mounted `postgres-volume` (`626c10f6-318b-4402-bedd-a507cd51bb3c`). Do not delete, empty, move or repurpose this volume without independently verifying records and retention/rollback needs.
+- Grants2 has `iron-rules-ci.yml` (push/PR checks), `verify-production.yml` (automatic post-main workflow trigger), and a manually dispatched `audit-r3-live.yml`. GitHub workflow changes and external Git/Railway/Vercel providers must be independently checked before closing retirement or merging anything that could cause an unwanted old-source redeployment.
+- Vercel `grantpathpro` project `prj_HOMKMEp9zBoDqvLlMcicFwBDF1MN` shows `fundingpathpro.net` among its configured domains. Do not confuse a project/domain association or latest READY deployment with full current application or tenant acceptance; verify separately against the PWA reviewed source and actual served revision.
+
+**Closure gate:** (1) confirm old-service users/dependents and backups, (2) disable retired repository auto-production deploy and old-source triggers in Vercel/Railway/GitHub/Replit as applicable without deleting retained data, (3) independently verify no active app uses Grants2 as canonical source, (4) preserve technical evidence and rollback; only then label `RETIRED_OPERATIONALLY_VERIFIED`. Current state: `RETIRED_BY_OWNER; LEGACY_PUBLISHER_DISCONNECTION_NOT_VERIFIED`. Canonical PWA release remains separate.
+
 ## Readiness meanings
 - **SOURCE_PRESENT:** Code/tree found. ISS-EBEAS adoption, signed provenance, branch protection, real E2E, store acceptance, and deployment NOT VERIFIED without receipts.
 - **DATA_PIPELINE:** Apply Track B integrity/security/source policy to dataset and jobs, Track A to its actual consumers; no fictitious user interface required.
