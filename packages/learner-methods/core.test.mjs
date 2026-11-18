@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import {
   CORE_VERSION, beginGradeFour, suggestSupports, multiplicationModel,
   instructionalSequence, assessAnswer, adaptNextStep,
-  checkLocalHomeworkFile, understandHomeworkText, reviewPlan
+  checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan
 } from "./core.mjs";
 
 test("grade four is implemented; other grades are not falsely advertised", () => {
@@ -98,6 +98,22 @@ test("homework photo validation is local and refuses oversized or unsupported fi
   assert.equal(checkLocalHomeworkFile({name:"school.pdf",type:"application/pdf",size:9*1024*1024}).ok, false);
   assert.equal(checkLocalHomeworkFile({name:"virus.exe",type:"application/octet-stream",size:999}).ok, false);
   assert.equal(checkLocalHomeworkFile({name:"../../secret.png",type:"image/png",size:999}).ok, false);
+});
+
+test("photo/PDF local preview checks content signature and rejects mismatches", () => {
+  const png = Uint8Array.from([137, 80, 78, 71, 13, 10, 26, 10, 0, 0, 0, 0]);
+  const jpg = Uint8Array.from([255, 216, 255, 224, 0, 16, 74, 70, 73, 70, 0, 0]);
+  const webp = Uint8Array.from([82, 73, 70, 70, 4, 0, 0, 0, 87, 69, 66, 80]);
+  const pdf = Uint8Array.from([37, 80, 68, 70, 45, 49, 46, 55, 10, 0, 0, 0]);
+  assert.equal(verifyHomeworkFileHeader("image/png", png).ok, true);
+  assert.equal(verifyHomeworkFileHeader("image/jpeg", jpg).ok, true);
+  assert.equal(verifyHomeworkFileHeader("image/webp", webp).ok, true);
+  assert.equal(verifyHomeworkFileHeader("application/pdf", pdf).ok, true);
+  assert.equal(verifyHomeworkFileHeader("image/jpeg", pdf).ok, false);
+  assert.equal(verifyHomeworkFileHeader("image/png", jpg).ok, false);
+  assert.equal(verifyHomeworkFileHeader("application/pdf", new Uint8Array(12)).ok, false);
+  assert.equal(verifyHomeworkFileHeader("application/pdf", new Uint8Array()).ok, false);
+  assert.equal(verifyHomeworkFileHeader("image/png", "fake").ok, false);
 });
 
 test("understanding typed worksheet text never pretends OCR was performed", () => {
