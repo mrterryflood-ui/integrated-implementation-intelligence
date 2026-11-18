@@ -1,0 +1,49 @@
+name: Research comparability v0.2 actual Python acceptance
+on:
+  pull_request:
+    paths:
+      - 'research/fragmentation-harm/**'
+      - '.github/workflows/research-comparability-v02.yml'
+  push:
+    paths:
+      - 'research/fragmentation-harm/**'
+      - '.github/workflows/research-comparability-v02.yml'
+permissions:
+  contents: read
+jobs:
+  contract-v02:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
+        with:
+          python-version: '3.11'
+      - name: Verify preexisting v0.1 baseline
+        run: python research/fragmentation-harm/validate_contract.py
+      - name: Execute actual v0.2 validator against shipped contract
+        run: python research/fragmentation-harm/validate_contract_v02.py
+      - name: Exercise all shipped positive and rejection fixtures in actual Python
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import json
+          from pathlib import Path
+          root = Path('research/fragmentation-harm')
+          spec = importlib.util.spec_from_file_location('contract_v02', root/'validate_contract_v02.py')
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          data = json.loads((root/'comparability-contract.v0.2.controls.json').read_text(encoding='utf-8'))
+          cases = data['controls']
+          assert len(cases) >= 10, 'Expected positive and negative cases'
+          for c in cases:
+              errors = module.validate(c['contract'])
+              refusal = bool(c['expected']['refuse'])
+              expected_fragment = c['expected'].get('error_substring')
+              assert bool(errors) == refusal, (c['control_id'], errors)
+              if expected_fragment:
+                  assert any(expected_fragment in error for error in errors), (c['control_id'], expected_fragment, errors)
+          print(f'PASS: {len(cases)} actual Python contract fixtures; no clinical/scientific validation implied')
+          PY
