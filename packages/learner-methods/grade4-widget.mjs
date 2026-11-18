@@ -195,9 +195,10 @@ if (typeof globalThis.customElements !== "undefined" &&
         this.practice = practiceMode(this.practice, "guided");
       } else {
         this.problemIndex = (this.problemIndex + 1) % this.problems.length;
-        this.practice = practiceMode(
-          changeProblem(this.practice, ...this.problems[this.problemIndex]),
-          "independent",
+        this.practice = changeProblem(
+          this.practice,
+          ...this.problems[this.problemIndex],
+          { mode: "independent" },
         );
       }
       this.drawProblem();
