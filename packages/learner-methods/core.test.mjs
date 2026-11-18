@@ -75,7 +75,7 @@ test("instruction goes concrete, pictorial, place-value, guided, independent and
 test("assessment helps correct place-value omissions without rushing or diagnosis", () => {
   assert.equal(assessAnswer(23, 14, "322").correct, true);
   assert.equal(assessAnswer(23, 14, 92).state, "place-value");
-  assert.equal(assessAnswer(23, 14, 223).state, "needs-a-step");
+  assert.equal(assessAnswer(23, 14, 292).state, "needs-a-step");
   assert.equal(assessAnswer(23, 14, "three hundred").state, "try-again");
   assert.equal(assessAnswer(23, 14, 37).state, "operation");
   assert.equal(assessAnswer(23, 14, 400).state, "revisit-model");
