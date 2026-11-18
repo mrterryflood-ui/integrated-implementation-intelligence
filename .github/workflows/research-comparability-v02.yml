@@ -41,9 +41,11 @@ jobs:
           for c in cases:
               errors = module.validate(c['contract'])
               refusal = bool(c['expected']['refuse'])
-              expected_fragment = c['expected'].get('error_substring')
+              expected_fragments = c['expected'].get('error_substring') or []
+              if isinstance(expected_fragments, str):
+                  expected_fragments = [expected_fragments]
               assert bool(errors) == refusal, (c['control_id'], errors)
-              if expected_fragment:
-                  assert any(expected_fragment in error for error in errors), (c['control_id'], expected_fragment, errors)
+              for fragment in expected_fragments:
+                  assert isinstance(fragment, str) and any(fragment in error for error in errors), (c['control_id'], fragment, errors)
           print(f'PASS: {len(cases)} actual Python contract fixtures; no clinical/scientific validation implied')
           PY
