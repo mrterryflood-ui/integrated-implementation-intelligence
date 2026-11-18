@@ -1,0 +1,10 @@
+{
+  "name": "iss-ebeas-gate",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "description": "ISS-EBEAS configuration and evidence gates; not a compliance certification",
+  "engines": { "node": ">=22.0.0" },
+  "scripts": { "test": "node --test gate.test.mjs" },
+  "dependencies": { "ajv": "8.20.0", "ajv-formats": "3.0.1" }
+}

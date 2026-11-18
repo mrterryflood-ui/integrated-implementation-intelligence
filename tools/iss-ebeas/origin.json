@@ -1,0 +1,19 @@
+{
+  "standard": "ISS-EBEAS",
+  "version": "1.1.0",
+  "interpretationVersion": "1.1.0-evidence.1",
+  "canonicalRepository": "mrterryflood-ui/integrated-implementation-intelligence",
+  "governingBaselineRevision": "92da411efb255183ebf7bfec3c99a095c76c4256",
+  "ironVersion": "1.0.0",
+  "ironPolicySha256": "60301dc8d8dd2443443e7afdffd8f1c33e199309668e7e8e6ebdc77932ac4c8b",
+  "sourceFiles": {
+    "gate.mjs": "ee777e3f6b80d83b68d7f57fd7c53761949449f682059b4cd4ae803947f398b0",
+    "gate.test.mjs": "0744d748fecb4169a62df4431b6b667e198dc07751b744778689eb024b936554",
+    "fixture.mjs": "6998426852e5d173cf9a0abb3b10b00b8d1762826c1c93337e402edb8260f72a",
+    "iron_gate.py": "e1f961ef619a38e1322b079dceaf83e9501af925b4b4de57fce1d469f0040022",
+    "package.json": "1b5b3bbaa7828ded0bfeafabf62d9a16d55309c5722b50a1a9face283a11d9d3",
+    "package-lock.json": "ea8a607eb3abbedfe1bd37b18d2ff8bd6a844c837b5c2955547997cd603574b7",
+    "README.md": "a247428ad54134898e95e6a49263dff16f8a3fd89e6aef179a91f2e0823f0073"
+  },
+  "meaning": "File integrity and source attribution only. Not a signature, deployment, or product acceptance."
+}

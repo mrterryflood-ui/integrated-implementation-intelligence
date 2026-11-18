@@ -1,0 +1,31 @@
+name: ISS-EBEAS standard and gate regression
+on:
+  pull_request:
+  push:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: iss-ebeas-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  standard-contract:
+    name: Fail-closed schema and evidence boundaries
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: npm ci --prefix tools/iss-ebeas --ignore-scripts --no-audit --no-fund
+      - name: Exercise synthetic normal, denial and tampering cases
+        run: node --test tools/iss-ebeas/gate.test.mjs
+      - name: Preserve canonical IRON validator
+        run: cmp scripts/engineering_receipt_gate.py tools/iss-ebeas/iron_gate.py
+      - name: State the evidence boundary
+        if: ${{ always() }}
+        run: echo "This verifies the standards tooling. No product, store, deployment or human-outcome acceptance is asserted." >> "$GITHUB_STEP_SUMMARY"

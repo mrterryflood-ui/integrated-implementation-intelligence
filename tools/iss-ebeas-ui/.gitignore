@@ -1,0 +1,7 @@
+node_modules/
+tests/*.generated.mjs
+tests/Primitives.mjs
+tests/*-receipt.json
+tests/site/fixture.js
+tests/site/fixture.css
+tests/*.png
