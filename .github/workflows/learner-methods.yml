@@ -28,6 +28,8 @@ jobs:
         run: node --check packages/learner-methods/core.test.mjs
       - name: Validate guided/independent practice state syntax
         run: node --check packages/learner-methods/practice-state.mjs
+      - name: Validate accessible visual-area module
+        run: node --check packages/learner-methods/visual-area.mjs
       - name: Validate browser test harness syntax
         run: node --check packages/learner-methods/grade4-widget.mjs
       - name: Validate browser harness HTML landmarks
