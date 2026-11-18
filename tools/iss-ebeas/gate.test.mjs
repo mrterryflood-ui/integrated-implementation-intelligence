@@ -44,6 +44,39 @@ test('hardlinked source/output are rejected',t=>{const {root}=fixture(t);fs.link
 test('potential secret is redacted and review required, not proof of no secrets',async t=>{const {root}=fixture(t);const fake='sk-'+('X'.repeat(40));put(root,'client/src/main.ts',`const synthetic = '${fake}';`);const r=await evaluate({root,stage:'build',env:{}});assert.equal(check(r,'G3-SOURCE-SCOPE').detail.heuristicStatus,'REVIEW_REQUIRED');assert.ok(!JSON.stringify(r).includes(fake));});
 test('component name does not excuse a permission call',async t=>{const {root}=fixture(t);put(root,'client/src/main.ts','// PermissionPrimerSheet\nnavigator.geolocation.getCurrentPosition(()=>{});');const r=await evaluate({root,stage:'build',env:{}});assert.ok(check(r,'G3-SOURCE-SCOPE').detail.findings.some(f=>f.code==='PERMISSION_JOURNEY_REVIEW'));});
 test('source binding distinguishes original invalid UTF-8 bytes',t=>{const {root,m}=fixture(t);const p=path.join(root,'client/src/main.ts');fs.writeFileSync(p,Buffer.from([0x80]));const a=scanRoots(root,m.platform.sourceRoots).sourceDigest;fs.writeFileSync(p,Buffer.from([0x81]));assert.notEqual(scanRoots(root,m.platform.sourceRoots).sourceDigest,a);});
+test('firmware and deployment-shell roots are scanned and changes are hash-bound',async t=>{
+  const {root,m}=fixture(t);m.platform.sourceRoots=['firmware','scripts'];
+  for(const extension of ['c','cc','cpp','cxx','h','hh','hpp']) put(root,`firmware/controller.${extension}`,'// Synthetic source-scope fixture only.\n');
+  const sketch='firmware/atlas-beacon/atlas-beacon.ino';
+  put(root,sketch,'void setup() {}\nvoid loop() {}\n');
+  put(root,'scripts/release.sh','#!/bin/sh\n# Synthetic shell source; never executed.\n');
+  put(root,'scripts/build.bash','#!/bin/bash\n# Synthetic shell source; never executed.\n');
+  put(root,'firmware/not-source.bin','Synthetic binary artifact remains outside source-format matching.');
+  put(root,'iss-manifest.json',m);
+  const result=await evaluate({root,stage:'build',env:{}}), scope=check(result,'G3-SOURCE-SCOPE');
+  assert.equal(scope.status,'PASSED');assert.equal(scope.detail.filesScanned,10);
+  assert.equal(result.releaseReadiness,'NOT_EVALUATED');
+  fs.appendFileSync(path.join(root,sketch),'// Changed firmware source.\n');
+  const changedFirmware=scanRoots(root,m.platform.sourceRoots).sourceDigest;
+  assert.notEqual(changedFirmware,scope.detail.sourceDigest,'Arduino source changes must change the source receipt');
+  fs.appendFileSync(path.join(root,'scripts/release.sh'),'# Changed deployment source.\n');
+  assert.notEqual(scanRoots(root,m.platform.sourceRoots).sourceDigest,changedFirmware,'Deployment shell changes must change the source receipt');
+});
+test('firmware and shell secret-pattern findings are actionable without exposing their values',async t=>{
+  const {root,m}=fixture(t);m.platform.sourceRoots=['firmware','scripts'];
+  const firmwareValue='sk-'+('X'.repeat(40)), shellValue='AKIA'+('Z'.repeat(16));
+  put(root,'firmware/atlas-beacon/atlas-beacon.ino',`const char* synthetic_key = "${firmwareValue}";\n`);
+  put(root,'scripts/release.bash',`# Synthetic fixture, not a real credential.\nSYNTHETIC_KEY='${shellValue}'\n`);
+  put(root,'iss-manifest.json',m);
+  const result=await evaluate({root,stage:'build',env:{}}), scope=check(result,'G3-SOURCE-SCOPE');
+  assert.equal(scope.status,'PASSED');assert.equal(scope.detail.heuristicStatus,'REVIEW_REQUIRED');
+  assert.deepEqual(scope.detail.findings,[
+    {code:'POTENTIAL_SECRET_REVIEW',path:'firmware/atlas-beacon/atlas-beacon.ino'},
+    {code:'POTENTIAL_SECRET_REVIEW',path:'scripts/release.bash'},
+  ]);
+  const serialized=JSON.stringify(result);
+  assert.ok(!serialized.includes(firmwareValue));assert.ok(!serialized.includes(shellValue));
+});
 test('extra mapped application control cannot disappear',t=>{const {root,m}=fixture(t);const now=new Date();const e=evidenceFixture(root,m,'a'.repeat(40),now);m.traceability.requirementsMapped.push('REQ-APP-SPECIFIC');assert.throws(()=>validateEvidence(root,e,m,'a'.repeat(40),now.getTime()),/CHECK_NOT_PASSED:REQ-APP-SPECIFIC/);});
 test('release defaults fail closed without signed executed evidence',async t=>{const {root}=fixture(t);const r=await evaluate({root,env:{}});assert.equal(r.stage,'release');assert.equal(r.status,'FAIL');assert.equal(r.releaseReadiness,'BLOCKED');assert.equal(check(r,'G9-SIGNED-PROVENANCE').status,'FAILED');});
 test('provider SHA cannot make missing evidence pass',async t=>{const {root}=fixture(t);const r=await evaluate({root,stage:'release',env:{GITHUB_SHA:'a'.repeat(40)}});assert.equal(r.revision,'a'.repeat(40));assert.equal(r.status,'FAIL');});

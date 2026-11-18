@@ -15,7 +15,7 @@ const SHA = /^[a-f0-9]{40}$/;
 const HASH = /^[a-f0-9]{64}$/;
 const OUTPUT = 'audit/attestation.json';
 const EXCLUDED = new Set(['node_modules','.git','dist','build','coverage','.next','__pycache__']);
-const CODE = /\.(?:[cm]?[jt]sx?|py|html?|css|json|swift|kt|java|vue|svelte)$/;
+const CODE = /\.(?:[cm]?[jt]sx?|py|html?|css|json|swift|kt|java|vue|svelte|c|cc|cpp|cxx|h|hh|hpp|ino|sh|bash)$/;
 export const REQUIREMENTS = [
   'REQ-EBEAS-JOURNEY','REQ-EBEAS-A11Y','REQ-EBEAS-PERFORMANCE','REQ-EBEAS-PERMISSIONS',
   'REQ-EBEAS-OFFLINE-DDIL','REQ-EBEAS-PRIVACY','REQ-EBEAS-CRYPTO','REQ-EBEAS-SUPPLY-CHAIN',
