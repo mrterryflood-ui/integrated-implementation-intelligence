@@ -13,7 +13,7 @@ test("a worked example is guided even when a learner enters the correct answer",
 });
 
 test("independent mode hides help and records actual unaided attempts", () => {
-  const practice = practiceMode(startPractice(23, 14), "independent");
+  const practice = startPractice(23, 14, { mode: "independent" });
   assert.equal(practice.shownHelp, false);
   const event = submitPractice(practice, "322", day);
   assert.equal(event.state.submissions[0].independent, true);
@@ -22,13 +22,13 @@ test("independent mode hides help and records actual unaided attempts", () => {
 });
 
 test("hint request invalidates independence for the current question", () => {
-  const practice = requestHint(practiceMode(startPractice(), "independent"));
+  const practice = requestHint(startPractice(23, 14, { mode: "independent" }));
   const scored = submitPractice(practice, 322, day);
   assert.equal(scored.state.submissions[0].independent, false);
 });
 
 test("a wrong answer followed by feedback must not count next attempt as independent", () => {
-  const practice = practiceMode(startPractice(23, 14), "independent");
+  const practice = startPractice(23, 14, { mode: "independent" });
   const wrong = submitPractice(practice, 92, day);
   assert.equal(wrong.result.correct, false);
   assert.equal(wrong.state.submissions[0].independent, true);
@@ -49,13 +49,30 @@ test("blank and malformed input never create a performance record", () => {
 });
 
 test("changing the problem resets guided mode without erasing prior evidence", () => {
-  const practice = practiceMode(startPractice(23,14), "independent");
+  const practice = startPractice(23,14, { mode: "independent" });
   const done = submitPractice(practice, 322, day).state;
   const next = changeProblem(done, 16,12);
   assert.deepEqual(next.problem,[16,12]);
   assert.equal(next.mode, "guided");
   assert.equal(next.shownHelp,true);
   assert.equal(next.submissions.length,1);
+});
+
+test("toggling guided worked example to independent cannot erase prior help", () => {
+  const guided = startPractice(23, 14);
+  const attempt = practiceMode(guided, "independent");
+  assert.equal(attempt.shownHelp, true);
+  const scored = submitPractice(attempt, 322, day);
+  assert.equal(scored.state.submissions[0].independent, false);
+});
+
+test("switching to a different unseen problem permits a genuinely unaided attempt", () => {
+  const original = startPractice(23,14);
+  const fresh = changeProblem(original,16,12,{mode:"independent"});
+  assert.equal(fresh.shownHelp,false);
+  assert.equal(submitPractice(fresh,192,day).state.submissions[0].independent,true);
+  const repeated = changeProblem(fresh,23,14,{mode:"independent"});
+  assert.equal(repeated.shownHelp,true);
 });
 
 test("only legitimate practice modes and mathematical factors are accepted", () => {
@@ -65,13 +82,11 @@ test("only legitimate practice modes and mathematical factors are accepted", () 
 });
 
 test("review still requires multiple different questions and two separate days", () => {
-  let state = practiceMode(startPractice(23,14),"independent");
+  let state = startPractice(23,14, { mode: "independent" });
   state = submitPractice(state,322,day).state;
-  state = changeProblem(state,16,12);
-  state = practiceMode(state,"independent");
+  state = changeProblem(state,16,12,{mode:"independent"});
   state = submitPractice(state,192,day).state;
-  state = changeProblem(state,34,21);
-  state = practiceMode(state,"independent");
+  state = changeProblem(state,34,21,{mode:"independent"});
   const after = submitPractice(state,714,day);
   assert.equal(after.review.status,"learning-in-progress");
 });
