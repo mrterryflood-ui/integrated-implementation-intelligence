@@ -1,0 +1,28 @@
+name: Learner methods grade 4 contract
+on:
+  pull_request:
+    paths:
+      - "packages/learner-methods/**"
+      - ".github/workflows/learner-methods.yml"
+  push:
+    branches: [main]
+    paths:
+      - "packages/learner-methods/**"
+      - ".github/workflows/learner-methods.yml"
+permissions:
+  contents: read
+jobs:
+  grade-four-core:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run real deterministic instructional tests
+        run: node --test packages/learner-methods/core.test.mjs
+      - name: Validate core syntax
+        run: node --check packages/learner-methods/core.mjs
+      - name: Validate test syntax
+        run: node --check packages/learner-methods/core.test.mjs
