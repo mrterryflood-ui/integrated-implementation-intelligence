@@ -116,8 +116,9 @@ export interface PermissionPrimerSheetProps {
 }
 
 /**
- * Uses the browser's native modal dialog: top layer, inert background and keyboard
- * containment. Targets modern browsers/WebViews with HTMLDialogElement.showModal.
+ * Uses the browser's native modal dialog for top-layer placement and background
+ * inertness, with an explicit Tab loop around this component's enabled controls.
+ * Targets modern browsers/WebViews with HTMLDialogElement.showModal.
  * No synthetic success, permission grant, privacy or store-readiness claim is made.
  */
 export function PermissionPrimerSheet({ isOpen, permissionName, userBenefitStory,
@@ -201,6 +202,20 @@ export function PermissionPrimerSheet({ isOpen, permissionName, userBenefitStory
         className="iss-primer-dialog"
         aria-labelledby={titleId}
         aria-describedby={`${benefitId} ${privacyId}`}
+        onKeyDown={(event) => {
+          if (event.key !== 'Tab' || event.altKey || event.ctrlKey || event.metaKey) return;
+          // Native dialogs may move focus to browser chrome at the end of their
+          // controls. Keep this modal's forward/reverse Tab sequence contained.
+          // Its only sequentially focusable children are the buttons below.
+          const controls = Array.from(event.currentTarget.querySelectorAll<HTMLButtonElement>('button:not(:disabled)'));
+          event.preventDefault();
+          if (controls.length === 0) { headingRef.current?.focus({ preventScroll: true }); return; }
+          const index = controls.findIndex(control => control === document.activeElement);
+          const next = index < 0
+            ? (event.shiftKey ? controls.length - 1 : 0)
+            : (index + (event.shiftKey ? -1 : 1) + controls.length) % controls.length;
+          controls[next]?.focus({ preventScroll: true });
+        }}
         onCancel={(event) => { event.preventDefault(); deferRef.current(); }}
         onClose={() => {
           if (controlledCloseRef.current) { controlledCloseRef.current = false; return; }

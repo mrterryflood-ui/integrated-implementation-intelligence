@@ -36,7 +36,7 @@ Use `SpatialCard` for a semantic section with a correctly ranked heading, `Narra
 6. The consumer calls the actual API or native bridge and handles actual granted, denied, unsupported and revoked states. Returning/resolving the handler does not mean permission was granted. Callers close the controlled sheet by updating `isOpen`.
 7. A rejected request exposes an error, keeps a recovery path and does not report successful consent. No browser permission/API capability, native application or store package is created by these primitives.
 
-The modal uses `HTMLDialogElement.showModal` for native top-layer placement, inert background and keyboard containment; initial focus and trigger restoration are explicit. Escape invokes the controlled dismissal handler. Unique `useId` values bind each title and description. Unsupported browsers display an explanatory error and dismissal action rather than requesting permission without the explanation.
+The modal uses `HTMLDialogElement.showModal` for native top-layer placement, inert background. An explicit Tab loop keeps forward/reverse navigation within the enabled action controls, with the heading as a focus anchor when the only button is pending. Initial focus and trigger restoration are explicit. Escape invokes the controlled dismissal handler. Unique `useId` values bind each title and description. Unsupported browsers display an explanatory error and dismissal action rather than requesting permission without the explanation.
 
 ## Accessibility and rendering
 
@@ -56,14 +56,16 @@ Executed locally:
 
 - `npm run typecheck`: PASS, zero TypeScript errors.
 - `npm run build:fixture`: PASS after correcting the fixture-only transitive dependency mismatch.
-- `npm run test:dom`: PASS, nine React lifecycle and control-flow tests; exact cases in `tests/dom-receipt.json`.
+- `npm run test:dom`: PASS, eleven React lifecycle, control-flow and explicit Tab-handler tests; exact cases in `tests/dom-receipt.json`.
 - Numeric contrast checks: see `tests/contrast-receipt.json` for declared token pairs. These are not rendered/composited browser measurements.
 
-Prepared but not executed successfully here:
+Browser verification status:
 
 - `npm test` runs a real Chromium fixture including light/dark axe scans, tab containment, background inertness, Escape/trigger restoration, actual user activation, duplicate-request prevention, native pre-alert button count, mobile/reflow, reduced motion and forced colors.
-- Chromium launch failed before any browser case because this execution environment denies the required process-singleton socket (`Operation not permitted`). The Playwright CDN also returned an invalid archive. No browser, screenshot or native inertness pass is claimed. `tests/browser-receipt.json` records this as BLOCKED, not PASS.
+- Chromium launch failed before any browser case because this execution environment denies the required process-singleton socket (`Operation not permitted`). The Playwright CDN also returned an invalid archive. No browser, screenshot or native inertness pass is claimed. The browser receipt records setup/assertion failures as FAIL, never PASS.
 - Run the suite in authorized CI using `ISS_TEST_CHROMIUM=/path/to/chromium` when a system browser is used; otherwise omit that variable and use the Playwright-managed browser. Install browser dependencies through the existing CI process.
+- Initial hosted attempts on candidate `aad9603f138fd0920a9cb0a614d0ddd95bae64b6` reached Chromium but failed the first contrast scan during an entrance animation. The scan now waits for actual opacity/transform settlement; no contrast rule is disabled. Forward and reverse Tab containment are both asserted. A new hosted run must verify this correction.
+- Receipts observe the actual checked-out Git HEAD. Partial source snapshots explicitly report Git revision unavailable and retain file hashes; a pull request event merge SHA is not substituted for the tested head.
 - Each integrated application still needs its exact-revision build, relevant user journeys, keyboard/screen-reader/mobile checks, store/privacy artifact validation, three actual unassisted first-time users per primary persona, and deployment receipts. Performance budgets require measured device/network/workload-specific evidence.
 
 ## Authoritative design references

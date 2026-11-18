@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs/promises';
 import crypto from 'node:crypto';
 import { createElement as h, useState } from 'react';
+import { observeGitRevision } from './revision.mjs';
 const dom=new JSDOM('<!doctype html><html><body></body></html>',{pretendToBeVisual:true,url:'http://localhost/'});
 for(const key of ['window','document','HTMLElement','HTMLDialogElement','Element','SVGElement','Node','MutationObserver','Event','MouseEvent','KeyboardEvent','getComputedStyle']) {
  Object.defineProperty(globalThis,key,{configurable:true,value:typeof dom.window[key]==='function'&&key==='getComputedStyle'?dom.window[key].bind(dom.window):dom.window[key]});
@@ -40,6 +41,20 @@ await test('defer performs no permission request',async()=>{
  const trigger=await open();fireEvent.click(screen.getByRole('button',{name:'Not now'}));await act(async()=>{});
  assert.equal(screen.queryByRole('dialog'),null);assert.equal(document.activeElement,trigger);assert.equal(calls,0);
 });
+await test('explicit Tab handling cycles enabled controls forward and backward',async()=>{
+ await open();const dialog=screen.getByRole('dialog');const defer=screen.getByRole('button',{name:'Not now'});const grant=screen.getByRole('button',{name:'Continue'});
+ fireEvent.keyDown(document.activeElement,{key:'Tab'});assert.equal(document.activeElement,defer);
+ fireEvent.keyDown(document.activeElement,{key:'Tab'});assert.equal(document.activeElement,grant);
+ fireEvent.keyDown(document.activeElement,{key:'Tab'});assert.equal(document.activeElement,defer);
+ fireEvent.keyDown(document.activeElement,{key:'Tab',shiftKey:true});assert.equal(document.activeElement,grant);
+ const title=document.getElementById(dialog.getAttribute('aria-labelledby'));title.focus();fireEvent.keyDown(title,{key:'Tab',shiftKey:true});assert.equal(document.activeElement,grant);
+ assert.equal(calls,0);
+});
+await test('pending native request retains a focus anchor when its only button is disabled',async()=>{
+ await open('native-essential');const dialog=screen.getByRole('dialog');const grant=screen.getByRole('button',{name:'Continue'});grant.focus();fireEvent.click(grant);
+ fireEvent.keyDown(dialog,{key:'Tab'});assert.equal(document.activeElement,document.getElementById(dialog.getAttribute('aria-labelledby')));
+ await act(async()=>{reject();});
+});
 await test('request is synchronous and duplicate pending requests are suppressed',async()=>{
  await open();const button=screen.getByRole('button',{name:'Continue'});fireEvent.click(button);assert.equal(calls,1);assert.equal(button.disabled,true);fireEvent.click(button);assert.equal(calls,1);
  await act(async()=>{finish();});assert.equal(screen.queryByRole('dialog'),null);
@@ -63,5 +78,5 @@ await test('empty-state CTA uses an explicit non-submit button',async()=>{
  let invoked=0;render(h(IssExperienceProvider,null,h('form',null,h(NarrativeEmptyState,{headline:'Begin with one resource',storyGuidance:'Choose a resource to review its availability.',ctaLabel:'Explore resources',onAction:()=>{invoked++;}}))));const button=screen.getByRole('button',{name:'Explore resources'});assert.equal(button.type,'button');fireEvent.click(button);assert.equal(invoked,1);
 });
 cleanup();
-await fs.writeFile(new URL('./dom-receipt.json',import.meta.url),JSON.stringify({status:'PASS',timestamp:new Date().toISOString(),nodeVersion:process.version,sourceSha256:Object.fromEntries(await Promise.all(['../src/components/iss-hig/Primitives.tsx','../styles/iss-hig-tokens.css','../package-lock.json'].map(async path=>[path,crypto.createHash('sha256').update(await fs.readFile(new URL(path,import.meta.url))).digest('hex')]))),scope:'Synthetic JSDOM React lifecycle/control-flow tests. Native dialog behavior is stubbed; no browser, accessibility, live permission, or production acceptance claim.',passed:cases.length,cases},null,2)+'\n');
+await fs.writeFile(new URL('./dom-receipt.json',import.meta.url),JSON.stringify({status:'PASS',timestamp:new Date().toISOString(),nodeVersion:process.version,gitRevision:observeGitRevision(),sourceSha256:Object.fromEntries(await Promise.all(['../src/components/iss-hig/Primitives.tsx','../styles/iss-hig-tokens.css','../package-lock.json'].map(async path=>[path,crypto.createHash('sha256').update(await fs.readFile(new URL(path,import.meta.url))).digest('hex')]))),scope:'Synthetic JSDOM React lifecycle/control-flow tests. Native dialog behavior is stubbed; no browser, accessibility, live permission, or production acceptance claim.',passed:cases.length,cases},null,2)+'\n');
 dom.window.close();

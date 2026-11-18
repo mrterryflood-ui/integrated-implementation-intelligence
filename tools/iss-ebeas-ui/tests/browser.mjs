@@ -5,6 +5,7 @@ import crypto from 'node:crypto';
 import path from 'node:path';
 import http from 'node:http';
 import { fileURLToPath } from 'node:url';
+import { observeGitRevision } from './revision.mjs';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const site=path.join(here,'site');
@@ -19,12 +20,25 @@ await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));
 const url=`http://127.0.0.1:${server.address().port}`;
 let browser;
 const receipts=[];
-const test=async(name,fn)=>{await fn();receipts.push({name,status:'PASS'});console.log('PASS',name);};
+let activeCase='Browser setup';
+const gitRevision=observeGitRevision();
+const sourceSha256=Object.fromEntries(await Promise.all(['../src/components/iss-hig/Primitives.tsx','../styles/iss-hig-tokens.css','../package-lock.json','./browser.mjs','./fixture.tsx','./revision.mjs'].map(async file=>[file,crypto.createHash('sha256').update(await fs.readFile(new URL(file,import.meta.url))).digest('hex')])));
+const test=async(name,fn)=>{activeCase=name;await fn();receipts.push({name,status:'PASS'});console.log('PASS',name);};
 const axe=path.join(here,'../node_modules/axe-core/axe.min.js');
 const checkAxe=async(page)=>{
+  // Scan the actual rendered resting state, never a partially transparent entry
+  // frame. Keep contrast rules enabled; do not hide/disable production animation.
+  await page.waitForFunction(()=>{
+    const surfaces=[...document.querySelectorAll('.iss-card, dialog[open] .iss-primer-content')];
+    return surfaces.length>0 && surfaces.every(element=>{
+      const style=getComputedStyle(element);
+      const transform=style.transform==='none' || new DOMMatrixReadOnly(style.transform).isIdentity;
+      return Number(style.opacity)===1 && transform && element.getAnimations({subtree:true}).every(animation=>animation.playState==='finished' || animation.playState==='idle');
+    });
+  },undefined,{timeout:10000,polling:'raf'});
   await page.addScriptTag({path:axe});
   const result=await page.evaluate(async()=>window.axe.run(document,{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}}));
-  assert.deepEqual(result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)})),[]);
+  assert.deepEqual(result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,summary:n.failureSummary}))})),[]);
 };
 try{
  browser=await chromium.launch({headless:true, ...(process.env.ISS_TEST_CHROMIUM ? {executablePath:process.env.ISS_TEST_CHROMIUM} : {})});
@@ -46,9 +60,11 @@ try{
   await checkAxe(page);
  });
  await test('native modal contains keyboard focus and makes background inert',async()=>{
-  for(let i=0;i<7;i++){
-   await page.keyboard.press('Tab');
-   assert.equal(await page.evaluate(()=>!!document.activeElement?.closest('dialog')),true);
+  for(const key of ['Tab','Shift+Tab']){
+   for(let i=0;i<7;i++){
+    await page.keyboard.press(key);
+    assert.equal(await page.evaluate(()=>!!document.activeElement?.closest('dialog[open]')),true,`${key} step ${i+1} escaped the modal`);
+   }
   }
   await page.locator('#outside').click({force:true});
   assert.equal(await page.evaluate(()=>window.outsideCalls),0);
@@ -84,6 +100,10 @@ try{
   await page.locator('#open-native').click();
   const dialog=page.getByRole('dialog',{name:'Use Camera'});assert.equal(await dialog.getByRole('button').count(),1);
   assert.equal(await dialog.getByRole('button').textContent(),'Continue');
+  await page.keyboard.press('Shift+Tab');
+  assert.equal(await page.evaluate(()=>document.activeElement?.textContent),'Continue');
+  await page.keyboard.press('Tab');
+  assert.equal(await page.evaluate(()=>document.activeElement?.textContent),'Continue');
   await page.keyboard.press('Escape');assert.equal(await page.evaluate(()=>document.activeElement?.id),'open-native');
  });
  await test('dark theme accessibility and button contrast scan',async()=>{await page.getByRole('button',{name:'Toggle theme'}).click();await checkAxe(page);await page.locator('#open-web').click();await checkAxe(page);await page.keyboard.press('Escape');});
@@ -109,8 +129,8 @@ try{
   await page.locator('#open-web').click();await checkAxe(page);await page.keyboard.press('Escape');
  });
  await test('no browser runtime errors',async()=>assert.deepEqual(errors,[]));
- await fs.writeFile(path.join(here,'browser-receipt.json'),JSON.stringify({status:'PASS',sourceSha256:Object.fromEntries(await Promise.all(['../src/components/iss-hig/Primitives.tsx','../styles/iss-hig-tokens.css','../package-lock.json'].map(async file=>[file,crypto.createHash('sha256').update(await fs.readFile(new URL(file,import.meta.url))).digest('hex')]))),scope:'Synthetic Chromium component fixture; no production/user/store acceptance claim',timestamp:new Date().toISOString(),browser:browser.version(),passed:receipts.length,cases:receipts},null,2)+'\n');
+ await fs.writeFile(path.join(here,'browser-receipt.json'),JSON.stringify({status:'PASS',gitRevision,sourceSha256,scope:'Synthetic Chromium component fixture; no production/user/store acceptance claim',timestamp:new Date().toISOString(),browser:browser.version(),passed:receipts.length,cases:receipts},null,2)+'\n');
 }catch(error){
- await fs.writeFile(path.join(here,'browser-receipt.json'),JSON.stringify({status:'FAIL',timestamp:new Date().toISOString(),scope:'Synthetic browser fixture; setup or assertion failure is not a pass.',completedCases:receipts,error:String(error)},null,2)+'\n');
+ await fs.writeFile(path.join(here,'browser-receipt.json'),JSON.stringify({status:'FAIL',gitRevision,sourceSha256,timestamp:new Date().toISOString(),scope:'Synthetic browser fixture; setup or assertion failure is not a pass.',failedCase:activeCase,completedCases:receipts,error:String(error)},null,2)+'\n');
  throw error;
 }finally{if(browser)await browser.close();await new Promise(resolve=>server.close(resolve));}

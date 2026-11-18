@@ -29,12 +29,14 @@ jobs:
         working-directory: tools/iss-ebeas-ui
         run: node node_modules/playwright/cli.js install --with-deps chromium
       - name: Exercise actual components and failure paths
+        env:
+          ISS_EXPECTED_SOURCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: npm test --prefix tools/iss-ebeas-ui
       - name: Retain revision-bound synthetic receipts
         if: ${{ always() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: iss-experience-components-${{ github.sha }}-${{ github.run_attempt }}
+          name: iss-experience-components-${{ github.event.pull_request.head.sha || github.sha }}-${{ github.run_attempt }}
           path: tools/iss-ebeas-ui/tests/*-receipt.json
           if-no-files-found: warn
           retention-days: 30
