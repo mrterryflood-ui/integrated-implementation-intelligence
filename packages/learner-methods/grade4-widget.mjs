@@ -2,6 +2,7 @@ import {
   beginGradeFour, suggestSupports, multiplicationModel, assessAnswer,
   checkLocalHomeworkFile, understandHomeworkText, reviewPlan, instructionalSequence
 } from "./core.mjs";
+import { startPractice, practiceMode, requestHint, submitPractice, changeProblem } from "./practice-state.mjs";
 
 /**
  * Opt-in browser test harness for the shared Grade 4 instructional core.
@@ -16,7 +17,7 @@ if (typeof globalThis.customElements !== "undefined" &&
       this.attachShadow({ mode: "open" });
       this.problemIndex = 0;
       this.problems = [[23, 14], [16, 12], [34, 21], [28, 15]];
-      this.attempts = [];
+      this.practice = startPractice(...this.problems[0]);
       this.previewUrl = null;
     }
 
@@ -86,6 +87,9 @@ if (typeof globalThis.customElements !== "undefined" &&
         '<p id="instructions">Break both numbers into tens and ones, then add four pieces.</p>',
         '<div id="model" class="grid" role="group" aria-label="Four-part area model"></div>',
         '<p class="muted" id="mnemonic"></p>',
+        '<p class="muted small" id="mode-state" role="status">Guided practice: four answers are shown.</p>',
+        '<div class="actions"><button id="mode" class="secondary" type="button">Try a new problem without hints</button>',
+        '<button id="hint" class="secondary" type="button">Show a hint</button></div>',
         '<label for="answer">What is the product?</label>',
         '<input id="answer" inputmode="numeric" type="number" min="0" step="1" autocomplete="off">',
         '<div class="actions"><button type="button" id="check">Check my reasoning</button>',
@@ -105,6 +109,8 @@ if (typeof globalThis.customElements !== "undefined" &&
       this.$("turtle").addEventListener("change", () => this.drawProblem());
       this.$("check").addEventListener("click", () => this.checkAnswer());
       this.$("next").addEventListener("click", () => this.nextProblem());
+      this.$("mode").addEventListener("click", () => this.togglePracticeMode());
+      this.$("hint").addEventListener("click", () => this.revealHint());
       beginGradeFour({ grade: 4 });
       this.applySupports();
       this.drawProblem();
@@ -177,56 +183,106 @@ if (typeof globalThis.customElements !== "undefined" &&
       if (result.state !== "recognized-from-text") return;
       this.problems.unshift(result.factors);
       this.problemIndex = 0;
+      this.practice = changeProblem(this.practice, ...result.factors);
       this.drawProblem();
       this.$("question").focus?.();
     }
 
+    togglePracticeMode() {
+      // Use a different problem for the independent attempt; one where the
+      // worked answer was displayed is not independent performance evidence.
+      if (this.practice.mode === "independent") {
+        this.practice = practiceMode(this.practice, "guided");
+      } else {
+        this.problemIndex = (this.problemIndex + 1) % this.problems.length;
+        this.practice = practiceMode(
+          changeProblem(this.practice, ...this.problems[this.problemIndex]),
+          "independent",
+        );
+      }
+      this.drawProblem();
+      this.$("answer").focus();
+    }
+
+    revealHint() {
+      this.practice = requestHint(this.practice);
+      this.drawProblem();
+      this.$("feedback").textContent =
+        "Here is a visual hint. This answer will count as guided practice, not independent mastery.";
+    }
+
     drawProblem() {
-      const [a, b] = this.problems[this.problemIndex];
+      const [a, b] = this.practice.problem;
       const model = multiplicationModel(a, b);
-      const t = instructionalSequence({ a, b, useTurtlehead: this.$("turtle").checked });
+      const showingHelp = this.practice.shownHelp;
+      const t = instructionalSequence({ a, b, useTurtlehead: showingHelp && this.$("turtle").checked });
       this.$("question").textContent = a + " × " + b;
-      this.$("instructions").textContent =
-        "Break " + a + " into " + model.decomposition[0].join(" and ") +
-        ", and " + b + " into " + model.decomposition[1].join(" and ") +
-        ". Add the four products. You can use blocks or draw groups first.";
+      this.$("instructions").textContent = showingHelp
+        ? "Break " + a + " into " + model.decomposition[0].join(" and ") +
+          ", and " + b + " into " + model.decomposition[1].join(" and ") +
+          ". Add the four partial products. You can make groups with blocks first."
+        : "Try " + a + " groups of " + b + " without the answers shown. You can ask for help any time.";
       const grid = this.$("model");
       grid.replaceChildren();
-      model.cells.forEach(cell => {
-        const div = document.createElement("div");
-        div.className = "cell";
-        const label = document.createElement("span");
-        label.textContent = cell.expression;
-        const score = document.createElement("strong");
-        score.textContent = String(cell.value);
-        div.append(label, score);
-        grid.appendChild(div);
-      });
-      this.$("mnemonic").textContent = t.stages.some(s => s.id === "turtlehead-optional")
-        ? "Optional written-algorithm memory cue: the tens partial-product row needs a zero placeholder. The area model explains why."
-        : "Use the four rectangles to understand the place value. There is no timer.";
+      if (showingHelp) {
+        model.cells.forEach(cell => {
+          const div = document.createElement("div");
+          div.className = "cell";
+          const label = document.createElement("span");
+          label.textContent = cell.expression;
+          const score = document.createElement("strong");
+          score.textContent = String(cell.value);
+          div.append(label, score);
+          grid.appendChild(div);
+        });
+      } else {
+        const div = document.createElement("p");
+        div.className = "muted";
+        div.textContent =
+          "Partial-product answers are hidden for independent practice. Choose Show a hint if you need the model.";
+        grid.append(div);
+      }
+      this.$("mnemonic").textContent = !showingHelp
+        ? "Untimed independent attempt. The Turtlehead reminder is available as a hint."
+        : t.stages.some(stage => stage.id === "turtlehead-optional")
+          ? "Optional Turtlehead reminder: the tens row needs a zero placeholder. Place value explains why."
+          : "Four rectangles show place value. There is no timer.";
+      this.$("mode-state").textContent = this.practice.mode === "independent"
+        ? (showingHelp ? "Independent mode with help used: counted as guided."
+          : "Independent mode: no answer hints are visible.")
+        : "Guided practice: the four partial products are shown.";
+      this.$("mode").textContent = this.practice.mode === "independent"
+        ? "Return to guided practice" : "Try a new problem without hints";
       this.$("answer").value = "";
       this.$("feedback").textContent = "Take your time. Explain your thinking. There is no timer.";
     }
 
     checkAnswer() {
-      const [a, b] = this.problems[this.problemIndex];
-      const response = assessAnswer(a, b, this.$("answer").value);
-      this.$("feedback").textContent = response.correct
-        ? "Correct. " + response.hint
-        : "Try again. " + response.hint;
       const day = new Date().toISOString().slice(0, 10);
-      if (this.$("answer").value && response.correct) {
-        this.attempts.push({ problemId: a + "x" + b, day, correct: true, independent: true });
+      const outcome = submitPractice(this.practice, this.$("answer").value, day);
+      this.practice = outcome.state;
+      // Error feedback counts as help; reveal the model, but do not relabel a
+      // later guided correction as an independent response.
+      if (outcome.counted && !outcome.result.correct && this.practice.mode === "independent") {
+        this.drawProblem();
       }
-      const review = reviewPlan(this.attempts, day);
+      this.$("feedback").textContent = outcome.result.correct
+        ? "Correct. " + outcome.result.hint
+        : "Try again. " + outcome.result.hint;
+      this.$("mode-state").textContent = this.practice.mode === "independent"
+        && !this.practice.shownHelp
+        ? "Answer attempted without visible hints; later review is still required."
+        : "This answer received teaching support and does not count as independent mastery.";
       this.$("revisit").textContent =
-        "Practice record for this session only. Next suggested revisit: " +
-        review.nextReviewDay + ". Returning on another day is needed to verify retention.";
+        "This browser session has " + this.practice.independentEvidence.length +
+        " independent attempts. Next suggested revisit: " +
+        outcome.review.nextReviewDay +
+        ". Cross-device progress is not connected; this is not proof of retained learning.";
     }
 
     nextProblem() {
       this.problemIndex = (this.problemIndex + 1) % this.problems.length;
+      this.practice = changeProblem(this.practice, ...this.problems[this.problemIndex]);
       this.drawProblem();
       this.$("answer").focus();
     }
