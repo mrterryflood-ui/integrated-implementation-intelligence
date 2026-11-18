@@ -26,3 +26,7 @@ jobs:
         run: node --check packages/learner-methods/core.mjs
       - name: Validate test syntax
         run: node --check packages/learner-methods/core.test.mjs
+      - name: Validate browser test harness syntax
+        run: node --check packages/learner-methods/grade4-widget.mjs
+      - name: Validate browser harness HTML landmarks
+        run: node -e "const f=require('fs').readFileSync('packages/learner-methods/demo.html','utf8'); if(!f.includes('iss-grade-four-lab') || !f.includes('grade4-widget.mjs')) process.exit(1)"
