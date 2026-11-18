@@ -1,6 +1,6 @@
 import {
   beginGradeFour, suggestSupports, multiplicationModel, assessAnswer,
-  checkLocalHomeworkFile, understandHomeworkText, reviewPlan, instructionalSequence
+  checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan, instructionalSequence
 } from "./core.mjs";
 import { startPractice, practiceMode, requestHint, submitPractice, changeProblem } from "./practice-state.mjs";
 
@@ -19,6 +19,7 @@ if (typeof globalThis.customElements !== "undefined" &&
       this.problems = [[23, 14], [16, 12], [34, 21], [28, 15]];
       this.practice = startPractice(...this.problems[0]);
       this.previewUrl = null;
+      this.previewSelectionId = 0;
     }
 
     connectedCallback() {
@@ -77,6 +78,9 @@ if (typeof globalThis.customElements !== "undefined" &&
         ' Photo text recognition and secure account upload are NOT connected. Please type',
         ' the problem below to practice it.</p>',
         '<label for="file">Choose a photo or PDF (optional)</label>',
+        '<p class="small muted">On a phone or tablet, you can also use the camera. The photo stays local in this test.</p>',
+        '<label for="camera">Take a homework photo with the camera</label>',
+        '<input id="camera" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">',
         '<input id="file" type="file" accept="image/jpeg,image/png,image/webp,application/pdf">',
         '<div class="preview" id="preview" aria-live="polite"></div>',
         '<label for="worksheet">Type or paste one question from school</label>',
@@ -104,7 +108,8 @@ if (typeof globalThis.customElements !== "undefined" &&
       this.$("apply").addEventListener("click", () => this.applySupports());
       this.$("need").addEventListener("change", () => this.applySupports());
       this.$("speak").addEventListener("click", () => this.speakInstructions());
-      this.$("file").addEventListener("change", () => this.previewHomework());
+      this.$("file").addEventListener("change", e => this.previewHomework(e.target.files?.[0]));
+      this.$("camera").addEventListener("change", e => this.previewHomework(e.target.files?.[0]));
       this.$("inspect").addEventListener("click", () => this.inspectHomework());
       this.$("turtle").addEventListener("change", () => this.drawProblem());
       this.$("check").addEventListener("click", () => this.checkAnswer());
@@ -155,25 +160,38 @@ if (typeof globalThis.customElements !== "undefined" &&
       if (preview) preview.replaceChildren();
     }
 
-    previewHomework() {
+    async previewHomework(file) {
+      const selection = ++this.previewSelectionId;
       this.clearPreview();
-      const file = this.$("file").files?.[0];
       if (!file) return;
       const result = checkLocalHomeworkFile({ name: file.name, size: file.size, type: file.type });
-      const p = this.$("preview");
+      const preview = this.$("preview");
       if (!result.ok) {
-        p.textContent = result.reason;
-        this.$("file").value = "";
+        preview.textContent = result.reason;
         return;
       }
-      if (file.type.startsWith("image/")) {
-        this.previewUrl = URL.createObjectURL(file);
-        const img = document.createElement("img");
-        img.src = this.previewUrl;
-        img.alt = "Selected homework photo, for the learner or parent to review locally";
-        p.appendChild(img);
-      } else {
-        p.textContent = "PDF selected for local review. No reading or uploading has occurred.";
+      try {
+        const bytes = new Uint8Array(await file.slice(0, 16).arrayBuffer());
+        // Don't display an older selection if the parent chose a newer file.
+        if (selection !== this.previewSelectionId || !this.isConnected) return;
+        const checked = verifyHomeworkFileHeader(file.type, bytes);
+        if (!checked.ok) {
+          preview.textContent = checked.reason;
+          return;
+        }
+        if (file.type.startsWith("image/")) {
+          this.previewUrl = URL.createObjectURL(file);
+          const img = document.createElement("img");
+          img.src = this.previewUrl;
+          img.alt = "Selected homework photo, for the learner or parent to review locally";
+          preview.appendChild(img);
+        } else {
+          preview.textContent = "PDF selected for local review. No document reading or uploading has occurred.";
+        }
+      } catch {
+        if (selection === this.previewSelectionId) {
+          preview.textContent = "This file could not be opened locally. Try another photo or PDF.";
+        }
       }
     }
 
