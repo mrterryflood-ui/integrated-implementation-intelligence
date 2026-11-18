@@ -1,0 +1,3326 @@
+{
+  "schema": "comparability-contract-controls/0.2",
+  "note": "Fixtures for validate_contract_v02.py. Each entry carries a full contract document and the substrings that must appear in the validator output. Authored as an AI review; not qualified human scientific acceptance.",
+  "controls": [
+    {
+      "control_id": "K0_positive_unmodified",
+      "intent": "The unmodified v0.2 contract must pass.",
+      "expected": {
+        "refuse": false,
+        "error_substring": null
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K1_period_mismatch_conditional",
+      "intent": "Harris on 2018-2022 while the record claims CONDITIONAL.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "sites carry more than one period"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2018-2022",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K2_dimension_missing",
+      "intent": "Delete one of the 20 required dimensions from the record.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "dimensions missing: actionability"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K3_claim_ceiling",
+      "intent": "CONDITIONAL record raised to causal_candidate.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "exceeds the ceiling"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "causal_candidate",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K4_share_construct_missing",
+      "intent": "Share present with no declared construct.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "requires a share_construct"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K5_share_unexplained",
+      "intent": "Share moved to 70 against a rate-implied 64.44 with no explanation.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "unexplained"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 70,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ]
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K6_w_misreconciled",
+      "intent": "Harris share labelled W although the 0.5053 pp gap exceeds the 0.5 pp tolerance.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "W does not reconcile"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "age_weighted_rate_ratio_W",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K7_unvalued_VALUED",
+      "intent": "A dimension claims VALUED and carries nothing.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "is VALUED but carries no value"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "VALUED",
+                "why": "asserted without a value"
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K8_rate_without_period",
+      "intent": "A site carries a rate but no period.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "carries a rate or share but no period"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "control_id": "K9_site_stage_definition_missing",
+      "intent": "Record-level stage_definition is UNKNOWN and a site does not name its own.",
+      "expected": {
+        "refuse": true,
+        "error_substring": [
+          "site must name its stage definition"
+        ]
+      },
+      "contract": {
+        "schema_version": "0.2",
+        "status": "template_partially_valued_comparability_assessment",
+        "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint 92, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+        "change_from_0_1": [
+          "period becomes a first-class field on every site object, so a per-site window cannot hide inside a single record-level string (S88-C4)",
+          "every one of the required dimensions must carry an explicit state and a reason on every record; absence is a validation failure, not a default (sprint 92 finding that 18 of 19 dimensions were absent yet the v0.1 validator returned PASS)",
+          "late_stage_share_percent must declare its construct, because the case proportion and the age-weighted rate ratio W coexist in the same record and differ by 0.7397 pp at Hinds and -0.5053 pp at Harris",
+          "claim_level is capped by comparison_status, so a CONDITIONAL comparison cannot carry a causal_candidate claim",
+          "follow_up_completion_after_abnormal_test is added as a required dimension, because the pilot's primary outcome was absent from v0.1 and neither system publishes it"
+        ],
+        "required_dimensions": [
+          "source_steward",
+          "canonical_url",
+          "source_sha256",
+          "extraction_timestamp",
+          "registry_submission",
+          "geography",
+          "population",
+          "numerator",
+          "denominator",
+          "age_adjustment",
+          "case_definition",
+          "stage_definition",
+          "period",
+          "subgroup_coding",
+          "suppression",
+          "uncertainty",
+          "publication_latency",
+          "decision_owner",
+          "actionability",
+          "follow_up_completion_after_abnormal_test"
+        ],
+        "dimension_states": [
+          "VALUED",
+          "UNKNOWN",
+          "NOT_APPLICABLE"
+        ],
+        "share_constructs": [
+          "case_proportion",
+          "age_weighted_rate_ratio_W"
+        ],
+        "share_rate_tolerance_pp": 0.5,
+        "allowed_statuses": [
+          "PASS",
+          "CONDITIONAL",
+          "FAIL",
+          "UNKNOWN"
+        ],
+        "claim_levels": [
+          "descriptive",
+          "associational",
+          "causal_candidate",
+          "causal_supported"
+        ],
+        "status_claim_ceiling": {
+          "PASS": "causal_candidate",
+          "CONDITIONAL": "descriptive",
+          "FAIL": "descriptive",
+          "UNKNOWN": "descriptive"
+        },
+        "records": [
+          {
+            "comparison_id": "hinds-harris-crc-2019-2023",
+            "sources": [
+              "Hinds County MS",
+              "Harris County TX"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "CONDITIONAL",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+            "dimensions": {
+              "source_steward": {
+                "state": "VALUED",
+                "why": "One steward and one table for both counties: State Cancer Profiles, Incidence Rates Table, cancer=020, areatype=county, stage=211, year=0.",
+                "value": "State Cancer Profiles (NCI and CDC NPCR)"
+              },
+              "canonical_url": {
+                "state": "VALUED",
+                "why": "Exact URL of the table that was opened.",
+                "value": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?stateFIPS=00&areatype=county&cancer=020&race=00&sex=0&age=001&stage=211&year=0&sortVariableName=rate&sortOrder=default"
+              },
+              "source_sha256": {
+                "state": "VALUED",
+                "why": "sha256 of the extracted excerpt retained in the sprint 92 artifact, not of the rendered page, because the page has no stable byte identity. Scope is named so the hash is not mistaken for a page hash.",
+                "value": "sha256 9e242929feb0ee492949ba7856ea20cefd45cb16c8301cf45033aae0db41c480 of the retained 11-line excerpt (1966 bytes) held by the campaign loop"
+              },
+              "extraction_timestamp": {
+                "state": "VALUED",
+                "why": "Opened 2026-11-11T03:14Z; the page footer states it was created 11/10/2026 10:12 pm.",
+                "value": "2026-11-11T03:14Z"
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+              },
+              "geography": {
+                "state": "VALUED",
+                "why": "County of residence as the table reports it.",
+                "value": "Hinds County MS FIPS 28049; Harris County TX FIPS 48201"
+              },
+              "population": {
+                "state": "VALUED",
+                "why": "Stated in the table header.",
+                "value": "All Races (includes Hispanic); Both Sexes; All Ages"
+              },
+              "numerator": {
+                "state": "VALUED",
+                "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+                "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
+              },
+              "denominator": {
+                "state": "VALUED",
+                "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
+                "value": "Census populations as modified by NCI, US Population Data File"
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+              },
+              "case_definition": {
+                "state": "VALUED",
+                "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
+                "value": "invasive colorectal cancer, ICD-O-3 malignant"
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+              },
+              "period": {
+                "state": "VALUED",
+                "why": "Report header states 2019-2023 for both county rows.",
+                "value": "2019-2023"
+              },
+              "subgroup_coding": {
+                "state": "VALUED",
+                "why": "Table parameters fix the strata: race=00 All Races, sex=0 Both Sexes, age=001 All Ages.",
+                "value": "race=00; sex=0; age=001"
+              },
+              "suppression": {
+                "state": "VALUED",
+                "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+                "value": "16-record floor per area-sex-race category"
+              },
+              "uncertainty": {
+                "state": "VALUED",
+                "why": "95 percent confidence intervals printed beside each rate.",
+                "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action, threshold or owner is bound to this comparison; the sprint 78 counterfactual remains a proposal without an adopting body."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Neither system publishes this quantity at county level, and the pilot's primary outcome has never been measured. When valued it must be: numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance. A test ordered does not populate the numerator."
+              }
+            },
+            "sites": [
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 46.4,
+                "late_stage_rate_per_100k": 29.9,
+                "late_stage_ci": [
+                  26.8,
+                  33.2
+                ],
+                "late_stage_share_percent": 63.7,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 64.4397,
+                "average_annual_late_count": 75,
+                "ci_rank": "N/A",
+                "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": "2019-2023",
+                "all_stage_rate_per_100k": 38,
+                "late_stage_rate_per_100k": 23.9,
+                "late_stage_ci": [
+                  23.3,
+                  24.6
+                ],
+                "late_stage_share_percent": 63.4,
+                "share_construct": "case_proportion",
+                "rate_ratio_w_percent": 62.8947,
+                "average_annual_late_count": 1098,
+                "ci_rank": "N/A"
+              }
+            ],
+            "share_rate_gap_explained": true,
+            "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+          },
+          {
+            "comparison_id": "colorado-candidate-crc-2019-2023",
+            "sources": [
+              "Colorado county candidate",
+              "Hinds/Harris pilot"
+            ],
+            "condition": "colorectal_cancer",
+            "comparison_status": "UNKNOWN",
+            "claim_level": "descriptive",
+            "causal_harm_established": false,
+            "reason": "Comparator is not prespecified and no site-level figure has been extracted, so no dimension can be valued and no comparison may be made.",
+            "dimensions": {
+              "source_steward": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "canonical_url": {
+                "state": "UNKNOWN",
+                "why": "No source has been chosen for the Colorado candidate."
+              },
+              "source_sha256": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted, so nothing to hash."
+              },
+              "extraction_timestamp": {
+                "state": "UNKNOWN",
+                "why": "Nothing extracted."
+              },
+              "registry_submission": {
+                "state": "UNKNOWN",
+                "why": "Not chosen."
+              },
+              "geography": {
+                "state": "UNKNOWN",
+                "why": "Candidate county not yet fixed."
+              },
+              "population": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "numerator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "denominator": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "age_adjustment": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "case_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "stage_definition": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "period": {
+                "state": "UNKNOWN",
+                "why": "Not fixed."
+              },
+              "subgroup_coding": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "suppression": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "uncertainty": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "publication_latency": {
+                "state": "UNKNOWN",
+                "why": "Not extracted."
+              },
+              "decision_owner": {
+                "state": "UNKNOWN",
+                "why": "No owner named."
+              },
+              "actionability": {
+                "state": "UNKNOWN",
+                "why": "No action bound."
+              },
+              "follow_up_completion_after_abnormal_test": {
+                "state": "UNKNOWN",
+                "why": "Not extracted and not published."
+              }
+            },
+            "sites": [
+              {
+                "label": "Colorado county candidate",
+                "fips": null,
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Hinds County MS",
+                "fips": "28049",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              },
+              {
+                "label": "Harris County TX",
+                "fips": "48201",
+                "period": null,
+                "stage_definition": "UNDISCLOSED: no source has been chosen for this comparator, so no stage definition is attached"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}
