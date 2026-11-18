@@ -1,0 +1,33 @@
+{
+  "name": "iss-ebeas-experience-verification",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build:fixture": "esbuild tests/fixture.tsx --bundle --format=esm --outfile=tests/site/fixture.js",
+    "test:dom": "npm run typecheck && esbuild src/components/iss-hig/Primitives.tsx --bundle --platform=node --packages=external --format=esm --outfile=tests/Primitives.mjs && node tests/dom.mjs && node tests/contrast.mjs",
+    "test": "npm run test:dom && npm run build:fixture && node tests/browser.mjs"
+  },
+  "dependencies": {
+    "framer-motion": "12.23.24",
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.0",
+    "@testing-library/dom": "10.4.1",
+    "@testing-library/react": "16.3.0",
+    "@types/react": "18.3.27",
+    "@types/react-dom": "18.3.7",
+    "axe-core": "4.11.0",
+    "esbuild": "0.27.0",
+    "jsdom": "26.1.0",
+    "motion": "12.23.24",
+    "typescript": "5.9.3"
+  },
+  "overrides": {
+    "motion-dom": "12.23.23",
+    "motion-utils": "12.23.6"
+  }
+}

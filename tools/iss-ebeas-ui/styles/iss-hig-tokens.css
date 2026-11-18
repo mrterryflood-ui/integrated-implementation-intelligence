@@ -1,0 +1,106 @@
+/* ISS-EBEAS 1.1 experience primitives. Import once after the app's reset. */
+:root {
+  --iss-bg-canvas: #f5f5f7;
+  --iss-surface-solid: #ffffff;
+  --iss-surface-primary: rgba(255, 255, 255, 0.96);
+  --iss-surface-elevated: #ffffff;
+  --iss-border-hairline: #d3d3d8;
+  --iss-text-primary: #1d1d1f;
+  --iss-text-secondary: #595961;
+  --iss-accent-primary: #0066cc;
+  --iss-accent-soft: #e8f1fc;
+  --iss-button-bg: #0066cc;
+  --iss-button-text: #ffffff;
+  --iss-focus-ring: #0052a3;
+  --iss-shadow-ambient: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+:root.dark, .dark, [data-iss-theme="dark"] {
+  --iss-bg-canvas: #101013;
+  --iss-surface-solid: #1c1c1f;
+  --iss-surface-primary: rgba(28, 28, 31, 0.96);
+  --iss-surface-elevated: #2c2c30;
+  --iss-border-hairline: #606068;
+  --iss-text-primary: #f5f5f7;
+  --iss-text-secondary: #b8b8c0;
+  --iss-accent-primary: #72b7ff;
+  --iss-accent-soft: #173451;
+  --iss-button-bg: #72b7ff;
+  --iss-button-text: #101013;
+  --iss-focus-ring: #a6d2ff;
+  --iss-shadow-ambient: 0 12px 40px rgba(0, 0, 0, 0.40);
+}
+.iss-experience {
+  color-scheme: light;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--iss-bg-canvas);
+  color: var(--iss-text-primary);
+  font-size: max(1rem, 15px);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  overflow-wrap: anywhere;
+}
+.dark .iss-experience, .iss-experience.dark, [data-iss-theme="dark"] .iss-experience { color-scheme: dark; }
+.iss-experience *, .iss-experience *::before, .iss-experience *::after { box-sizing: border-box; }
+.iss-experience ::selection { background: var(--iss-button-bg); color: var(--iss-button-text); }
+.iss-secondary { color: var(--iss-text-secondary); }
+.iss-glass {
+  background: var(--iss-surface-solid);
+  border: 1px solid var(--iss-border-hairline);
+  box-shadow: var(--iss-shadow-ambient);
+}
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .iss-glass {
+    background: var(--iss-surface-primary);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+  }
+}
+.iss-card { border-radius: 1rem; padding: clamp(1rem, 3vw, 1.5rem); min-width: 0; }
+.iss-card-header { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.iss-card-title-group { flex: 1 1 12rem; min-width: 0; }
+.iss-card-title { font-size: 1.25rem; line-height: 1.35; letter-spacing: -0.02em; margin: 0; }
+.iss-card-subtitle { font-size: max(0.9375rem, 15px); margin: 0.4rem 0 0; }
+.iss-card-action { max-width: 100%; }
+.iss-badge { display: inline-block; max-width: 100%; padding: 0.15rem 0.65rem; margin-bottom: 0.4rem; border-radius: 2rem; background: var(--iss-accent-soft); color: var(--iss-accent-primary); font-size: max(0.8125rem, 12px); font-weight: 650; }
+.iss-empty { display: flex; flex-direction: column; align-items: center; padding: clamp(1.25rem, 5vw, 3rem) 1rem; border: 1px dashed var(--iss-border-hairline); border-radius: 1rem; text-align: center; min-width: 0; }
+.iss-empty-icon { display: grid; place-items: center; width: 3rem; min-height: 3rem; padding: 0.5rem; margin-bottom: 1rem; border-radius: 0.9rem; background: var(--iss-accent-soft); color: var(--iss-accent-primary); }
+.iss-empty-title { margin: 0; font-size: 1.0625rem; line-height: 1.4; }
+.iss-empty-guidance { max-width: 34rem; margin: 0.5rem 0 0; font-size: max(1rem, 15px); }
+.iss-empty-action { margin-top: 1.5rem; }
+.iss-button { display: inline-flex; justify-content: center; align-items: center; gap: 0.5rem; min-height: 44px; min-width: 44px; max-width: 100%; padding: 0.65rem 1.2rem; border: 1px solid transparent; border-radius: 2rem; font: inherit; font-weight: 600; text-align: center; line-height: 1.4; cursor: pointer; white-space: normal; overflow-wrap: anywhere; }
+.iss-button-primary { background: var(--iss-button-bg); color: var(--iss-button-text); }
+.iss-button-secondary { background: var(--iss-surface-elevated); border-color: var(--iss-border-hairline); color: var(--iss-text-primary); }
+.iss-button:hover { text-decoration: underline; text-underline-offset: 0.2em; }
+.iss-button:focus-visible { outline: 3px solid var(--iss-focus-ring); outline-offset: 3px; }
+.iss-button:disabled { cursor: progress; }
+.iss-primer-dialog { position: fixed; max-width: min(32rem, calc(100vw - 2rem)); width: calc(100vw - 2rem); max-height: calc(100dvh - 2rem); padding: 0; border: 0; border-radius: 1.5rem; margin: auto; color: var(--iss-text-primary); background: var(--iss-surface-solid); overflow-y: auto; overscroll-behavior: contain; }
+.iss-primer-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+.iss-primer-content { padding: clamp(1rem, 4vw, 1.5rem); border-radius: inherit; }
+.iss-eyebrow { color: var(--iss-accent-primary); font-size: max(0.875rem, 12px); font-weight: 650; margin: 0; }
+.iss-primer-title { margin: 0.4rem 0 0; font-size: 1.4rem; line-height: 1.3; }
+.iss-primer-title:focus { outline: none; }
+.iss-primer-benefit { margin: 1rem 0 0; }
+.iss-primer-privacy { padding: 1rem; border-radius: 0.75rem; background: var(--iss-accent-soft); color: var(--iss-text-primary); margin: 1rem 0 0; font-size: max(0.9375rem, 15px); }
+.iss-primer-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+.iss-dialog-error { margin: 1rem 0 0; font-weight: 600; color: var(--iss-text-primary); }
+@media (max-width: 30rem) { .iss-primer-actions { flex-direction: column; } .iss-primer-actions .iss-button { width: 100%; } }
+@media (prefers-reduced-motion: reduce) {
+  .iss-experience *, .iss-experience *::before, .iss-experience *::after {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+  .iss-card, .iss-button, .iss-primer-content { transform: none !important; }
+}
+@media (prefers-reduced-transparency: reduce), (prefers-contrast: more) {
+  .iss-glass { background: var(--iss-surface-solid); backdrop-filter: none; -webkit-backdrop-filter: none; box-shadow: none; }
+}
+@media (forced-colors: active) {
+  .iss-experience, .iss-glass, .iss-primer-dialog, .iss-primer-privacy, .iss-empty-icon, .iss-badge { background: Canvas; color: CanvasText; box-shadow: none; backdrop-filter: none; -webkit-backdrop-filter: none; }
+  .iss-secondary, .iss-eyebrow { color: CanvasText; }
+  .iss-button { background: ButtonFace; color: ButtonText; border: 1px solid ButtonText; }
+  .iss-button:focus-visible { outline-color: Highlight; }
+  .iss-glass, .iss-empty { border-color: CanvasText; }
+}

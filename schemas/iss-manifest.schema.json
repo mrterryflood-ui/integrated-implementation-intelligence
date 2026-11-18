@@ -1,0 +1,629 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "manifestVersion",
+    "interpretationVersion",
+    "declarationKind",
+    "platform",
+    "experienceTrack",
+    "assuranceTrack",
+    "traceability"
+  ],
+  "properties": {
+    "manifestVersion": {
+      "const": "1.1.0"
+    },
+    "interpretationVersion": {
+      "const": "1.1.0-evidence.1"
+    },
+    "declarationKind": {
+      "const": "REQUIREMENTS_NOT_ATTESTATION"
+    },
+    "platform": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "tier",
+        "runtimeTargets",
+        "plannedRuntimeTargets",
+        "repoOwner",
+        "repository",
+        "sourceRoots",
+        "cartridges"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^iss-[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        },
+        "tier": {
+          "type": "string",
+          "enum": [
+            "TIER_1_COMMERCIAL_CIVIC",
+            "TIER_2_HEALTH_COMMUNITY",
+            "TIER_3_DEFENSE_DDIL"
+          ]
+        },
+        "runtimeTargets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "WEB_PWA",
+              "IOS_APP_STORE",
+              "ANDROID_PLAY_STORE",
+              "TAURI_DESKTOP",
+              "EDGE_DDIL"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true
+        },
+        "plannedRuntimeTargets": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "WEB_PWA",
+              "IOS_APP_STORE",
+              "ANDROID_PLAY_STORE",
+              "TAURI_DESKTOP",
+              "EDGE_DDIL"
+            ]
+          },
+          "minItems": 0,
+          "maxItems": 5,
+          "uniqueItems": true
+        },
+        "repoOwner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^[A-Za-z0-9-]+$"
+        },
+        "repository": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$"
+        },
+        "sourceRoots": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+          },
+          "minItems": 1,
+          "maxItems": 30,
+          "uniqueItems": true
+        },
+        "cartridges": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "minItems": 0,
+          "maxItems": 30,
+          "uniqueItems": true
+        }
+      }
+    },
+    "experienceTrack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ucdNarrative",
+        "higStandards",
+        "performanceBudgets",
+        "accessibility"
+      ],
+      "properties": {
+        "ucdNarrative": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "primaryPersona",
+            "coreJobToBeDone",
+            "timeToFirstValueSeconds",
+            "emptyStateCopyAudited",
+            "fullOutcomeBudgetSeconds"
+          ],
+          "properties": {
+            "primaryPersona": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 1000
+            },
+            "coreJobToBeDone": {
+              "type": "string",
+              "minLength": 15,
+              "maxLength": 1000
+            },
+            "timeToFirstValueSeconds": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 30
+            },
+            "emptyStateCopyAudited": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "fullOutcomeBudgetSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 600,
+              "description": "Default ISS first bounded job outcome budget; not the entire award, care or field mission lifecycle. Any complex-task exception requires a separately reviewed standard amendment."
+            }
+          }
+        },
+        "higStandards": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "maxPrimaryActionsPerView",
+            "springPhysicsEnabled",
+            "optimisticUiEnabled",
+            "optimisticUiPolicy",
+            "supportsDarkAndLight",
+            "prePermissionPriming",
+            "permissionPolicy"
+          ],
+          "properties": {
+            "maxPrimaryActionsPerView": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 3
+            },
+            "springPhysicsEnabled": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "optimisticUiEnabled": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "optimisticUiPolicy": {
+              "const": "REVERSIBLE_PENDING_ONLY"
+            },
+            "supportsDarkAndLight": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "prePermissionPriming": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "permissionPolicy": {
+              "const": "CONTEXTUAL_PLATFORM_SPECIFIC"
+            }
+          }
+        },
+        "performanceBudgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "firstContentfulPaintMs",
+            "interactionToNextPaintMs",
+            "targetFps",
+            "offlineFirstReady"
+          ],
+          "properties": {
+            "firstContentfulPaintMs": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 1200
+            },
+            "interactionToNextPaintMs": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "targetFps": {
+              "type": "integer",
+              "enum": [
+                60,
+                120
+              ]
+            },
+            "offlineFirstReady": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            }
+          }
+        },
+        "accessibility": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "wcagVersion",
+            "wcagLevel",
+            "dynamicTypeScaling",
+            "reducedMotionFallback"
+          ],
+          "properties": {
+            "wcagVersion": {
+              "const": "2.2"
+            },
+            "wcagLevel": {
+              "type": "string",
+              "enum": [
+                "AA",
+                "AAA"
+              ]
+            },
+            "dynamicTypeScaling": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "reducedMotionFallback": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            }
+          }
+        }
+      }
+    },
+    "assuranceTrack": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "dataClassification",
+        "cryptography",
+        "storeCompliance",
+        "auditAndSbom",
+        "applicability"
+      ],
+      "properties": {
+        "dataClassification": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "PUBLIC",
+              "PII",
+              "PHI_HIPAA",
+              "CUI_NIST_171",
+              "ITAR_EAR"
+            ]
+          },
+          "minItems": 1,
+          "maxItems": 5,
+          "uniqueItems": true
+        },
+        "cryptography": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inTransit",
+            "atRest",
+            "e2ePayloadEncryption",
+            "authMechanism"
+          ],
+          "properties": {
+            "inTransit": {
+              "type": "string",
+              "enum": [
+                "TLS_1_3",
+                "MTLS_1_3",
+                "RNS_LXMF_ENCRYPTED"
+              ]
+            },
+            "atRest": {
+              "type": "string",
+              "enum": [
+                "AES_256_GCM",
+                "XCHACHA20_POLY1305",
+                "FIPS_140_3_MODULE"
+              ]
+            },
+            "e2ePayloadEncryption": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "authMechanism": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "WEBAUTHN_PASSKEY",
+                  "OIDC_PKCE",
+                  "HARDWARE_PIV_CAC",
+                  "ED25519_KEYPAIR"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 4,
+              "uniqueItems": true
+            }
+          }
+        },
+        "storeCompliance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "accountCreation",
+            "accountDeletionEndpoint",
+            "accountDeletionWebUrl",
+            "privacyManifestPath",
+            "playDataSafetyPath",
+            "pwaManifestPath",
+            "tosUrl",
+            "privacyPolicyUrl"
+          ],
+          "properties": {
+            "accountCreation": {
+              "anyOf": [
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "accountDeletionEndpoint": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "pattern": "^/[^\\s]*$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "accountDeletionWebUrl": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "format": "uri",
+                  "pattern": "^https://[^\\s]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "privacyManifestPath": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "playDataSafetyPath": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "pwaManifestPath": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "tosUrl": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "format": "uri",
+                  "pattern": "^https://[^\\s]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "privacyPolicyUrl": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "format": "uri",
+                  "pattern": "^https://[^\\s]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        },
+        "auditAndSbom": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sbomFormat",
+            "blockCriticalHighCves",
+            "immutableAuditLog",
+            "complianceFrameworks"
+          ],
+          "properties": {
+            "sbomFormat": {
+              "type": "string",
+              "enum": [
+                "CYCLONEDX_1_5",
+                "SPDX_2_3"
+              ]
+            },
+            "blockCriticalHighCves": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "immutableAuditLog": {
+              "type": "boolean",
+              "const": true,
+              "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+            },
+            "complianceFrameworks": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "SOC2_TYPE_2",
+                  "HIPAA_HITECH",
+                  "NIST_800_53",
+                  "NIST_800_171_CMMC_L2",
+                  "GDPR_CCPA"
+                ]
+              },
+              "minItems": 1,
+              "maxItems": 5,
+              "uniqueItems": true
+            }
+          }
+        },
+        "applicability": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "reviewStatus",
+            "basis",
+            "reviewEvidencePath"
+          ],
+          "properties": {
+            "reviewStatus": {
+              "type": "string",
+              "enum": [
+                "UNDETERMINED",
+                "REVIEWED"
+              ]
+            },
+            "basis": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 2000
+            },
+            "reviewEvidencePath": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 1000,
+                  "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "traceability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirementsMapped",
+        "e2eSuitePath",
+        "checklistPath",
+        "evidencePath",
+        "ironReceiptPath",
+        "attestationOutputPath",
+        "signerWorkflow",
+        "owner"
+      ],
+      "properties": {
+        "requirementsMapped": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "^REQ-[A-Z0-9-]+$"
+          },
+          "minItems": 1,
+          "maxItems": 100,
+          "uniqueItems": true
+        },
+        "e2eSuitePath": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+        },
+        "checklistPath": {
+          "const": "docs/engineering/ISS-EBEAS-RELEASE-CHECKLIST.md"
+        },
+        "evidencePath": {
+          "const": "audit/ebeas-evidence.json"
+        },
+        "ironReceiptPath": {
+          "const": "audit/iron-receipt.json"
+        },
+        "attestationOutputPath": {
+          "const": "audit/attestation.json"
+        },
+        "signerWorkflow": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000,
+          "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/\\.github/workflows/[A-Za-z0-9_.-]+\\.ya?ml$"
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      }
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://schemas.integratedservices.io/iss-ebeas-v1.1-evidence.1.json",
+  "title": "ISS-EBEAS v1.1 \u2014 dual-track requirements manifest",
+  "description": "Targets and applicable runtime scope, never self-attested conformance. v1.1 engineering interpretation evidence.1 retains the owner budgets and adds independent release evidence. Planned native targets do not imply store readiness. Schema URL is an identifier, not a published endpoint claim."
+}

@@ -1,0 +1,9 @@
+/tools/iss-ebeas/node_modules/
+/tools/iss-ebeas/__pycache__/
+/tools/iss-ebeas-ui/node_modules/
+/tools/iss-ebeas-ui/tests/Primitives.mjs
+/tools/iss-ebeas-ui/tests/site/fixture.js
+/tools/iss-ebeas-ui/tests/site/fixture.css
+/tools/iss-ebeas-ui/tests/*-receipt.json
+/tools/iss-ebeas-ui/tests/screenshots/
+/audit/
