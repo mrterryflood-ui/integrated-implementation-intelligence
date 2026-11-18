@@ -3,6 +3,7 @@ import {
   checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan, instructionalSequence
 } from "./core.mjs";
 import { startPractice, practiceMode, requestHint, submitPractice, changeProblem } from "./practice-state.mjs";
+import { areaPicturePlan, renderAreaPicture } from "./visual-area.mjs";
 
 /**
  * Opt-in browser test harness for the shared Grade 4 instructional core.
@@ -89,6 +90,7 @@ if (typeof globalThis.customElements !== "undefined" &&
         '<p class="small" id="school-state" role="status"></p></section>',
         '<section class="panel stack"><h3 id="question">23 × 14</h3>',
         '<p id="instructions">Break both numbers into tens and ones, then add four pieces.</p>',
+        '<div id="diagram" aria-label="Visual multiplication diagram"></div>',
         '<div id="model" class="grid" role="group" aria-label="Four-part area model"></div>',
         '<p class="muted" id="mnemonic"></p>',
         '<p class="muted small" id="mode-state" role="status">Guided practice: four answers are shown.</p>',
@@ -241,6 +243,7 @@ if (typeof globalThis.customElements !== "undefined" &&
           ", and " + b + " into " + model.decomposition[1].join(" and ") +
           ". Add the four partial products. You can make groups with blocks first."
         : "Try " + a + " groups of " + b + " without the answers shown. You can ask for help any time.";
+      renderAreaPicture(this.$("diagram"), areaPicturePlan(a,b,showingHelp));
       const grid = this.$("model");
       grid.replaceChildren();
       if (showingHelp) {
