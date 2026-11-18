@@ -52,19 +52,20 @@ These properties support accessibility. They do not certify WCAG conformance, dy
 
 ## Verification and outstanding acceptance
 
-Executed locally:
+Historical local preparation results (before canonical adoption):
 
 - `npm run typecheck`: PASS, zero TypeScript errors.
 - `npm run build:fixture`: PASS after correcting the fixture-only transitive dependency mismatch.
 - `npm run test:dom`: PASS, eleven React lifecycle, control-flow and explicit Tab-handler tests; exact cases in `tests/dom-receipt.json`.
 - Numeric contrast checks: see `tests/contrast-receipt.json` for declared token pairs. These are not rendered/composited browser measurements.
 
-Browser verification status:
+Browser verification history and current component evidence:
 
 - `npm test` runs a real Chromium fixture including light/dark axe scans, tab containment, background inertness, Escape/trigger restoration, actual user activation, duplicate-request prevention, native pre-alert button count, mobile/reflow, reduced motion and forced colors.
-- Chromium launch failed before any browser case because this execution environment denies the required process-singleton socket (`Operation not permitted`). The Playwright CDN also returned an invalid archive. No browser, screenshot or native inertness pass is claimed. The browser receipt records setup/assertion failures as FAIL, never PASS.
+- During local preparation, Chromium launch failed before any browser case because that execution environment denied the required process-singleton socket (`Operation not permitted`). The Playwright CDN also returned an invalid archive. That local attempt established no browser, screenshot or native inertness pass. The browser receipt records setup/assertion failures as FAIL, never PASS.
 - Run the suite in authorized CI using `ISS_TEST_CHROMIUM=/path/to/chromium` when a system browser is used; otherwise omit that variable and use the Playwright-managed browser. Install browser dependencies through the existing CI process.
-- Initial hosted attempts on candidate `aad9603f138fd0920a9cb0a614d0ddd95bae64b6` reached Chromium but failed the first contrast scan during an entrance animation. The scan now waits for actual opacity/transform settlement; no contrast rule is disabled. Forward and reverse Tab containment are both asserted. A new hosted run must verify this correction.
+- Initial hosted attempts on candidate `aad9603f138fd0920a9cb0a614d0ddd95bae64b6` reached Chromium but failed the first contrast scan during an entrance animation. The scan now waits for actual opacity/transform settlement; no contrast rule is disabled. Forward and reverse Tab containment are both asserted. The subsequent hosted run below verified these corrections within the synthetic component fixture.
+- At candidate `d231c7e4d3522daca1dfc3b2d0ef55246f52fede`, [hosted run 44298349350](https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/44298349350) passed 11 DOM/control-flow cases, 12 numerical contrast pairs and 14 real Chromium cases, with [revision-bound receipts](https://github.com/mrterryflood-ui/integrated-implementation-intelligence/actions/runs/44298349350/artifacts/14424677840). The [canonical adoption record](https://github.com/mrterryflood-ui/integrated-implementation-intelligence/blob/d1182ce3dcb7eff94929334142d7e9006ecac4f3/docs/engineering/ISS-EBEAS-ADOPTION-2026-11-18.md) records this later evidence. These are synthetic component results; they do not establish whole-product, actual-user, clinical, native-store or production acceptance.
 - Receipts observe the actual checked-out Git HEAD. Partial source snapshots explicitly report Git revision unavailable and retain file hashes; a pull request event merge SHA is not substituted for the tested head.
 - Each integrated application still needs its exact-revision build, relevant user journeys, keyboard/screen-reader/mobile checks, store/privacy artifact validation, three actual unassisted first-time users per primary persona, and deployment receipts. Performance budgets require measured device/network/workload-specific evidence.
 
@@ -77,4 +78,4 @@ Browser verification status:
 
 ## Policy receipt
 
-Loaded canonical `AGENTS.md` at blob `d0d0e4bddc0c43dcfc00b1ce737a1e8c4c0d0514`, IRON-ENG-001 v1.0.0 at blob `00e0b3d8583c4248743518e403bc5d4598c1cfe4`, and stack-agnostic inquiry protocol v0.1.0 at blob `f2aa0492a27a201bdddf05fc4e0c63d945aefe5d` from `mrterryflood-ui/integrated-implementation-intelligence`. Work is an uncommitted component candidate; repository adoption, independent exact-head review, merge, production deployment and user outcomes are not established by this package.
+Loaded canonical `AGENTS.md` at blob `d0d0e4bddc0c43dcfc00b1ce737a1e8c4c0d0514`, IRON-ENG-001 v1.0.0 at blob `00e0b3d8583c4248743518e403bc5d4598c1cfe4`, and stack-agnostic inquiry protocol v0.1.0 at blob `f2aa0492a27a201bdddf05fc4e0c63d945aefe5d` from `mrterryflood-ui/integrated-implementation-intelligence`. These policy-source receipts describe the original preparation. Canonical source adoption and independent exact-revision review were subsequently recorded in [PR #99](https://github.com/mrterryflood-ui/integrated-implementation-intelligence/pull/99), merged as `d1182ce3dcb7eff94929334142d7e9006ecac4f3`. Product-specific integration, production deployment, native-store acceptance and actual-user outcomes still require their own evidence; this package does not establish them.
