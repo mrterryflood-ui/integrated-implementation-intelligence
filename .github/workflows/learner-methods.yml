@@ -21,11 +21,13 @@ jobs:
         with:
           node-version: "22"
       - name: Run real deterministic instructional tests
-        run: node --test packages/learner-methods/core.test.mjs
+        run: node --test packages/learner-methods/*.test.mjs
       - name: Validate core syntax
         run: node --check packages/learner-methods/core.mjs
       - name: Validate test syntax
         run: node --check packages/learner-methods/core.test.mjs
+      - name: Validate guided/independent practice state syntax
+        run: node --check packages/learner-methods/practice-state.mjs
       - name: Validate browser test harness syntax
         run: node --check packages/learner-methods/grade4-widget.mjs
       - name: Validate browser harness HTML landmarks
