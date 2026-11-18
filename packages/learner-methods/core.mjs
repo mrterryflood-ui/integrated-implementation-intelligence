@@ -183,12 +183,25 @@ export function understandHomeworkText(value) {
     return { state: "needs-text", skill: null, instruction: "A photo can be previewed, but text recognition is not connected. Type or paste one problem." };
   }
   const text = value.slice(0, 4000).replace(/\s+/g, " ").trim();
-  const match = text.match(/\b(\d{1,3})\s*(?:×|x|\*)\s*(\d{1,3})\b/i);
-  if (match) {
-    const a = Number(match[1]), b = Number(match[2]);
-    if (a >= 10 && a <= 99 && b >= 10 && b <= 99) {
-      return { state: "recognized-from-text", skill: "two-digit-multiplication", factors: [a, b], instruction: "Use the array and area model before the written algorithm." };
-    }
+  // Bound BOTH operands: never misread -23, 23.5, 1,023, 23² or 23 × 14.5
+  // as a different positive two-digit multiplication exercise.
+  const pattern = /(^|[^\p{L}\p{N}.,+\-−])(\d{1,3})\s*(?:×|x|\*)\s*(\d{1,3})(?![\p{L}\p{N}.,])/giu;
+  const matches = [...text.matchAll(pattern)].map(m => [Number(m[2]), Number(m[3])])
+    .filter(([a,b]) => a >= 10 && a <= 99 && b >= 10 && b <= 99);
+  const distinct = [...new Map(matches.map(pair => [pair.join("x"), pair])).values()];
+  if (distinct.length > 1) {
+    return {
+      state: "choose-question", skill: "two-digit-multiplication",
+      candidates: distinct,
+      instruction: "There are several multiplication questions. Choose one and confirm it before learning."
+    };
+  }
+  if (distinct.length === 1) {
+    const factors = distinct[0];
+    return {
+      state: "recognized-from-text", skill: "two-digit-multiplication", factors,
+      instruction: "Check that these numbers match your worksheet, then use the area model."
+    };
   }
   if (/multiply|multiplication|equal groups|partial products/i.test(text)) {
     return { state: "recognized-topic", skill: "multiplication", instruction: "Start with equal groups and place value; ask for the numbers on the worksheet." };
@@ -196,14 +209,31 @@ export function understandHomeworkText(value) {
   return { state: "needs-review", skill: null, instruction: "The lesson cannot safely infer this worksheet's skill. Ask a learner or teacher to identify the topic." };
 }
 
-export function reviewPlan(observations = [], currentDay = "2026-11-18") {
-  const today = new Date(currentDay + "T00:00:00.000Z");
-  if (!Number.isFinite(today.getTime()) || today.toISOString().slice(0, 10) !== currentDay) {
-    throw new RangeError("currentDay must be a valid YYYY-MM-DD date");
+function parseCalendarDay(day) {
+  if (typeof day !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(day)) return null;
+  const d = new Date(day + "T00:00:00.000Z");
+  if (!Number.isFinite(d.getTime()) || d.toISOString().slice(0, 10) !== day) return null;
+  return d;
+}
+
+/** Dynamic local calendar day; avoid freezing every lesson on one release date. */
+export function localCalendarDay(date = new Date()) {
+  if (!(date instanceof Date) || !Number.isFinite(date.getTime())) {
+    throw new TypeError("date must be a valid Date");
   }
+  const y = String(date.getFullYear()).padStart(4, "0");
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return y + "-" + m + "-" + d;
+}
+
+export function reviewPlan(observations = [], currentDay = localCalendarDay()) {
+  const today = parseCalendarDay(currentDay);
+  if (!today) throw new RangeError("currentDay must be a valid YYYY-MM-DD date");
   const valid = Array.isArray(observations) ? observations.filter(row =>
-    row && typeof row.problemId === "string" && row.problemId &&
-    typeof row.day === "string" && /^\d{4}-\d{2}-\d{2}$/.test(row.day) &&
+    row && typeof row.problemId === "string" && row.problemId.length > 0 &&
+    typeof row.day === "string" && parseCalendarDay(row.day) !== null &&
+    row.day <= currentDay && // Future and impossible practice cannot establish retention.
     typeof row.correct === "boolean" && typeof row.independent === "boolean"
   ) : [];
   const independentCorrect = valid.filter(row => row.correct && row.independent);
