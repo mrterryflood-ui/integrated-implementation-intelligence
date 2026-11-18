@@ -1,6 +1,6 @@
 import {
   beginGradeFour, suggestSupports, multiplicationModel, assessAnswer,
-  checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan, instructionalSequence
+  checkLocalHomeworkFile, verifyHomeworkFileHeader, understandHomeworkText, reviewPlan, localCalendarDay, instructionalSequence
 } from "./core.mjs";
 import { startPractice, practiceMode, requestHint, submitPractice, changeProblem } from "./practice-state.mjs";
 import { areaPicturePlan, renderAreaPicture } from "./visual-area.mjs";
@@ -280,7 +280,7 @@ if (typeof globalThis.customElements !== "undefined" &&
     }
 
     checkAnswer() {
-      const day = new Date().toISOString().slice(0, 10);
+      const day = localCalendarDay();
       const outcome = submitPractice(this.practice, this.$("answer").value, day);
       this.practice = outcome.state;
       // Error feedback counts as help; reveal the model, but do not relabel a
