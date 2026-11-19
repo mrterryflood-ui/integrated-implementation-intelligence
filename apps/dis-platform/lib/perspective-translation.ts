@@ -20,3 +20,11 @@ export function validatePerspectiveRequest(value:unknown):{ok:true;value:Perspec
  if(x.consent!==true)return{ok:false,error:"Explicit AI transfer consent required"};
  return{ok:true,value:{from,to,source,objective,language,depth:x.depth as Depth,direction:x.direction as Direction,consent:true,experience,priorities,audienceStatements,unknowns}};
 }
+
+/** Compare values by named field, not JSON object key order. API and UI may
+ * serialize the same settings in different orders; trimming mirrors admission. */
+export const PERSPECTIVE_SETTING_KEYS=["from","to","objective","language","depth","direction","experience","priorities","audienceStatements","unknowns"] as const;
+export type PerspectiveSettings=Pick<PerspectiveRequest,(typeof PERSPECTIVE_SETTING_KEYS)[number]>;
+export function samePerspectiveSettings(a:PerspectiveSettings,b:PerspectiveSettings):boolean{
+ return PERSPECTIVE_SETTING_KEYS.every(key=>typeof a[key]==="string"&&typeof b[key]==="string"&&a[key].trim()===b[key].trim());
+}
