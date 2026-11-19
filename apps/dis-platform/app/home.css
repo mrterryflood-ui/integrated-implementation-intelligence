@@ -182,3 +182,7 @@
 .perspective-section button{max-inline-size:100%;white-space:normal;overflow-wrap:anywhere}
 .perspective-examples,.perspective-actions{min-width:0;width:100%}
 .perspective-output pre{min-width:0;max-width:100%;box-sizing:border-box}
+
+/* Tablet E2E: the extra first-class nav destination must wrap rather than widen the page. */
+.site-nav nav{flex-wrap:wrap;min-width:0;max-width:100%;align-items:center}
+.site-nav nav a{white-space:normal}
