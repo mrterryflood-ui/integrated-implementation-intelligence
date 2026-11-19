@@ -1,9 +1,11 @@
 "use client";
 import {useRef,useState} from "react";
 import {DEPTHS,DIRECTIONS,type PerspectiveRequest} from "../lib/perspective-translation";
+import PerspectiveDocuments from "./perspective-documents";
+import PerspectiveCollaboration from "./perspective-collaboration";
 type Draft={output:string;acceptedSettings:Pick<PerspectiveRequest,"from"|"to"|"objective"|"language"|"depth"|"direction">;sourceText:string;sourceSha256:string;generatedAt:string;model:string|null};
 const examples=[["Parent or caregiver","Teacher"],["Community member","Public official"],["Researcher","General audience"],["Employee","Manager"]];
-export default function PerspectiveStudio(){
+export default function PerspectiveStudio({privateReady=false}:{privateReady?:boolean}){
  const [from,setFrom]=useState(""),[to,setTo]=useState(""),[source,setSource]=useState(""),[objective,setObjective]=useState("");
  const [language,setLanguage]=useState("English"),[depth,setDepth]=useState<PerspectiveRequest["depth"]>("Simple"),[direction,setDirection]=useState<PerspectiveRequest["direction"]>("One-way");
  const [consent,setConsent]=useState(false),[status,setStatus]=useState(""),[draft,setDraft]=useState<Draft|null>(null),[busy,setBusy]=useState(false);
@@ -16,6 +18,7 @@ export default function PerspectiveStudio(){
   if(!from.trim()||!to.trim()||source.trim().length<15){setStatus("Enter both perspectives and at least 15 characters of non-identifying text.");return}
   if(!consent){setStatus("Review and approve the optional AI transfer before submitting.");return}
   setBusy(true);
+  setConsent(false); // One explicit approval per AI transfer, not a reusable blanket grant.
   const submission=++serial.current,submittedSource=source;
   try{
    const res=await fetch("/api/perspective-translation",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({from,to,source,objective,language,depth,direction,consent})});
@@ -43,7 +46,8 @@ export default function PerspectiveStudio(){
    <fieldset className="perspective-modes"><legend>How much detail?</legend>{DEPTHS.map(x=><button type="button" key={x} aria-pressed={depth===x} onClick={()=>setDepth(x)}>{x}</button>)}</fieldset>
    <div className="perspective-fields"><label>Communication direction<select value={direction} onChange={e=>setDirection(e.target.value as PerspectiveRequest["direction"])}>{DIRECTIONS.map(x=><option key={x}>{x}</option>)}</select></label><label>Output language<input value={language} onChange={e=>setLanguage(e.target.value)} maxLength={70} placeholder="English, Spanish, etc."/></label></div>
    <label className="perspective-block">What is the purpose? <input value={objective} onChange={e=>setObjective(e.target.value)} maxLength={350} placeholder="Explain, resolve a misunderstanding, identify shared actions..."/></label>
-   <label className="perspective-block">Your source text or report excerpt<textarea value={source} onChange={e=>setSource(e.target.value)} maxLength={9000} rows={7} placeholder="Use publicly shareable or fictional text only. Do not enter personal, student, patient or confidential records."/></label>
+   <label className="perspective-block">Your source text or report excerpt<textarea value={source} onChange={e=>{setSource(e.target.value);setConsent(false)}} maxLength={9000} rows={7} placeholder="Use publicly shareable or fictional text only. Do not enter personal, student, patient or confidential records."/></label>
+   <PerspectiveDocuments privateReady={privateReady} onUseText={text=>{setSource(text);setConsent(false)}}/>
    <p className="perspective-truth">The four modes control explanation depth, not factual certainty. AI output is a draft; source statistics, citations and conclusions require review. This public pilot does not accept confidential document uploads.</p>
    <label className="perspective-consent"><input type="checkbox" checked={consent} onChange={e=>setConsent(e.target.checked)}/> I confirm this text is permitted for external AI processing and approve sending it to the configured AI service for this request.</label>
    <div className="perspective-actions"><button type="button" disabled={busy} onClick={transform}>{busy?"Preparing draft…":"Translate perspectives"}</button><button type="button" onClick={()=>{setFrom(to);setTo(from);setStatus("Direction reversed. Regenerate before exporting a draft for the new perspective.")}}>Swap perspectives ↔</button></div>
@@ -52,6 +56,7 @@ export default function PerspectiveStudio(){
    {!draftMatches&&<p role="alert">The source or communication settings changed after this draft was generated. This is the earlier draft. Regenerate to unlock export.</p>}
    <p>Generated {draft?.generatedAt||"unknown"} · Original audience: {draft?.acceptedSettings.to||"unknown"} · Original language: {draft?.acceptedSettings.language||"unknown"} · {draftMatches?"Settings match":"Prior settings retained"}</p>
    <pre>{output}</pre></div>}
+   <PerspectiveCollaboration privateReady={privateReady} draftText={output} draftReady={draftMatches}/>
   </div>
  </section>;
 }
