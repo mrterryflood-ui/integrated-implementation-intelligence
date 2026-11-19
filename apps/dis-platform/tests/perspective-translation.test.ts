@@ -19,7 +19,7 @@ test("homepage exposes studio and data transfer requires signed-in opt-in",()=>{
 });
 
 test("9,000 Japanese characters and bounded Unicode escape expansion remain admissible",async()=>{
- for(const input of ["漢".repeat(9000),"\\u0000".repeat(9000), "あ".repeat(9000)]){
+ for(const input of ["漢".repeat(9000),String.fromCharCode(0).repeat(9000), "あ".repeat(9000)]){
   const payload={...sample,source:input};const raw=JSON.stringify(payload);
   assert.ok(new TextEncoder().encode(raw).byteLength<=PERSPECTIVE_JSON_MAX_BYTES);
   const parsed=await readBoundedJsonRequest(new Request("https://dynamicintel.io/api/perspective-translation",{method:"POST",headers:{"content-type":"application/json"},body:raw}),PERSPECTIVE_JSON_MAX_BYTES);
