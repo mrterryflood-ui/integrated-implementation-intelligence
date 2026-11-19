@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {readFileSync} from "node:fs";
-import {validatePerspectiveRequest,DEPTHS,DIRECTIONS} from "../lib/perspective-translation";
+import {validatePerspectiveRequest,DEPTHS,DIRECTIONS,samePerspectiveSettings} from "../lib/perspective-translation";
 import {readBoundedJsonRequest,jsonRequestStatus} from "../lib/bounded-json-request";
 import {PERSPECTIVE_JSON_MAX_BYTES} from "../app/api/perspective-translation/route";
 const sample={from:"Community member",to:"Public official",source:"Our public meeting notes describe delayed transit access. Costs were not measured.",objective:"Clarify priorities",language:"English",depth:"Simple",direction:"Bidirectional",consent:true};
@@ -34,7 +34,7 @@ test("AI export is tied to original server-accepted settings and is blocked when
  const ui=readFileSync("app/perspective-studio.tsx","utf8");
  const api=readFileSync("app/api/perspective-translation/route.ts","utf8");
  assert.match(ui,/acceptedSettings:.*data.acceptedSettings/);
- assert.match(ui,/JSON.stringify\(draft.acceptedSettings\)===JSON.stringify\(settings\)/);
+ assert.match(ui,/samePerspectiveSettings\(draft.acceptedSettings,settings\)/);
  assert.match(ui,/if\(!draft\|\|!draftMatches\)/);
  assert.match(ui,/const d=draft.acceptedSettings/);
  assert.match(ui,/disabled=\{!draftMatches\|\|busy\}/);
@@ -63,4 +63,13 @@ test("UI binds perspective differences to generation settings and source truth",
  assert.match(api,/Do not manufacture thoughts, feelings, motivations or claims/);
  assert.match(api,/audienceStatements:input.audienceStatements/);
  assert.match(ui,/setConsent\(false\)/);
+});
+
+test("server and browser field ordering do not invalidate valid generation metadata",()=>{
+ const submitted={from:"Parent",to:"Teacher",objective:"Understand",language:"Japanese",depth:"Deep" as const,direction:"Bidirectional" as const,experience:"I am uncertain",priorities:"Clarity",audienceStatements:"",unknowns:"Not known"};
+ const server={unknowns:"Not known",audienceStatements:"",priorities:"Clarity",experience:"I am uncertain",direction:"Bidirectional" as const,depth:"Deep" as const,language:"Japanese",objective:"Understand",to:"Teacher",from:"Parent"};
+ assert.equal(samePerspectiveSettings(submitted,server),true);
+ assert.equal(samePerspectiveSettings(submitted,{...server,to:"Student"}),false);
+ assert.equal(samePerspectiveSettings(submitted,{...server,unknowns:"Different"}),false);
+ assert.equal(samePerspectiveSettings(submitted,{...server,language:"Spanish"}),false);
 });
