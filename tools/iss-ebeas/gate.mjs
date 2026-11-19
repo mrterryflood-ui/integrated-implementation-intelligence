@@ -41,7 +41,7 @@ function principal(value) {
 
 /** No absolute paths, traversal, symlinks, special files, or reads outside root. */
 export function safePath(root, relative, { exists=true, file=false }={}) {
-  insist(typeof relative === 'string' && /^[A-Za-z0-9_.@/-]+$/.test(relative) &&
+  insist(typeof relative === 'string' && /^[A-Za-z0-9_.@/\[\]-]+$/.test(relative) &&
     !path.isAbsolute(relative) && !relative.split('/').some(p=>p==='..'||p==='.'||!p), 'UNSAFE_PATH');
   root=fs.realpathSync(root);
   let cursor=root;

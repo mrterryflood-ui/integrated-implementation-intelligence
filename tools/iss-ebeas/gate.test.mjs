@@ -43,6 +43,34 @@ test('empty source root fails',async t=>{const {root}=fixture(t);fs.unlinkSync(p
 test('source symlink cannot escape scan',async t=>{const {root}=fixture(t);fs.symlinkSync('/etc/passwd',path.join(root,'client/src/linked.ts'));assert.equal(check(await evaluate({root,stage:'build',env:{}}),'G3-SOURCE-SCOPE').status,'FAILED');});
 test('receipt directory symlink cannot overwrite outside root',async t=>{const {root}=fixture(t);const outside=fs.mkdtempSync(path.join(os.tmpdir(),'iss-outside-'));t.after(()=>fs.rmSync(outside,{recursive:true,force:true}));fs.symlinkSync(outside,path.join(root,'audit'));assert.throws(()=>writeReceipt(root,{}),/SYMLINK_PATH/);assert.deepEqual(fs.readdirSync(outside),[]);});
 test('hardlinked source/output are rejected',t=>{const {root}=fixture(t);fs.linkSync(path.join(root,'client/src/main.ts'),path.join(root,'hardlink.ts'));assert.throws(()=>safePath(root,'hardlink.ts'),/HARDLINK_FILE/);});
+test('literal bracket route filenames are scanned and every changed route remains source-bound',async t=>{
+  const {root,m}=fixture(t);
+  const routes=['client/src/pages/cohorts/[cohortId]/page.tsx','client/src/pages/trade/[gameId]/page.tsx',
+    'client/src/pages/goals/[goalId]/page.tsx','client/src/pages/social/[userId]/page.tsx'];
+  for(const route of routes) put(root,route,'// Synthetic route source only; no runtime code or records.\n');
+  const result=await evaluate({root,stage:'build',env:{}});
+  assert.equal(result.status,'PASS');assert.equal(result.releaseReadiness,'NOT_EVALUATED');
+  let prior=check(result,'G3-SOURCE-SCOPE').detail.sourceDigest;
+  for(const route of routes) {
+    assert.equal(safePath(root,route,{file:true}),path.join(root,route));
+    fs.appendFileSync(path.join(root,route),'// Changed route source.\n');
+    const next=scanRoots(root,m.platform.sourceRoots).sourceDigest;
+    assert.notEqual(next,prior);prior=next;
+  }
+  assert.throws(()=>safePath(root,'client/src/pages/cohorts/[missing]/page.tsx',{file:true}),/MISSING_PATH/,
+    'Literal brackets must not expand into a matching glob');
+});
+test('bracket path support preserves traversal, shell-character, symbolic-link and hard-link rejection',t=>{
+  const {root}=fixture(t);
+  for(const unsafe of ['client/src/[id]/../../outside.ts','client/src/[id]/./page.ts','client/src/[id]//page.ts',
+    '/tmp/[id]/page.ts','client/src/[id]/page*.ts','client/src/[id]/page?.ts','client/src/[id]/$(command).ts',
+    'client/src/[id]/page;command.ts','client/src/[id]/page\\\\other.ts','client/src/[id]/page\u0000.ts'])
+    assert.throws(()=>safePath(root,unsafe,{exists:false}),/UNSAFE_PATH/);
+  fs.symlinkSync(path.join(root,'client/src/main.ts'),path.join(root,'client/src/[linked].ts'));
+  assert.throws(()=>safePath(root,'client/src/[linked].ts'),/SYMLINK_PATH/);
+  fs.linkSync(path.join(root,'client/src/main.ts'),path.join(root,'client/src/[hardlinked].ts'));
+  assert.throws(()=>safePath(root,'client/src/[hardlinked].ts'),/HARDLINK_FILE/);
+});
 test('potential secret is redacted and review required, not proof of no secrets',async t=>{const {root}=fixture(t);const fake='sk-'+('X'.repeat(40));put(root,'client/src/main.ts',`const synthetic = '${fake}';`);const r=await evaluate({root,stage:'build',env:{}});assert.equal(check(r,'G3-SOURCE-SCOPE').detail.heuristicStatus,'REVIEW_REQUIRED');assert.ok(!JSON.stringify(r).includes(fake));});
 test('component name does not excuse a permission call',async t=>{const {root}=fixture(t);put(root,'client/src/main.ts','// PermissionPrimerSheet\nnavigator.geolocation.getCurrentPosition(()=>{});');const r=await evaluate({root,stage:'build',env:{}});assert.ok(check(r,'G3-SOURCE-SCOPE').detail.findings.some(f=>f.code==='PERMISSION_JOURNEY_REVIEW'));});
 test('source binding distinguishes original invalid UTF-8 bytes',t=>{const {root,m}=fixture(t);const p=path.join(root,'client/src/main.ts');fs.writeFileSync(p,Buffer.from([0x80]));const a=scanRoots(root,m.platform.sourceRoots).sourceDigest;fs.writeFileSync(p,Buffer.from([0x81]));assert.notEqual(scanRoots(root,m.platform.sourceRoots).sourceDigest,a);});
