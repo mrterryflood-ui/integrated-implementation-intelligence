@@ -42,3 +42,25 @@ test("AI export is tied to original server-accepted settings and is blocked when
  assert.match(api,/PERSPECTIVE_JSON_MAX_BYTES=100\*1024/);
  assert.doesNotMatch(api,/readBoundedOfficeRequest/);
 });
+
+test("stakeholder experience is optional, bounded, user-defined and never silently truncated",()=>{
+ const x=validatePerspectiveRequest({...sample,experience:"I observed the service close early.",priorities:"Being able to take the bus",audienceStatements:"The clerk wrote that the schedule changed.",unknowns:"The reason for the change has not been verified."});
+ assert.equal(x.ok,true);
+ if(x.ok){assert.match(x.value.experience,/observed/);assert.match(x.value.audienceStatements,/clerk/);}
+ for(const key of ["experience","priorities","audienceStatements","unknowns"] as const){
+   const limits={experience:900,priorities:600,audienceStatements:900,unknowns:600};
+   assert.equal(validatePerspectiveRequest({...sample,[key]:"語".repeat(limits[key]+1)}).ok,false,"oversize "+key);
+ }
+});
+test("UI binds perspective differences to generation settings and source truth",()=>{
+ const ui=readFileSync("app/perspective-studio.tsx","utf8");
+ const api=readFileSync("app/api/perspective-translation/route.ts","utf8");
+ assert.match(ui,/const settings=\{from,to,objective,language,depth,direction,experience,priorities,audienceStatements,unknowns\}/);
+ assert.match(ui,/Reported firsthand experience/);
+ assert.match(ui,/Attributed recipient statements/);
+ assert.match(ui,/What the receiving person actually said/);
+ assert.match(api,/attributedAudienceStatements:input.audienceStatements/);
+ assert.match(api,/Do not manufacture thoughts, feelings, motivations or claims/);
+ assert.match(api,/audienceStatements:input.audienceStatements/);
+ assert.match(ui,/setConsent\(false\)/);
+});
