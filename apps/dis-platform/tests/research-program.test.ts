@@ -69,6 +69,25 @@ test("all contextual driver narratives remain hypotheses, with observable discon
   }
   assert.ok(p.issues.some(x=>x.code==="DRIVERS_ARE_HYPOTHESES"));
 });
+test("unobserved local follow-up figures cannot appear as measured findings in page or copied brief",()=>{
+  const p=buildResearchProgram(jacksonCancerCase("colorectal"));
+  const early=p.drivers.find(d=>d.id==="H-EARLY");
+  assert.ok(early);
+  assert.equal(p.dataSources.find(s=>s.id==="local-protected")?.kind,"NOT_OBSERVED");
+  assert.match(early.discriminatingTest,/alpha of 0\\.005 or below/);
+  assert.match(early.discriminatingTest,/minimum detectable interaction/);
+  assert.match(early.discriminatingTest,/sample-size and power assumptions/);
+  assert.match(early.discriminatingTest,/NOT OBSERVED/);
+  assert.match(early.discriminatingTest,/simulation assumptions.*clinical recommendation/);
+  assert.doesNotMatch(early.discriminatingTest,/\\b(?:898|18\\.60|17\\.00|11\\.472|40\\.81)\\b/);
+  const page=readFileSync("app/research-program/page.tsx","utf8");
+  assert.match(page,/\\.\\.\\.program\\.drivers\\.map\\(d=>/);
+  assert.match(page,/d\\.discriminatingTest/);
+  assert.match(page,/JSON\\.stringify\\(\\{program,journey/);
+  assert.match(page,/Copy research and implementation brief/);
+  assert.equal(p.individualDataProcessed,false);
+  assert.equal(p.interventionAuthorized,false);
+});
 test("an evidence-based screening strategy is not promoted to proven local stage-shift efficacy",()=>{
   const p=buildResearchProgram(jacksonCancerCase("colorectal"));
   assert.ok(p.strategies.some(s=>s.name==="Patient navigation"));
