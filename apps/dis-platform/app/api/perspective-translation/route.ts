@@ -1,4 +1,5 @@
 import {auth} from "@clerk/nextjs/server";
+import {readBoundedOfficeRequest} from "../../../lib/consultation-export-artifacts";
 import {neon} from "@neondatabase/serverless";
 import {infer} from "../../../lib/council-engine";
 import {productionIdentityBlocked} from "../../../lib/release-gates";
@@ -11,7 +12,7 @@ export async function POST(req:Request){
  if(origin){try{if(new URL(origin).origin!==new URL(req.url).origin)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}}
  if(Number(req.headers.get("content-length")||0)>26000)return Response.json({error:"Request exceeds bounded intake"},{status:413});
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in before AI perspective translation",state:"SIGN_IN_REQUIRED"},{status:401});
- let raw:unknown;try{raw=await req.json()}catch{return Response.json({error:"Invalid JSON"},{status:400})}
+ let raw:unknown;try{raw=await readBoundedOfficeRequest(req,26000)}catch{return Response.json({error:"Invalid or oversized JSON"},{status:400})}
  const checked=validatePerspectiveRequest(raw);if(!checked.ok)return Response.json({error:checked.error},{status:400});
  const input=checked.value;
  if(!input.consent)return Response.json({error:"Explicit AI transfer consent required"},{status:403});
