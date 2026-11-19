@@ -1,6 +1,6 @@
 "use client";
 import {useRef,useState} from "react";
-import {DEPTHS,DIRECTIONS,type PerspectiveRequest} from "../lib/perspective-translation";
+import {DEPTHS,DIRECTIONS,samePerspectiveSettings,type PerspectiveRequest} from "../lib/perspective-translation";
 import PerspectiveDocuments from "./perspective-documents";
 import PerspectiveCollaboration from "./perspective-collaboration";
 type Draft={output:string;acceptedSettings:Pick<PerspectiveRequest,"from"|"to"|"objective"|"language"|"depth"|"direction"|"experience"|"priorities"|"audienceStatements"|"unknowns">;sourceText:string;sourceSha256:string;generatedAt:string;model:string|null};
@@ -12,7 +12,7 @@ export default function PerspectiveStudio({privateReady=false}:{privateReady?:bo
  const [consent,setConsent]=useState(false),[status,setStatus]=useState(""),[draft,setDraft]=useState<Draft|null>(null),[busy,setBusy]=useState(false);
  const serial=useRef(0);
  const settings={from,to,objective,language,depth,direction,experience,priorities,audienceStatements,unknowns};
- const draftMatches=Boolean(draft&&draft.sourceText===source&&JSON.stringify(draft.acceptedSettings)===JSON.stringify(settings));
+ const draftMatches=Boolean(draft&&draft.sourceText===source&&samePerspectiveSettings(draft.acceptedSettings,settings));
  const output=draft?.output||"";
  async function transform(){
   setStatus("");
