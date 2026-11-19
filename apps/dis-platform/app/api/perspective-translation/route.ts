@@ -1,18 +1,24 @@
 import {auth} from "@clerk/nextjs/server";
-import {readBoundedOfficeRequest} from "../../../lib/consultation-export-artifacts";
+import {createHash} from "node:crypto";
+import {readBoundedJsonRequest,jsonRequestStatus} from "../../../lib/bounded-json-request";
 import {neon} from "@neondatabase/serverless";
 import {infer} from "../../../lib/council-engine";
 import {productionIdentityBlocked} from "../../../lib/release-gates";
 import {looksLikePrivateRecord} from "../../../lib/answer-release-policy";
 import {validatePerspectiveRequest} from "../../../lib/perspective-translation";
 export const runtime="nodejs";export const maxDuration=45;
+// A 9,000-character source can require substantially more than 9,000 UTF-8 bytes,
+// especially with Japanese text or JSON-escaped control characters. The bounded
+// stream reader (not Content-Length alone) enforces this 100 KiB transport cap.
+export const PERSPECTIVE_JSON_MAX_BYTES=100*1024;
 export async function POST(req:Request){
  if(productionIdentityBlocked(process.env))return Response.json({error:"Private identity not released",state:"UNAVAILABLE"},{status:503});
  const origin=req.headers.get("origin");
- if(origin){try{if(new URL(origin).origin!==new URL(req.url).origin)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}}
- if(Number(req.headers.get("content-length")||0)>26000)return Response.json({error:"Request exceeds bounded intake"},{status:413});
+ if(!origin)return Response.json({error:"Same-origin request required"},{status:403});
+ try{if(new URL(origin).origin!==new URL(req.url).origin)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}
+ if(Number(req.headers.get("content-length")||0)>PERSPECTIVE_JSON_MAX_BYTES)return Response.json({error:"Request exceeds bounded intake"},{status:413});
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in before AI perspective translation",state:"SIGN_IN_REQUIRED"},{status:401});
- let raw:unknown;try{raw=await readBoundedOfficeRequest(req,26000)}catch{return Response.json({error:"Invalid or oversized JSON"},{status:400})}
+ let raw:unknown;try{raw=await readBoundedJsonRequest(req,PERSPECTIVE_JSON_MAX_BYTES)}catch(e){return Response.json({error:"Invalid or oversized JSON",state:"REQUEST_REJECTED"},{status:jsonRequestStatus(e)})}
  const checked=validatePerspectiveRequest(raw);if(!checked.ok)return Response.json({error:checked.error},{status:400});
  const input=checked.value;
  if(!input.consent)return Response.json({error:"Explicit AI transfer consent required"},{status:403});
@@ -27,5 +33,8 @@ export async function POST(req:Request){
  const prompt=JSON.stringify({task:"Produce a useful, clearly labeled audience-specific communication draft; then add a short 'What may need confirmation' section. In bidirectional mode, produce separate messages in both directions and show potential misunderstandings without claiming either side is wrong.",sourceRole:input.from,audienceRole:input.to,depth:input.depth,direction:input.direction,language:input.language,objective:input.objective,source:input.source});
  const response=await infer(system,prompt);
  if(!response.ok||!response.text.trim())return Response.json({error:response.error||"AI transformation unavailable",state:"INCOMPLETE"},{status:503,headers:{"Cache-Control":"no-store"}});
- return Response.json({state:"DRAFT_REVIEW_REQUIRED",output:response.text,sourceLength:input.source.length,model:response.model||null,verified:false,note:"AI-drafted perspective translation. Original evidence and human approvals remain authoritative; no independent translation or factual validation has occurred."},{headers:{"Cache-Control":"private, no-store"}});
+ const acceptedSettings={from:input.from,to:input.to,language:input.language,depth:input.depth,direction:input.direction,objective:input.objective};
+ const sourceSha256=createHash("sha256").update(input.source,"utf8").digest("hex");
+ const generatedAt=new Date().toISOString();
+ return Response.json({state:"DRAFT_REVIEW_REQUIRED",output:response.text,acceptedSettings,sourceSha256,generatedAt,sourceLength:input.source.length,model:response.model||null,verified:false,note:"AI-drafted perspective translation. Original evidence and human approvals remain authoritative; no independent translation or factual validation has occurred."},{headers:{"Cache-Control":"private, no-store"}});
 }
