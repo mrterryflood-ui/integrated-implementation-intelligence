@@ -13,7 +13,7 @@ test("homepage exposes studio and data transfer requires signed-in opt-in",()=>{
  const home=readFileSync("app/page.tsx","utf8");
  const ui=readFileSync("app/perspective-studio.tsx","utf8");
  const route=readFileSync("app/api/perspective-translation/route.ts","utf8");
- assert.match(home,/<PerspectiveStudio\/>/);assert.match(home,/href="#perspectives"/);
+ assert.match(home,/<PerspectiveStudio privateReady=\{privateReady\}\/>/);assert.match(home,/href="#perspectives"/);
  assert.match(ui,/DEPTHS\.map/);assert.match(ui,/DIRECTIONS\.map/);assert.match(ui,/setFrom\(to\);setTo\(from\)/);assert.match(ui,/External AI|external AI/);
  assert.match(route,/await auth\(\)/);assert.match(route,/input\.consent/);assert.match(route,/looksLikePrivateRecord/);assert.match(route,/usage_day/);assert.match(route,/Cache-Control/);
 });
