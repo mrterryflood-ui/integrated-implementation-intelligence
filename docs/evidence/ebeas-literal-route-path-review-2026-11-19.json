@@ -1,0 +1,37 @@
+{
+  "scope": "Literal bracket route path support in canonical source gate",
+  "baseRevision": "aa4ba262e7d135ed94ddf088cce00e2151bc1c17",
+  "files": [
+    {
+      "path": "tools/iss-ebeas/gate.mjs",
+      "baselineSha256": "91360fb8ba8943e38efddde54f3a6f54044d2a563ac7751410697d53d07e045d",
+      "candidateSha256": "d3f53bdde4a2f2320aa867dfda3499b7e0d93c081723764446f76267f9d837e8"
+    },
+    {
+      "path": "tools/iss-ebeas/gate.test.mjs",
+      "baselineSha256": "bdfb262b4813cc0d1db34d235a29bcd72bc1ffb96587c3c9e3e6113f7045f531",
+      "candidateSha256": "1cc886c31f5752af95304d77e1ec9f148590e17560ff1ec11e479a960c088390"
+    }
+  ],
+  "builder": "financial_security_release",
+  "independentVerifier": "root",
+  "verification": {
+    "nodeTests": 94,
+    "passed": 94,
+    "failed": 0,
+    "skipped": 0,
+    "result": "PASS",
+    "rawTestEvidenceSha256": "5f276b045afb448783ca667a2c0ba522453acbab175840acf9afdd39a8978e08"
+  },
+  "rationale": "Actual bracket-named routes must be included in source-digest scanning. Brackets are literal path bytes, not shell/glob expansion.",
+  "preservedControls": [
+    "absolute and dot-component traversal rejection",
+    "shell/wildcard character rejection",
+    "symlink and hardlink rejection",
+    "signed release evidence and IRON gates"
+  ],
+  "limits": [
+    "This helper repair is not application release acceptance or a production deployment.",
+    "Manifest source-root schema is unchanged."
+  ]
+}
