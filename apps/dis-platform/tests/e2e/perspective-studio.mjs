@@ -22,7 +22,7 @@ for(const [browserType,label] of [[chromium,"chromium-desktop"],[webkit,"webkit-
    const body=JSON.parse(route.request().postData()||"{}");requests.push(body);
    await route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({
     state:"DRAFT_REVIEW_REQUIRED",output:"SYNTHETIC FIXTURE OUTPUT — the date is 19 November 2026. No independent review.",
-    acceptedSettings:{from:body.from,to:body.to,objective:body.objective,language:body.language,depth:body.depth,direction:body.direction},
+    acceptedSettings:{from:body.from,to:body.to,objective:body.objective,language:body.language,depth:body.depth,direction:body.direction,experience:body.experience||"",priorities:body.priorities||"",audienceStatements:body.audienceStatements||"",unknowns:body.unknowns||""},
     sourceSha256:"a".repeat(64),generatedAt:"2026-11-19T10:20:00.000Z",model:"synthetic-fixture",verified:false
    })});
   });
@@ -34,6 +34,11 @@ for(const [browserType,label] of [[chromium,"chromium-desktop"],[webkit,"webkit-
   await studio.getByRole("combobox",{name:"Communication direction"}).selectOption("Bidirectional");
   await studio.getByRole("textbox",{name:"Output language"}).fill("Japanese");
   await studio.getByRole("textbox",{name:"What is the purpose?"}).fill("Clarify a synthetic disagreement");
+  await studio.getByText("Make the explanation faithful to your lived experience and perspective (optional)").click();
+  await studio.getByRole("textbox",{name:"Your experience or direct observations"}).fill("I saw the fictional bus leave early.");
+  await studio.getByRole("textbox",{name:"What matters to you / constraints"}).fill("Keep the original schedule explanation accurate.");
+  await studio.getByRole("textbox",{name:"What the receiving person actually said (if known)"}).fill("The transport manager wrote: 'The schedule is not final.'");
+  await studio.getByRole("textbox",{name:"Unanswered questions or disagreements"}).fill("Unknown who approved the change.");
   const box=studio.getByRole("textbox",{name:"Your source text or report excerpt"});
   await box.fill("Fictional transit delay occurred on 19 November 2026.");
   await studio.getByRole("button",{name:"Translate perspectives"}).click();
@@ -46,7 +51,10 @@ for(const [browserType,label] of [[chromium,"chromium-desktop"],[webkit,"webkit-
   const got=page.waitForEvent("download");await exportButton.click();
   const text=readFileSync(await (await got).path(),"utf8");
   assert.match(text,/Audience: Custom municipal analyst/);assert.match(text,/Language: Japanese/);
-  assert.match(text,/Depth: Research/);assert.match(text,/Source SHA-256: a{64}/);
+  assert.match(text,/Depth: Research/);assert.match(text,/Reported firsthand experience: I saw the fictional bus leave early/);assert.match(text,/Attributed recipient statements: The transport manager wrote/);assert.match(text,/Source SHA-256: a{64}/);
+  await studio.getByRole("textbox",{name:"What the receiving person actually said (if known)"}).fill("Updated actual quote.");
+  assert.equal(await exportButton.isDisabled(),true,"changing a reported statement must block stale export");
+  await studio.getByRole("textbox",{name:"What the receiving person actually said (if known)"}).fill("The transport manager wrote: 'The schedule is not final.'");
   await studio.getByRole("textbox",{name:"Receiving audience or perspective"}).fill("Different recipient");
   assert.equal(await exportButton.isDisabled(),true,"changing audience must block stale export");
   await studio.getByRole("alert").filter({hasText:/settings changed/}).waitFor();
