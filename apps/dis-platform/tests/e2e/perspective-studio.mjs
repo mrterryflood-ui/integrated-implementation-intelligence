@@ -22,7 +22,7 @@ for(const [browserType,label] of [[chromium,"chromium-desktop"],[webkit,"webkit-
    const body=JSON.parse(route.request().postData()||"{}");requests.push(body);
    await route.fulfill({status:200,contentType:"application/json",body:JSON.stringify({
     state:"DRAFT_REVIEW_REQUIRED",output:"SYNTHETIC FIXTURE OUTPUT — the date is 19 November 2026. No independent review.",
-    acceptedSettings:{from:body.from,to:body.to,objective:body.objective,language:body.language,depth:body.depth,direction:body.direction,experience:body.experience||"",priorities:body.priorities||"",audienceStatements:body.audienceStatements||"",unknowns:body.unknowns||""},
+    acceptedSettings:{unknowns:body.unknowns||"",audienceStatements:body.audienceStatements||"",priorities:body.priorities||"",experience:body.experience||"",direction:body.direction,depth:body.depth,language:body.language,objective:body.objective,to:body.to,from:body.from},
     sourceSha256:"a".repeat(64),generatedAt:"2026-11-19T10:20:00.000Z",model:"synthetic-fixture",verified:false
    })});
   });
