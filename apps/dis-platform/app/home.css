@@ -152,3 +152,25 @@
 .owned-intel-panel button:disabled{cursor:not-allowed;opacity:.65}
 .owned-intel-panel li{margin:8px 0;font-size:13px;overflow-wrap:anywhere}
 .owned-intel-panel pre{max-width:100%;white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* Audience-agnostic perspective studio */
+.perspective-section{max-width:1200px;margin:auto;padding:88px 24px;scroll-margin-top:32px}
+.perspective-panel{background:#f7f9fa;color:#153247;border:1px solid #90b0b7;border-radius:22px;padding:clamp(20px,4vw,42px);box-shadow:0 22px 65px #020c133b}
+.perspective-examples,.perspective-modes,.perspective-actions{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}
+.perspective-examples button,.perspective-modes button,.perspective-actions button,.perspective-output button{font:inherit;font-weight:700;border:1px solid #638c9e;border-radius:9px;padding:10px 15px;cursor:pointer;background:#e4eff0;color:#10374c}
+.perspective-modes button[aria-pressed="true"],.perspective-actions button:first-child{background:#13485d;color:#fff}
+.perspective-actions button:disabled{opacity:.65;cursor:wait}
+.perspective-modes{border:0;padding:0}.perspective-modes legend{font-weight:750}
+.perspective-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.perspective-fields label,.perspective-block{display:block;font-weight:700;margin:12px 0}
+.perspective-fields input,.perspective-fields select,.perspective-block input,.perspective-block textarea{display:block;width:100%;box-sizing:border-box;padding:13px;border:1px solid #8baeb7;border-radius:8px;margin-top:7px;font:inherit;color:#173b4b;background:#fff}
+.perspective-block textarea{resize:vertical;min-height:140px}
+.perspective-truth{color:#325368;font-size:14px;line-height:1.5}
+.perspective-consent{display:flex;align-items:flex-start;gap:12px;background:#e6f1f1;border-radius:10px;padding:16px;line-height:1.5}
+.perspective-consent input{margin-top:5px;min-width:20px;min-height:20px}
+.perspective-status{color:#224d64;background:#e9f3f5;border-left:4px solid #276b88;padding:12px}
+.perspective-output{margin-top:24px;border-top:1px solid #b5cad0;padding-top:16px}
+.perspective-output>div{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.perspective-output pre{white-space:pre-wrap;overflow-wrap:anywhere;font:inherit;line-height:1.6;background:#fff;border:1px solid #c6d6dd;border-radius:10px;padding:20px;max-height:680px;overflow:auto}
+.perspective-section input:focus-visible,.perspective-section textarea:focus-visible,.perspective-section button:focus-visible,.perspective-section select:focus-visible{outline:3px solid #cb9f51;outline-offset:2px}
+@media(max-width:700px){.perspective-fields{grid-template-columns:1fr}.perspective-section{padding:45px 15px}.perspective-panel{padding:20px}}
