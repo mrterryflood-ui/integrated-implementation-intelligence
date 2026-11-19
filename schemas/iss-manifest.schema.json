@@ -15,7 +15,10 @@
       "const": "1.1.0"
     },
     "interpretationVersion": {
-      "const": "1.1.0-evidence.1"
+      "enum": [
+        "1.1.0-evidence.1",
+        "1.1.0-evidence.2-static"
+      ]
     },
     "declarationKind": {
       "const": "REQUIREMENTS_NOT_ATTESTATION"
@@ -59,6 +62,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "WEB_STATIC",
               "WEB_PWA",
               "IOS_APP_STORE",
               "ANDROID_PLAY_STORE",
@@ -67,7 +71,7 @@
             ]
           },
           "minItems": 1,
-          "maxItems": 5,
+          "maxItems": 6,
           "uniqueItems": true
         },
         "plannedRuntimeTargets": {
@@ -75,6 +79,7 @@
           "items": {
             "type": "string",
             "enum": [
+              "WEB_STATIC",
               "WEB_PWA",
               "IOS_APP_STORE",
               "ANDROID_PLAY_STORE",
@@ -83,7 +88,7 @@
             ]
           },
           "minItems": 0,
-          "maxItems": 5,
+          "maxItems": 6,
           "uniqueItems": true
         },
         "repoOwner": {
@@ -120,6 +125,64 @@
           "minItems": 0,
           "maxItems": 30,
           "uniqueItems": true
+        },
+        "staticDelivery": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "serverDataClassification",
+            "inquiryProcessing",
+            "visitorAccounts",
+            "serverSubmission",
+            "applicationStorage",
+            "protectedPayloads",
+            "offlineRuntime",
+            "entrypoints"
+          ],
+          "properties": {
+            "kind": {
+              "const": "ANONYMOUS_READ_ONLY"
+            },
+            "serverDataClassification": {
+              "const": [
+                "PUBLIC"
+              ]
+            },
+            "inquiryProcessing": {
+              "enum": [
+                "NONE",
+                "LOCAL_DRAFT_ONLY"
+              ]
+            },
+            "visitorAccounts": {
+              "const": false
+            },
+            "serverSubmission": {
+              "const": false
+            },
+            "applicationStorage": {
+              "const": false
+            },
+            "protectedPayloads": {
+              "const": false
+            },
+            "offlineRuntime": {
+              "const": false
+            },
+            "entrypoints": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 1000,
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/-]+$"
+              },
+              "minItems": 1,
+              "maxItems": 20,
+              "uniqueItems": true
+            }
+          }
         }
       }
     },
@@ -247,7 +310,6 @@
             },
             "offlineFirstReady": {
               "type": "boolean",
-              "const": true,
               "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
             }
           }
@@ -328,7 +390,8 @@
               "enum": [
                 "TLS_1_3",
                 "MTLS_1_3",
-                "RNS_LXMF_ENCRYPTED"
+                "RNS_LXMF_ENCRYPTED",
+                "HTTPS_PROVIDER_MANAGED"
               ]
             },
             "atRest": {
@@ -336,12 +399,12 @@
               "enum": [
                 "AES_256_GCM",
                 "XCHACHA20_POLY1305",
-                "FIPS_140_3_MODULE"
+                "FIPS_140_3_MODULE",
+                "NO_APPLICATION_STORAGE"
               ]
             },
             "e2ePayloadEncryption": {
               "type": "boolean",
-              "const": true,
               "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
             },
             "authMechanism": {
@@ -355,7 +418,7 @@
                   "ED25519_KEYPAIR"
                 ]
               },
-              "minItems": 1,
+              "minItems": 0,
               "maxItems": 4,
               "uniqueItems": true
             }
@@ -520,7 +583,7 @@
                   "GDPR_CCPA"
                 ]
               },
-              "minItems": 1,
+              "minItems": 0,
               "maxItems": 5,
               "uniqueItems": true
             }
@@ -623,7 +686,225 @@
     }
   },
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.integratedservices.io/iss-ebeas-v1.1-evidence.1.json",
+  "$id": "https://schemas.integratedservices.io/iss-ebeas-v1.1-evidence.2-static.json",
   "title": "ISS-EBEAS v1.1 \u2014 dual-track requirements manifest",
-  "description": "Targets and applicable runtime scope, never self-attested conformance. v1.1 engineering interpretation evidence.1 retains the owner budgets and adds independent release evidence. Planned native targets do not imply store readiness. Schema URL is an identifier, not a published endpoint claim."
+  "description": "Targets and applicable runtime scope, never self-attested conformance. v1.1 engineering interpretation evidence.1 retains the owner budgets and adds independent release evidence. Planned native targets do not imply store readiness. Schema URL is an identifier, not a published endpoint claim. Additive static-delivery interpretation: only anonymous read-only public delivery may declare no application accounts, persistence or protected payload encryption. This scope never waives transport, privacy, independent applicability, executed evidence or protected release requirements.",
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "platform": {
+            "properties": {
+              "runtimeTargets": {
+                "contains": {
+                  "const": "WEB_STATIC"
+                },
+                "type": "array"
+              }
+            },
+            "required": [
+              "runtimeTargets"
+            ],
+            "type": "object"
+          }
+        },
+        "required": [
+          "platform"
+        ],
+        "type": "object"
+      },
+      "then": {
+        "properties": {
+          "interpretationVersion": {
+            "const": "1.1.0-evidence.2-static"
+          },
+          "platform": {
+            "properties": {
+              "tier": {
+                "const": "TIER_1_COMMERCIAL_CIVIC"
+              },
+              "runtimeTargets": {
+                "const": [
+                  "WEB_STATIC"
+                ]
+              },
+              "staticDelivery": {}
+            },
+            "required": [
+              "staticDelivery"
+            ],
+            "type": "object"
+          },
+          "experienceTrack": {
+            "properties": {
+              "performanceBudgets": {
+                "properties": {
+                  "offlineFirstReady": {
+                    "const": false
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "assuranceTrack": {
+            "properties": {
+              "dataClassification": {
+                "items": {
+                  "enum": [
+                    "PUBLIC",
+                    "PII"
+                  ]
+                },
+                "type": "array"
+              },
+              "cryptography": {
+                "properties": {
+                  "inTransit": {
+                    "const": "HTTPS_PROVIDER_MANAGED"
+                  },
+                  "atRest": {
+                    "const": "NO_APPLICATION_STORAGE"
+                  },
+                  "e2ePayloadEncryption": {
+                    "const": false
+                  },
+                  "authMechanism": {
+                    "maxItems": 0,
+                    "type": "array"
+                  }
+                },
+                "type": "object"
+              },
+              "storeCompliance": {
+                "properties": {
+                  "accountCreation": {
+                    "const": false
+                  },
+                  "accountDeletionEndpoint": {
+                    "const": null
+                  },
+                  "accountDeletionWebUrl": {
+                    "const": null
+                  },
+                  "privacyManifestPath": {
+                    "const": null
+                  },
+                  "playDataSafetyPath": {
+                    "const": null
+                  },
+                  "pwaManifestPath": {
+                    "const": null
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      },
+      "else": {
+        "properties": {
+          "interpretationVersion": {
+            "const": "1.1.0-evidence.1"
+          },
+          "platform": {
+            "not": {
+              "required": [
+                "staticDelivery"
+              ],
+              "type": "object",
+              "properties": {
+                "staticDelivery": {}
+              }
+            }
+          },
+          "experienceTrack": {
+            "properties": {
+              "performanceBudgets": {
+                "properties": {
+                  "offlineFirstReady": {
+                    "const": true
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          },
+          "assuranceTrack": {
+            "properties": {
+              "cryptography": {
+                "properties": {
+                  "inTransit": {
+                    "type": "string",
+                    "enum": [
+                      "TLS_1_3",
+                      "MTLS_1_3",
+                      "RNS_LXMF_ENCRYPTED"
+                    ]
+                  },
+                  "atRest": {
+                    "type": "string",
+                    "enum": [
+                      "AES_256_GCM",
+                      "XCHACHA20_POLY1305",
+                      "FIPS_140_3_MODULE"
+                    ]
+                  },
+                  "e2ePayloadEncryption": {
+                    "type": "boolean",
+                    "const": true,
+                    "description": "Normative ISS requirement; NOT a claim of implemented or measured conformance."
+                  },
+                  "authMechanism": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "WEBAUTHN_PASSKEY",
+                        "OIDC_PKCE",
+                        "HARDWARE_PIV_CAC",
+                        "ED25519_KEYPAIR"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 4,
+                    "uniqueItems": true
+                  }
+                },
+                "type": "object"
+              },
+              "auditAndSbom": {
+                "properties": {
+                  "complianceFrameworks": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "enum": [
+                        "SOC2_TYPE_2",
+                        "HIPAA_HITECH",
+                        "NIST_800_53",
+                        "NIST_800_171_CMMC_L2",
+                        "GDPR_CCPA"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 5,
+                    "uniqueItems": true
+                  }
+                },
+                "type": "object"
+              }
+            },
+            "type": "object"
+          }
+        },
+        "type": "object"
+      }
+    }
+  ]
 }

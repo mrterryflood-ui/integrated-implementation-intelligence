@@ -50,6 +50,14 @@ Postdeployment checklist rows are deliberately separate. `REQ-EBEAS-DEPLOYMENT` 
 
 ## 3. Applicability, tiers and runtime targets
 
+### Anonymous static delivery interpretation
+
+`WEB_STATIC` with interpretation `1.1.0-evidence.2-static` describes only anonymous, read-only public web delivery in the commercial/civic tier. The scoped manifest must declare no visitor accounts, server submissions, application persistence, protected application payloads or offline runtime. An inquiry may remain in browser memory until the visitor chooses an email draft or clipboard action; those external destinations and provider access logs remain separate privacy boundaries. This scope cannot be combined with PWA/native/edge targets, a health/defense tier, or restricted data. Adding any such behavior requires the corresponding application profile and controls before acceptance.
+
+The static declaration therefore uses provider-managed HTTPS as its transport requirement, no application-storage cipher, no visitor authentication mechanism and no application end-to-end payload-encryption claim. These are scope declarations, not proof of provider TLS configuration, deployment or a reviewed legal conclusion. An empty framework selection may be prepared while applicability remains undetermined; it cannot pass evidence/release until the independent applicability review is completed and hash-bound. Operator identity, build access, signed provenance and release authority remain mandatory.
+
+All existing requirement IDs and executed-evidence rules remain in force. For application controls that are absent by design, the evidence must exercise the boundary: denied writes, no visitor session or storage, no protected data/caches, honest offline behavior and the local-draft/permission journey. A revision-bound, independent static-scope review must bind the declared boundary, actual source digest and hashed entrypoint files, identify those executed checks and report zero unresolved scope findings. A declaration, static filename scan or internally consistent review record does not establish its own truth. Build success remains configuration evidence only; human experience, vulnerability/SBOM checks, IRON acceptance, artifact signatures, provider enforcement and live verification retain their original gates.
+
 The manifest separates currently supported runtime targets from planned targets. A PWA target does not imply an iOS/Android native build or store submission. A planned store target has an owner and closure work; it is not silently enabled to obtain a readiness badge.
 
 | Product scope | ISS risk profile | Required interpretation |

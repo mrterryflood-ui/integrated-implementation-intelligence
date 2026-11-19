@@ -7,6 +7,8 @@ import { fileURLToPath } from 'node:url';
 import { spawnSync } from 'node:child_process';
 import { evaluate, writeReceipt, digest, canonical, safePath, validateEvidence, scanRoots } from './gate.mjs';
 import { setupFixture, put, evidenceFixture } from './fixture.mjs';
+// Keep the additive static-delivery contracts in every existing gate-test entrypoint.
+import './static-delivery.test.mjs';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const schema=JSON.parse(fs.readFileSync(path.join(here,'../../schemas/iss-manifest.schema.json'),'utf8'));

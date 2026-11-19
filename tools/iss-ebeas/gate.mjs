@@ -1,4 +1,4 @@
-/** ISS-EBEAS 1.1.0 / evidence.1.
+/** ISS-EBEAS 1.1.0 / evidence.1 + evidence.2-static.
  * Build validates requirements and scope. Release validates independently collected
  * receipts and invokes a signature verifier. Neither stage certifies legal/store
  * compliance, actual delivery, or a beneficiary outcome. No manifest commands run.
@@ -125,6 +125,36 @@ function artifact(root,a) {
   insist(digest(fs.readFileSync(file))===a.sha256,'ARTIFACT_HASH_MISMATCH');
   return file;
 }
+/** Static delivery changes application-control applicability, never release authority.
+ * This is review-record consistency. Source/browser/server checks must supply the
+ * observations; a reviewed JSON assertion cannot establish their truth by itself.
+ */
+function validateStaticApplicability(root,evidence,manifest,revision,now) {
+  if (!manifest.platform.runtimeTargets.includes('WEB_STATIC')) return;
+  const boundary=manifest.platform.staticDelivery;
+  const review=readJson(root,manifest.assuranceTrack.applicability.reviewEvidencePath);
+  insist(review.version===1 && review.kind==='STATIC_DELIVERY_APPLICABILITY_REVIEW' &&
+    review.disposition==='APPLICABLE_STATIC_DELIVERY','STATIC_APPLICABILITY_REVIEW_REQUIRED');
+  insist(review.revision===revision && review.repository===manifest.platform.repository &&
+    review.sourceDigest===evidence.sourceDigest && HASH.test(review.sourceDigest??''),'STATIC_REVIEW_SOURCE_MISMATCH');
+  insist(review.boundaryDigest===digest(canonical(boundary)),'STATIC_REVIEW_BOUNDARY_MISMATCH');
+  checkTime(review.reviewedAt,now);
+  insist(principal(review.reviewedBy) && principal(review.reviewedBy)!==principal(evidence.builder),
+    'STATIC_INDEPENDENT_REVIEW_REQUIRED');
+  insist(text(review.rationale,20) && Array.isArray(review.unresolvedScopeFindings) &&
+    review.unresolvedScopeFindings.length===0,'STATIC_SCOPE_REVIEW_INCOMPLETE');
+  insist(Array.isArray(review.sources) && review.sources.length>0 && review.sources.length<=100,
+    'STATIC_REVIEW_SOURCES_REQUIRED');
+  for (const source of review.sources) artifact(root,source);
+  insist(boundary.entrypoints.every(entry=>review.sources.some(source=>source.path===entry)),
+    'STATIC_ENTRYPOINT_NOT_REVIEWED');
+  // Existing mandatory evidence checks remain required and executable, including
+  // negative tests of unsupported writes/accounts/storage and honest offline behavior.
+  const required=['REQ-EBEAS-E2E','REQ-EBEAS-IDENTITY-CONTINUITY','REQ-EBEAS-ENTITY-ISOLATION',
+    'REQ-EBEAS-PERSISTENCE','REQ-EBEAS-PERMISSIONS','REQ-EBEAS-OFFLINE-DDIL','REQ-EBEAS-PRIVACY','REQ-EBEAS-CRYPTO'];
+  insist(Array.isArray(review.evidenceRequirements) && required.every(id=>review.evidenceRequirements.includes(id)),
+    'STATIC_ABSENCE_EVIDENCE_UNMAPPED');
+}
 export function validateEvidence(root,evidence,manifest,revision,now=Date.now()) {
   insist(evidence && evidence.version==='1.1.0' && evidence.revision===revision,'EVIDENCE_REVISION_MISMATCH');
   insist(evidence.repository===manifest.platform.repository,'EVIDENCE_REPOSITORY_MISMATCH');
@@ -204,6 +234,7 @@ export function validateEvidence(root,evidence,manifest,revision,now=Date.now())
       text(crypt.fips.moduleVersion) && text(crypt.fips.operatingEnvironment) && crypt.fips.approvedMode===true,'FIPS_MODULE_EVIDENCE_REQUIRED');
   insist(manifest.assuranceTrack.applicability.reviewStatus==='REVIEWED' && manifest.assuranceTrack.applicability.reviewEvidencePath,'REGULATORY_APPLICABILITY_UNRESOLVED');
   insist(evidence.checks['REQ-EBEAS-APPLICABILITY'].artifacts.some(a=>a.path===manifest.assuranceTrack.applicability.reviewEvidencePath),'APPLICABILITY_NOT_HASH_BOUND');
+  validateStaticApplicability(root,evidence,manifest,revision,now);
   insist(evidence.approval && principal(evidence.approval.approvedBy) && principal(evidence.approval.approvedBy)!==principal(evidence.builder) &&
     evidence.approval.revision===revision && text(evidence.approval.authorityReference) && text(evidence.approval.environment),'RELEASE_AUTHORITY_REQUIRED');
   artifact(root,{path:manifest.traceability.ironReceiptPath,sha256:evidence.ironReceiptSha256});
@@ -211,6 +242,11 @@ export function validateEvidence(root,evidence,manifest,revision,now=Date.now())
 }
 function storeArtifacts(root,m) {
   const t=m.platform.runtimeTargets, c=m.assuranceTrack.storeCompliance;
+  if (t.includes('WEB_STATIC')) {
+    for (const entry of m.platform.staticDelivery.entrypoints) safePath(root,entry,{file:true});
+    // Build confirms paths and declarations only. Independent review and executed
+    // scope-negatives are still mandatory in validateEvidence before release.
+  }
   if (t.includes('WEB_PWA')) {
     insist(c.pwaManifestPath,'PWA_MANIFEST_UNRESOLVED');
     const pwa=readJson(root,c.pwaManifestPath);
@@ -321,7 +357,7 @@ export async function evaluate({root=process.cwd(),stage='release',env=process.e
     }
   }
   const passed=checks.every(c=>c.status==='PASSED');
-  const payload={standard:'ISS-EBEAS-1.1',interpretation:'1.1.0-evidence.1',platformId:manifest?.platform?.id??'UNKNOWN',timestamp:now.toISOString(),
+  const payload={standard:'ISS-EBEAS-1.1',interpretation:manifest?.interpretationVersion??'UNAVAILABLE',platformId:manifest?.platform?.id??'UNKNOWN',timestamp:now.toISOString(),
     stage,revision:identity.revision,revisionSource:identity.source,status:passed?'PASS':'FAIL',
     releaseReadiness:stage==='build'?'NOT_EVALUATED':!passed?'BLOCKED':stage==='evidence'?'PROVENANCE_PENDING':'EVIDENCE_CHECKS_PASSED',
     storeApproval:'NOT_ESTABLISHED',deployment:'NOT_ESTABLISHED',signature:'UNSIGNED_LOCAL_RECEIPT',checks};

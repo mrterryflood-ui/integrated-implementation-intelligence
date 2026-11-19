@@ -128,3 +128,9 @@ Owner: Terry Flood, portfolio authority; repository maintainers implement and
 independent reviewers verify. Re-run affected requirements after source, runtime,
 SDK, policy, threat-model or data-flow changes. Maintain rollback, original evidence,
 current primary-source standards and a named operational successor.
+# Additive anonymous-static interpretation
+
+`WEB_STATIC` uses `1.1.0-evidence.2-static` and a strict `platform.staticDelivery` declaration. It is only available for anonymous, read-only commercial/civic web delivery. Existing application manifests keep `1.1.0-evidence.1` and all of their existing authentication, encryption, framework, runtime and risk requirements.
+
+This corrects scope representation, not release authority. Every original evidence requirement remains required. Static release additionally requires a hash-bound `STATIC_DELIVERY_APPLICABILITY_REVIEW` for the exact revision, source digest, entrypoints and declared boundary, with an independent reviewer and executed absence checks. Missing or unreviewed scope, failed tests, high vulnerabilities, absent real-user evidence, invalid IRON acceptance or unsigned provenance still fail. `node --test tools/iss-ebeas/gate.test.mjs` includes both ordinary-profile and static-profile regressions.
+
