@@ -34,6 +34,7 @@ test("homepage renders real links, while client route opens the existing consult
  const page=readFileSync(join(process.cwd(),"app","page.tsx"),"utf8");
  const studio=readFileSync(join(process.cwd(),"app","consultation-studio.tsx"),"utf8");
  const css=readFileSync(join(process.cwd(),"app","home.css"),"utf8");
+ assert.match(page,/<PerspectiveStudio privateReady=\{privateReady\}\/>/);
  assert.match(page,/<a className="possibility-card" key={area.id} href={consultationFocusHref\(area.id\)}/);
  assert.doesNotMatch(page,/useCases\.map\(x=><article/);
  assert.match(studio,/findConsultationFocus\(new URLSearchParams\(window\.location\.search\)\.get\("focus"\)\)/);

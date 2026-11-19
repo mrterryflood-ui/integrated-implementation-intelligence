@@ -186,3 +186,15 @@
 /* Tablet E2E: the extra first-class nav destination must wrap rather than widen the page. */
 .site-nav nav{flex-wrap:wrap;min-width:0;max-width:100%;align-items:center}
 .site-nav nav a{white-space:normal}
+
+/* Perspective Studio: owner-scoped document selection and participant-authored dialogue */
+.perspective-documents{margin:20px 0;border:1px solid #b4cbd3;border-radius:14px;background:#f0f6f6;padding:16px;color:#183a4c}
+.perspective-documents summary{cursor:pointer;font-weight:800;line-height:1.5}
+.perspective-documents label{display:block;font-weight:700;margin:14px 0}
+.perspective-documents input,.perspective-documents select,.perspective-documents textarea{display:block;width:100%;box-sizing:border-box;margin-top:7px;padding:12px;font:inherit;border:1px solid #99b5bf;border-radius:8px;background:white;color:#18374b}
+.perspective-documents a{text-decoration:underline;color:#165f79}
+.perspective-thread{max-height:410px;overflow:auto;background:white;border:1px solid #c4d6dd;border-radius:10px;padding:12px}
+.perspective-thread article{border-bottom:1px solid #d5e3e7;padding:12px 0;overflow-wrap:anywhere}
+.perspective-thread p{white-space:pre-wrap}
+.perspective-thread button{border:1px solid #7f9ba4;padding:6px 10px;border-radius:6px;cursor:pointer;background:#e7f0f1}
+.perspective-output button:disabled{opacity:.5;cursor:not-allowed}
