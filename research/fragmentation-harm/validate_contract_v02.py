@@ -24,6 +24,8 @@ DIMENSIONS = [
 STATES = {"VALUED", "UNKNOWN", "NOT_APPLICABLE"}
 SHARE_CONSTRUCTS = {"case_proportion", "age_weighted_rate_ratio_W"}
 RATE_FIELDS = ("all_stage_rate_per_100k", "late_stage_rate_per_100k")
+ALLOWED_ENFORCEMENT = {"advisory", "strict"}
+UNDISCLOSED_PREFIX = "UNDISCLOSED"
 
 
 def _num(value) -> bool:
@@ -37,7 +39,7 @@ def _tolerance(contract: dict) -> float:
     return float(value)
 
 
-def validate(contract: dict) -> list[str]:
+def validate(contract: dict, strict_provenance=None) -> list[str]:
     errors: list[str] = []
     if contract.get("schema_version") != "0.2":
         errors.append("unexpected schema_version")
@@ -47,6 +49,20 @@ def validate(contract: dict) -> list[str]:
     tolerance = _tolerance(contract)
     if tolerance == 0.0:
         errors.append("share_rate_tolerance_pp must be a positive number")
+    enforcement = contract.get("provenance_enforcement", "advisory")
+    if not isinstance(enforcement, str) or enforcement not in ALLOWED_ENFORCEMENT:
+        errors.append("provenance_enforcement must be one of: " + ", ".join(sorted(ALLOWED_ENFORCEMENT)))
+        enforcement = "advisory"
+    if strict_provenance is None:
+        strict = enforcement == "strict"
+    else:
+        strict = bool(strict_provenance)
+    tolerance_kind = contract.get("share_rate_tolerance_kind")
+    if tolerance_kind is not None and (not isinstance(tolerance_kind, str) or not tolerance_kind.strip()):
+        errors.append("share_rate_tolerance_kind must be a non-empty string when present")
+    tolerance_basis = contract.get("share_rate_tolerance_basis")
+    if tolerance_basis is not None and (not isinstance(tolerance_basis, str) or not tolerance_basis.strip()):
+        errors.append("share_rate_tolerance_basis must be a non-empty string when present")
     ceiling = contract.get("status_claim_ceiling")
     if not isinstance(ceiling, dict):
         errors.append("status_claim_ceiling must be an object")
@@ -165,13 +181,48 @@ def validate(contract: dict) -> list[str]:
             if isinstance(stage_definition, dict) and stage_definition.get("state") == "UNKNOWN":
                 if not isinstance(site.get("stage_definition"), str) or not site["stage_definition"].strip():
                     errors.append(node + " record-level stage_definition is UNKNOWN, so the site must name its stage definition")
+            if strict and status in {"PASS", "CONDITIONAL"}:
+                site_stage = site.get("stage_definition")
+                disclosed = (
+                    isinstance(site_stage, str)
+                    and bool(site_stage.strip())
+                    and not site_stage.strip().upper().startswith(UNDISCLOSED_PREFIX)
+                )
+                provenance = site.get("stage_provenance")
+                attested = False
+                if isinstance(provenance, dict):
+                    variable = provenance.get("stage_variable")
+                    variable_state = provenance.get("stage_variable_state")
+                    attested = (
+                        isinstance(variable, str)
+                        and bool(variable.strip())
+                        and variable_state != "UNATTESTED_PER_COUNTY"
+                    )
+                if not disclosed or not attested:
+                    errors.append(
+                        node + " status " + str(status) + " requires a disclosed and attested stage variable under strict provenance enforcement"
+                    )
         if len(periods) > 1 and status in {"PASS", "CONDITIONAL"}:
             errors.append(path + " sites carry more than one period (" + ", ".join(sorted(periods)) + ") yet status is " + str(status))
     return errors
 
 
 def main(argv: list[str]) -> int:
-    paths = argv[1:]
+    paths: list[str] = []
+    strict_override = None
+    for arg in argv[1:]:
+        if arg == "--strict-provenance":
+            strict_override = True
+        elif arg == "--advisory-provenance":
+            strict_override = False
+        elif arg in {"-h", "--help"}:
+            print("usage: validate_contract_v02.py [--strict-provenance|--advisory-provenance] [contract.json ...]")
+            return 0
+        elif arg.startswith("-"):
+            print("FAIL: unknown option", arg, file=sys.stderr)
+            return 2
+        else:
+            paths.append(arg)
     if not paths:
         paths = [str(Path(__file__).with_name("comparability-contract.v0.2.json"))]
     status = 0
@@ -182,7 +233,7 @@ def main(argv: list[str]) -> int:
             print("FAIL:", path, "unreadable:", exc, file=sys.stderr)
             status = 1
             continue
-        errors = validate(contract)
+        errors = validate(contract, strict_override)
         if errors:
             status = 1
             for error in errors:
