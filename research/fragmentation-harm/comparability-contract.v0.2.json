@@ -41,6 +41,10 @@
     "age_weighted_rate_ratio_W"
   ],
   "share_rate_tolerance_pp": 0.5,
+  "share_rate_tolerance_kind": "materiality_margin",
+  "share_rate_tolerance_state": "ADOPTED_BY_LOOP_NOT_RATIFIED",
+  "share_rate_tolerance_basis": "Not derivable from the published cells. Adopted by the DIS-RPLICE campaign loop as a materiality margin for a percentage-point share, because it exceeds both computable reconciliation floors computed in ledger item Q04 (0.1603448276 pp at Hinds and 0.2052631579 pp at Harris, S525-C2), and it is not a reconciliation tolerance. No accountable owner has ratified it. AI review, unverified by human: not qualified human scientific acceptance, not clinical acceptance, no patient benefit claimed.",
+  "share_rate_tolerance_representation_note": "The tolerance is tested against late_stage_share_percent, the publisher's printed one-decimal share, so the gap it judges depends on which published representation of the share is entered. On the printed input the implied-minus-printed gap is 0.7396551724 pp at Hinds and -0.5052631579 pp at Harris. On the count-ratio share (100 x 375 / 589 = 63.6672325976 and 100 x 5490 / 8660 = 63.3949191686) it is 0.7724225748 pp and -0.5001823265 pp. Both representations cross 0.5 pp at both counties, so no verdict moves, but the Harris margin is 0.0052632 pp on the printed input (1.05 pct of the tolerance) against 0.0001823 pp on the count-ratio input (0.036 pct of the tolerance, one part in 2742). A record that does not name its share representation leaves its Harris verdict decided at that margin.",
   "allowed_statuses": [
     "PASS",
     "CONDITIONAL",
@@ -182,7 +186,18 @@
           "rate_ratio_w_percent": 64.4397,
           "average_annual_late_count": 75,
           "ci_rank": "N/A",
-          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary",
+          "stage_provenance": {
+            "state": "PARTIAL",
+            "registry_source_marker": "2",
+            "product": "NPCR SEER*Stat Database (CDC) via State Cancer Profiles",
+            "release": "2025 submission",
+            "stage_variable": null,
+            "stage_variable_state": "UNATTESTED_PER_COUNTY",
+            "stage_variable_note": "The publisher assigns the staging variable by data source and reserves substitution, so the branch-implied variable is a reading of the footnote and not an attested per-county value. Carried from ledger item Q04 page reads S284, S439, S448 and S521; not re-read this sprint.",
+            "diagnosis_years": "2019-2023",
+            "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
+          }
         },
         {
           "label": "Harris County TX",
@@ -199,7 +214,18 @@
           "rate_ratio_w_percent": 62.8947,
           "average_annual_late_count": 1098,
           "ci_rank": "N/A",
-          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary"
+          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary",
+          "stage_provenance": {
+            "state": "PARTIAL",
+            "registry_source_marker": "7",
+            "product": "SEER submission via State Cancer Profiles",
+            "release": "November 2025 submission",
+            "stage_variable": null,
+            "stage_variable_state": "UNATTESTED_PER_COUNTY",
+            "stage_variable_note": "The publisher assigns the staging variable by data source and reserves substitution, so the branch-implied variable is a reading of the footnote and not an attested per-county value. Carried from ledger item Q04 page reads S284, S439, S448 and S521; not re-read this sprint.",
+            "diagnosis_years": "2019-2023",
+            "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
+          }
         }
       ],
       "share_rate_gap_explained": true,
