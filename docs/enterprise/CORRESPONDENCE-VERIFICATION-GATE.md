@@ -19,6 +19,33 @@
 
 All transitions require authenticated evidence receipts. Any unverified claim, missing attachment, nonauthoritative opportunity source, stale amendment, unsupported capability claim, mismatched recipient or absent exact-version approval stops at **HELD**. Disputed facts stay visible to the user. No status such as VERIFIED, SENT, DELIVERED, FILED, ACCEPTED or AWARDED may be inferred from a prior rung.
 
+## Dispatch reconciliation and independent Sent readback — November 20, 2026
+
+This operational addendum addresses observed failure modes in which a draft survived a successful send, a sent reply contained only a signature, a corrective email remained in Drafts after the recipient reported missing attachments, and equivalent packages were sent more than once. It extends, and does not weaken, the required source/claim, independent-review, exact-version approval, and server-side authorization gates above.
+
+### Pre-dispatch reconciliation (mandatory for humans, agents and automations)
+
+- Define the **correspondence obligation** by origin, intended recipient set, source thread, requested action, exact approved payload and latest version. Inventory drafts and Sent records in all connected accounts authorized for that obligation. An alternative subject, account or thread may contain the effective send; compare meaning, exact key claims, recipient identity, versions and attachments rather than subject alone.
+- Classify each candidate as `NOT_YET_DRAFTED`, `DRAFT_ONLY`, `AWAITING_EXACT_APPROVAL`, `SENT_EQUIVALENT`, `SENT_INCOMPLETE`, `SUPERSEDED`, `BLOCKED` or `UNKNOWN`. If an equivalent message is actually sent and complete, do **not** resend the stale draft. If the Sent message lacks the substantive body or any required attachment, the obligation remains OPEN despite its `SENT` label.
+- Explicitly verify body text is substantive rather than signature-only, and enumerate expected attachment **file names, sizes, versions and where available content digests**. Confirm the real file objects exist and may lawfully be shared. Link text claiming "attached" does not count as attachment evidence.
+- A collaborator's `GO` tag, an automation schedule, an agent's generated text, or permission to draft is not permission to dispatch. Exact-payload owner/delegated-authority approval remains a separate enforced requirement. A change to recipient, content, attachment or version invalidates earlier approval.
+
+### Post-dispatch proof (must be a separate provider read)
+
+1. Persist the outbound provider response `message_id` and `thread_id`, sender/account, UTC timestamp and a digest/version manifest for the **approved** payload. Do not claim success from the send API's return value alone.
+2. **Read back the actual provider message**, by its returned ID, independently of the send call. Compare account, `SENT`/equivalent state, real `To`/`Cc`/`Bcc` where available, full message body, expected attachment count, each exact filename and positive file size, correct thread and timestamp against the approved manifest. If the provider omits a required attribute, record it as `UNVERIFIED` and apply an alternative approved independent check before declaring the relevant field verified.
+3. Check for explicit provider rejection, bounce or downstream delivery error where supported. `SENT_VERIFIED` means evidence of dispatch from the sender-side provider. `DELIVERED_VERIFIED` requires delivery evidence; `RECIPIENT_ACKNOWLEDGED` requires actual recipient acknowledgment. Do not collapse them or claim inbox visibility/opening from Sent.
+4. Government or grant **portal** filing uses a different receipt: authoritative submitted-version/manifest, accepted portal confirmation number and timestamp. `SENT_VERIFIED` email does not prove `SUBMITTED_VERIFIED` portal acceptance.
+5. On timeout, mismatch, missing file, incomplete reply, missing approval, mismatched tenant or ambiguous send status: **fail closed**. Reconcile the provider outcome **before** any retry to prevent duplicates, then show the owner the actual blocker and proposed correction. No silent auto-retry, blind bulk-send or suppression of evidence.
+
+### Required receipt fields and regression cases
+
+Record for each intended action: `obligation_id`, `client_or_legal_entity`, `source_thread`, `owner_authorization_id`, `approved_payload_hash`, `sender_account`, `to_cc_bcc`, `subject`, `attachment_manifest`, `provider_message_id`, `provider_thread_id`, `sent_readback_timestamp`, `body_and_attachments_match`, `provider_failure_or_bounce`, `submission_receipt_if_applicable`, `evidence_class`, `state`, and `next_owner_action`. Store protected identifiers securely; never write raw client correspondence or tokens to public CI artifacts.
+
+Agent/provider integration acceptance must demonstrate at least: (a) stale draft with equivalent valid Sent message; (b) signature-only Sent reply; (c) correction draft still unsent after recipient reports missing attachment; (d) correct filename but incorrect version or zero-byte file; (e) duplicate send attempts after ambiguous provider response; (f) send success response with missing or mismatched Sent readback; (g) cross-account/alternate-thread equivalent; (h) wrong recipient/tenant; (i) changed attachment after approval; (j) portal upload without agency confirmation; (k) owner-approved routine notice versus unauthorized substantive outreach. No real external email is emitted by negative tests.
+
+**Adoption standard:** This file is the authoritative enterprise instruction for agents that load it. Each independent agent, repository, Gmail/CRM/MCP integration and background sender must explicitly link/load this policy and exhibit runtime tests; simply pointing at this document does **not** establish that the shared gate is installed, live, non-bypassable or effective outside this repository.
+
 ## Automated messages
 
 Routine mechanical account notifications may use a preapproved, pinned template with authenticated event provenance, bounded recipients and no unverified consequential claims. This is not a general-purpose escape hatch for proposal, funding, deadline, capabilities, client intelligence or outreach messages. Internal digests must preserve source status and may not mislead users into taking action on unsourced opportunities.
