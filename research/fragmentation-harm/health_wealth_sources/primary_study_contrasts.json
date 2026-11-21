@@ -1,0 +1,84 @@
+{
+  "NYC_ECONSULT_2021": {
+    "source": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8796905/",
+    "doi": "10.1001/jamahealthforum.2021.0456",
+    "extraction_level": "primary_full_text_html_and_table",
+    "study_design": "observational_interrupted_time_series",
+    "population": "19 NYC Health+Hospitals specialty clinics, 2017-2019 rollout, 12 months before/after",
+    "unit": "referral_request",
+    "all_requests": 50260,
+    "post_requests": 23529,
+    "post_resolved_without_visit": 3074,
+    "scheduled_before_pct": 66.5,
+    "scheduled_after_pct": 82.3,
+    "scheduled_adjusted_difference_pp": 15.8,
+    "scheduled_p_lt": 0.001,
+    "completed_90d_before_pct": 38.4,
+    "completed_90d_after_pct": 37.9,
+    "completed_90d_adjusted_difference_pp": -0.8,
+    "completed_90d_p": 0.07,
+    "wait_adjusted_difference_days": -8.2,
+    "wait_p_lt": 0.001,
+    "source_discrepancy": {
+      "pre_wait_table_days": 60.1,
+      "pre_wait_prose_days": 61.0,
+      "disposition": "unresolved_preserve_both_do_not_derive_crude_wait_effect"
+    },
+    "denominators_differ": true,
+    "concurrent_ehr_transition": true,
+    "project_clinical_effect": false,
+    "boundary": "No completed-visit benefit established; not equivalence. Resolved-without-visit requests are legitimate distinct outcome, not failed care. No mortality outcome."
+  },
+  "VA_DUAL_ELIGIBLE_2023": {
+    "source": "https://web.stanford.edu/~chand04/papers/va_nonva_paper.pdf",
+    "alternate_primary": "https://escholarship.org/content/qt6zk068w9/qt6zk068w9.pdf",
+    "doi": "10.1257/aer.20211638",
+    "extraction_level": "primary_full_text_parsed_pdf_tables_screenshot_failed",
+    "study_design": "ambulance_destination_instrumental_variable",
+    "population": "VA+Medicare eligible veterans age65+, emergency ambulance rides, restricted nearby hospital choice and prior VA use",
+    "unit": "ambulance_ride",
+    "analysis_observations": 401319,
+    "mortality_28d_effect_pp": -4.5,
+    "mortality_28d_ci95_pp": [
+      -8.0,
+      -1.1
+    ],
+    "mortality_relative_reduction_pct_reported": 46,
+    "spending_28d_iv_dollars": -2598,
+    "spending_28d_iv_se": 820,
+    "spending_28d_ols_dollars": 840,
+    "spending_28d_ols_se": 87,
+    "spending_28d_mean_dollars": 12265,
+    "boundary": "Published estimated local effect for ambulance-destination compliers under IV assumptions, not Medicaid/nonveterans/all elective care. Spending includes VA costs and Medicare/provider payments, not patient wealth or take-home income. OLS and IV target different estimands; do not treat difference as quantified selection bias. No source microdata rerun."
+  },
+  "FQHC_LOOKALIKE_2023": {
+    "source": "https://journals.ku.edu/kjm/article/download/19524/18565",
+    "doi": "10.17161/kjm.vol16.19524",
+    "extraction_level": "primary_full_text_table2_visually_checked_page3",
+    "study_design": "single_clinic_retrospective_observational",
+    "population": "Hope Family Care Center Kansas City, all primary care encounters in 15 months",
+    "unit": "encounter",
+    "encounters": 4235,
+    "payer_initiation_pct": {
+      "private": 5.6,
+      "Medicaid": 7.4,
+      "Medicare": 6.6,
+      "self_pay": 3.8
+    },
+    "payer_conditional_completion_pct": {
+      "private": 35.6,
+      "Medicaid": 33.0,
+      "Medicare": 25.0,
+      "self_pay": 32.1
+    },
+    "completion_pairwise_vs_other_p": {
+      "private": 0.442,
+      "Medicaid": 0.904,
+      "Medicare": 0.274,
+      "self_pay": 0.946
+    },
+    "income_measured": false,
+    "costs_measured": false,
+    "boundary": "No statistically established completion difference; not equivalence. Completion conditional on referral; initiation selection and repeated encounters matter. Do not infer wealth from payer or compute patient-risk using encounter counts. Exact payer-specific referral event denominators not supplied in extracted table."
+  }
+}
