@@ -71,6 +71,28 @@ for(const [label,engine,device] of [
   await page.getByRole("button",{name:"Transfer to Houston"}).click();
   await page.getByText(/hold pending local adaptation and validation/i).waitFor();
   const project=page.getByRole("combobox",{name:"Research scenario"});
+  // Exercise source-bounded neuroinclusive scenarios through the rendered UI:
+  // these are published study summaries, not patient-level evidence or care.
+  await project.selectOption("neuroinclusive");
+  const neuro=page.getByRole("combobox",{name:"Health concern and population"});
+  assert.equal(await neuro.locator("option").count(),10,"all ten public-literature exercises offered");
+  await page.getByText("No pilot-site measurements",{exact:true}).waitFor();
+  await neuro.selectOption("id-colorectal-screening");
+  await page.getByText(/30.2% versus 56.1%/).waitFor();
+  await page.getByText(/No participant is enrolled/).waitFor();
+  await page.getByRole("button",{name:"Population and measures"}).click();
+  await page.getByText(/No verified observed population values have been supplied/).waitFor();
+  await page.getByRole("button",{name:"Sources and limits"}).click();
+  await page.getByText("Colorectal Cancer Screening Among People With Intellectual Disabilities").waitFor();
+  await page.getByRole("button",{name:"Full DIS lifecycle"}).click();
+  await page.getByText(/No externally verified proof/).first().waitFor();
+  await page.screenshot({path:join(out,"neuroinclusive-research-"+label+".png"),fullPage:false});
+  await neuro.selectOption("autism-constipation");
+  await page.getByText(/22% of autistic versus 9%/).waitFor();
+  await neuro.selectOption("adhd-urinary");
+  await page.getByText(/5.79% in ADHD versus 3.36%/).waitFor();
+  assert.deepEqual(errors,[],"neuroinclusive exercise rendered without browser errors");
+  assert.deepEqual(writes,[],"neuroinclusive research exercise caused no live mutation or clinical messages");
   await project.selectOption("custom");
   await page.getByRole("textbox",{name:"Your research/implementation question"}).fill("How can a city improve access to public services?");
   await page.getByRole("textbox",{name:"Target population or geographic frame"}).fill("Synthetic City");
