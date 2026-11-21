@@ -100,3 +100,12 @@ test("no sensitive social-health cohort or individual-health connector becomes c
  assert.equal(requests,0);
  assert.ok(results.every(r=>r.state==="CONTRACT_ONLY"&&r.value===null));
 });
+test("dated partner payloads normalise the observed time on both catalog lanes",async()=>{
+ const mock=(async (url:RequestInfo|URL)=>new Response(JSON.stringify(String(url).includes("ms/intelligence")?healthPayload:socialPayload),{status:200})) as typeof fetch;
+ const health=await readHealthSocialCatalog("health-ms-public-organizations",approved,mock);
+ const social=await readHealthSocialCatalog("social-benefits-programs",approved,mock);
+ assert.equal(health.ok,true);
+ assert.equal(social.ok,true);
+ assert.equal(health.observedAt,"2026-10-30T18:00:00.000Z");
+ assert.equal(social.observedAt,"2026-10-30T17:30:00.000Z");
+});
