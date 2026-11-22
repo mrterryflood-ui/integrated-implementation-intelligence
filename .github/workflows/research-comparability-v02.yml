@@ -25,6 +25,8 @@ jobs:
         run: python research/fragmentation-harm/validate_contract.py
       - name: Execute actual v0.2 validator against shipped contract
         run: python research/fragmentation-harm/validate_contract_v02.py
+      - name: Regress stage mappings, review binding, arithmetic and actual CLI claim boundary
+        run: python -m unittest discover -s research/fragmentation-harm -p 'test_comparability_evidence.py' -v
       - name: Exercise all shipped positive and rejection fixtures in actual Python
         run: |
           python - <<'PY'

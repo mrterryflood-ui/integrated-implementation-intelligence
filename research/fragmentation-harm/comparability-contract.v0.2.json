@@ -44,7 +44,7 @@
   "share_rate_tolerance_kind": "materiality_margin",
   "share_rate_tolerance_state": "ADOPTED_BY_LOOP_NOT_RATIFIED",
   "share_rate_tolerance_basis": "Not derivable from the published cells. Adopted by the DIS-RPLICE campaign loop as a materiality margin for a percentage-point share, because it exceeds both computable reconciliation floors computed in ledger item Q04 (0.1603448276 pp at Hinds and 0.2052631579 pp at Harris, S525-C2), and it is not a reconciliation tolerance. No accountable owner has ratified it. AI review, unverified by human: not qualified human scientific acceptance, not clinical acceptance, no patient benefit claimed.",
-  "share_rate_tolerance_representation_note": "The tolerance is tested against late_stage_share_percent, the publisher's printed one-decimal share, so the gap it judges depends on which published representation of the share is entered. On the printed input the implied-minus-printed gap is 0.7396551724 pp at Hinds and -0.5052631579 pp at Harris. On the count-ratio share (100 x 375 / 589 = 63.6672325976 and 100 x 5490 / 8660 = 63.3949191686) it is 0.7724225748 pp and -0.5001823265 pp. Both representations cross 0.5 pp at both counties, so no verdict moves, but the Harris margin is 0.0052632 pp on the printed input (1.05 pct of the tolerance) against 0.0001823 pp on the count-ratio input (0.036 pct of the tolerance, one part in 2742). A record that does not name its share representation leaves its Harris verdict decided at that margin.",
+  "share_rate_tolerance_representation_note": "The share is the publisher's rounded one-decimal percentage. The values 375/589 and 5490/8660 are hypothetical count pairs compatible with rounded published displays, not identified registry totals. The November 8 denominator audit finds three compatible Hinds pairs and 25 Harris pairs. The 0.2723134290-percentage-point contrast and one-/two-case sensitivity based on one such pair are illustrative only. The published displayed contrast is 63.7 minus 63.4 = 0.3 percentage points; its unrounded value and uncertainty are not recovered. The 0.5-pp share/rate reconciliation margin is not a prespecified equivalence margin and cannot authorize an equivalence claim.",
   "allowed_statuses": [
     "PASS",
     "CONDITIONAL",
@@ -71,10 +71,10 @@
         "Harris County TX"
       ],
       "condition": "colorectal_cancer",
-      "comparison_status": "CONDITIONAL",
+      "comparison_status": "UNKNOWN",
       "claim_level": "descriptive",
       "causal_harm_established": false,
-      "reason": "Both county figures are read from one rendered State Cancer Profiles table under one footnote set, so steward, case definition and denominator convention are shared at documentation level. The pair still cannot carry more than a descriptive claim because the stage variable actually used per county is undisclosed, the age-group count is stated two contradictory ways on the same page, and the pilot's primary outcome is unpublished for both counties.",
+      "reason": "Recorded 2019–2023 county estimates remain available for descriptive inspection. Both retained reports document regional-or-distant disease and a percentage relative to all-stage cases. Extract-specific stage derivation, alternate-variable exceptions, exact case-denominator exclusions and unrounded counts remain unresolved. Different pipeline labels alone do not establish a clinical classification mismatch. No harmonized comparison or statistical equivalence has been established.",
       "dimensions": {
         "source_steward": {
           "state": "VALUED",
@@ -97,8 +97,9 @@
           "value": "2026-11-11T03:14Z"
         },
         "registry_submission": {
-          "state": "UNKNOWN",
-          "why": "The table does not state whether each county record was submitted by the NPCR registry, a SEER registry, or both, so the programme-specific stage mapping cannot be assigned per county."
+          "state": "VALUED",
+          "value": "Hinds source marker 2: NPCR 2025 submission; Harris marker 7: SEER November 2025 submission. State Cancer Profiles September 2026 release history identifies November 2025 submissions for incidence through 2023.",
+          "why": "Source markers are retained in the report exports. Portal-level release history establishes broad chronology; it does not authenticate the exact stage derivation or exceptions used for either extract."
         },
         "geography": {
           "state": "VALUED",
@@ -112,17 +113,16 @@
         },
         "numerator": {
           "state": "VALUED",
-          "why": "The ^ footnote defines late stage as regional or distant and the dagger footnote restricts to invasive cancer; average annual counts 75 and 1,098 sit beside the rates.",
+          "why": "The retained footnote defines the broad late-stage category as regional or distant and invasive cancer; displayed average annual counts are rounded and do not identify exact period totals.",
           "value": "late-stage cases, average annual count 75 (Hinds) and 1,098 (Harris)"
         },
         "denominator": {
-          "state": "VALUED",
-          "why": "Dagger footnote: population counts for denominators are based on Census populations as modified by NCI, with the US Population Data File used for SEER and NPCR incidence rates. The age-group count inside the age adjustment is separately UNKNOWN.",
-          "value": "Census populations as modified by NCI, US Population Data File"
+          "state": "UNKNOWN",
+          "why": "For the case percentage, both retained interpretation pages say late-stage cases relative to all-stage cases, but do not disclose membership of unknown/unstaged, blank/unclassifiable, death-certificate-only or autopsy-only cases. Census population denominators apply to the incidence rates and cannot substitute for this case denominator."
         },
         "age_adjustment": {
           "state": "UNKNOWN",
-          "why": "The same page states two incompatible age-group counts. Dagger footnote: 'SEER areas use 20 age groups and NPCR areas use 19 age groups'. CI*Rank footnote: 'The rates used in CI*Rank are all age-adjusted to the 2000 US standard population using 19 age groups for SEER and NPCR areas'. Both county rows show CI*Rank N/A, so the CI*Rank note does not govern the displayed rates. Neither statement can be preferred on this page."
+          "why": "Rate footnotes specify 20 age groups for SEER and 19 for NPCR. Official February 2026 release history confirms that SEER incidence changed to 20 groups and NPCR did not. The CI*Rank note refers to 19 groups for both; column-level method linkage remains unresolved. This issue concerns incidence rates, not the crude case percentage; no harmonized county rate has been recalculated."
         },
         "case_definition": {
           "state": "VALUED",
@@ -131,7 +131,7 @@
         },
         "stage_definition": {
           "state": "UNKNOWN",
-          "why": "The ^ footnote fixes late as regional or distant and names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but then reserves substitution: 'Due to the increased complexity with staging, other staging variables maybe used if necessary.' The variable actually used is not disclosed per county."
+          "why": "The displayed broad outcome is documented as regional or distant. The exact field, version, derivation and any alternate-variable exceptions remain undisclosed per extract. CDC NPCR SS2018 and NCI Derived SS2018 may support a common broad classification for 2019–2023; the expanded regional recode concerns pre-2018 cases and does not establish a mismatch here."
         },
         "period": {
           "state": "VALUED",
@@ -186,7 +186,7 @@
           "rate_ratio_w_percent": 64.4397,
           "average_annual_late_count": 75,
           "ci_rank": "N/A",
-          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary",
+          "stage_definition": "UNDISCLOSED per-extract derivation: the retained report defines late stage as regional or distant; its generic footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but reserves alternate staging variables without attesting the executed field for this county.",
           "stage_provenance": {
             "state": "PARTIAL",
             "registry_source_marker": "2",
@@ -194,7 +194,7 @@
             "release": "2025 submission",
             "stage_variable": null,
             "stage_variable_state": "UNATTESTED_PER_COUNTY",
-            "stage_variable_note": "The publisher assigns the staging variable by data source and reserves substitution, so the branch-implied variable is a reading of the footnote and not an attested per-county value. Carried from ledger item Q04 page reads S284, S439, S448 and S521; not re-read this sprint.",
+            "stage_variable_note": "The retained November 8 interpretation pages and CSV exports were rechecked November 21, 2026. They identify the broad regional-or-distant construct and default source-specific staging variables, while reserving substitution. The branch-implied variable is not an attested per-extract field or derivation; exact lineage remains unresolved.",
             "diagnosis_years": "2019-2023",
             "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
           }
@@ -214,7 +214,7 @@
           "rate_ratio_w_percent": 62.8947,
           "average_annual_late_count": 1098,
           "ci_rank": "N/A",
-          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary",
+          "stage_definition": "UNDISCLOSED per-extract derivation: the retained report defines late stage as regional or distant; its generic footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but reserves alternate staging variables without attesting the executed field for this county.",
           "stage_provenance": {
             "state": "PARTIAL",
             "registry_source_marker": "7",
@@ -222,14 +222,75 @@
             "release": "November 2025 submission",
             "stage_variable": null,
             "stage_variable_state": "UNATTESTED_PER_COUNTY",
-            "stage_variable_note": "The publisher assigns the staging variable by data source and reserves substitution, so the branch-implied variable is a reading of the footnote and not an attested per-county value. Carried from ledger item Q04 page reads S284, S439, S448 and S521; not re-read this sprint.",
+            "stage_variable_note": "The retained November 8 interpretation pages and CSV exports were rechecked November 21, 2026. They identify the broad regional-or-distant construct and default source-specific staging variables, while reserving substitution. The branch-implied variable is not an attested per-extract field or derivation; exact lineage remains unresolved.",
             "diagnosis_years": "2019-2023",
             "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
           }
         }
       ],
       "share_rate_gap_explained": true,
-      "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect."
+      "share_rate_gap_note": "The case proportion and the rate ratio W are different constructs and are expected to differ, because W is age-weighted. Differences are -0.7397 pp at Hinds and +0.5053 pp at Harris against one-decimal published rates; this is the sprint 82 identity, not a defect.",
+      "stage_comparability": {
+        "status": "NOT_ESTABLISHED",
+        "calculation": {
+          "status": "NOT_REPRODUCED"
+        },
+        "reason": "Broad stage construct documented; exact extract implementation, case-denominator membership and source-supported mapping remain unresolved. No accepted review digest exists for this comparison. Published rounded estimates are retained, not a harmonized recalculation."
+      },
+      "rate_denominator_note": "Incidence-rate denominators are Census populations as modified by NCI. These are separate from the case denominator of late_stage_share_percent.",
+      "published_share_difference_pp": 0.3,
+      "published_share_difference_basis": "Difference between displayed rounded percentages only; no exact-count or equivalence claim.",
+      "accountability_record": "CRC_COMPARABILITY_REMEDIATION_2026-11-21.md",
+      "supplemental_source_evidence": [
+        {
+          "id": "hinds_report_interpretation",
+          "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/hinds_report_interpretation.html",
+          "source_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=2&referrer=table",
+          "retrieved_at": "2026-11-08T23:47:11.892529+00:00",
+          "sha256": "51ac357e38fac45fef00fa31ba33b26a4c986cdefdc1c6c6cdcaf8caaa3ffb87",
+          "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
+        },
+        {
+          "id": "harris_report_interpretation",
+          "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/harris_report_interpretation.html",
+          "source_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=2&referrer=table",
+          "retrieved_at": "2026-11-08T23:47:11.893371+00:00",
+          "sha256": "7d0041e7e2522790d5a111ca2169eb9a4b26eb7117ae894235e4aa7372dd7900",
+          "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
+        },
+        {
+          "id": "hinds_all_export",
+          "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/hinds_all_export.csv",
+          "source_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+          "retrieved_at": "2026-11-08T23:51:01.694402+00:00",
+          "sha256": "34ebb729828bb03454daddc69e708d902faca33958e95c8dcbe6c58612ae05b2",
+          "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
+        },
+        {
+          "id": "hinds_late_export",
+          "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/hinds_late_export.csv",
+          "source_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=28&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+          "retrieved_at": "2026-11-08T23:51:01.695183+00:00",
+          "sha256": "d5cbbfc1c2f96f9ecb7c5274cb37540975e74ffdc0c3e26e9ef38c6b61d5f284",
+          "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
+        },
+        {
+          "id": "harris_all_export",
+          "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/harris_all_export.csv",
+          "source_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=999&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+          "retrieved_at": "2026-11-08T23:51:01.695884+00:00",
+          "sha256": "82c21ab022d4598139d61d15fcac3a4f3756eb38991db7ecd4569ec188da7665",
+          "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
+        },
+        {
+          "id": "harris_late_export",
+          "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/harris_late_export.csv",
+          "source_url": "https://statecancerprofiles.cancer.gov/incidencerates/index.php?age=001&areatype=county&cancer=020&datatype=1&race=00&ruralurban=0&sex=0&stage=211&statefips=48&type=incd&year=0&sortVariableName=name&sortOrder=asc&output=1",
+          "retrieved_at": "2026-11-08T23:51:06.487200+00:00",
+          "sha256": "551a3c9c2fdcb37b6875877d3211ebcf86cb30aae4dc24e6e2abf1f5292bfd5f",
+          "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
+        }
+      ]
     },
     {
       "comparison_id": "colorado-candidate-crc-2019-2023",
@@ -345,5 +406,7 @@
         }
       ]
     }
-  ]
+  ],
+  "provenance_enforcement": "advisory",
+  "validation_scope": "Advisory validation checks structural consistency only. Scientific-use admission requires the explicit comparability claim gate and a separately supplied, already reviewed artifact digest; no scientific acceptance is implied by exit status zero."
 }
