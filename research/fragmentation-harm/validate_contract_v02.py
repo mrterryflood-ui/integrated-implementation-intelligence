@@ -39,6 +39,17 @@ def _tolerance(contract: dict) -> float:
     return float(value)
 
 
+def _construct_key(variable: str) -> str:
+    """Normalise a declared stage variable to a comparable construct key."""
+    return " ".join(variable.strip().upper().split())
+
+
+def _construct_equivalence_note(record: dict) -> bool:
+    """True when the record carries a non-empty owner note explaining a non-identical pairing."""
+    note = record.get("stage_construct_equivalence_note")
+    return isinstance(note, str) and bool(note.strip())
+
+
 def validate(contract: dict, strict_provenance=None) -> list[str]:
     errors: list[str] = []
     if contract.get("schema_version") != "0.2":
@@ -202,6 +213,37 @@ def validate(contract: dict, strict_provenance=None) -> list[str]:
                     errors.append(
                         node + " status " + str(status) + " requires a disclosed and attested stage variable under strict provenance enforcement"
                     )
+        if strict and status in {"PASS", "CONDITIONAL"} and len(sites) >= 2:
+            construct_keys = []
+            for site_index, site in enumerate(sites):
+                if not isinstance(site, dict):
+                    construct_keys = []
+                    break
+                site_stage = site.get("stage_definition")
+                provenance = site.get("stage_provenance")
+                variable = provenance.get("stage_variable") if isinstance(provenance, dict) else None
+                variable_state = provenance.get("stage_variable_state") if isinstance(provenance, dict) else None
+                site_disclosed = (
+                    isinstance(site_stage, str)
+                    and bool(site_stage.strip())
+                    and not site_stage.strip().upper().startswith(UNDISCLOSED_PREFIX)
+                )
+                site_attested = (
+                    isinstance(variable, str)
+                    and bool(variable.strip())
+                    and variable_state != "UNATTESTED_PER_COUNTY"
+                )
+                if not (site_disclosed and site_attested):
+                    construct_keys = []
+                    break
+                construct_keys.append(_construct_key(variable))
+            distinct_constructs = sorted(set(construct_keys))
+            if len(distinct_constructs) > 1 and not _construct_equivalence_note(record):
+                errors.append(
+                    path + " sites attest different stage constructs ("
+                    + ", ".join(distinct_constructs)
+                    + ") and stage_construct_equivalence_note does not explain the pairing"
+                )
         if len(periods) > 1 and status in {"PASS", "CONDITIONAL"}:
             errors.append(path + " sites carry more than one period (" + ", ".join(sorted(periods)) + ") yet status is " + str(status))
     return errors
