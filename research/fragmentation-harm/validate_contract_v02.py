@@ -4,6 +4,11 @@ Authored as an AI review by the DIS-RPLICE campaign loop (sprint 92, ledger item
 Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit
 is claimed or implied. Companion contract: comparability-contract.v0.2.json.
 Negative and positive fixtures: comparability-contract.v0.2.controls.json.
+
+At the explicit claim gate, late_stage_share_percent is the admitted harmonized
+case proportion and must equal the recomputed result. An original published value
+that uses different definitions or rounding belongs in published_late_stage_share_percent;
+it is preserved as source context and is not the admitted comparative result.
 """
 from __future__ import annotations
 
@@ -90,6 +95,15 @@ def assess_comparability(record: dict, accepted_review_sha256=None) -> dict:
     if not isinstance(record, dict):
         errors.append("comparison must be an object")
         return result
+    if record.get("claim_level") != "descriptive":
+        errors.append("this review and claim gate support descriptive comparisons only")
+    if record.get("causal_harm_established") is not False:
+        errors.append("a descriptive comparison cannot establish causal harm")
+    status = record.get("comparison_status")
+    if not isinstance(status, str) or status not in ALLOWED:
+        errors.append("invalid comparison_status")
+    elif status in {"UNKNOWN", "FAIL"}:
+        errors.append("comparison_status " + status + " blocks admission of a comparative claim")
     evidence = record.get("stage_comparability")
     if not isinstance(evidence, dict) or evidence.get("status") != "EVIDENCE_RECORDED":
         errors.append("structured stage_comparability evidence is not established; labels and notes do not establish equivalence")
@@ -128,8 +142,9 @@ def assess_comparability(record: dict, accepted_review_sha256=None) -> dict:
             errors.append("target requires " + key)
     if not isinstance(evidence.get("data_kind"), str) or evidence["data_kind"] not in {"observed", "synthetic"}:
         errors.append("data_kind must distinguish observed from synthetic evidence")
-    if (len(mappings) != len(sites) or not all(isinstance(m, dict) for m in mappings)
-            or sorted(str(m.get("site_label")) for m in mappings) != sorted(labels)):
+    if (len(mappings) != len(sites)
+            or not all(isinstance(m, dict) and _text(m.get("site_label")) for m in mappings)
+            or sorted(m["site_label"] for m in mappings) != sorted(labels)):
         errors.append("site_mappings must cover each site exactly once")
         return result
     by_label = {m["site_label"]: m for m in mappings}
@@ -191,11 +206,14 @@ def assess_comparability(record: dict, accepted_review_sha256=None) -> dict:
         errors.append("calculation is not reproduced from exact source category counts")
         return result
     rows = calculation.get("sites")
-    if (not isinstance(rows, list) or len(rows) != 2 or not all(isinstance(row, dict) for row in rows)
-            or sorted(str(row.get("site_label")) for row in rows) != sorted(labels)):
+    if (not isinstance(rows, list) or len(rows) != 2
+            or not all(isinstance(row, dict) and _text(row.get("site_label")) for row in rows)
+            or sorted(row["site_label"] for row in rows) != sorted(labels)):
         errors.append("calculation must cover each site exactly once")
         return result
     shares = {}
+    calculated_sites = []
+    sites_by_label = {site["label"]: site for site in sites}
     for row in rows:
         label = row["site_label"]
         mapping = by_label[label]["category_mapping"]
@@ -215,12 +233,29 @@ def assess_comparability(record: dict, accepted_review_sha256=None) -> dict:
             errors.append(label + " reproduced numerator, denominator or share does not reconcile")
         else:
             shares[label] = share
+            calculated_sites.append({"site_label": label, "numerator": numerator,
+                                     "denominator": total, "share_percent": share})
+            site = sites_by_label[label]
+            if "late_stage_share_percent" in site and (
+                    site.get("share_construct") != "case_proportion"
+                    or not _num(site["late_stage_share_percent"])
+                    or abs(site["late_stage_share_percent"] - share) > 1e-9):
+                errors.append(label + " admitted late_stage_share_percent must equal the reproduced case proportion; preserve original published values separately")
+            published = site.get("published_late_stage_share_percent")
+            if "published_late_stage_share_percent" in site and (not _num(published) or not 0 <= published <= 100):
+                errors.append(label + " invalid published_late_stage_share_percent")
     difference = calculation.get("difference_pp")
     if len(shares) == 2 and (not _num(difference) or abs(difference - (shares[labels[0]] - shares[labels[1]])) > 1e-9):
         errors.append("difference_pp must equal the first site's share minus the second site's share")
     if errors:
         return result
     result["calculation_status"] = "REPRODUCED_FROM_DECLARED_COUNTS"
+    result["calculated_comparison"] = {
+        "claim_level": "descriptive", "data_kind": evidence["data_kind"],
+        "scope": "arithmetic from declared counts; claim admission requires the separate claim_gate",
+        "target": dict(target), "period": periods[0], "sites": calculated_sites,
+        "difference_pp": shares[labels[0]] - shares[labels[1]],
+        "difference_direction": labels[0] + " minus " + labels[1]}
     review = evidence.get("review")
     if not isinstance(review, dict):
         errors.append("independent source-methods review is not recorded")
@@ -243,7 +278,12 @@ def assess_comparability(record: dict, accepted_review_sha256=None) -> dict:
     if errors:
         return result
     result["review_status"] = "RECORDED_NOT_AUTHENTICATED"
-    if not _sha256(accepted_review_sha256) or accepted_review_sha256 != review_digest(review):
+    try:
+        actual_review_digest = review_digest(review)
+    except (ValueError, TypeError):
+        errors.append("review cannot be canonically bound")
+        return result
+    if not _sha256(accepted_review_sha256) or accepted_review_sha256 != actual_review_digest:
         errors.append("operator must supply the accepted review SHA-256 outside the contract")
     if evidence.get("data_kind") != "observed":
         errors.append("synthetic evidence cannot authorize a real-data comparison claim")
@@ -261,7 +301,8 @@ def validate(contract: dict, strict_provenance=None, *, require_comparable=False
     if contract.get("schema_version") != "0.2":
         errors.append("unexpected schema_version")
     dimensions = contract.get("required_dimensions")
-    if not isinstance(dimensions, list) or len(dimensions) != len(DIMENSIONS) or set(dimensions) != set(DIMENSIONS):
+    if (not isinstance(dimensions, list) or len(dimensions) != len(DIMENSIONS)
+            or not all(isinstance(d, str) for d in dimensions) or set(dimensions) != set(DIMENSIONS)):
         errors.append("required_dimensions must be exactly the 0.2 dimension set")
     tolerance = _tolerance(contract)
     if tolerance == 0.0:
@@ -301,17 +342,19 @@ def validate(contract: dict, strict_provenance=None, *, require_comparable=False
             ids.add(rid)
         status = record.get("comparison_status")
         level = record.get("claim_level")
-        if status not in ALLOWED:
+        status_valid = isinstance(status, str) and status in ALLOWED
+        level_valid = isinstance(level, str) and level in LEVEL_RANK
+        if not status_valid:
             errors.append(path + " invalid comparison_status")
-        if level not in LEVEL_RANK:
+        if not level_valid:
             errors.append(path + " invalid claim_level")
         if record.get("causal_harm_established") is not False:
             errors.append(path + " cannot assert causal harm in this unvalidated pilot")
         if level == "causal_supported":
             errors.append(path + " causal_supported requires separate adjudicated evidence")
-        if status in ALLOWED and level in LEVEL_RANK and status in ceiling:
+        if status_valid and level_valid and status in ceiling:
             cap = ceiling[status]
-            if cap not in LEVEL_RANK:
+            if not isinstance(cap, str) or cap not in LEVEL_RANK:
                 errors.append(path + " status_claim_ceiling has an invalid level for " + str(status))
             elif LEVEL_RANK[level] > LEVEL_RANK[cap]:
                 errors.append(path + " claim_level " + level + " exceeds the ceiling " + cap + " for status " + status)
@@ -338,7 +381,7 @@ def validate(contract: dict, strict_provenance=None, *, require_comparable=False
                 if not isinstance(entry, dict):
                     errors.append(path + " dimension " + key + " must be an object")
                     continue
-                if entry.get("state") not in STATES:
+                if not isinstance(entry.get("state"), str) or entry["state"] not in STATES:
                     errors.append(path + " dimension " + key + " has no valid state")
                 if not isinstance(entry.get("why"), str) or not entry["why"].strip():
                     errors.append(path + " dimension " + key + " requires a reason")
@@ -374,7 +417,7 @@ def validate(contract: dict, strict_provenance=None, *, require_comparable=False
             if share is not None:
                 if not (_num(share) and 0 <= share <= 100):
                     errors.append(node + " invalid late_stage_share_percent")
-                elif site.get("share_construct") not in SHARE_CONSTRUCTS:
+                elif not isinstance(site.get("share_construct"), str) or site["share_construct"] not in SHARE_CONSTRUCTS:
                     errors.append(node + " late_stage_share_percent requires a share_construct")
                 elif all(_num(site.get(field)) for field in RATE_FIELDS) and tolerance > 0:
                     all_stage = float(site["all_stage_rate_per_100k"])
@@ -399,10 +442,10 @@ def validate(contract: dict, strict_provenance=None, *, require_comparable=False
                 if not isinstance(site.get("stage_definition"), str) or not site["stage_definition"].strip():
                     errors.append(node + " record-level stage_definition is UNKNOWN, so the site must name its stage definition")
         # Display/record status cannot waive the explicit downstream claim gate.
-        if require_comparable or (strict and status in {"PASS", "CONDITIONAL"}):
+        if require_comparable or (strict and status_valid and status in {"PASS", "CONDITIONAL"}):
             assessment = assess_comparability(record, accepted_review_sha256)
             errors.extend(path + " " + error for error in assessment["errors"])
-        if len(periods) > 1 and status in {"PASS", "CONDITIONAL"}:
+        if len(periods) > 1 and status_valid and status in {"PASS", "CONDITIONAL"}:
             errors.append(path + " sites carry more than one period (" + ", ".join(sorted(periods)) + ") yet status is " + str(status))
     return errors
 
@@ -427,6 +470,7 @@ def main(argv: list[str]) -> int:
         elif arg in {"-h", "--help"}:
             print("usage: validate_contract_v02.py [--strict-provenance|--advisory-provenance] [--require-comparable] [--accepted-review-sha256=HEX] [contract.json ...]")
             print("Default checks structure only; --require-comparable also requires source-linked mappings, reproduced arithmetic and an externally accepted review digest. A digest is not source/reviewer authentication or scientific truth.")
+            print("The gate admits descriptive case proportions only. late_stage_share_percent must equal the calculated harmonized share; original published values belong in published_late_stage_share_percent.")
             return 0
         elif arg.startswith("-"):
             print("FAIL: unknown option", arg, file=sys.stderr)

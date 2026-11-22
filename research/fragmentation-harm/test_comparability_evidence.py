@@ -46,7 +46,9 @@ def evidence_fixture(*, observed_declaration=False, different_codes=False):
     rows = []
     for index, site in enumerate(record["sites"]):
         label = "Synthetic site " + str(index + 1)
-        site.update({"label": label, "fips": None, "stage_definition": "localized/regional/distant/unknown"})
+        site.update({"label": label, "fips": None, "stage_definition": "localized/regional/distant/unknown",
+                     "published_late_stage_share_percent": 63.7 if index == 0 else 63.4,
+                     "late_stage_share_percent": 62.5 if index == 0 else 50.0})
         provenance = {"stage_variable": "Summary stage" if index == 0 or not different_codes else "Other registry stage",
                       "stage_version": "2018", "stage_variable_state": "ATTESTED_PER_EXTRACT",
                       "diagnosis_years": site["period"], "release": "synthetic release"}
@@ -88,6 +90,7 @@ class ComparabilityEvidenceTests(unittest.TestCase):
         contract = reference_contract()
         self.assertEqual(guard.validate(contract), [])
         record = contract["records"][0]
+        self.assertEqual([site["late_stage_share_percent"] for site in record["sites"]], [63.7, 63.4])
         self.assertBlocked(record, "not established")
         self.assertTrue(guard.validate(contract, require_comparable=True))
 
@@ -134,6 +137,44 @@ class ComparabilityEvidenceTests(unittest.TestCase):
         self.assertEqual(result["claim_gate"], "EVIDENCE_GATE_PASSED")
         self.assertEqual(result["review_status"], "MATCHES_OPERATOR_ACCEPTED_DIGEST")
         self.assertEqual(guard.validate(contract, require_comparable=True, accepted_review_sha256=pin), [])
+        calculated = result["calculated_comparison"]
+        self.assertEqual(calculated["claim_level"], "descriptive")
+        self.assertEqual(calculated["data_kind"], "observed")
+        self.assertEqual([site["share_percent"] for site in calculated["sites"]], [62.5, 50.0])
+        self.assertEqual(calculated["difference_pp"], 12.5)
+
+    def test_fresh_review_pin_cannot_authorize_association_or_causation(self):
+        for level in ("associational", "causal_candidate", "causal_supported"):
+            contract, _ = evidence_fixture(observed_declaration=True)
+            record = contract["records"][0]
+            record.update(comparison_status="PASS", claim_level=level)
+            pin = refresh_review(record)
+            with self.subTest(level=level):
+                self.assertBlocked(record, "descriptive comparisons only", pin)
+                self.assertTrue(guard.validate(contract, require_comparable=True, accepted_review_sha256=pin))
+
+    def test_contradictory_admitted_shares_fail_even_with_fresh_pin(self):
+        contract, _ = evidence_fixture(observed_declaration=True)
+        record = contract["records"][0]
+        for site, value in zip(record["sites"], [63.7, 63.4]):
+            site["late_stage_share_percent"] = value
+        pin = refresh_review(record)
+        self.assertBlocked(record, "admitted late_stage_share_percent", pin)
+
+    def test_published_and_harmonized_values_remain_distinct(self):
+        contract, pin = evidence_fixture(observed_declaration=True)
+        record = contract["records"][0]
+        result = guard.assess_comparability(record, pin)
+        self.assertEqual(result["claim_gate"], "EVIDENCE_GATE_PASSED")
+        self.assertEqual([site["published_late_stage_share_percent"] for site in record["sites"]], [63.7, 63.4])
+        self.assertEqual([site["share_percent"] for site in result["calculated_comparison"]["sites"]], [62.5, 50.0])
+        self.assertEqual(result["calculated_comparison"]["difference_pp"], 12.5)
+
+    def test_rate_ratio_cannot_be_admitted_as_case_share(self):
+        contract, _ = evidence_fixture(observed_declaration=True)
+        record = contract["records"][0]
+        record["sites"][0]["share_construct"] = "age_weighted_rate_ratio_W"
+        self.assertBlocked(record, "admitted late_stage_share_percent", refresh_review(record))
 
     def test_tampered_version_definition_population_and_count_invalidate_review(self):
         changes = [
@@ -178,6 +219,7 @@ class ComparabilityEvidenceTests(unittest.TestCase):
         for item in [evidence["target"], *evidence["site_mappings"]]:
             item.update(denominator_policy="all_eligible", unknown_stage_policy="include_denominator")
         evidence["calculation"]["sites"][0].update(denominator=100, share_percent=60.0)
+        record["sites"][0]["late_stage_share_percent"] = 60.0
         evidence["calculation"]["difference_pp"] = 10.0
         pin = refresh_review(record)
         result = self.assertBlocked(record, "synthetic", pin)
@@ -230,6 +272,40 @@ class ComparabilityEvidenceTests(unittest.TestCase):
         contract["records"][0]["sites"][0]["late_stage_share_percent"] = float("nan")
         self.assertTrue(guard.validate(contract))
 
+    def test_malformed_metadata_returns_validation_errors(self):
+        mutations = [
+            lambda c: c["records"][0].update(comparison_status=[]),
+            lambda c: c["records"][0].update(claim_level={}),
+            lambda c: c["records"][0]["dimensions"]["population"].update(state=[]),
+            lambda c: c["required_dimensions"].__setitem__(0, {}),
+            lambda c: c["status_claim_ceiling"].update(UNKNOWN={}),
+            lambda c: c["records"][0]["sites"][0].update(share_construct=[]),
+        ]
+        for mutation in mutations:
+            contract = reference_contract()
+            mutation(contract)
+            self.assertTrue(guard.validate(contract))
+            self.assertTrue(guard.validate(contract, require_comparable=True))
+
+    def test_nonfinite_review_metadata_returns_blocked_assessment(self):
+        contract, pin = evidence_fixture(observed_declaration=True)
+        record = contract["records"][0]
+        record["stage_comparability"]["review"]["extra"] = float("nan")
+        self.assertBlocked(record, "review cannot be canonically bound", pin)
+
+    def test_labels_are_not_coerced_between_null_and_string(self):
+        for section in ("site_mappings", "calculation"):
+            contract, _ = evidence_fixture(observed_declaration=True)
+            record = contract["records"][0]
+            record["sites"][0]["label"] = "None"
+            record["stage_comparability"]["site_mappings"][0]["site_label"] = "None"
+            record["stage_comparability"]["calculation"]["sites"][0]["site_label"] = "None"
+            if section == "site_mappings":
+                record["stage_comparability"][section][0]["site_label"] = None
+            else:
+                record["stage_comparability"][section]["sites"][0]["site_label"] = None
+            self.assertBlocked(record, "each site exactly once")
+
 
 class ComparabilityCliTests(unittest.TestCase):
     def run_cli(self, contract=None, *flags):
@@ -264,6 +340,39 @@ class ComparabilityCliTests(unittest.TestCase):
 
     def test_malformed_pin_is_usage_error(self):
         self.assertEqual(self.run_cli(None, "--accepted-review-sha256=x").returncode, 2)
+
+    def test_cli_rejects_overclaim_and_contradictory_admitted_values(self):
+        for level in ("associational", "causal_candidate", "causal_supported"):
+            contract, _ = evidence_fixture(observed_declaration=True)
+            record = contract["records"][0]
+            record.update(comparison_status="PASS", claim_level=level)
+            pin = refresh_review(record)
+            result = self.run_cli(contract, "--require-comparable", "--accepted-review-sha256=" + pin)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("descriptive comparisons only", result.stderr)
+        contract, _ = evidence_fixture(observed_declaration=True)
+        record = contract["records"][0]
+        record["sites"][0]["late_stage_share_percent"] = 63.7
+        pin = refresh_review(record)
+        result = self.run_cli(contract, "--require-comparable", "--accepted-review-sha256=" + pin)
+        self.assertEqual(result.returncode, 1)
+        self.assertIn("admitted late_stage_share_percent", result.stderr)
+
+    def test_cli_malformed_metadata_rejects_without_traceback(self):
+        mutations = [
+            lambda c: c["records"][0].update(comparison_status=[]),
+            lambda c: c["records"][0].update(claim_level={}),
+            lambda c: c["records"][0]["dimensions"]["population"].update(state=[]),
+            lambda c: c["required_dimensions"].__setitem__(0, {}),
+            lambda c: c["status_claim_ceiling"].update(UNKNOWN={}),
+            lambda c: c["records"][0]["sites"][0].update(share_construct=[]),
+        ]
+        for mutation in mutations:
+            contract = reference_contract()
+            mutation(contract)
+            result = self.run_cli(contract, "--require-comparable")
+            self.assertEqual(result.returncode, 1)
+            self.assertNotIn("Traceback", result.stderr)
 
 
 if __name__ == "__main__":

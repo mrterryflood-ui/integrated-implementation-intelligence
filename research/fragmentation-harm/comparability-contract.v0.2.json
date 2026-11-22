@@ -186,7 +186,7 @@
           "rate_ratio_w_percent": 64.4397,
           "average_annual_late_count": 75,
           "ci_rank": "N/A",
-          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary",
+          "stage_definition": "UNDISCLOSED per-extract derivation: the retained report defines late stage as regional or distant; its generic footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but reserves alternate staging variables without attesting the executed field for this county.",
           "stage_provenance": {
             "state": "PARTIAL",
             "registry_source_marker": "2",
@@ -194,7 +194,7 @@
             "release": "2025 submission",
             "stage_variable": null,
             "stage_variable_state": "UNATTESTED_PER_COUNTY",
-            "stage_variable_note": "The publisher assigns the staging variable by data source and reserves substitution, so the branch-implied variable is a reading of the footnote and not an attested per-county value. Carried from ledger item Q04 page reads S284, S439, S448 and S521; not re-read this sprint.",
+            "stage_variable_note": "The retained November 8 interpretation pages and CSV exports were rechecked November 21, 2026. They identify the broad regional-or-distant construct and default source-specific staging variables, while reserving substitution. The branch-implied variable is not an attested per-extract field or derivation; exact lineage remains unresolved.",
             "diagnosis_years": "2019-2023",
             "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
           }
@@ -214,7 +214,7 @@
           "rate_ratio_w_percent": 62.8947,
           "average_annual_late_count": 1098,
           "ci_rank": "N/A",
-          "stage_definition": "UNDISCLOSED: ^ footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, then reserves other staging variables if necessary",
+          "stage_definition": "UNDISCLOSED per-extract derivation: the retained report defines late stage as regional or distant; its generic footnote names Combined Summary Stage with Expanded Regional Codes (2004+) for SEER and Merged Summary Stage for NPCR, but reserves alternate staging variables without attesting the executed field for this county.",
           "stage_provenance": {
             "state": "PARTIAL",
             "registry_source_marker": "7",
@@ -222,7 +222,7 @@
             "release": "November 2025 submission",
             "stage_variable": null,
             "stage_variable_state": "UNATTESTED_PER_COUNTY",
-            "stage_variable_note": "The publisher assigns the staging variable by data source and reserves substitution, so the branch-implied variable is a reading of the footnote and not an attested per-county value. Carried from ledger item Q04 page reads S284, S439, S448 and S521; not re-read this sprint.",
+            "stage_variable_note": "The retained November 8 interpretation pages and CSV exports were rechecked November 21, 2026. They identify the broad regional-or-distant construct and default source-specific staging variables, while reserving substitution. The branch-implied variable is not an attested per-extract field or derivation; exact lineage remains unresolved.",
             "diagnosis_years": "2019-2023",
             "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
           }
