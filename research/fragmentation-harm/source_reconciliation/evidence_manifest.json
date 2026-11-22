@@ -1,0 +1,345 @@
+{
+  "schema_version": "1.0",
+  "created_utc": "2026-11-22T04:27:48.390311+00:00",
+  "purpose": "Primary-source evidence for a bounded public-data reanalysis of retained Hinds/Harris 2019-2023 State Cancer Profiles CRC exports. This is a harmonization specification, not an attestation of original query execution.",
+  "sources": [
+    {
+      "filename": "scp_faq.html",
+      "url": "https://statecancerprofiles.cancer.gov/faq.html",
+      "retrieved_utc": "2026-11-22T04:22:59.321795+00:00",
+      "status": 200,
+      "final_url": "https://statecancerprofiles.cancer.gov/faq.html",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 39496,
+      "sha256": "19b419702f04b3a44097570a3e2ab55f6a5954630c30ed4f1c8c1dd7ac0c67db",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/scp_faq.html"
+    },
+    {
+      "filename": "scp_malignant.html",
+      "url": "https://statecancerprofiles.cancer.gov/malignant.html",
+      "retrieved_utc": "2026-11-22T04:22:59.322440+00:00",
+      "status": 200,
+      "final_url": "https://statecancerprofiles.cancer.gov/malignant.html",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 7479,
+      "sha256": "724a05011179e8b91a490ac8582f6219bf1d9d70222115a652e41a7df9064fc8",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/scp_malignant.html"
+    },
+    {
+      "filename": "scp_release_history.html",
+      "url": "https://statecancerprofiles.cancer.gov/about/history.html",
+      "retrieved_utc": "2026-11-22T04:22:59.322933+00:00",
+      "status": 200,
+      "final_url": "https://statecancerprofiles.cancer.gov/about/history.html",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 142453,
+      "sha256": "38f94eaea0a19ea0e2c57ca4df1411bf73e086fb119bffcbd56dfa3f2ce7dbcf",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/scp_release_history.html"
+    },
+    {
+      "filename": "cdc_variable_definitions.html",
+      "url": "https://www.cdc.gov/united-states-cancer-statistics/public-use/variable-definitions.html",
+      "retrieved_utc": "2026-11-22T04:22:59.323471+00:00",
+      "status": 200,
+      "final_url": "https://www.cdc.gov/united-states-cancer-statistics/public-use/variable-definitions.html",
+      "content_type": "text/html",
+      "bytes": 226982,
+      "sha256": "c91f0f2bc4b9cbe7c7c12abb3cec6eea0ee451c0d9a6e450ae8fc8c7573b4d09",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/cdc_variable_definitions.html"
+    },
+    {
+      "filename": "cdc_cautionary_notes.html",
+      "url": "https://www.cdc.gov/united-states-cancer-statistics/public-use/cautionary-notes.html",
+      "retrieved_utc": "2026-11-22T04:22:59.323944+00:00",
+      "status": 200,
+      "final_url": "https://www.cdc.gov/united-states-cancer-statistics/public-use/cautionary-notes.html",
+      "content_type": "text/html",
+      "bytes": 69000,
+      "sha256": "dfd135cff8eebbc7a496eae9a939ecc626e7a0ff0cddca1b377b5608d14310f7",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/cdc_cautionary_notes.html"
+    },
+    {
+      "filename": "cdc_stage_at_diagnosis.html",
+      "url": "https://www.cdc.gov/united-states-cancer-statistics/technical-notes/stage-at-diagnosis.html",
+      "retrieved_utc": "2026-11-22T04:23:03.714140+00:00",
+      "status": 200,
+      "final_url": "https://www.cdc.gov/united-states-cancer-statistics/technical-notes/stage-at-diagnosis.html",
+      "content_type": "text/html",
+      "bytes": 48057,
+      "sha256": "4c681a6a74419a88413ede25c76f90205ec7f2bd14debcda91e14fdd36d63a1e",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/cdc_stage_at_diagnosis.html"
+    },
+    {
+      "filename": "seer_lrd_adjustments.html",
+      "url": "https://seer.cancer.gov/seerstat/variables/seer/yr1975_2020/lrd_stage/index.html",
+      "retrieved_utc": "2026-11-22T04:23:03.910722+00:00",
+      "status": 200,
+      "final_url": "https://seer.cancer.gov/seerstat/variables/seer/yr1975_2020/lrd_stage/index.html",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 48658,
+      "sha256": "3d7b53c9d8acacef773a019e374365b5eb9302db649ba447c44669c35254a9a1",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/seer_lrd_adjustments.html"
+    },
+    {
+      "filename": "seer_nov2025_dictionary.pdf",
+      "url": "https://seer.cancer.gov/data-software/documentation/seerstat/nov2025/seerstat-variable-dictionary-nov2025.pdf",
+      "retrieved_utc": "2026-11-22T04:23:04.019716+00:00",
+      "status": 200,
+      "final_url": "https://seer.cancer.gov/data-software/documentation/seerstat/nov2025/seerstat-variable-dictionary-nov2025.pdf",
+      "content_type": "application/pdf",
+      "bytes": 278355,
+      "sha256": "8451b54a6e94d183910fafb58faf56f58d793aecc821e89da414b405bb9b90a4",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/seer_nov2025_dictionary.pdf"
+    },
+    {
+      "filename": "seer_nov2025_description.pdf",
+      "url": "https://seer.cancer.gov/data-software/documentation/seerstat/nov2025/TextData.FileDescription-nov2025.pdf",
+      "retrieved_utc": "2026-11-22T04:23:04.052708+00:00",
+      "status": 200,
+      "final_url": "https://seer.cancer.gov/data-software/documentation/seerstat/nov2025/TextData.FileDescription-nov2025.pdf",
+      "content_type": "application/pdf",
+      "bytes": 1655124,
+      "sha256": "47af287ade3f2353901aea05ec717aa4843fb86ae8daedc89ed4a4baf837bcd9",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/seer_nov2025_description.pdf"
+    },
+    {
+      "filename": "seer_nov2025_required_dataitems.pdf",
+      "url": "https://seer.cancer.gov/tools/seer.nov25.dataitems.pdf",
+      "retrieved_utc": "2026-11-22T04:23:04.133877+00:00",
+      "status": 200,
+      "final_url": "https://seer.cancer.gov/tools/seer.nov25.dataitems.pdf",
+      "content_type": "application/pdf",
+      "bytes": 620085,
+      "sha256": "0b2541a9351918f53c61e9a1a46368509d02ff58b1044cc7f41e2404c36cc220",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/seer_nov2025_required_dataitems.pdf"
+    },
+    {
+      "filename": "naaccr_v25_item764.html",
+      "url": "https://apps.naaccr.org/data-dictionary/data-dictionary/version=25/data-item-view/item-number=764/",
+      "retrieved_utc": "2026-11-22T04:23:07.433318+00:00",
+      "status": 200,
+      "final_url": "https://apps.naaccr.org/data-dictionary/data-dictionary/version=25/data-item-view/item-number=764/",
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 20984,
+      "sha256": "a2de9df78e1d578cf42c5230eab2fd4ec5775f3f27c994810ab54e9d4579aa98",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/naaccr_v25_item764.html"
+    },
+    {
+      "filename": "naaccr_v25_item762.html",
+      "url": "https://apps.naaccr.org/data-dictionary/data-dictionary/version=25/data-item-view/item-number=762/",
+      "retrieved_utc": "2026-11-22T04:23:07.474099+00:00",
+      "status": 200,
+      "final_url": "https://apps.naaccr.org/data-dictionary/data-dictionary/version=25/data-item-view/item-number=762/",
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 20907,
+      "sha256": "340d3d0afca18140b4612dda82b00509c2d48e8bd8e670bec2ef20eada9eccd8",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/naaccr_v25_item762.html"
+    },
+    {
+      "filename": "seer_site_recode_icdo3_who2008.html",
+      "url": "https://seer.cancer.gov/siterecode/icdo3_dwhoheme/",
+      "retrieved_utc": "2026-11-22T04:23:07.611071+00:00",
+      "status": 200,
+      "final_url": "https://seer.cancer.gov/siterecode/icdo3_dwhoheme/",
+      "content_type": "text/html; charset=UTF-8",
+      "bytes": 62378,
+      "sha256": "fdb541dcf5a7f530ef03e860d40becaf6844e961a1e89a5e86f6aa5fcf7a8b80",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/seer_site_recode_icdo3_who2008.html"
+    },
+    {
+      "filename": "texas_crc_2024_brief.pdf",
+      "url": "https://dshs.texas.gov/sites/default/files/tcr/data/screening/2024-Colorectal-Cancer-Data-Brief.pdf",
+      "retrieved_utc": "2026-11-22T04:23:07.654312+00:00",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "filename": "texas_reporting_2021.pdf",
+      "url": "https://www.dshs.state.tx.us/sites/default/files/tcr/training/handbook/2021-Cancer-Reporting-Handbook.pdf",
+      "retrieved_utc": "2026-11-22T04:23:08.129353+00:00",
+      "error": "HTTPError: HTTP Error 503: Service Unavailable"
+    },
+    {
+      "filename": "mississippi_reporting_2021.html",
+      "url": "https://www.umc.edu/CancerInstitute/Cancer-Research/Cancer-Registries/Mississippi%20Cancer%20Registry/Resources1/MCR-Manuals/2021.html",
+      "retrieved_utc": "2026-11-22T04:23:11.441185+00:00",
+      "status": 200,
+      "final_url": "https://www.umc.edu/CancerInstitute/Cancer-Research/Cancer-Registries/Mississippi%20Cancer%20Registry/Resources1/MCR-Manuals/2021.html",
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 593846,
+      "sha256": "961766dd447490f9c12d7c6e5706626f08a35b228c0594f14e38882b7653829a",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/mississippi_reporting_2021.html"
+    },
+    {
+      "filename": "eod_v3_2_home.html",
+      "url": "https://staging.seer.cancer.gov/eod_public/home/3.2/",
+      "retrieved_utc": "2026-11-22T04:23:11.729345+00:00",
+      "status": 200,
+      "final_url": "https://staging.seer.cancer.gov/eod_public/home/3.2/",
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 43627,
+      "sha256": "464411b63fbddcb794eb3f1fef1be80592e1aa24bdca7ceedd8032e60fcd8aa3",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/eod_v3_2_home.html"
+    },
+    {
+      "filename": "cdc_uscs_2001_2023_technical.pdf",
+      "url": "https://www.cdc.gov/united-states-cancer-statistics/public-use/pdf/uscs-public-use-database-technical-documentation-2001-2023-final-508.pdf",
+      "retrieved_utc": "2026-11-22T04:25:55.675219+00:00",
+      "status": 200,
+      "final_url": "https://www.cdc.gov/united-states-cancer-statistics/public-use/pdf/uscs-public-use-database-technical-documentation-2001-2023-final-508.pdf",
+      "content_type": "application/pdf",
+      "bytes": 785503,
+      "sha256": "34f291deb3538e6477d119f9fbdd5fb322170046a7b959cd050f8f040ae7ff11",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/cdc_uscs_2001_2023_technical.pdf"
+    },
+    {
+      "filename": "cdc_dataviz_2023_technical.pdf",
+      "url": "https://www.cdc.gov/united-states-cancer-statistics/technical-notes/pdf/uscs-data-visualizations-tool-technical-notes-2023-june-508-final.pdf",
+      "retrieved_utc": "2026-11-22T04:25:55.675962+00:00",
+      "status": 200,
+      "final_url": "https://www.cdc.gov/united-states-cancer-statistics/technical-notes/pdf/uscs-data-visualizations-tool-technical-notes-2023-june-508-final.pdf",
+      "content_type": "application/pdf",
+      "bytes": 702847,
+      "sha256": "191fa4b8398c90cb69db3970fdf98564f22e5b8c509f1c250a0ad9b5391cf6b4",
+      "raw_hash_verified": true,
+      "raw_source_bundle_member": "methods/cdc_dataviz_2023_technical.pdf"
+    },
+    {
+      "filename": "texas_crc_2024_brief_www.pdf",
+      "url": "https://www.dshs.texas.gov/sites/default/files/tcr/data/screening/2024-Colorectal-Cancer-Data-Brief.pdf",
+      "retrieved_utc": "2026-11-22T04:25:55.676530+00:00",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+      "filename": "texas_reporting_2021_currentdomain.pdf",
+      "url": "https://www.dshs.texas.gov/sites/default/files/tcr/training/handbook/2021-Cancer-Reporting-Handbook.pdf",
+      "retrieved_utc": "2026-11-22T04:25:55.676960+00:00",
+      "error": "HTTPError: HTTP Error 404: Not Found"
+    }
+  ],
+  "retained_source_exports": [
+    {
+      "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/hinds_all_export.csv",
+      "sha256": "34ebb729828bb03454daddc69e708d902faca33958e95c8dcbe6c58612ae05b2",
+      "bytes": 11812
+    },
+    {
+      "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/hinds_late_export.csv",
+      "sha256": "d5cbbfc1c2f96f9ecb7c5274cb37540975e74ffdc0c3e26e9ef38c6b61d5f284",
+      "bytes": 9838
+    },
+    {
+      "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/harris_all_export.csv",
+      "sha256": "82c21ab022d4598139d61d15fcac3a4f3756eb38991db7ecd4569ec188da7665",
+      "bytes": 25637
+    },
+    {
+      "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/harris_late_export.csv",
+      "sha256": "551a3c9c2fdcb37b6875877d3211ebcf86cb30aae4dc24e6e2abf1f5292bfd5f",
+      "bytes": 21262
+    },
+    {
+      "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/hinds_report_interpretation.html",
+      "sha256": "51ac357e38fac45fef00fa31ba33b26a4c986cdefdc1c6c6cdcaf8caaa3ffb87",
+      "bytes": 67589
+    },
+    {
+      "path": "research/fragmentation-harm/denominator_adjudication/source_retrieval/harris_report_interpretation.html",
+      "sha256": "7d0041e7e2522790d5a111ca2169eb9a4b26eb7117ae894235e4aa7372dd7900",
+      "bytes": 175046
+    }
+  ],
+  "findings": [
+    {
+      "id": "F1",
+      "status": "documented_common_category_specification",
+      "claim": "2019-2023 falls wholly within Summary Stage 2018. NPCR Merged uses direct item764; SEER Combined uses derived item762 by published default. Both codebooks map1 localized,2/3/4 regional,7 distant,9 unknown. Different wrapper names alone are not evidence of incompatible stage constructs.",
+      "sources": [
+        "cdc_uscs_2001_2023_technical.pdf",
+        "seer_nov2025_description.pdf",
+        "naaccr_v25_item762.html",
+        "naaccr_v25_item764.html"
+      ]
+    },
+    {
+      "id": "F2",
+      "status": "documented_registry_year_exception",
+      "claim": "SEER Nov2025 transmission requirements permit Texas item762 and EOD772/774/776 only when available for2018-2021. This neither proves absence nor proves a fallback executed. No explicit public Texas2019-2021 direct-to-derived fallback was recovered in the inspected documentation.",
+      "sources": [
+        "seer_nov2025_required_dataitems.pdf"
+      ]
+    },
+    {
+      "id": "F3",
+      "status": "original_execution_not_recovered",
+      "claim": "The retained SCP footnotes permit alternative staging variables as necessary and identify late as regional or distant. They do not expose selected alternative variables or per-case derivation, the exact historical algorithm build, or an explicit accounting of unknown/blank/invalid/DCO/autopsy denominator membership.",
+      "sources": [
+        "retained source exports"
+      ]
+    },
+    {
+      "id": "F4",
+      "status": "selection_specification_documented",
+      "claim": "SCP FAQ links the ICD-O-3/WHO2008 site recode; Colon and Rectum comprises C180-C189,C199,C209,C260 with histology exclusions9050-9055,9140,9590-9993. Malignant ICD-O-3 behavior3 is the invasive incidence cohort; appendix is included, anus is not.",
+      "sources": [
+        "scp_faq.html",
+        "scp_malignant.html",
+        "seer_site_recode_icdo3_who2008.html"
+      ]
+    },
+    {
+      "id": "F5",
+      "status": "uniform_cdc_specification_documented",
+      "claim": "CDC public-use definitions classify both Mississippi and Texas asNPCR, using direct SS2018#764 for2018+. CDC stage visualization excludes DCO/autopsy-only and explicitly offers unknown-inclusive and known-stage-only denominators. These rules are valid for a newly specified CDC analysis, not proof of the old SCP execution.",
+      "sources": [
+        "cdc_uscs_2001_2023_technical.pdf",
+        "cdc_stage_at_diagnosis.html",
+        "cdc_dataviz_2023_technical.pdf"
+      ]
+    },
+    {
+      "id": "F6",
+      "status": "official_public_access_limit",
+      "claim": "USCS2001-2023 technical documentation p66 explicitly says county-level records are not available in the public-use database under state data-sharing agreements; they are held in restricted-accessRDC. This is not a claim that all aggregate county statistics are unavailable. The public county all-stage file recovered by another agent contains no stage field; stage input availability must not be fabricated.",
+      "sources": [
+        "cdc_uscs_2001_2023_technical.pdf"
+      ]
+    },
+    {
+      "id": "F7",
+      "status": "documented_manual_inconsistency_not_data_error",
+      "claim": "Mississippi2021 SS2018 allowable-values header includes5, while its own code table omits5 and NAACCRv25 disallows5. This supports correcting the manual, not an assertion that any retained Hinds record used5.",
+      "sources": [
+        "mississippi_reporting_2021.html",
+        "naaccr_v25_item764.html"
+      ]
+    },
+    {
+      "id": "F8",
+      "status": "historical_negative_control_not_retrieved",
+      "claim": "The earlier official search-index record for the September2024 Texas CRC brief describes a stage chart excluding unknown and including in situ; raw PDF retrieval now returns404. Preserve as a qualified prior lead, not as recovered bytes. The currently linked July2026 brief is a different document. The fully archived CDC note independently demonstrates why published stage percentages can use different denominators.",
+      "sources": [
+        "texas_crc_2024_brief.pdf",
+        "texas_crc_2024_brief_www.pdf",
+        "cdc_stage_at_diagnosis.html"
+      ]
+    }
+  ],
+  "raw_source_bundle": "CRC_Source_Reconciliation_Evidence_2026-11-21.zip",
+  "manifest_transformation": "Copied from the research acquisition manifest; source bytes and hashes unchanged. Transient absolute paths replaced with repository-relative paths and raw-evidence bundle members. Retrieval failures remain explicit."
+}

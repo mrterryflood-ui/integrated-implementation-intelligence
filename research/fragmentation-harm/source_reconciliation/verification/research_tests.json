@@ -1,0 +1,24 @@
+{
+  "name": "research_tests",
+  "started_utc": "2026-11-22T04:42:01.309447+00:00",
+  "finished_utc": "2026-11-22T04:42:07.179176+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "research/fragmentation-harm",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "source_environment_variables": [
+    "DIS_NCI_ARCHIVE_PATH",
+    "CHAINWEB_ARCHIVE"
+  ],
+  "log": "research_tests.log",
+  "log_sha256": "63964ef8a763a62cfb37df666f2d81ff077670178f3187362804960b97182ac7",
+  "original_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a"
+}

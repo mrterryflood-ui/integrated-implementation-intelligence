@@ -1,0 +1,243 @@
+{
+  "schema_version": "1.0",
+  "status": "source_documented_harmonization_specification_not_verified_execution",
+  "diagnosis_years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023
+  ],
+  "geographies": [
+    {
+      "county": "Hinds",
+      "state": "Mississippi",
+      "fips": "28049",
+      "scp_source": "NPCR",
+      "scp_default_wrapper": "Merged Summary Stage",
+      "documented_2018_plus_input": 764
+    },
+    {
+      "county": "Harris",
+      "state": "Texas",
+      "fips": "48201",
+      "scp_source": "SEER",
+      "scp_default_wrapper": "Combined Summary Stage with Expanded Regional Codes (2004+)",
+      "documented_2018_plus_input": 762,
+      "release_specific_exception": {
+        "source": "seer_nov2025_required_dataitems.pdf",
+        "physical_page": 5,
+        "requirement_date": "2025-09-10",
+        "years_overlapping_this_study": [
+          2019,
+          2020,
+          2021
+        ],
+        "items": [
+          762,
+          772,
+          774,
+          776
+        ],
+        "exception": "Accepted when available for Texas diagnoses 2018–2021",
+        "meaning": "Neither proves missing values nor identifies the executed fallback. The default derivation is not an extract-specific execution attestation."
+      }
+    }
+  ],
+  "items": {
+    "764": {
+      "name": "Summary Stage 2018",
+      "method": "directly assigned",
+      "codebook_version": "NAACCR version 25"
+    },
+    "762": {
+      "name": "Derived Summary Stage 2018",
+      "method": "derived using EOD Primary Tumor 772, Regional Nodes 774, Mets 776 and potentially other items",
+      "codebook_version": "NAACCR version 25"
+    }
+  },
+  "ss2018_mapping": [
+    {
+      "raw_code": "0",
+      "category": "in_situ",
+      "handling": "outside_invasive_crc_target",
+      "observed_late": false
+    },
+    {
+      "raw_code": "1",
+      "category": "localized",
+      "handling": "known_stage_nonlate",
+      "observed_late": false
+    },
+    {
+      "raw_code": "2",
+      "category": "regional_direct_extension",
+      "handling": "known_stage_late",
+      "observed_late": true
+    },
+    {
+      "raw_code": "3",
+      "category": "regional_nodes",
+      "handling": "known_stage_late",
+      "observed_late": true
+    },
+    {
+      "raw_code": "4",
+      "category": "regional_extension_and_nodes",
+      "handling": "known_stage_late",
+      "observed_late": true
+    },
+    {
+      "raw_code": "5",
+      "category": "invalid_for_ss2018",
+      "handling": "quarantine_and_review",
+      "observed_late": null
+    },
+    {
+      "raw_code": "6",
+      "category": "invalid_for_ss2018",
+      "handling": "quarantine_and_review",
+      "observed_late": null
+    },
+    {
+      "raw_code": "7",
+      "category": "distant",
+      "handling": "known_stage_late",
+      "observed_late": true
+    },
+    {
+      "raw_code": "8",
+      "category": "benign_or_borderline",
+      "handling": "outside_invasive_crc_target_and_not_applicable_crc",
+      "observed_late": false
+    },
+    {
+      "raw_code": "9",
+      "category": "unknown_unstaged_unspecified_including_dco",
+      "handling": "unknown_category_not_observed_late",
+      "observed_late": false
+    },
+    {
+      "raw_code": "blank",
+      "category": "missing",
+      "handling": "quarantine_until_explicit_missingness_policy",
+      "observed_late": null
+    }
+  ],
+  "raw_encoding_caution": "These codes apply to NAACCR items 762 and 764. Do not assume identical underlying numeric storage of the SEER*Stat merged/combined wrapper; map its documented category labels or obtain its dictionary.",
+  "invasive_crc_selection": {
+    "site_recode": "ICD-O-3/WHO2008",
+    "site_recode_values": [
+      "21041",
+      "21042",
+      "21043",
+      "21044",
+      "21045",
+      "21046",
+      "21047",
+      "21048",
+      "21049",
+      "21051",
+      "21052"
+    ],
+    "icdo3_primary_sites": [
+      "C180",
+      "C181",
+      "C182",
+      "C183",
+      "C184",
+      "C185",
+      "C186",
+      "C187",
+      "C188",
+      "C189",
+      "C199",
+      "C209",
+      "C260"
+    ],
+    "histology_excluded_ranges": [
+      [
+        9050,
+        9055
+      ],
+      [
+        9140,
+        9140
+      ],
+      [
+        9590,
+        9993
+      ]
+    ],
+    "icdo3_behavior_include": [
+      3
+    ],
+    "behavior_excluded": [
+      0,
+      1,
+      2
+    ],
+    "appendix_included": true,
+    "anus_excluded": true,
+    "inconsistent_stage_behavior_policy": "Select the invasive cohort by malignant behavior3. Stage0 or8 are outside the target invasive stage categories. If such a code occurs on a behavior3 CRC record, flag and account for the inconsistency; do not silently drop it from an all-stage denominator.",
+    "unit": "incident primary cancer case, not unique patient"
+  },
+  "new_uniform_cdc_analysis": {
+    "source_program_both": "NPCR under the CDC publication classification; Texas is dual-supported, not exclusively NPCR",
+    "source_stage_item_both": 764,
+    "stage_release": "2001–2023 USCS, November 2025 submission",
+    "exclude_reporting_source": [
+      6,
+      7
+    ],
+    "reporting_source_labels": {
+      "6": "autopsy only",
+      "7": "death certificate only"
+    },
+    "primary_denominator_categories": [
+      "localized",
+      "regional",
+      "distant",
+      "unknown"
+    ],
+    "secondary_denominator_categories": [
+      "localized",
+      "regional",
+      "distant"
+    ],
+    "primary_estimate": "100*(N2+N3+N4+N7)/(N1+N2+N3+N4+N7+N9)",
+    "known_stage_estimate": "100*(N2+N3+N4+N7)/(N1+N2+N3+N4+N7)",
+    "unknown_fraction": "N9/(N1+N2+N3+N4+N7+N9)",
+    "blank_or_invalid": "must be separately enumerated and resolved under a predeclared rule, not silently equated to9",
+    "access_status": "county-stage input records not released inUSCS public-use database; restricted-accessRDC needed unless an explicitly documented aggregate county-stage extract is supplied",
+    "not_old_scp_execution": true,
+    "public_database_eligibility": {
+      "unknown_age_excluded": true,
+      "unknown_sex_excluded": true,
+      "source": "CDC public-use cautionary notes; no inference about old SCP special handling",
+      "age": "all known ages; do not import survival-analysis age0-99restriction",
+      "sex": "both included sexes under database eligibility",
+      "race_ethnicity": "all groups, including Hispanic origin; do not add an undocumented exclusion",
+      "diagnosis_years": [
+        2019,
+        2020,
+        2021,
+        2022,
+        2023
+      ]
+    },
+    "implementation_status": "Specification documented; exact county-stage category inputs are not present in the available public releases. No new county-stage extraction is claimed."
+  },
+  "do_not_infer": [
+    "AJCC III+IV equals regional+distant",
+    "equal access, care quality, system performance or mechanisms",
+    "county results are city or FQHC patient results",
+    "rounded displayed percentages establish formal equivalence",
+    "different direct/derived pathways necessarily produce incompatible categories",
+    "SCP DCO/autopsy exclusions from CDC stage-only rules"
+  ],
+  "sources": [
+    "evidence_manifest.json",
+    "evidence_excerpts.json"
+  ]
+}

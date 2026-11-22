@@ -1,0 +1,26 @@
+{
+  "name": "research_tests",
+  "started_utc": "2026-11-22T04:40:14.246151+00:00",
+  "finished_utc": "2026-11-22T04:40:20.096007+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "research/fragmentation-harm",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "source_environment_variables": [
+    "DIS_NCI_ARCHIVE_PATH",
+    "CHAINWEB_ARCHIVE"
+  ],
+  "log": "research_tests_before_crude_output.log",
+  "log_sha256": "476af083aa374e6045a8c7919a9751b1a7b95d84e92d246de6c6690ee4adbb12",
+  "original_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+  "initial_partial_environment_run": "research_tests_initial_partial_env.log; 13 legacy checks skipped because CHAINWEB_ARCHIVE was omitted, then rerun with both required variables and unchanged tests.",
+  "checkpoint": "Successful prior checkpoint before reviewer-requested crude-rate output; superseded by final run."
+}

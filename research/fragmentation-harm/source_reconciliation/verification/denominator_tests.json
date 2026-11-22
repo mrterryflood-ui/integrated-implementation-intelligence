@@ -1,0 +1,20 @@
+{
+  "name": "denominator_tests",
+  "started_utc": "2026-11-22T04:39:44.923303+00:00",
+  "finished_utc": "2026-11-22T04:39:45.533229+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "research/fragmentation-harm/denominator_adjudication",
+    "-p",
+    "test_*.py",
+    "-v"
+  ],
+  "exit_code": 0,
+  "log": "denominator_tests.log",
+  "log_sha256": "6daf18f29ea2859a7364babbc28535813e16b4e0d7029162d5f7e2574a701fa8",
+  "original_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a"
+}

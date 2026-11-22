@@ -21,6 +21,8 @@ jobs:
           python-version: "3.11"
       - name: Validate research comparability contract
         run: python research/fragmentation-harm/validate_contract.py
+      - name: Replay retained CRC sources and completed bounded reanalysis
+        run: python research/fragmentation-harm/reconcile_crc_sources.py --check
       - name: Regression tests
         run: python -m unittest discover -s research/fragmentation-harm -p "test_*.py" -v
       - name: Independent denominator invariants (archive replay is a separate source-dependent gate)

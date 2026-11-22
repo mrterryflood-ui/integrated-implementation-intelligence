@@ -1,0 +1,49 @@
+{
+  "schema": "crc-source-reconciliation-execution-v1",
+  "summary_created_utc": "2026-11-22T04:43:19.395657+00:00",
+  "base_revision": "9be8298b08c18608984de5e70adb12f22ac77ef3",
+  "policy_version": "IRON-ENG-001 v1.0.0",
+  "policy_sha256": "60301dc8d8dd2443443e7afdffd8f1c33e199309668e7e8e6ebdc77932ac4c8b",
+  "scope": "Headless research source replay, conditional arithmetic, scientific records and proposal correction; no application/authentication/database/runtime changes.",
+  "python": "Python 3.12.14",
+  "tests": {
+    "research_tests": {
+      "tests": 315,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "receipt": "research_tests.json"
+    },
+    "denominator_tests": {
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "receipt": "denominator_tests.json"
+    }
+  },
+  "total_python_tests": 328,
+  "separate_legacy_fixture_controls": 10,
+  "source_replay": "source_replay.json; actual original CDC ZIP supplied and both county rows reproduced",
+  "claim_boundary": "claim_boundary_checks.json; actual v0.2 structure inspection succeeds, unsupported exact-stage claim denied",
+  "syntax_check": "python -m py_compile on both changed modules and their two test files passed; this is syntax compilation, not static typechecking",
+  "diff_check": "git diff --check passed",
+  "review_status": "Independent AI review found no local blocker; exact published commit review and hosted acceptance are recorded in the resulting pull request.",
+  "scientific_limit": "Completed conditional identification bounds and separate published all-stage comparison. Exact original stage counts, executed fallback and denominator membership are not identified. No human scientific acceptance is claimed.",
+  "source_and_code_sha256": {
+    "denominator_age_sensitivity.py": "75fc48147282fdc099699cdf362609bf8407868bec28532df23bdfede1934e03",
+    "test_denominator_age_sensitivity.py": "1ee5c576f8b1ea6fd3a94b3d2149b966f2c41a33a469b83c18ab195b4025cdd1",
+    "reconcile_crc_sources.py": "7298e4981cc959632adcd95c25b0855d7ba16cb9084fb5ef7d27e681ee763066",
+    "test_reconcile_crc_sources.py": "9e2167eb150b493875850bf2d95329f8ae93d38a1ea82c083adeeac57741a1fe",
+    "validate_contract_v02.py": "d830ad30c9cf870cd721842f66baa90c38d8630097af8158809b706896c26732",
+    "test_comparability_evidence.py": "2c74eb00b2b38cb248414b1fcd0be6ec295ee7815d129092eb8dcef40e876221",
+    "comparability-contract.v0.2.json": "b47894c80d5b157254d15849103cd8794c86d47b261031f21c8b108c46a6bd08",
+    "source_reconciliation/results.json": "c9b398cac8c1938e9efd539d680733204070554beb5c979dd652cf2f38434c45",
+    "source_reconciliation/stage_selection_crosswalk.json": "c5106b64d3b63f86a76f4031ac215eb7a2f380452c100917f29c599f3a099073",
+    "source_reconciliation/evidence_manifest.json": "c92c4de73082e27bdfdcc3d76fef3f093203191673575b669e3b9e1035bd9b48",
+    "source_reconciliation/evidence_excerpts.json": "d570429139f6f6a1830657b40352f6eff78f7b44ef74f327411ba8b38e8d8b86",
+    "source_reconciliation/uscs_exact_allstage_county_rows.json": "8305e091c852676b7126b0c1207825719bbc21470beebd821aec9965693e4e74",
+    "source_reconciliation/retained_crc_county_sources.zip": "39b339425f7bbba4dac5e4278d8ae43dd289b4fd74a9e3eec2d41ccae8578e66"
+  },
+  "historical_checkpoints": "Initial missing-second-environment-variable run and pre-crude-output runs are retained and explicitly superseded."
+}

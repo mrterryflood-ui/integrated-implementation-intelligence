@@ -1,0 +1,66 @@
+{
+  "scope": "Existing FQHC artifact revision and source-evidence preservation; no submission or human scientific attestation.",
+  "revision_date": "2026-11-21",
+  "document_preparation_date_preserved": "2026-11-09",
+  "saved_version": 3,
+  "reviewer": "stage_methods_review (AI document review)",
+  "docx": {
+    "filename": "Jeremiah_FQHC_DIS_RPLICE_Research_Brief_2026-11-09.docx",
+    "sha256": "f4bc62e9415bd872641923dcf4e56a1c5b2820ea160a4172a0170330f28611b5",
+    "changed_zip_members": [
+      "word/document.xml"
+    ]
+  },
+  "pdf": {
+    "filename": "Jeremiah_FQHC_DIS_RPLICE_Research_Brief_2026-11-09.pdf",
+    "sha256": "6691c8fe99a8cf375bf4a40e711b5491fbd6c0eaa524d44e38c5dd3a6b7222bc",
+    "pages": 14,
+    "changed_pages": [
+      4,
+      14
+    ],
+    "pixel_identical_pages": [
+      1,
+      2,
+      3,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13
+    ]
+  },
+  "superscript_citations": [
+    {
+      "text": "38",
+      "vertical_alignment": "superscript"
+    },
+    {
+      "text": "34,37",
+      "vertical_alignment": "superscript"
+    }
+  ],
+  "all_pages_visually_reviewed": true,
+  "layout_findings": "No clipping, overlaps, missing glyphs, or disrupted tables observed. Page4 revised paragraph and page14 updated references are legible; all other page images unchanged.",
+  "source_evidence_bundle": {
+    "filename": "CRC_Source_Reconciliation_Evidence_2026-11-21.zip",
+    "bytes": 40549910,
+    "sha256": "78411793014ab0cfae96c36ad81c3682ca4d310916b3974727b8949f18c43e56",
+    "member_count": 53,
+    "methods_raw_source_count": 17,
+    "historical_checkpoint_file_count": 11,
+    "verified_member_hashes": 51,
+    "zip_test": "passed",
+    "path_handling": "Derived source receipts and manifests remove local/private paths. Raw historical execution receipts/logs retain transient runtime paths unchanged to preserve hashes; no credentials were identified.",
+    "canonical_crosswalk_sha256": "c5106b64d3b63f86a76f4031ac215eb7a2f380452c100917f29c599f3a099073"
+  },
+  "save_result": "Both existing document identities replaced successfully as version 3; evidence bundle saved successfully as a new artifact. Private storage identifiers omitted.",
+  "additional_root_visual_review_pages": [
+    4,
+    14
+  ]
+}

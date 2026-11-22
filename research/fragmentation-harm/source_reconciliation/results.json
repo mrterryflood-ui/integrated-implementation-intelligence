@@ -1,0 +1,2344 @@
+{
+  "bounded_late_stage_share_analysis": {
+    "assumptions": [
+      "Five diagnosis years; nearest-integer average annual counts; half-open [display-0.5, display+0.5) annual intervals.",
+      "Nearest-0.1 percentage-point published shares; half-open [display-0.05, display+0.05) intervals, intersected with [0,100].",
+      "These rounding conventions are explicit assumptions, not independently established agency tie-breaking rules.",
+      "Within each county, the late-stage count table and share calculation use the same late numerator and diagnosis period.",
+      "All configurations are mathematical possibilities; no true count pair or exclusion count is selected."
+    ],
+    "clinical_causal_effect": null,
+    "difference_direction": "first_minus_second",
+    "exact_registry_counts_recovered": false,
+    "possible_denominator_exclusions": {
+      "assumption": "The displayed share may use an integer D with L <= D <= N, retaining the same late numerator L; recalculate both shares as 100L/N.",
+      "difference_pp": {
+        "lower": {
+          "decimal": -0.4259066759066759,
+          "denominator": 17316,
+          "numerator": -7375
+        },
+        "lower_attained": true,
+        "upper": {
+          "decimal": 0.3716212249881618,
+          "denominator": 255529,
+          "numerator": 94960
+        },
+        "upper_attained": true
+      },
+      "exclusions_are_estimated_unknown_stage_counts": false,
+      "extreme_witnesses": {
+        "lower": {
+          "first": {
+            "all": 592,
+            "all_case_percent": 63.00675675675676,
+            "excluded_count": 6,
+            "late": 373,
+            "percent": 63.6518771331058,
+            "share_denominator": 586
+          },
+          "second": {
+            "all": 8658,
+            "all_case_percent": 63.43266343266343,
+            "excluded_count": 2,
+            "late": 5492,
+            "percent": 63.44731977818854,
+            "share_denominator": 8656
+          }
+        },
+        "upper": {
+          "first": {
+            "all": 590,
+            "all_case_percent": 63.728813559322035,
+            "excluded_count": 0,
+            "late": 376,
+            "percent": 63.728813559322035,
+            "share_denominator": 590
+          },
+          "second": {
+            "all": 8662,
+            "all_case_percent": 63.357192334333874,
+            "excluded_count": 12,
+            "late": 5488,
+            "percent": 63.445086705202314,
+            "share_denominator": 8650
+          }
+        }
+      },
+      "first_all_case_percent_bounds": {
+        "lower": {
+          "decimal": 63.00675675675676,
+          "denominator": 148,
+          "numerator": 9325
+        },
+        "lower_attained": true,
+        "upper": {
+          "decimal": 63.728813559322035,
+          "denominator": 59,
+          "numerator": 3760
+        },
+        "upper_attained": true
+      },
+      "first_configuration_count": 18,
+      "first_configurations": [
+        {
+          "all": 588,
+          "all_case_percent": 63.435374149659864,
+          "excluded_count": 2,
+          "late": 373,
+          "percent": 63.6518771331058,
+          "share_denominator": 586
+        },
+        {
+          "all": 588,
+          "all_case_percent": 63.605442176870746,
+          "excluded_count": 1,
+          "late": 374,
+          "percent": 63.71379897785349,
+          "share_denominator": 587
+        },
+        {
+          "all": 589,
+          "all_case_percent": 63.3276740237691,
+          "excluded_count": 3,
+          "late": 373,
+          "percent": 63.6518771331058,
+          "share_denominator": 586
+        },
+        {
+          "all": 589,
+          "all_case_percent": 63.497453310696095,
+          "excluded_count": 2,
+          "late": 374,
+          "percent": 63.71379897785349,
+          "share_denominator": 587
+        },
+        {
+          "all": 589,
+          "all_case_percent": 63.66723259762309,
+          "excluded_count": 0,
+          "late": 375,
+          "percent": 63.66723259762309,
+          "share_denominator": 589
+        },
+        {
+          "all": 590,
+          "all_case_percent": 63.220338983050844,
+          "excluded_count": 4,
+          "late": 373,
+          "percent": 63.6518771331058,
+          "share_denominator": 586
+        },
+        {
+          "all": 590,
+          "all_case_percent": 63.389830508474574,
+          "excluded_count": 3,
+          "late": 374,
+          "percent": 63.71379897785349,
+          "share_denominator": 587
+        },
+        {
+          "all": 590,
+          "all_case_percent": 63.559322033898304,
+          "excluded_count": 1,
+          "late": 375,
+          "percent": 63.66723259762309,
+          "share_denominator": 589
+        },
+        {
+          "all": 590,
+          "all_case_percent": 63.728813559322035,
+          "excluded_count": 0,
+          "late": 376,
+          "percent": 63.728813559322035,
+          "share_denominator": 590
+        },
+        {
+          "all": 591,
+          "all_case_percent": 63.11336717428088,
+          "excluded_count": 5,
+          "late": 373,
+          "percent": 63.6518771331058,
+          "share_denominator": 586
+        },
+        {
+          "all": 591,
+          "all_case_percent": 63.28257191201354,
+          "excluded_count": 4,
+          "late": 374,
+          "percent": 63.71379897785349,
+          "share_denominator": 587
+        },
+        {
+          "all": 591,
+          "all_case_percent": 63.45177664974619,
+          "excluded_count": 2,
+          "late": 375,
+          "percent": 63.66723259762309,
+          "share_denominator": 589
+        },
+        {
+          "all": 591,
+          "all_case_percent": 63.62098138747885,
+          "excluded_count": 1,
+          "late": 376,
+          "percent": 63.728813559322035,
+          "share_denominator": 590
+        },
+        {
+          "all": 592,
+          "all_case_percent": 63.00675675675676,
+          "excluded_count": 6,
+          "late": 373,
+          "percent": 63.6518771331058,
+          "share_denominator": 586
+        },
+        {
+          "all": 592,
+          "all_case_percent": 63.17567567567568,
+          "excluded_count": 5,
+          "late": 374,
+          "percent": 63.71379897785349,
+          "share_denominator": 587
+        },
+        {
+          "all": 592,
+          "all_case_percent": 63.3445945945946,
+          "excluded_count": 3,
+          "late": 375,
+          "percent": 63.66723259762309,
+          "share_denominator": 589
+        },
+        {
+          "all": 592,
+          "all_case_percent": 63.513513513513516,
+          "excluded_count": 2,
+          "late": 376,
+          "percent": 63.728813559322035,
+          "share_denominator": 590
+        },
+        {
+          "all": 592,
+          "all_case_percent": 63.682432432432435,
+          "excluded_count": 0,
+          "late": 377,
+          "percent": 63.682432432432435,
+          "share_denominator": 592
+        }
+      ],
+      "joint_configuration_count": 3600,
+      "maximum_first_compatible_exclusion": 6,
+      "maximum_second_compatible_exclusion": 12,
+      "second_all_case_percent_bounds": {
+        "lower": {
+          "decimal": 63.357192334333874,
+          "denominator": 4331,
+          "numerator": 274400
+        },
+        "lower_attained": true,
+        "upper": {
+          "decimal": 63.43266343266343,
+          "denominator": 4329,
+          "numerator": 274600
+        },
+        "upper_attained": true
+      },
+      "second_configuration_count": 200,
+      "second_configurations": [
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 8,
+          "late": 5488,
+          "percent": 63.445086705202314,
+          "share_denominator": 8650
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 7,
+          "late": 5488,
+          "percent": 63.43775286094093,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 6,
+          "late": 5488,
+          "percent": 63.43042071197411,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 5,
+          "late": 5488,
+          "percent": 63.42309025771409,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 4,
+          "late": 5488,
+          "percent": 63.41576149757338,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 3,
+          "late": 5488,
+          "percent": 63.40843443096476,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 2,
+          "late": 5488,
+          "percent": 63.40110905730129,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 1,
+          "late": 5488,
+          "percent": 63.3937853759963,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.38646338646338,
+          "excluded_count": 0,
+          "late": 5488,
+          "percent": 63.38646338646338,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 7,
+          "late": 5489,
+          "percent": 63.449312218240664,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 6,
+          "late": 5489,
+          "percent": 63.441978733240866,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 5,
+          "late": 5489,
+          "percent": 63.43464694325667,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 4,
+          "late": 5489,
+          "percent": 63.42731684770049,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 3,
+          "late": 5489,
+          "percent": 63.41998844598498,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 2,
+          "late": 5489,
+          "percent": 63.4126617375231,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 1,
+          "late": 5489,
+          "percent": 63.405336721728084,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.3980133980134,
+          "excluded_count": 0,
+          "late": 5489,
+          "percent": 63.3980133980134,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.40956340956341,
+          "excluded_count": 5,
+          "late": 5490,
+          "percent": 63.44620362879926,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.40956340956341,
+          "excluded_count": 4,
+          "late": 5490,
+          "percent": 63.43887219782759,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.40956340956341,
+          "excluded_count": 3,
+          "late": 5490,
+          "percent": 63.4315424610052,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.40956340956341,
+          "excluded_count": 2,
+          "late": 5490,
+          "percent": 63.42421441774491,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.40956340956341,
+          "excluded_count": 1,
+          "late": 5490,
+          "percent": 63.41688806745986,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.40956340956341,
+          "excluded_count": 0,
+          "late": 5490,
+          "percent": 63.40956340956341,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.42111342111342,
+          "excluded_count": 3,
+          "late": 5491,
+          "percent": 63.44309647602542,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.42111342111342,
+          "excluded_count": 2,
+          "late": 5491,
+          "percent": 63.435767097966725,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.42111342111342,
+          "excluded_count": 1,
+          "late": 5491,
+          "percent": 63.42843941319164,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.42111342111342,
+          "excluded_count": 0,
+          "late": 5491,
+          "percent": 63.42111342111342,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.43266343266343,
+          "excluded_count": 2,
+          "late": 5492,
+          "percent": 63.44731977818854,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.43266343266343,
+          "excluded_count": 1,
+          "late": 5492,
+          "percent": 63.439990758923415,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8658,
+          "all_case_percent": 63.43266343266343,
+          "excluded_count": 0,
+          "late": 5492,
+          "percent": 63.43266343266343,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 9,
+          "late": 5488,
+          "percent": 63.445086705202314,
+          "share_denominator": 8650
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 8,
+          "late": 5488,
+          "percent": 63.43775286094093,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 7,
+          "late": 5488,
+          "percent": 63.43042071197411,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 6,
+          "late": 5488,
+          "percent": 63.42309025771409,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 5,
+          "late": 5488,
+          "percent": 63.41576149757338,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 4,
+          "late": 5488,
+          "percent": 63.40843443096476,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 3,
+          "late": 5488,
+          "percent": 63.40110905730129,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 2,
+          "late": 5488,
+          "percent": 63.3937853759963,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 1,
+          "late": 5488,
+          "percent": 63.38646338646338,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.37914308811641,
+          "excluded_count": 0,
+          "late": 5488,
+          "percent": 63.37914308811641,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 8,
+          "late": 5489,
+          "percent": 63.449312218240664,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 7,
+          "late": 5489,
+          "percent": 63.441978733240866,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 6,
+          "late": 5489,
+          "percent": 63.43464694325667,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 5,
+          "late": 5489,
+          "percent": 63.42731684770049,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 4,
+          "late": 5489,
+          "percent": 63.41998844598498,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 3,
+          "late": 5489,
+          "percent": 63.4126617375231,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 2,
+          "late": 5489,
+          "percent": 63.405336721728084,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 1,
+          "late": 5489,
+          "percent": 63.3980133980134,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.390691765792816,
+          "excluded_count": 0,
+          "late": 5489,
+          "percent": 63.390691765792816,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 6,
+          "late": 5490,
+          "percent": 63.44620362879926,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 5,
+          "late": 5490,
+          "percent": 63.43887219782759,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 4,
+          "late": 5490,
+          "percent": 63.4315424610052,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 3,
+          "late": 5490,
+          "percent": 63.42421441774491,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 2,
+          "late": 5490,
+          "percent": 63.41688806745986,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 1,
+          "late": 5490,
+          "percent": 63.40956340956341,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.402240443469225,
+          "excluded_count": 0,
+          "late": 5490,
+          "percent": 63.402240443469225,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.413789121145626,
+          "excluded_count": 4,
+          "late": 5491,
+          "percent": 63.44309647602542,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.413789121145626,
+          "excluded_count": 3,
+          "late": 5491,
+          "percent": 63.435767097966725,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.413789121145626,
+          "excluded_count": 2,
+          "late": 5491,
+          "percent": 63.42843941319164,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.413789121145626,
+          "excluded_count": 1,
+          "late": 5491,
+          "percent": 63.42111342111342,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.413789121145626,
+          "excluded_count": 0,
+          "late": 5491,
+          "percent": 63.413789121145626,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.425337798822035,
+          "excluded_count": 3,
+          "late": 5492,
+          "percent": 63.44731977818854,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.425337798822035,
+          "excluded_count": 2,
+          "late": 5492,
+          "percent": 63.439990758923415,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.425337798822035,
+          "excluded_count": 1,
+          "late": 5492,
+          "percent": 63.43266343266343,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8659,
+          "all_case_percent": 63.425337798822035,
+          "excluded_count": 0,
+          "late": 5492,
+          "percent": 63.425337798822035,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 10,
+          "late": 5488,
+          "percent": 63.445086705202314,
+          "share_denominator": 8650
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 9,
+          "late": 5488,
+          "percent": 63.43775286094093,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 8,
+          "late": 5488,
+          "percent": 63.43042071197411,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 7,
+          "late": 5488,
+          "percent": 63.42309025771409,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 6,
+          "late": 5488,
+          "percent": 63.41576149757338,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 5,
+          "late": 5488,
+          "percent": 63.40843443096476,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 4,
+          "late": 5488,
+          "percent": 63.40110905730129,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 3,
+          "late": 5488,
+          "percent": 63.3937853759963,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 2,
+          "late": 5488,
+          "percent": 63.38646338646338,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 1,
+          "late": 5488,
+          "percent": 63.37914308811641,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.37182448036952,
+          "excluded_count": 0,
+          "late": 5488,
+          "percent": 63.37182448036952,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 9,
+          "late": 5489,
+          "percent": 63.449312218240664,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 8,
+          "late": 5489,
+          "percent": 63.441978733240866,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 7,
+          "late": 5489,
+          "percent": 63.43464694325667,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 6,
+          "late": 5489,
+          "percent": 63.42731684770049,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 5,
+          "late": 5489,
+          "percent": 63.41998844598498,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 4,
+          "late": 5489,
+          "percent": 63.4126617375231,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 3,
+          "late": 5489,
+          "percent": 63.405336721728084,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 2,
+          "late": 5489,
+          "percent": 63.3980133980134,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 1,
+          "late": 5489,
+          "percent": 63.390691765792816,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.38337182448037,
+          "excluded_count": 0,
+          "late": 5489,
+          "percent": 63.38337182448037,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 7,
+          "late": 5490,
+          "percent": 63.44620362879926,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 6,
+          "late": 5490,
+          "percent": 63.43887219782759,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 5,
+          "late": 5490,
+          "percent": 63.4315424610052,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 4,
+          "late": 5490,
+          "percent": 63.42421441774491,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 3,
+          "late": 5490,
+          "percent": 63.41688806745986,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 2,
+          "late": 5490,
+          "percent": 63.40956340956341,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 1,
+          "late": 5490,
+          "percent": 63.402240443469225,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.39491916859122,
+          "excluded_count": 0,
+          "late": 5490,
+          "percent": 63.39491916859122,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.40646651270208,
+          "excluded_count": 5,
+          "late": 5491,
+          "percent": 63.44309647602542,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.40646651270208,
+          "excluded_count": 4,
+          "late": 5491,
+          "percent": 63.435767097966725,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.40646651270208,
+          "excluded_count": 3,
+          "late": 5491,
+          "percent": 63.42843941319164,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.40646651270208,
+          "excluded_count": 2,
+          "late": 5491,
+          "percent": 63.42111342111342,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.40646651270208,
+          "excluded_count": 1,
+          "late": 5491,
+          "percent": 63.413789121145626,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.40646651270208,
+          "excluded_count": 0,
+          "late": 5491,
+          "percent": 63.40646651270208,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.418013856812934,
+          "excluded_count": 4,
+          "late": 5492,
+          "percent": 63.44731977818854,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.418013856812934,
+          "excluded_count": 3,
+          "late": 5492,
+          "percent": 63.439990758923415,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.418013856812934,
+          "excluded_count": 2,
+          "late": 5492,
+          "percent": 63.43266343266343,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.418013856812934,
+          "excluded_count": 1,
+          "late": 5492,
+          "percent": 63.425337798822035,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8660,
+          "all_case_percent": 63.418013856812934,
+          "excluded_count": 0,
+          "late": 5492,
+          "percent": 63.418013856812934,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 11,
+          "late": 5488,
+          "percent": 63.445086705202314,
+          "share_denominator": 8650
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 10,
+          "late": 5488,
+          "percent": 63.43775286094093,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 9,
+          "late": 5488,
+          "percent": 63.43042071197411,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 8,
+          "late": 5488,
+          "percent": 63.42309025771409,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 7,
+          "late": 5488,
+          "percent": 63.41576149757338,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 6,
+          "late": 5488,
+          "percent": 63.40843443096476,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 5,
+          "late": 5488,
+          "percent": 63.40110905730129,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 4,
+          "late": 5488,
+          "percent": 63.3937853759963,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 3,
+          "late": 5488,
+          "percent": 63.38646338646338,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 2,
+          "late": 5488,
+          "percent": 63.37914308811641,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 1,
+          "late": 5488,
+          "percent": 63.37182448036952,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.36450756263711,
+          "excluded_count": 0,
+          "late": 5488,
+          "percent": 63.36450756263711,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 10,
+          "late": 5489,
+          "percent": 63.449312218240664,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 9,
+          "late": 5489,
+          "percent": 63.441978733240866,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 8,
+          "late": 5489,
+          "percent": 63.43464694325667,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 7,
+          "late": 5489,
+          "percent": 63.42731684770049,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 6,
+          "late": 5489,
+          "percent": 63.41998844598498,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 5,
+          "late": 5489,
+          "percent": 63.4126617375231,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 4,
+          "late": 5489,
+          "percent": 63.405336721728084,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 3,
+          "late": 5489,
+          "percent": 63.3980133980134,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 2,
+          "late": 5489,
+          "percent": 63.390691765792816,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 1,
+          "late": 5489,
+          "percent": 63.38337182448037,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.37605357349036,
+          "excluded_count": 0,
+          "late": 5489,
+          "percent": 63.37605357349036,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 8,
+          "late": 5490,
+          "percent": 63.44620362879926,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 7,
+          "late": 5490,
+          "percent": 63.43887219782759,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 6,
+          "late": 5490,
+          "percent": 63.4315424610052,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 5,
+          "late": 5490,
+          "percent": 63.42421441774491,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 4,
+          "late": 5490,
+          "percent": 63.41688806745986,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 3,
+          "late": 5490,
+          "percent": 63.40956340956341,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 2,
+          "late": 5490,
+          "percent": 63.402240443469225,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 1,
+          "late": 5490,
+          "percent": 63.39491916859122,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.38759958434361,
+          "excluded_count": 0,
+          "late": 5490,
+          "percent": 63.38759958434361,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 6,
+          "late": 5491,
+          "percent": 63.44309647602542,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 5,
+          "late": 5491,
+          "percent": 63.435767097966725,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 4,
+          "late": 5491,
+          "percent": 63.42843941319164,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 3,
+          "late": 5491,
+          "percent": 63.42111342111342,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 2,
+          "late": 5491,
+          "percent": 63.413789121145626,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 1,
+          "late": 5491,
+          "percent": 63.40646651270208,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.399145595196856,
+          "excluded_count": 0,
+          "late": 5491,
+          "percent": 63.399145595196856,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.41069160605011,
+          "excluded_count": 5,
+          "late": 5492,
+          "percent": 63.44731977818854,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.41069160605011,
+          "excluded_count": 4,
+          "late": 5492,
+          "percent": 63.439990758923415,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.41069160605011,
+          "excluded_count": 3,
+          "late": 5492,
+          "percent": 63.43266343266343,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.41069160605011,
+          "excluded_count": 2,
+          "late": 5492,
+          "percent": 63.425337798822035,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.41069160605011,
+          "excluded_count": 1,
+          "late": 5492,
+          "percent": 63.418013856812934,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8661,
+          "all_case_percent": 63.41069160605011,
+          "excluded_count": 0,
+          "late": 5492,
+          "percent": 63.41069160605011,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 12,
+          "late": 5488,
+          "percent": 63.445086705202314,
+          "share_denominator": 8650
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 11,
+          "late": 5488,
+          "percent": 63.43775286094093,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 10,
+          "late": 5488,
+          "percent": 63.43042071197411,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 9,
+          "late": 5488,
+          "percent": 63.42309025771409,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 8,
+          "late": 5488,
+          "percent": 63.41576149757338,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 7,
+          "late": 5488,
+          "percent": 63.40843443096476,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 6,
+          "late": 5488,
+          "percent": 63.40110905730129,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 5,
+          "late": 5488,
+          "percent": 63.3937853759963,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 4,
+          "late": 5488,
+          "percent": 63.38646338646338,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 3,
+          "late": 5488,
+          "percent": 63.37914308811641,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 2,
+          "late": 5488,
+          "percent": 63.37182448036952,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 1,
+          "late": 5488,
+          "percent": 63.36450756263711,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.357192334333874,
+          "excluded_count": 0,
+          "late": 5488,
+          "percent": 63.357192334333874,
+          "share_denominator": 8662
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 11,
+          "late": 5489,
+          "percent": 63.449312218240664,
+          "share_denominator": 8651
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 10,
+          "late": 5489,
+          "percent": 63.441978733240866,
+          "share_denominator": 8652
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 9,
+          "late": 5489,
+          "percent": 63.43464694325667,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 8,
+          "late": 5489,
+          "percent": 63.42731684770049,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 7,
+          "late": 5489,
+          "percent": 63.41998844598498,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 6,
+          "late": 5489,
+          "percent": 63.4126617375231,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 5,
+          "late": 5489,
+          "percent": 63.405336721728084,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 4,
+          "late": 5489,
+          "percent": 63.3980133980134,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 3,
+          "late": 5489,
+          "percent": 63.390691765792816,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 2,
+          "late": 5489,
+          "percent": 63.38337182448037,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 1,
+          "late": 5489,
+          "percent": 63.37605357349036,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.36873701223736,
+          "excluded_count": 0,
+          "late": 5489,
+          "percent": 63.36873701223736,
+          "share_denominator": 8662
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 9,
+          "late": 5490,
+          "percent": 63.44620362879926,
+          "share_denominator": 8653
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 8,
+          "late": 5490,
+          "percent": 63.43887219782759,
+          "share_denominator": 8654
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 7,
+          "late": 5490,
+          "percent": 63.4315424610052,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 6,
+          "late": 5490,
+          "percent": 63.42421441774491,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 5,
+          "late": 5490,
+          "percent": 63.41688806745986,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 4,
+          "late": 5490,
+          "percent": 63.40956340956341,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 3,
+          "late": 5490,
+          "percent": 63.402240443469225,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 2,
+          "late": 5490,
+          "percent": 63.39491916859122,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 1,
+          "late": 5490,
+          "percent": 63.38759958434361,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.38028169014085,
+          "excluded_count": 0,
+          "late": 5490,
+          "percent": 63.38028169014085,
+          "share_denominator": 8662
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 7,
+          "late": 5491,
+          "percent": 63.44309647602542,
+          "share_denominator": 8655
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 6,
+          "late": 5491,
+          "percent": 63.435767097966725,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 5,
+          "late": 5491,
+          "percent": 63.42843941319164,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 4,
+          "late": 5491,
+          "percent": 63.42111342111342,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 3,
+          "late": 5491,
+          "percent": 63.413789121145626,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 2,
+          "late": 5491,
+          "percent": 63.40646651270208,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 1,
+          "late": 5491,
+          "percent": 63.399145595196856,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.391826368044335,
+          "excluded_count": 0,
+          "late": 5491,
+          "percent": 63.391826368044335,
+          "share_denominator": 8662
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 6,
+          "late": 5492,
+          "percent": 63.44731977818854,
+          "share_denominator": 8656
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 5,
+          "late": 5492,
+          "percent": 63.439990758923415,
+          "share_denominator": 8657
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 4,
+          "late": 5492,
+          "percent": 63.43266343266343,
+          "share_denominator": 8658
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 3,
+          "late": 5492,
+          "percent": 63.425337798822035,
+          "share_denominator": 8659
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 2,
+          "late": 5492,
+          "percent": 63.418013856812934,
+          "share_denominator": 8660
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 1,
+          "late": 5492,
+          "percent": 63.41069160605011,
+          "share_denominator": 8661
+        },
+        {
+          "all": 8662,
+          "all_case_percent": 63.40337104594782,
+          "excluded_count": 0,
+          "late": 5492,
+          "percent": 63.40337104594782,
+          "share_denominator": 8662
+        }
+      ],
+      "status": "BOUNDED_UNDER_ASSUMPTIONS"
+    },
+    "published_share_rounding_difference_pp": {
+      "lower": {
+        "decimal": 0.2,
+        "denominator": 5,
+        "numerator": 1
+      },
+      "lower_attained": false,
+      "upper": {
+        "decimal": 0.4,
+        "denominator": 5,
+        "numerator": 2
+      },
+      "upper_attained": false
+    },
+    "registry_stage_comparability_established": false,
+    "same_all_case_denominator": {
+      "difference_pp": {
+        "lower": {
+          "decimal": 0.23456916495965732,
+          "denominator": 2549781,
+          "numerator": 598100
+        },
+        "lower_attained": true,
+        "upper": {
+          "decimal": 0.3716212249881618,
+          "denominator": 255529,
+          "numerator": 94960
+        },
+        "upper_attained": true
+      },
+      "extreme_witnesses": {
+        "lower": {
+          "first": {
+            "all": 589,
+            "late": 375,
+            "percent": 63.66723259762309
+          },
+          "second": {
+            "all": 8658,
+            "late": 5492,
+            "percent": 63.43266343266343
+          }
+        },
+        "upper": {
+          "first": {
+            "all": 590,
+            "late": 376,
+            "percent": 63.728813559322035
+          },
+          "second": {
+            "all": 8662,
+            "late": 5488,
+            "percent": 63.357192334333874
+          }
+        }
+      },
+      "first_all_case_percent_bounds": {
+        "lower": {
+          "decimal": 63.66723259762309,
+          "denominator": 589,
+          "numerator": 37500
+        },
+        "lower_attained": true,
+        "upper": {
+          "decimal": 63.728813559322035,
+          "denominator": 59,
+          "numerator": 3760
+        },
+        "upper_attained": true
+      },
+      "first_configuration_count": 3,
+      "first_configurations": [
+        {
+          "all": 589,
+          "late": 375,
+          "percent": 63.66723259762309
+        },
+        {
+          "all": 590,
+          "late": 376,
+          "percent": 63.728813559322035
+        },
+        {
+          "all": 592,
+          "late": 377,
+          "percent": 63.682432432432435
+        }
+      ],
+      "joint_configuration_count": 75,
+      "second_all_case_percent_bounds": {
+        "lower": {
+          "decimal": 63.357192334333874,
+          "denominator": 4331,
+          "numerator": 274400
+        },
+        "lower_attained": true,
+        "upper": {
+          "decimal": 63.43266343266343,
+          "denominator": 4329,
+          "numerator": 274600
+        },
+        "upper_attained": true
+      },
+      "second_configuration_count": 25,
+      "second_configurations": [
+        {
+          "all": 8658,
+          "late": 5488,
+          "percent": 63.38646338646338
+        },
+        {
+          "all": 8658,
+          "late": 5489,
+          "percent": 63.3980133980134
+        },
+        {
+          "all": 8658,
+          "late": 5490,
+          "percent": 63.40956340956341
+        },
+        {
+          "all": 8658,
+          "late": 5491,
+          "percent": 63.42111342111342
+        },
+        {
+          "all": 8658,
+          "late": 5492,
+          "percent": 63.43266343266343
+        },
+        {
+          "all": 8659,
+          "late": 5488,
+          "percent": 63.37914308811641
+        },
+        {
+          "all": 8659,
+          "late": 5489,
+          "percent": 63.390691765792816
+        },
+        {
+          "all": 8659,
+          "late": 5490,
+          "percent": 63.402240443469225
+        },
+        {
+          "all": 8659,
+          "late": 5491,
+          "percent": 63.413789121145626
+        },
+        {
+          "all": 8659,
+          "late": 5492,
+          "percent": 63.425337798822035
+        },
+        {
+          "all": 8660,
+          "late": 5488,
+          "percent": 63.37182448036952
+        },
+        {
+          "all": 8660,
+          "late": 5489,
+          "percent": 63.38337182448037
+        },
+        {
+          "all": 8660,
+          "late": 5490,
+          "percent": 63.39491916859122
+        },
+        {
+          "all": 8660,
+          "late": 5491,
+          "percent": 63.40646651270208
+        },
+        {
+          "all": 8660,
+          "late": 5492,
+          "percent": 63.418013856812934
+        },
+        {
+          "all": 8661,
+          "late": 5488,
+          "percent": 63.36450756263711
+        },
+        {
+          "all": 8661,
+          "late": 5489,
+          "percent": 63.37605357349036
+        },
+        {
+          "all": 8661,
+          "late": 5490,
+          "percent": 63.38759958434361
+        },
+        {
+          "all": 8661,
+          "late": 5491,
+          "percent": 63.399145595196856
+        },
+        {
+          "all": 8661,
+          "late": 5492,
+          "percent": 63.41069160605011
+        },
+        {
+          "all": 8662,
+          "late": 5488,
+          "percent": 63.357192334333874
+        },
+        {
+          "all": 8662,
+          "late": 5489,
+          "percent": 63.36873701223736
+        },
+        {
+          "all": 8662,
+          "late": 5490,
+          "percent": 63.38028169014085
+        },
+        {
+          "all": 8662,
+          "late": 5491,
+          "percent": 63.391826368044335
+        },
+        {
+          "all": 8662,
+          "late": 5492,
+          "percent": 63.40337104594782
+        }
+      ],
+      "status": "BOUNDED_UNDER_ASSUMPTIONS"
+    },
+    "sampling_confidence_interval": null,
+    "schema": "dis-bounded-stage-share-comparison-v1",
+    "scope": "CONDITIONAL_DESCRIPTIVE_IDENTIFICATION_AND_SENSITIVITY_ONLY",
+    "statistical_equivalence_established": false,
+    "unknown_stage_sensitivity": {
+      "denominator_removal": {
+        "difference_pp_envelope": {
+          "lower": {
+            "decimal": -0.4409090909090909,
+            "denominator": 220,
+            "numerator": -97
+          },
+          "lower_attained": false,
+          "upper": {
+            "decimal": 1.043939393939394,
+            "denominator": 660,
+            "numerator": 689
+          },
+          "upper_attained": false
+        },
+        "formula": "p_known = p_all / (1-u), with p in percent and u=U/N."
+      },
+      "required_starting_estimand": "Observed late-stage cases divided by all cases including unknown stage.",
+      "scope": "HYPOTHETICAL_SCENARIOS_NOT_MEASURED_COUNTY_MISSINGNESS",
+      "uncertainty_basis": "Published-percentage rounding intervals plus independently chosen unknown-stage fractions; these envelopes are separate from, and not jointly sharpened by, the finite count configurations.",
+      "unknown_fraction_each_county": {
+        "maximum": {
+          "decimal": 0.01,
+          "denominator": 100,
+          "numerator": 1
+        },
+        "minimum": {
+          "decimal": 0.0,
+          "denominator": 1,
+          "numerator": 0
+        }
+      },
+      "unknown_reclassification": {
+        "difference_pp_envelope": {
+          "lower": {
+            "decimal": -0.8,
+            "denominator": 5,
+            "numerator": -4
+          },
+          "lower_attained": false,
+          "upper": {
+            "decimal": 1.4,
+            "denominator": 5,
+            "numerator": 7
+          },
+          "upper_attained": false
+        },
+        "formula": "p_complete = p_all + 100*z*u, with p in percent, u=U/N and z in [0,1]."
+      }
+    }
+  },
+  "disposition": {
+    "bounded_arithmetic": "COMPLETED_UNDER_EXPLICIT_ASSUMPTIONS",
+    "bounds_are_sampling_confidence_intervals": false,
+    "claim_scope": "Published descriptive context and conditional bounds; no harmonized-stage, equivalent-performance, or causal claim.",
+    "clinical_causal_effect": "NOT_ESTABLISHED",
+    "exact_original_stage_counts": "NOT_RECOVERED",
+    "harmonized_stage_comparison": "NOT_ESTABLISHED",
+    "registry_denominator_membership": "NOT_IDENTIFIED",
+    "retained_source_replay": "COMPLETED",
+    "statistical_equivalence": "NOT_ESTABLISHED"
+  },
+  "documented_methods": {
+    "category_crosswalk_executed_on_county_stage_counts": false,
+    "crosswalk_declared_status": "source_documented_harmonization_specification_not_verified_execution",
+    "file_sha256": {
+      "evidence_excerpts.json": "d570429139f6f6a1830657b40352f6eff78f7b44ef74f327411ba8b38e8d8b86",
+      "evidence_manifest.json": "c92c4de73082e27bdfdcc3d76fef3f093203191673575b669e3b9e1035bd9b48",
+      "stage_selection_crosswalk.json": "c5106b64d3b63f86a76f4031ac215eb7a2f380452c100917f29c599f3a099073"
+    },
+    "scope": "Binds the documented specification and evidence excerpts to this result; the aggregate inputs contain no category-level stage counts for executing that crosswalk."
+  },
+  "published_observations": {
+    "harris_all": {
+      "age": "All Ages",
+      "annual_age_adjusted_incidence_per_100000": 38.0,
+      "average_annual_count": 1732,
+      "average_annual_count_is_unrounded_period_count": false,
+      "county": "Harris County",
+      "period": "2019-2023",
+      "race": "All Races (includes Hispanic)",
+      "sex": "Both Sexes",
+      "site": "Colon & Rectum",
+      "source_marker": "7",
+      "source_reported_rate_95pct_ci": [
+        37.2,
+        38.9
+      ],
+      "stage": "All Stages",
+      "state": "Texas"
+    },
+    "harris_late": {
+      "age": "All Ages",
+      "annual_age_adjusted_incidence_per_100000": 23.9,
+      "average_annual_count": 1098,
+      "average_annual_count_is_unrounded_period_count": false,
+      "county": "Harris County",
+      "period": "2019-2023",
+      "published_late_stage_share_percent": "63.4",
+      "race": "All Races (includes Hispanic)",
+      "sex": "Both Sexes",
+      "site": "Colon & Rectum",
+      "source_marker": "7",
+      "source_reported_rate_95pct_ci": [
+        23.3,
+        24.6
+      ],
+      "stage": "Late Stage",
+      "state": "Texas"
+    },
+    "hinds_all": {
+      "age": "All Ages",
+      "annual_age_adjusted_incidence_per_100000": 46.4,
+      "average_annual_count": 118,
+      "average_annual_count_is_unrounded_period_count": false,
+      "county": "Hinds County",
+      "period": "2019-2023",
+      "race": "All Races (includes Hispanic)",
+      "sex": "Both Sexes",
+      "site": "Colon & Rectum",
+      "source_marker": "2",
+      "source_reported_rate_95pct_ci": [
+        42.6,
+        50.5
+      ],
+      "stage": "All Stages",
+      "state": "Mississippi"
+    },
+    "hinds_late": {
+      "age": "All Ages",
+      "annual_age_adjusted_incidence_per_100000": 29.9,
+      "average_annual_count": 75,
+      "average_annual_count_is_unrounded_period_count": false,
+      "county": "Hinds County",
+      "period": "2019-2023",
+      "published_late_stage_share_percent": "63.7",
+      "race": "All Races (includes Hispanic)",
+      "sex": "Both Sexes",
+      "site": "Colon & Rectum",
+      "source_marker": "2",
+      "source_reported_rate_95pct_ci": [
+        26.8,
+        33.2
+      ],
+      "stage": "Late Stage",
+      "state": "Mississippi"
+    }
+  },
+  "schema": "dis-crc-retained-source-reconciliation-v1",
+  "separate_cdc_all_stage_comparison": {
+    "age_standard": "2000 U.S. standard population, 19 age groups",
+    "age_standard_reference": {
+      "physical_page": 16,
+      "url": "https://www.cdc.gov/united-states-cancer-statistics/technical-notes/pdf/uscs-data-visualizations-tool-technical-notes-2023-june-508-final.pdf"
+    },
+    "all_stage_rate_difference_per_100000": 8.4,
+    "all_stage_rate_ratio_Hinds_over_Harris": 1.2210526315789474,
+    "basis": "Difference and ratio of published USCS age-adjusted rates; no age-specific rate re-estimation.",
+    "counts_are_incident_cancers_not_unique_people": true,
+    "county_stage_counts_recovered": false,
+    "crude_all_stage_incidence": {
+      "age_standardized": false,
+      "confidence_intervals_recalculated": false,
+      "denominator_scope": "The supplied 2019-2023 pooled population denominator is used as a person-year approximation, not a count of unique residents. It already spans the five-year period; do not divide the rate by five again.",
+      "formula": "100000 * period incidence COUNT / supplied pooled-period POPULATION",
+      "rate_difference_per_100000": 16.746919469210567,
+      "rate_ratio_Hinds_over_Harris": 1.4618974800431057,
+      "rows": [
+        {
+          "county": "MS: Hinds County (28049)",
+          "crude_annual_rate_per_100000": 53.00370845980582,
+          "period_incident_cancers": 589,
+          "pooled_population_denominator": 1111243
+        },
+        {
+          "county": "TX: Harris County (48201)",
+          "crude_annual_rate_per_100000": 36.256788990595254,
+          "period_incident_cancers": 8661,
+          "pooled_population_denominator": 23887940
+        }
+      ],
+      "scope": "Separate crude all-stage estimand; neither an age-specific re-estimation nor a stage-comparability result."
+    },
+    "difference_direction": "Hinds_minus_Harris",
+    "harmonized_late_stage_comparison_established": false,
+    "original_scp_case_universe_correspondence_established": false,
+    "reproduction": "Default replay verifies the pinned compact extract and download receipt; optional --cdc-archive verifies the full original ZIP and streams the county table. Execution mode is recorded by the command receipt, not inferred from this deterministic result.",
+    "retained_extract_sha256": "8305e091c852676b7126b0c1207825719bbc21470beebd821aec9965693e4e74",
+    "retained_receipt_sha256": "61564d5c0f4ddc149c862adb1232deab05f825a55d29f0f042a89d6576885091",
+    "rows": [
+      {
+        "AGE_ADJUSTED_CI_LOWER": "42.6",
+        "AGE_ADJUSTED_CI_UPPER": "50.5",
+        "AGE_ADJUSTED_RATE": "46.4",
+        "AREA": "MS: Hinds County (28049)",
+        "COUNT": "589",
+        "EVENT_TYPE": "Incidence",
+        "POPULATION": "1111243",
+        "RACE": "All Races",
+        "SEX": "Male and Female",
+        "SITE": "Colon and Rectum",
+        "STATE": "MS",
+        "YEAR": "2019-2023"
+      },
+      {
+        "AGE_ADJUSTED_CI_LOWER": "37.2",
+        "AGE_ADJUSTED_CI_UPPER": "38.9",
+        "AGE_ADJUSTED_RATE": "38.0",
+        "AREA": "TX: Harris County (48201)",
+        "COUNT": "8661",
+        "EVENT_TYPE": "Incidence",
+        "POPULATION": "23887940",
+        "RACE": "All Races",
+        "SEX": "Male and Female",
+        "SITE": "Colon and Rectum",
+        "STATE": "TX",
+        "YEAR": "2019-2023"
+      }
+    ],
+    "scope": "SEPARATE_COMMON_USCS_ALL_STAGE_DESCRIPTIVE_COMPARISON",
+    "source_member": "BYAREA_COUNTY.TXT",
+    "source_url": "https://www.cdc.gov/cancer/uscs/USCS-1999-2023-ASCII.zip",
+    "source_zip_sha256": "291765c997e59cddc7bc9bdd5852ea18f52696a58e2c212f5eb6b72c680b6df7"
+  },
+  "source_verification": {
+    "all_table_data_cells_compared": 4420,
+    "county_data_cells_compared": 4368,
+    "county_rows_compared_across_all_and_late_tables": 672,
+    "derived_manifest_entries_verified": 11,
+    "derived_package_bytes": 100878,
+    "derived_package_sha256": "39b339425f7bbba4dac5e4278d8ae43dd289b4fd74a9e3eec2d41ccae8578e66",
+    "distinct_counties": 336,
+    "normalization_scope": "Whitespace, HTML entities and thousands separators; CSV blank versus HTML N/A only in state/U.S. rural-urban and CI*Rank reference cells. No county suppression or zero normalization.",
+    "original_acquisition_revision": "73455a439f950ffa0644d5714843b06b173f029a",
+    "package_entries_verified": 12,
+    "package_kind": "DERIVED_COUNTY_ONLY_SUBSET_NOT_ORIGINAL_WHOLE_ARCHIVE",
+    "parent_original_archive_replayed_by_this_consumer": false,
+    "parent_original_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+    "reference_na_cells_normalized": 16,
+    "reported_workflow_head": "312577b8e43efadaceb4b834dc524dc11368d3fe",
+    "revision_binding_state": "CONTRADICTORY_REVISION_EVIDENCE_REQUIRES_ADJUDICATION",
+    "scope": "Pinned subset source integrity and table reproduction; no stage-equivalence authentication.",
+    "selected_original_entries_verified": 8,
+    "selected_original_source_hashes": {
+      "extracted/harris_all_table_0.csv": "97e1e3e0f87c31db81682c2d789dc642cce4c3f870b07778ca9d3050e0431d33",
+      "extracted/harris_late_table_0.csv": "1d1f4822473e05c0a9b73c354bcddb8721a389cfe856f9b946fb95516e597453",
+      "extracted/hinds_all_table_0.csv": "795efc6a7a1583d5c772a52e9217fa6bf2c2615e110458b420595b52e2cdde1d",
+      "extracted/hinds_late_table_0.csv": "fb4e76663a9081ccbe7e8bbbd72d743c615cdf96aa33068ad4af64503d3d1456",
+      "originals/harris_all.html": "aec6d2b4d7e9c7ac7ddbf2a30c7d700286ac6eab4e8a0ff88ca4a1c983feb456",
+      "originals/harris_late.html": "a04b3b49759d680ccd4bb508e5bd68713e1a6516bb9c8c951c5c21a623522af3",
+      "originals/hinds_all.html": "83484db2208ea5914aa588e19118ca150645d69fba35316aa9688198ce2f1aa6",
+      "originals/hinds_late.html": "130843a055b089fb0471ab559fb214ee3b7efda90b18f94727ef8e09d64226ca"
+    },
+    "tables_compared": 4
+  }
+}

@@ -35,14 +35,19 @@ def finite_nonnegative(value: float) -> float:
     return value
 
 
-def compatible_counts(all_annual: int, late_annual: int, share: str, years: int = 5) -> list[dict]:
+def compatible_counts(all_annual: int, late_annual: int, share: str, years: int = 5,
+                      *, allow_denominator_exclusions: bool = False) -> list[dict]:
     """Enumerate nearest-integer annual counts and nearest-0.1 percent share.
 
     Half-open rounding intervals; not a claim about agency tie-breaking rules.
     Scope deliberately limited to unsuppressed aggregate five-year reports.
+    With exclusions enabled, the displayed share denominator D may be any integer
+    from the late numerator L through the all-stage total N. The same L must occur
+    in both tables. N-D is a mathematical possibility, not an unknown-stage count.
     """
     require(type(all_annual) is int and type(late_annual) is int, 'Counts must be integers')
     require(type(years) is int and years == 5, 'Only audited five-year report supported')
+    require(type(allow_denominator_exclusions) is bool, 'Exclusion flag must be boolean')
     require(16 <= late_annual <= all_annual, 'Only unsuppressed large aggregates supported')
     p = Fraction(str(share))
     require(0 <= p <= 100, 'Share must be between 0 and 100')
@@ -50,9 +55,149 @@ def compatible_counts(all_annual: int, late_annual: int, share: str, years: int 
                    math.ceil((Fraction(all_annual) + Fraction(1, 2))*years))
     late_totals = range(math.ceil((Fraction(late_annual) - Fraction(1, 2))*years),
                         math.ceil((Fraction(late_annual) + Fraction(1, 2))*years))
-    return [{'late': late, 'all': total, 'percent': float(100*Fraction(late, total))}
-            for total in totals for late in late_totals
-            if late <= total and p-Fraction(1, 20) <= 100*Fraction(late, total) < p+Fraction(1, 20)]
+    matches = []
+    for total in totals:
+        for late in late_totals:
+            denominators = range(late, total + 1) if allow_denominator_exclusions else (total,)
+            for denominator in denominators:
+                percent = 100 * Fraction(late, denominator)
+                if late <= denominator and p-Fraction(1, 20) <= percent < p+Fraction(1, 20):
+                    row = {'late': late, 'all': total, 'percent': float(percent)}
+                    if allow_denominator_exclusions:
+                        row.update(share_denominator=denominator, excluded_count=total-denominator,
+                                   all_case_percent=float(100 * Fraction(late, total)))
+                    matches.append(row)
+    return matches
+
+
+def _rational(value: Fraction) -> dict:
+    """Exact arithmetic and a display approximation; neither is a recovered count."""
+    return {'numerator': value.numerator, 'denominator': value.denominator,
+            'decimal': float(value)}
+
+
+def _bounds(lower: Fraction, upper: Fraction, *, lower_attained=True, upper_attained=True) -> dict:
+    return {'lower': _rational(lower), 'upper': _rational(upper),
+            'lower_attained': lower_attained, 'upper_attained': upper_attained}
+
+
+def _share_interval(share_percent) -> tuple[Fraction, Fraction, bool]:
+    require(not isinstance(share_percent, bool), 'Boolean is not a share')
+    share = Fraction(str(share_percent))
+    require(0 <= share <= 100, 'Share must be between 0 and 100')
+    require((10 * share).denominator == 1, 'Reported share must be on the 0.1 percentage-point grid')
+    return max(Fraction(0), share-Fraction(1, 20)), min(Fraction(100), share+Fraction(1, 20)), share == 100
+
+
+def unknown_stage_models(share_percent, unknown_fraction, late_fraction_unknown=0) -> dict:
+    """Two distinct hypothetical estimands, starting from L/N including unknowns.
+
+    u=U/N is the unknown-stage fraction of that same case universe. Removing U
+    changes the denominator: 100L/(N-U). Reclassifying a fraction z of U as late
+    keeps N fixed: 100(L+zU)/N. Neither operation is an observed correction, and
+    these formulas cannot be applied to a share already excluding unknown stage.
+    """
+    require(not any(isinstance(x, bool) for x in (share_percent, unknown_fraction, late_fraction_unknown)),
+            'Boolean is not a measurement')
+    p, u, z = (Fraction(str(x)) for x in (share_percent, unknown_fraction, late_fraction_unknown))
+    require(0 <= p <= 100 and 0 <= u < 1 and 0 <= z <= 1, 'Invalid share or sensitivity fraction')
+    require(p/100 + u <= 1, 'Unknown and observed late-stage cases cannot exceed the all-case total')
+    return {'scope': 'HYPOTHETICAL_SAME_CASE_UNIVERSE_NOT_AN_OBSERVED_CORRECTION',
+            'input_all_case_percent': _rational(p), 'unknown_fraction': _rational(u),
+            'late_fraction_among_unknown': _rational(z),
+            'denominator_removal_percent': _rational(p/(1-u)),
+            'unknown_reclassification_percent': _rational(p+100*z*u)}
+
+
+def _configuration_comparison(first: list[dict], second: list[dict]) -> dict:
+    """Recalculate both counties on each configuration's all-stage-table N."""
+    def share(row):
+        return 100 * Fraction(row['late'], row['all'])
+    result = {'status': 'BOUNDED_UNDER_ASSUMPTIONS' if first and second else 'NO_COMPATIBLE_CONFIGURATION',
+              'first_configurations': first, 'second_configurations': second,
+              'first_configuration_count': len(first), 'second_configuration_count': len(second),
+              'joint_configuration_count': len(first)*len(second),
+              'first_all_case_percent_bounds': None, 'second_all_case_percent_bounds': None,
+              'difference_pp': None, 'extreme_witnesses': None}
+    for key, rows in (('first_all_case_percent_bounds', first), ('second_all_case_percent_bounds', second)):
+        if rows:
+            result[key] = _bounds(min(map(share, rows)), max(map(share, rows)))
+    if first and second:
+        first_min, first_max = min(first, key=share), max(first, key=share)
+        second_min, second_max = min(second, key=share), max(second, key=share)
+        result['difference_pp'] = _bounds(share(first_min)-share(second_max), share(first_max)-share(second_min))
+        result['extreme_witnesses'] = {
+            'lower': {'first': first_min, 'second': second_max},
+            'upper': {'first': first_max, 'second': second_min}}
+    return result
+
+
+def bounded_share_comparison(first_all_annual: int, first_late_annual: int, first_share,
+                             second_all_annual: int, second_late_annual: int, second_share,
+                             *, max_unknown_fraction='0.01') -> dict:
+    """Finite identification bounds and separate hypothetical unknown-stage models.
+
+    Exact fractions describe conditional mathematics, not scientific precision.
+    Each source must have the same period and late numerator across its own tables.
+    This function does not establish cross-registry stage equivalence, historical
+    denominator membership, empirical unknown-stage prevalence, or sampling error.
+    """
+    first_low, first_high, first_high_included = _share_interval(first_share)
+    second_low, second_high, second_high_included = _share_interval(second_share)
+    require(not isinstance(max_unknown_fraction, bool), 'Boolean is not an unknown-stage fraction')
+    umax = Fraction(str(max_unknown_fraction))
+    require(0 <= umax < 1, 'Unknown-stage fraction must be in [0, 1)')
+    require(max(first_high, second_high)/100 + umax <= 1,
+            'Unknown-stage scenario overlaps observed late-stage cases at the rounding boundary')
+    first = compatible_counts(first_all_annual, first_late_annual, first_share)
+    second = compatible_counts(second_all_annual, second_late_annual, second_share)
+    first_exclusions = compatible_counts(first_all_annual, first_late_annual, first_share,
+                                        allow_denominator_exclusions=True)
+    second_exclusions = compatible_counts(second_all_annual, second_late_annual, second_share,
+                                         allow_denominator_exclusions=True)
+    same = _configuration_comparison(first, second)
+    exclusions = _configuration_comparison(first_exclusions, second_exclusions)
+    exclusions.update(
+        assumption='The displayed share may use an integer D with L <= D <= N, retaining the same late numerator L; recalculate both shares as 100L/N.',
+        maximum_first_compatible_exclusion=max((r['excluded_count'] for r in first_exclusions), default=None),
+        maximum_second_compatible_exclusion=max((r['excluded_count'] for r in second_exclusions), default=None),
+        exclusions_are_estimated_unknown_stage_counts=False)
+    return {
+        'schema': 'dis-bounded-stage-share-comparison-v1',
+        'scope': 'CONDITIONAL_DESCRIPTIVE_IDENTIFICATION_AND_SENSITIVITY_ONLY',
+        'difference_direction': 'first_minus_second',
+        'assumptions': [
+            'Five diagnosis years; nearest-integer average annual counts; half-open [display-0.5, display+0.5) annual intervals.',
+            'Nearest-0.1 percentage-point published shares; half-open [display-0.05, display+0.05) intervals, intersected with [0,100].',
+            'These rounding conventions are explicit assumptions, not independently established agency tie-breaking rules.',
+            'Within each county, the late-stage count table and share calculation use the same late numerator and diagnosis period.',
+            'All configurations are mathematical possibilities; no true count pair or exclusion count is selected.'
+        ],
+        'published_share_rounding_difference_pp': _bounds(
+            first_low-second_high, first_high-second_low,
+            lower_attained=second_high_included, upper_attained=first_high_included),
+        'same_all_case_denominator': same,
+        'possible_denominator_exclusions': exclusions,
+        'unknown_stage_sensitivity': {
+            'scope': 'HYPOTHETICAL_SCENARIOS_NOT_MEASURED_COUNTY_MISSINGNESS',
+            'required_starting_estimand': 'Observed late-stage cases divided by all cases including unknown stage.',
+            'unknown_fraction_each_county': {'minimum': _rational(Fraction(0)), 'maximum': _rational(umax)},
+            'denominator_removal': {
+                'formula': 'p_known = p_all / (1-u), with p in percent and u=U/N.',
+                'difference_pp_envelope': _bounds(
+                    first_low-second_high/(1-umax), first_high/(1-umax)-second_low,
+                    lower_attained=second_high_included, upper_attained=first_high_included)},
+            'unknown_reclassification': {
+                'formula': 'p_complete = p_all + 100*z*u, with p in percent, u=U/N and z in [0,1].',
+                'difference_pp_envelope': _bounds(
+                    first_low-second_high-100*umax, first_high+100*umax-second_low,
+                    lower_attained=second_high_included, upper_attained=first_high_included)}},
+        'exact_registry_counts_recovered': False,
+        'registry_stage_comparability_established': False,
+        'statistical_equivalence_established': False,
+        'sampling_confidence_interval': None,
+        'clinical_causal_effect': None,
+    }
 
 
 def age_split_delta(rate85: float, rate90: float, py85: float, py90: float) -> float:

@@ -74,7 +74,7 @@
       "comparison_status": "UNKNOWN",
       "claim_level": "descriptive",
       "causal_harm_established": false,
-      "reason": "Recorded 2019–2023 county estimates remain available for descriptive inspection. Both retained reports document regional-or-distant disease and a percentage relative to all-stage cases. Extract-specific stage derivation, alternate-variable exceptions, exact case-denominator exclusions and unrounded counts remain unresolved. Different pipeline labels alone do not establish a clinical classification mismatch. No harmonized comparison or statistical equivalence has been established.",
+      "reason": "Completed source reconciliation documents a common Summary Stage 2018 target and reproduces conditional late-share bounds from retained 2019\u20132023 county displays. Original extract-specific fallback and denominator membership remain unverified; plausible denominator exclusions can reverse the sign of the small displayed difference. Formal equivalence and equal system performance are not established. A separate common-source CDC all-stage incidence comparison is supported and retained separately.",
       "dimensions": {
         "source_steward": {
           "state": "VALUED",
@@ -122,16 +122,16 @@
         },
         "age_adjustment": {
           "state": "UNKNOWN",
-          "why": "Rate footnotes specify 20 age groups for SEER and 19 for NPCR. Official February 2026 release history confirms that SEER incidence changed to 20 groups and NPCR did not. The CI*Rank note refers to 19 groups for both; column-level method linkage remains unresolved. This issue concerns incidence rates, not the crude case percentage; no harmonized county rate has been recalculated."
+          "why": "The original SCP rate/rank column linkage remains unverified. A separate CDC June 2026 all-stage comparison uses the common 19-group 2000 U.S. standard for both counties and retrieves published rates of 46.4 versus 38.0 per 100,000. It does not harmonize or validate the original SCP late-stage rates; see source_reconciliation/results.json."
         },
         "case_definition": {
           "state": "VALUED",
-          "why": "Dagger footnote: rates are for invasive cancer only except bladder, computed from cancers classified as malignant on ICD-O-3, with cancer=020 the colorectal site set.",
-          "value": "invasive colorectal cancer, ICD-O-3 malignant"
+          "why": "The retained invasive-cancer footnote and SCP FAQ/site-recode documentation establish the documented cohort selection. Full primary-site and histology exclusions are recorded in source_reconciliation/stage_selection_crosswalk.json. This does not attest every original execution choice.",
+          "value": "Invasive colorectal primary cancers, malignant ICD-O-3 behavior 3; Site Recode ICD-O-3/WHO 2008 21041\u201321049 and 21051\u201321052; appendix included, anus excluded."
         },
         "stage_definition": {
           "state": "UNKNOWN",
-          "why": "The displayed broad outcome is documented as regional or distant. The exact field, version, derivation and any alternate-variable exceptions remain undisclosed per extract. CDC NPCR SS2018 and NCI Derived SS2018 may support a common broad classification for 2019–2023; the expanded regional recode concerns pre-2018 cases and does not establish a mismatch here."
+          "why": "Release-specific source mapping is completed: NPCR Merged Summary Stage uses direct SS2018 item 764 and SEER Combined uses Derived SS2018 item 762 for 2018 onward; both map 2/3/4/7 to regional-or-distant. Original executed alternatives remain unverified, including the SEER transmission exception for Texas 2018\u20132021. The exact crosswalk and source locators are retained in source_reconciliation/."
         },
         "period": {
           "state": "VALUED",
@@ -145,21 +145,22 @@
         },
         "suppression": {
           "state": "VALUED",
-          "why": "Page states counts are suppressed below 16 records per area-sex-race category; the two county totals shown are far above that floor, but any age-stratified tabulation for Hinds does not clear it.",
+          "why": "The page states counts are suppressed below 16 records per area-sex-race category. The displayed county totals are released. Individual age-specific cells are not available here; their suppression eligibility is not inferred from aggregate counts.",
           "value": "16-record floor per area-sex-race category"
         },
         "uncertainty": {
           "state": "VALUED",
-          "why": "95 percent confidence intervals printed beside each rate.",
+          "why": "Published 95% intervals concern the age-adjusted late-stage rates, not the case shares. The completed late-share reanalysis supplies conditional rounding/denominator bounds, explicitly not confidence intervals.",
           "value": "29.9 (26.8, 33.2) and 23.9 (23.3, 24.6) per 100,000"
         },
         "publication_latency": {
           "state": "UNKNOWN",
-          "why": "The page states a creation timestamp but not the registry data vintage or the release-to-publication interval for this window."
+          "why": "November 2025 registry submissions and the September 2026 SCP release through diagnosis year 2023 are documented. Exact case-specific reporting latency and the original extract-specific processing/release interval are not quantified by the retained records."
         },
         "decision_owner": {
-          "state": "UNKNOWN",
-          "why": "No named owner, reviewer or adjudicator is attached to this comparison in either repository or in the pilot register."
+          "state": "VALUED",
+          "value": "Terry Flood, research owner",
+          "why": "The owner authorized completion of source investigation, bounded reanalysis, proposal correction, testing, push and merge. This is project ownership, not qualified human scientific acceptance of an equivalence claim."
         },
         "actionability": {
           "state": "UNKNOWN",
@@ -194,9 +195,11 @@
             "release": "2025 submission",
             "stage_variable": null,
             "stage_variable_state": "UNATTESTED_PER_COUNTY",
-            "stage_variable_note": "The retained November 8 interpretation pages and CSV exports were rechecked November 21, 2026. They identify the broad regional-or-distant construct and default source-specific staging variables, while reserving substitution. The branch-implied variable is not an attested per-extract field or derivation; exact lineage remains unresolved.",
+            "stage_variable_note": "The completed November 21 source review documents the default SS2018 item and category mapping for 2019\u20132023. The report reserves alternative variables; no extract-specific execution attestation is present. Documented target categories do not establish the original fallback or case-denominator membership.",
             "diagnosis_years": "2019-2023",
-            "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
+            "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603",
+            "source_documented_stage_item": 764,
+            "documented_crosswalk": "source_reconciliation/stage_selection_crosswalk.json"
           }
         },
         {
@@ -222,9 +225,11 @@
             "release": "November 2025 submission",
             "stage_variable": null,
             "stage_variable_state": "UNATTESTED_PER_COUNTY",
-            "stage_variable_note": "The retained November 8 interpretation pages and CSV exports were rechecked November 21, 2026. They identify the broad regional-or-distant construct and default source-specific staging variables, while reserving substitution. The branch-implied variable is not an attested per-extract field or derivation; exact lineage remains unresolved.",
+            "stage_variable_note": "The completed November 21 source review documents the default SS2018 item and category mapping for 2019\u20132023. The report reserves alternative variables; no extract-specific execution attestation is present. Documented target categories do not establish the original fallback or case-denominator membership. Texas 2019\u20132021 also overlaps the documented SEER transmission exception.",
             "diagnosis_years": "2019-2023",
-            "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603"
+            "carried_from": "Q04 page reads S284 and S448 for the county-row source markers; the 2019-2023 window is the header statement carried since S284 and re-read at S603",
+            "source_documented_stage_item": 762,
+            "documented_crosswalk": "source_reconciliation/stage_selection_crosswalk.json"
           }
         }
       ],
@@ -233,9 +238,10 @@
       "stage_comparability": {
         "status": "NOT_ESTABLISHED",
         "calculation": {
-          "status": "NOT_REPRODUCED"
+          "status": "NOT_REPRODUCED",
+          "scope": "Exact harmonized late-stage counts and denominator; distinct from completed conditional bounds and the separate all-stage descriptive comparison."
         },
-        "reason": "Broad stage construct documented; exact extract implementation, case-denominator membership and source-supported mapping remain unresolved. No accepted review digest exists for this comparison. Published rounded estimates are retained, not a harmonized recalculation."
+        "reason": "A source-supported category mapping and bounded public-data reanalysis are now completed. An exact harmonized late-stage calculation cannot be identified from the released observations, so this gate remains NOT_ESTABLISHED. No accepted human review digest or exact source stage counts are invented. See the distinct completed_analysis record."
       },
       "rate_denominator_note": "Incidence-rate denominators are Census populations as modified by NCI. These are separate from the case denominator of late_stage_share_percent.",
       "published_share_difference_pp": 0.3,
@@ -290,7 +296,20 @@
           "sha256": "551a3c9c2fdcb37b6875877d3211ebcf86cb30aae4dc24e6e2abf1f5292bfd5f",
           "role": "Retained source supplement; not a newly acquired extract or a complete staging/denominator specification"
         }
-      ]
+      ],
+      "completed_analysis": {
+        "status": "COMPLETED_WITH_CONDITIONAL_IDENTIFICATION_BOUNDS",
+        "source_crosswalk": "source_reconciliation/stage_selection_crosswalk.json",
+        "source_manifest": "source_reconciliation/evidence_manifest.json",
+        "reproducible_results": "source_reconciliation/results.json",
+        "replay_command": "python research/fragmentation-harm/reconcile_crc_sources.py --check",
+        "retained_crc_source_package": "source_reconciliation/retained_crc_county_sources.zip",
+        "retained_crc_source_package_sha256": "39b339425f7bbba4dac5e4278d8ae43dd289b4fd74a9e3eec2d41ccae8578e66",
+        "bounded_late_share_result": "Hinds minus Harris is 0.23456916496 to 0.37162122499 percentage points under a shared all-case denominator within each source; allowing compatible denominator exclusions and expressing both as late/all-stage-table cases gives -0.42590667591 to 0.37162122499. Conditional bounds are not confidence intervals or recovered counts.",
+        "separate_all_stage_result": "CDC June 2026 USCS reports 589 and 8661 incident primary CRC cases, and common-standard age-adjusted rates 46.4 and 38.0 per 100,000. The 8.4 difference and approximately 22.1% relative contrast are calculated from published rounded rates.",
+        "not_promoted_to_exact_stage_claim": true,
+        "county_stage_public_access_finding": "CDC November 2025 public-use technical documentation p66 excludes county records under state data-sharing agreements. The retrieved public stage endpoint is state-level; an explicitly documented aggregate county-stage supply or authorized restricted access would be a new evidence acquisition, not a completed extraction here."
+      }
     },
     {
       "comparison_id": "colorado-candidate-crc-2019-2023",
