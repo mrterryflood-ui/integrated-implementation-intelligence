@@ -1,0 +1,29 @@
+{
+  "runs": [
+    {
+      "name": "actual_v02_inspection",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "research/fragmentation-harm/validate_contract_v02.py"
+      ],
+      "exit_code": 0,
+      "expected": "successful structure inspection",
+      "log": "actual_v02_inspection.log",
+      "log_sha256": "e4f55a8f837a1cf81fdaf57651b4b079a71c57ba824c48dfc8ebc3e03bc5e7a1"
+    },
+    {
+      "name": "actual_v02_claim_denial",
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "research/fragmentation-harm/validate_contract_v02.py",
+        "--require-comparable"
+      ],
+      "exit_code": 1,
+      "expected": "denied because actual exact-stage evidence is unestablished",
+      "log": "actual_v02_claim_denial.log",
+      "log_sha256": "ecb4d1198e04a636a733dddef21313d2eb875b79e0031a3737d308d051dd5c3c"
+    }
+  ],
+  "legacy_control_count": 10,
+  "legacy_controls": "passed"
+}

@@ -1,0 +1,56 @@
+{
+  "archive_files": [
+    {
+      "bytes": 689051,
+      "name": "BRAINBYSITE.TXT"
+    },
+    {
+      "bytes": 43429868,
+      "name": "BYAGE.TXT"
+    },
+    {
+      "bytes": 116064405,
+      "name": "BYAREA.TXT"
+    },
+    {
+      "bytes": 352313028,
+      "name": "BYAREA_COUNTY.TXT"
+    },
+    {
+      "bytes": 6708431,
+      "name": "BYSITE.TXT"
+    },
+    {
+      "bytes": 74749,
+      "name": "CHILDBYAGE_ADJ.TXT"
+    },
+    {
+      "bytes": 1072797,
+      "name": "CHILDBYSITE.TXT"
+    },
+    {
+      "bytes": 50924,
+      "name": "Data Dictionary USCS ASCII Nov_2025 submission.xlsx"
+    },
+    {
+      "bytes": 234456,
+      "name": "ICCCBYAGE_ADJ.TXT"
+    },
+    {
+      "bytes": 316937,
+      "name": "ICCCBYSITE.TXT"
+    },
+    {
+      "bytes": 3761,
+      "name": "USCS_ascii_input_program_2026.sas"
+    }
+  ],
+  "bytes": 35931591,
+  "content_type": "application/x-zip-compressed",
+  "final_url": "https://www.cdc.gov/cancer/uscs/USCS-1999-2023-ASCII.zip",
+  "id": "cdc_uscs_1999_2023_ascii",
+  "retrieved_at": "2026-11-22T04:23:33.735465+00:00",
+  "sha256": "291765c997e59cddc7bc9bdd5852ea18f52696a58e2c212f5eb6b72c680b6df7",
+  "status": 200,
+  "url": "https://www.cdc.gov/cancer/uscs/USCS-1999-2023-ASCII.zip"
+}

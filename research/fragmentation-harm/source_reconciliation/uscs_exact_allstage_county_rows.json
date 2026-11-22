@@ -1,0 +1,36 @@
+{
+  "rows": [
+    {
+      "AGE_ADJUSTED_CI_LOWER": "42.6",
+      "AGE_ADJUSTED_CI_UPPER": "50.5",
+      "AGE_ADJUSTED_RATE": "46.4",
+      "AREA": "MS: Hinds County (28049)",
+      "COUNT": "589",
+      "EVENT_TYPE": "Incidence",
+      "POPULATION": "1111243",
+      "RACE": "All Races",
+      "SEX": "Male and Female",
+      "SITE": "Colon and Rectum",
+      "STATE": "MS",
+      "YEAR": "2019-2023"
+    },
+    {
+      "AGE_ADJUSTED_CI_LOWER": "37.2",
+      "AGE_ADJUSTED_CI_UPPER": "38.9",
+      "AGE_ADJUSTED_RATE": "38.0",
+      "AREA": "TX: Harris County (48201)",
+      "COUNT": "8661",
+      "EVENT_TYPE": "Incidence",
+      "POPULATION": "23887940",
+      "RACE": "All Races",
+      "SEX": "Male and Female",
+      "SITE": "Colon and Rectum",
+      "STATE": "TX",
+      "YEAR": "2019-2023"
+    }
+  ],
+  "same_original_scp_case_universe_established": false,
+  "source_file": "BYAREA_COUNTY.TXT",
+  "source_zip": "USCS-1999-2023-ASCII.zip",
+  "stage_specific_counts_available_in_table": false
+}

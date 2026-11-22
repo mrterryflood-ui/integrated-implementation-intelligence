@@ -1,0 +1,17 @@
+{
+  "name": "source_replay",
+  "started_utc": "2026-11-22T04:39:44.917855+00:00",
+  "finished_utc": "2026-11-22T04:39:52.285123+00:00",
+  "command": [
+    "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+    "research/fragmentation-harm/reconcile_crc_sources.py",
+    "--cdc-archive",
+    "/workspace/scratch/07822097efed/crc-source-recovery-u6h_4i3v/public_count_investigation/USCS-1999-2023-ASCII.zip",
+    "--check"
+  ],
+  "exit_code": 0,
+  "log": "source_replay_before_crude_output.log",
+  "log_sha256": "7984ba6bfbcfb6d12216d58ad59fd81e742e4bd9a027157dc6480cdf807e4d31",
+  "original_archive_sha256": "ddee039ad52fbe27b694e3e64a01d7d5ec2b0e9cb24b535fce47b8434dba727a",
+  "checkpoint": "Successful prior checkpoint before reviewer-requested crude-rate output; superseded by final run."
+}
