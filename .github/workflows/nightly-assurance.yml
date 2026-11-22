@@ -1,0 +1,101 @@
+name: Nightly dependency and regression assurance
+on:
+  schedule:
+    - cron: "30 2 * * *"
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - .github/dependabot.yml
+      - .github/workflows/nightly-assurance.yml
+      - scripts/nightly-discovery.py
+      - tests/test_nightly_discovery.py
+      - docs/engineering/nightly-assurance.md
+
+permissions:
+  contents: read
+
+concurrency:
+  group: nightly-assurance-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  discovery-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - run: python3 -m unittest discover -s tests -p test_nightly_discovery.py
+
+  dependency-audit:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        directory:
+          - apps/dis-platform
+          - tools/iss-ebeas
+          - tools/iss-ebeas-ui
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Resolve an ephemeral lockfile for the unlocked platform
+        if: matrix.directory == 'apps/dis-platform'
+        working-directory: ${{ matrix.directory }}
+        run: npm install --package-lock-only --ignore-scripts --no-audit --no-fund
+      - name: Audit npm dependency graph
+        working-directory: ${{ matrix.directory }}
+        run: npm audit --audit-level=high
+
+  regression:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "22"
+      - name: Install platform dependencies as in existing CI
+        working-directory: apps/dis-platform
+        run: npm install --no-audit --no-fund
+      - name: Platform typecheck and regression tests
+        working-directory: apps/dis-platform
+        run: |
+          npx tsc --noEmit
+          npm test
+      - name: Web and learner-method regressions
+        run: |
+          node --test apps/dis-web/tests/*.test.mjs
+          node --test packages/learner-methods/*.test.mjs
+
+  discovery:
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Search public GitHub repository metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          python3 scripts/nightly-discovery.py > discovery-report.md
+          cat discovery-report.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Retain discovery report
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: nightly-discovery-${{ github.run_id }}-${{ github.run_attempt }}
+          path: discovery-report.md
+          if-no-files-found: error
+          retention-days: 30

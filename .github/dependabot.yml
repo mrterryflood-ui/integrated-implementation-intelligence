@@ -1,0 +1,17 @@
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: daily
+      time: "02:15"
+      timezone: Etc/UTC
+  - package-ecosystem: npm
+    directories:
+      - /apps/dis-platform
+      - /tools/iss-ebeas
+      - /tools/iss-ebeas-ui
+    schedule:
+      interval: daily
+      time: "02:15"
+      timezone: Etc/UTC
