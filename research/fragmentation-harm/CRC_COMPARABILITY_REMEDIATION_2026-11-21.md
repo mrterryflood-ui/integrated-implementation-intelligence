@@ -16,6 +16,8 @@ Change: extend the existing validator, claim-admission CLI and CI regression sui
 
 Reason: validation of a document's structure, consistency of an evidence package, operator acceptance of a reviewed artifact, and scientific truth are different decisions. A digest binds bytes to the operator's selected review; it is not a digital signature, identity verification, or proof that the review's assertions are correct.
 
+The CLI requires an explicit `--require-comparable` request before accepting a review digest. A digest cannot silently promote a structure-only inspection into claim admission. A contract with validation errors cannot emit a successful per-record claim gate, even when the record's declared arithmetic and review binding are internally consistent.
+
 For an evidence record submitted to the claim gate, `late_stage_share_percent` identifies the recalculated case share and must reconcile with the exact declared counts. An original published share that uses another denominator or rounding belongs in the explicitly separate `published_late_stage_share_percent` field. The assessment returns the calculated comparison and its descriptive scope. The unresolved real record retains the publisher's original values for inspection and cannot pass the claim gate; no harmonized result is invented.
 
 Verification: test commands and results are retained below and in the resulting pull request. Independent final review is bound to the candidate commit; a historical passing run cannot substitute. Actual source checks cover the six retained November 8 supplements listed in the current contract and their original receipts. Original source bytes are preserved.
@@ -81,6 +83,8 @@ Rollback: revert the bounded validator/CLI/workflow change through a reviewed co
 ## Verification record
 
 The baseline false passes were reproduced on `c24a6fb0ec95afce69ab32ec769b87ac0950b29b`. Final candidate test counts, independent review and merge identity are recorded in the pull request rather than guessed before execution. Passing code checks establishes the corrected engineering boundary only. Source clarification and harmonized reanalysis remain open until their own evidence exists.
+
+Independent review of the first correction identified stronger claims admitted by a descriptive review, conflicting published and recalculated shares, and malformed metadata exceptions. Hosted review identified a review-digest flag interaction; a follow-up independent check also found successful per-record output inside an invalid contract. These reproduced failures are retained as regressions and reviewed at the replacement commit. A passing earlier test suite did not close the later findings.
 
 ## Primary and retained sources
 

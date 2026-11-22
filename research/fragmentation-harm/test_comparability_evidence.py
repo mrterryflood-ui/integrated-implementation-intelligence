@@ -326,17 +326,54 @@ class ComparabilityCliTests(unittest.TestCase):
         self.assertIn('"evidence_status": "NOT_ESTABLISHED"', result.stdout)
 
     def test_real_claim_gate_is_nonzero_even_with_advisory_override(self):
-        result = self.run_cli(None, "--require-comparable", "--advisory-provenance")
-        self.assertEqual(result.returncode, 1)
-        self.assertIn("not established", result.stderr)
+        for pin_flags in ((), ("--accepted-review-sha256=" + "a" * 64,)):
+            with self.subTest(pin_supplied=bool(pin_flags)):
+                result = self.run_cli(None, "--require-comparable", "--advisory-provenance", *pin_flags)
+                self.assertEqual(result.returncode, 1)
+                self.assertIn("not established", result.stderr)
+                self.assertNotIn("EVIDENCE_GATE_PASSED", result.stdout)
+
+    def test_review_pin_requires_explicit_claim_gate_even_with_provenance_flag(self):
+        contract, pin = evidence_fixture(observed_declaration=True)
+        for provenance_flags in ((), ("--advisory-provenance",), ("--strict-provenance",)):
+            with self.subTest(provenance_flags=provenance_flags):
+                result = self.run_cli(contract, "--accepted-review-sha256=" + pin, *provenance_flags)
+                self.assertEqual(result.returncode, 2, result.stderr)
+                self.assertIn("--accepted-review-sha256 requires --require-comparable", result.stderr)
+                self.assertEqual(result.stdout, "")
 
     def test_simulated_claim_gate_positive_requires_external_pin(self):
         contract, pin = evidence_fixture(observed_declaration=True)
         self.assertEqual(self.run_cli(contract, "--require-comparable").returncode, 1)
-        result = self.run_cli(contract, "--require-comparable", "--accepted-review-sha256=" + pin)
-        self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertIn('"claim_gate": "EVIDENCE_GATE_PASSED"', result.stdout)
-        self.assertIn("do not authenticate", result.stdout)
+        flags = ("--require-comparable", "--accepted-review-sha256=" + pin)
+        for flag_order in (flags, tuple(reversed(flags))):
+            with self.subTest(flag_order=flag_order):
+                result = self.run_cli(contract, *flag_order)
+                self.assertEqual(result.returncode, 0, result.stderr)
+                self.assertIn('"claim_gate": "EVIDENCE_GATE_PASSED"', result.stdout)
+                self.assertIn("do not authenticate", result.stdout)
+
+    def test_contract_errors_block_cli_admission_but_preserve_arithmetic_diagnostics(self):
+        mutations = [
+            ("unexpected schema_version", lambda c: c.update(schema_version="invalid")),
+            ("required_dimensions must be", lambda c: c.update(required_dimensions=[])),
+            ("dimensions missing: suppression", lambda c: c["records"][0]["dimensions"].pop("suppression")),
+        ]
+        for expected_error, mutation in mutations:
+            with self.subTest(expected_error=expected_error):
+                contract, _ = evidence_fixture(observed_declaration=True)
+                mutation(contract)
+                pin = refresh_review(contract["records"][0])
+                result = self.run_cli(contract, "--require-comparable", "--accepted-review-sha256=" + pin)
+                self.assertEqual(result.returncode, 1, result.stderr)
+                self.assertIn(expected_error, result.stderr)
+                self.assertNotIn("EVIDENCE_GATE_PASSED", result.stdout)
+                assessment = next(json.loads(line) for line in result.stdout.splitlines() if line.startswith("{"))
+                self.assertEqual(assessment["claim_gate"], "BLOCKED")
+                self.assertIn("overall contract validation failed; no comparison claim admitted", assessment["errors"])
+                self.assertEqual(assessment["evidence_status"], "RECORDED_NOT_AUTHENTICATED")
+                self.assertEqual(assessment["calculation_status"], "REPRODUCED_FROM_DECLARED_COUNTS")
+                self.assertEqual(assessment["calculated_comparison"]["difference_pp"], 12.5)
 
     def test_malformed_pin_is_usage_error(self):
         self.assertEqual(self.run_cli(None, "--accepted-review-sha256=x").returncode, 2)

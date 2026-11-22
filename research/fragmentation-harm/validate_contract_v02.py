@@ -87,7 +87,9 @@ def assess_comparability(record: dict, accepted_review_sha256=None) -> dict:
     This does not fetch/authenticate sources, establish reviewer identity, or infer
     scientific truth. The external pin is an operator trust decision about an
     already reviewed artifact; the contract cannot supply its own trust pin.
-    Synthetic records can exercise consistency checks but cannot pass the claim gate.
+    Records declared synthetic can exercise consistency checks but cannot pass the claim gate.
+    This assesses one record; the CLI also requires the entire contract to validate
+    before reporting any claim admission.
     """
     result = {"evidence_status": "NOT_ESTABLISHED", "calculation_status": "NOT_REPRODUCED",
               "review_status": "NOT_ACCEPTED", "claim_gate": "BLOCKED", "errors": []}
@@ -470,6 +472,7 @@ def main(argv: list[str]) -> int:
         elif arg in {"-h", "--help"}:
             print("usage: validate_contract_v02.py [--strict-provenance|--advisory-provenance] [--require-comparable] [--accepted-review-sha256=HEX] [contract.json ...]")
             print("Default checks structure only; --require-comparable also requires source-linked mappings, reproduced arithmetic and an externally accepted review digest. A digest is not source/reviewer authentication or scientific truth.")
+            print("--accepted-review-sha256 requires --require-comparable. Any contract validation error blocks all claim admissions in that contract.")
             print("The gate admits descriptive case proportions only. late_stage_share_percent must equal the calculated harmonized share; original published values belong in published_late_stage_share_percent.")
             return 0
         elif arg.startswith("-"):
@@ -477,6 +480,9 @@ def main(argv: list[str]) -> int:
             return 2
         else:
             paths.append(arg)
+    if accepted_review_sha256 is not None and not require_comparable:
+        print("INVALID: --accepted-review-sha256 requires --require-comparable", file=sys.stderr)
+        return 2
     if not paths:
         paths = [str(Path(__file__).with_name("comparability-contract.v0.2.json"))]
     status = 0
@@ -498,6 +504,9 @@ def main(argv: list[str]) -> int:
         if isinstance(contract, dict) and isinstance(contract.get("records"), list):
             for record in contract["records"]:
                 assessment = assess_comparability(record, accepted_review_sha256)
+                if errors:
+                    assessment["claim_gate"] = "BLOCKED"
+                    assessment["errors"].append("overall contract validation failed; no comparison claim admitted")
                 label = record.get("comparison_id", "unnamed") if isinstance(record, dict) else "invalid"
                 print(json.dumps({"comparison_id": label, **assessment}, sort_keys=True))
         print("LIMIT: consistency and arithmetic checks do not authenticate sources or reviewer identity, establish scientific truth, or authorize external publication.")
