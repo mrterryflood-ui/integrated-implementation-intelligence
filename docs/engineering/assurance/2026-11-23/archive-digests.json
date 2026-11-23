@@ -1,0 +1,13 @@
+{
+  "meaning": "Unsigned byte-integrity inventory of preserved local evidence, not a signature or release approval. Original receipts describe their execution time and may retain local source paths.",
+  "sha256": {
+    "README.md": "8aa3b7c294c115c29a1d0d9ec8a7d38b07df5e3821b3bc407fbf67c00dd14405",
+    "candidate-implementation-digests.json": "e654a478b27feec4eeb92c5e113303d55e2c0f4d39de93292167d85c6356a331",
+    "independent-integration-review.json": "cb2b562e516da323b85ed55e159de085194aff6b0d65b12a53c44980622e4331",
+    "independent-standard-review.json": "4ad31bbd8e0bccee2a9b744d51bf70374aef3d2ed6762c11cf62d6170e1f0736",
+    "language-scope-after.json": "4be72e2df313c001f226f39e59fa7b3483cd467da6718141f3e346fd8d89bc18",
+    "language-scope-before.json": "1fac24831fde1eb541bd542c6755dbe772167190d7727eb820c38ffcbb217f09",
+    "mirror-check.json": "16a11724c5b6dfd56b4af59a7d7db3af6af333aa6144598ae71905a2bc250cee",
+    "shared-tests.tap": "d5a7a2e23c438ba2cd810abf2da45426d990fff4a8a8e98ced574bfdf62f8079"
+  }
+}

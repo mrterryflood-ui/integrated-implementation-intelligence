@@ -134,3 +134,11 @@ current primary-source standards and a named operational successor.
 
 This corrects scope representation, not release authority. Every original evidence requirement remains required. Static release additionally requires a hash-bound `STATIC_DELIVERY_APPLICABILITY_REVIEW` for the exact revision, source digest, entrypoints and declared boundary, with an independent reviewer and executed absence checks. Missing or unreviewed scope, failed tests, high vulnerabilities, absent real-user evidence, invalid IRON acceptance or unsigned provenance still fail. `node --test tools/iss-ebeas/gate.test.mjs` includes both ordinary-profile and static-profile regressions.
 
+
+## evidence.3-validation: stack-neutral input coverage
+
+The [validation/mirror contract](../../docs/engineering/ISS-EBEAS-VALIDATION-MIRROR.md) adds `traceability.validationInputs`, a raw-byte inventory independent of programming language. Mandatory anchors include the manifest, schema, gate tooling, source roots, configured suite/checklist and signer workflow. Explicit inputs cover repository-specific tests, dependency locks, workflows and build configuration. `G4-VALIDATION-INPUTS` inventories these bytes; it does not execute them. Evidence/release requires a matching `validationDigest`, in addition to existing source, artifact, IRON and signature checks. Legacy interpretation receipts retain their earlier scope.
+
+Run `node tools/iss-ebeas/mirror-integrity.mjs` to compare files with the recorded canonical inventory, then `node --test tools/iss-ebeas/gate.test.mjs` to execute shared regressions (including validation and mirror negatives). Independently compare `origin.json` to the reviewed canonical candidate; the hash list is not signed and does not establish provenance on its own. Preserve runtime-specific tests and the existing separate build, evidence and release boundaries.
+
+For v3, `scanRoots(root, roots, {requireRecognizedSource: false})` may return zero heuristic matches and `unrecognizedSourceRoots`; this is not a clean security/UX scan. `inventoryValidationInputs` independently requires meaningful nonempty scope and binds unfamiliar formats. Use the appropriate language tools for semantic checks.

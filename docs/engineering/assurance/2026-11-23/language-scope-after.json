@@ -1,0 +1,102 @@
+[
+  {
+    "scenario": "rs",
+    "status": "PASS",
+    "sourceCheck": {
+      "id": "G3-SOURCE-SCOPE",
+      "track": "EXPERIENCE",
+      "status": "PASSED",
+      "detail": {
+        "roots": [
+          "client/src"
+        ],
+        "filesScanned": 0,
+        "sourceDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "findings": [],
+        "unrecognizedSourceRoots": [
+          "client/src"
+        ],
+        "heuristicStatus": "NOT_EVALUATED_NO_RECOGNIZED_FILES",
+        "limitation": "Extension-filtered heuristics do not prove HIG, accessibility, permission sequencing or absence of secrets. Unrecognized formats require applicable independent tools; validation inventory does not perform semantic analysis."
+      }
+    },
+    "inventoryCheck": "PASSED"
+  },
+  {
+    "scenario": "symlink using excluded directory name",
+    "status": "REJECTED"
+  },
+  {
+    "scenario": "tilde traversal and shell metacharacter paths",
+    "status": "REJECTED"
+  },
+  {
+    "scenario": "go",
+    "status": "PASS",
+    "sourceCheck": {
+      "id": "G3-SOURCE-SCOPE",
+      "track": "EXPERIENCE",
+      "status": "PASSED",
+      "detail": {
+        "roots": [
+          "client/src"
+        ],
+        "filesScanned": 0,
+        "sourceDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "findings": [],
+        "unrecognizedSourceRoots": [
+          "client/src"
+        ],
+        "heuristicStatus": "NOT_EVALUATED_NO_RECOGNIZED_FILES",
+        "limitation": "Extension-filtered heuristics do not prove HIG, accessibility, permission sequencing or absence of secrets. Unrecognized formats require applicable independent tools; validation inventory does not perform semantic analysis."
+      }
+    },
+    "inventoryCheck": "PASSED"
+  },
+  {
+    "scenario": "unrecognized_format",
+    "status": "PASS",
+    "sourceCheck": {
+      "id": "G3-SOURCE-SCOPE",
+      "track": "EXPERIENCE",
+      "status": "PASSED",
+      "detail": {
+        "roots": [
+          "client/src"
+        ],
+        "filesScanned": 0,
+        "sourceDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "findings": [],
+        "unrecognizedSourceRoots": [
+          "client/src"
+        ],
+        "heuristicStatus": "NOT_EVALUATED_NO_RECOGNIZED_FILES",
+        "limitation": "Extension-filtered heuristics do not prove HIG, accessibility, permission sequencing or absence of secrets. Unrecognized formats require applicable independent tools; validation inventory does not perform semantic analysis."
+      }
+    },
+    "inventoryCheck": "PASSED"
+  },
+  {
+    "scenario": "EMPTY",
+    "status": "FAIL",
+    "sourceCheck": {
+      "id": "G3-SOURCE-SCOPE",
+      "track": "EXPERIENCE",
+      "status": "PASSED",
+      "detail": {
+        "roots": [
+          "client/src"
+        ],
+        "filesScanned": 0,
+        "sourceDigest": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+        "findings": [],
+        "unrecognizedSourceRoots": [
+          "client/src"
+        ],
+        "heuristicStatus": "NOT_EVALUATED_NO_RECOGNIZED_FILES",
+        "limitation": "Extension-filtered heuristics do not prove HIG, accessibility, permission sequencing or absence of secrets. Unrecognized formats require applicable independent tools; validation inventory does not perform semantic analysis."
+      }
+    },
+    "inventoryCheck": "FAILED"
+  }
+]

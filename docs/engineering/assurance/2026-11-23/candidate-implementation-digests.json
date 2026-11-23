@@ -1,0 +1,26 @@
+{
+  "baseRevision": "0032113b36f01c52e510b7a1a3b1e3f80b8e659a",
+  "meaning": "Unsigned byte inventory of selected implementation and reference files in the local candidate snapshot. Not a complete repository inventory, signed provenance, or a test execution result. Evidence archive files are inventoried separately.",
+  "sha256": {
+    ".github/workflows/iss-ebeas.yml": "cfbc777d1819b3227876b4bcc816149642e8028a9b301cf040792d35cffd6cc4",
+    "AGENTS.md": "fb4cc477f0ef4d27b3887a020395af2e643190c9acd20f9e37a4cea2e13d4a86",
+    "docs/build-ledger.md": "b7c4756f3496d75df9ec13e113477faa1b8381388c1104e08183e249a10a3bd5",
+    "docs/engineering/ISS-EBEAS-1.1.md": "1fad58bc4d7955aa7e7c26104a3dab8d99d1504108b78696fb76b052486a2a1d",
+    "docs/engineering/ISS-EBEAS-RELEASE-CHECKLIST.md": "44ee7c6ddae79bba353937a05d62441a776146c90eaa5e3c595a8405bde08765",
+    "docs/engineering/ISS-EBEAS-VALIDATION-MIRROR.md": "fa71dcc9cec0d11bec4d075c5d79e595266c5cce7601da42645c03c11611f26c",
+    "schemas/iss-manifest.schema.json": "757303604dc7e694977abacc34e00b428bb29724903f1c9f4766d0d7a0851648",
+    "scripts/engineering_receipt_gate.py": "e1f961ef619a38e1322b079dceaf83e9501af925b4b4de57fce1d469f0040022",
+    "tools/iss-ebeas/README.md": "411d9ffae563a12eeafbfa4c48b84e4f37f485447cefc4dd8cd2d9ee640ef220",
+    "tools/iss-ebeas/fixture.mjs": "6998426852e5d173cf9a0abb3b10b00b8d1762826c1c93337e402edb8260f72a",
+    "tools/iss-ebeas/gate.mjs": "3d44d14e837e2d04cf3e4a26c3a2c012c054fd308b961361b397a3a4b75c97ec",
+    "tools/iss-ebeas/gate.test.mjs": "5b0a192641d965f69a3e0e81ac4872ca3b86c840c080b506ca1b2f146bba61b7",
+    "tools/iss-ebeas/iron_gate.py": "e1f961ef619a38e1322b079dceaf83e9501af925b4b4de57fce1d469f0040022",
+    "tools/iss-ebeas/mirror-integrity.mjs": "4ebaeafcbca4d5c72f194c3ce34ef2ad4031cc56b587b07cc016574369648101",
+    "tools/iss-ebeas/mirror-integrity.test.mjs": "51e5163ef7b0c3786d738018f7afa9c8470279521f0f97bded12a9c8025265d0",
+    "tools/iss-ebeas/origin.json": "e2cf3f5d373776b53bd9e88bb317c054329dc63c8b41b0e29357720d810c6fa0",
+    "tools/iss-ebeas/package-lock.json": "ea8a607eb3abbedfe1bd37b18d2ff8bd6a844c837b5c2955547997cd603574b7",
+    "tools/iss-ebeas/package.json": "1b5b3bbaa7828ded0bfeafabf62d9a16d55309c5722b50a1a9face283a11d9d3",
+    "tools/iss-ebeas/static-delivery.test.mjs": "fbaf396ed4cfa6021a5baa41f593380da7ef05513639f8ca9372e8b9a3815ae7",
+    "tools/iss-ebeas/validation-inputs.test.mjs": "c94de760a6548f29f99ae5b45089f39f43b4389b1d7818976c9abb2d0133afdb"
+  }
+}

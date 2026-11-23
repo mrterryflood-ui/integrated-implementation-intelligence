@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "filesVerified": 15,
+  "originSha256": "e2cf3f5d373776b53bd9e88bb317c054329dc63c8b41b0e29357720d810c6fa0",
+  "mirrorDigest": "eb6d6fdeaa864ef034e265b860c2805705119da3693a5a2ed52ff4e939ab5e59",
+  "canonicalRepository": "mrterryflood-ui/integrated-implementation-intelligence",
+  "sourceParentRevision": "0032113b36f01c52e510b7a1a3b1e3f80b8e659a",
+  "meaning": "Bytes match the recorded mirror inventory; independent canonical pin/review and release provenance are still required.",
+  "signature": "UNSIGNED_LOCAL_CHECK",
+  "releaseReadiness": "NOT_EVALUATED"
+}

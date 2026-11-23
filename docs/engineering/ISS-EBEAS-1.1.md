@@ -1,5 +1,7 @@
 # ISS-EBEAS v1.1 — Dual-Track Experience and E2E Assurance
 
+**November 23, 2026 validation addendum:** `1.1.0-evidence.3-validation` extends the existing evidence interpretations with a language-independent validation inventory and mirrored-tool integrity checks. Earlier interpretation support remains for recorded adoption history; active ATLAS and EVERLINK candidates adopt this extension. Product verification, release and deployment remain separate states.
+
 **Authority:** Dr. Terry Flood's November 18, 2026 instruction to update and integrate ISS-EBEAS across the named portfolio.
 
 **Standard version:** 1.1.0. **Engineering interpretation:** November 18, 2026.
@@ -154,3 +156,9 @@ External sources below were consulted on November 18, 2026. The release owner re
 | MDN | [Making PWAs installable](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Guides/Making_PWAs_installable): manifest, HTTPS and installability distinct from offline behavior. |
 
 Reassess after a relevant policy change, runtime/SDK upgrade, identity or data-flow change, newly supported target, material incident or failed user acceptance. The sustainment owner retains prior versions, corrective actions, rollback and next review. Updating this repository does not update unrelated agents, ChatGPT-wide instructions or every product automatically.
+
+## Validation interpretation: November 23, 2026
+
+Adopt the [agnostic validation and mirror contract](ISS-EBEAS-VALIDATION-MIRROR.md) for new shared-tool updates. Interpretation `1.1.0-evidence.3-validation` binds all inventoried source, test, workflow, lock and configuration bytes independently of language. `sourceDigest` remains the heuristic source-scope digest; `validationDigest` is the separate declared validation inventory. Neither proves execution. Record both for the actual frozen candidate and retain all existing evidence, authority, IRON and signature gates.
+
+ATLAS and EVERLINK mirror the canonical package and execute their own real producer/consumer regressions. Source availability, unknown health, queue preservation and delivery receipts must remain truthful through the whole flow. Repository-specific deployment, physical-device and human-use acceptance stays separately observed.

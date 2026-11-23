@@ -73,3 +73,8 @@ The workspace-reported consolidated eleven-skill bundle has not yet been copied 
 ## GPT sessions and delegated agents — source-first behavioral contract
 
 For every agent operating in this repository, also load `docs/dis/GPT-SESSION-AND-AGENT-OPERATING-CONTRACT.md`. It is a cross-domain MAP–GAP reasoning and delivery discipline, not merely a UI or code checklist. Source-first discovery, meaningful council challenge, human-directed autonomy, stakeholder-ready deliverables, five-pillar UX review, and honest release receipts apply to every engagement. A repository contract cannot automatically govern unrelated ChatGPT sessions or agents that have not loaded it; confirm adoption through actual tests.
+
+
+## Agnostic validation and standards mirrors — November 23, 2026
+
+For affected changes, load `docs/engineering/ISS-EBEAS-VALIDATION-MIRROR.md`. Preserve the actual minimum supported journey, unknown versus measured zero, configuration versus observation, and queued versus delivered/acknowledged. New interpretation `1.1.0-evidence.3-validation` binds source plus test/workflow/lock/configuration inputs and requires a matching validation digest for evidence/release. Verify recorded mirror bytes and execute the shared regressions plus native flow tests. A digest, policy pointer, fixture or unchanged version label is not evidence of execution, authenticated provenance, physical qualification or adoption by another agent. Keep independent review, existing authority and exact deployed-source checks.

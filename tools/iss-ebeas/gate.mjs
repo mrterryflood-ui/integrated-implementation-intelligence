@@ -1,4 +1,4 @@
-/** ISS-EBEAS 1.1.0 / evidence.1 + evidence.2-static.
+/** ISS-EBEAS 1.1.0 / evidence.1 + evidence.2-static + evidence.3-validation.
  * Build validates requirements and scope. Release validates independently collected
  * receipts and invokes a signature verifier. Neither stage certifies legal/store
  * compliance, actual delivery, or a beneficiary outcome. No manifest commands run.
@@ -41,7 +41,7 @@ function principal(value) {
 
 /** No absolute paths, traversal, symlinks, special files, or reads outside root. */
 export function safePath(root, relative, { exists=true, file=false }={}) {
-  insist(typeof relative === 'string' && /^[A-Za-z0-9_.@/\[\]-]+$/.test(relative) &&
+  insist(typeof relative === 'string' && /^[A-Za-z0-9_.@/\[\]~-]+$/.test(relative) &&
     !path.isAbsolute(relative) && !relative.split('/').some(p=>p==='..'||p==='.'||!p), 'UNSAFE_PATH');
   root=fs.realpathSync(root);
   let cursor=root;
@@ -81,8 +81,8 @@ function currentRevision(root,env) {
   }
   return {revision:null,source:'UNAVAILABLE'};
 }
-export function scanRoots(root,roots) {
-  const files=new Map(), findings=[];
+export function scanRoots(root,roots,{requireRecognizedSource=true}={}) {
+  const files=new Map(), findings=[], unrecognizedSourceRoots=[];
   for (const rel of roots) {
     const entry=safePath(root,rel);
     insist(fs.statSync(entry).isDirectory(),'SOURCE_ROOT_NOT_DIRECTORY');
@@ -109,9 +109,93 @@ export function scanRoots(root,roots) {
       }
     }
     walk(entry);
-    insist(count>0,'EMPTY_SOURCE_ROOT');
+    if(count===0) unrecognizedSourceRoots.push(rel);
+    if(requireRecognizedSource) insist(count>0,'EMPTY_SOURCE_ROOT');
   }
-  return {roots,filesScanned:files.size,sourceDigest:digest(canonical([...files.entries()].sort())),findings};
+  return {roots,filesScanned:files.size,sourceDigest:digest(canonical([...files.entries()].sort())),findings,
+    ...(requireRecognizedSource?{}:{unrecognizedSourceRoots})};
+}
+const VALIDATION_INTERPRETATION='1.1.0-evidence.3-validation';
+const MAX_VALIDATION_FILES=50_000;
+const MAX_VALIDATION_ENTRIES=100_000;
+const MAX_VALIDATION_BYTES=500_000_000;
+function validationInventoryRequired(manifest) {
+  return manifest?.interpretationVersion===VALIDATION_INTERPRETATION ||
+    Object.prototype.hasOwnProperty.call(manifest?.traceability??{},'validationInputs');
+}
+
+/** Byte inventory, not semantic analysis or test execution. Always include the
+ * controls that define/validate a receipt, plus the explicitly declared scope.
+ * The signed exact-commit provenance remains a separate release obligation.
+ */
+export function inventoryValidationInputs(root,manifest) {
+  root=fs.realpathSync(root);
+  const trace=manifest?.traceability, explicit=trace?.validationInputs;
+  insist(Array.isArray(explicit) && explicit.length>0 && explicit.length<=128 &&
+    explicit.every(p=>typeof p==='string') && new Set(explicit).size===explicit.length,'INVALID_VALIDATION_INPUTS');
+  const sourceRoots=manifest?.platform?.sourceRoots;
+  insist(Array.isArray(sourceRoots) && sourceRoots.length>0,'INVALID_VALIDATION_SOURCE_ROOTS');
+  const signerPrefix=manifest.platform.repository+'/.github/workflows/';
+  insist(typeof trace.signerWorkflow==='string' && trace.signerWorkflow.startsWith(signerPrefix),'UNTRUSTED_SIGNER_SCOPE');
+  const signerLocal=trace.signerWorkflow.slice(manifest.platform.repository.length+1);
+  const inputs=[...new Set(['iss-manifest.json','schemas/iss-manifest.schema.json','tools/iss-ebeas',
+    trace.e2eSuitePath,trace.checklistPath,signerLocal,...sourceRoots,...explicit])].sort();
+  // Evidence/receipt outputs cannot be included in the digest that they contain.
+  const outputs=[trace.evidencePath,trace.ironReceiptPath,trace.attestationOutputPath,
+    'audit/ebeas-evidence.sigstore.jsonl'];
+  insist(outputs.every(p=>typeof p==='string'),'INVALID_VALIDATION_OUTPUT_PATH');
+  const files=new Map(), excluded=new Map();
+  let entries=0, bytesInventoried=0;
+  function avoidOutputs(relative) {
+    insist(!outputs.some(p=>p===relative || p.startsWith(relative+'/')),'SELF_REFERENTIAL_VALIDATION_INPUT');
+  }
+  function inputPath(relative) {
+    // Validate lexical form before comparing prefixes or touching the filesystem.
+    safePath(root,relative,{exists:false});
+    avoidOutputs(relative);
+    let cursor=root;
+    for(const segment of relative.split('/')) {
+      cursor=path.join(cursor,segment);
+      if(EXCLUDED.has(segment) && fs.existsSync(cursor) && fs.lstatSync(cursor).isDirectory())
+        throw new Error('EXCLUDED_VALIDATION_INPUT');
+    }
+    return safePath(root,relative);
+  }
+  function walk(relative,depth=0) {
+    insist(depth<=64 && ++entries<=MAX_VALIDATION_ENTRIES,'VALIDATION_ENTRY_LIMIT');
+    avoidOutputs(relative);
+    const full=safePath(root,relative), stat=fs.lstatSync(full);
+    if(stat.isDirectory()) {
+      let count=0;
+      for(const ent of fs.readdirSync(full,{withFileTypes:true})) {
+        const child=relative+'/'+ent.name;
+        // Reject links/special files before applying a generated-directory exclusion.
+        safePath(root,child);
+        if(ent.isDirectory() && EXCLUDED.has(ent.name)) {
+          excluded.set(child,{path:child,reason:'GENERATED_OR_DEPENDENCY_DIRECTORY'});
+          continue;
+        }
+        count+=walk(child,depth+1);
+      }
+      return count;
+    }
+    // Nested empty marker files (for example Python __init__.py) are legitimate
+    // inputs. Bind their bytes, but do not let an all-empty tree satisfy scope.
+    if(!files.has(relative)) {
+      insist(files.size<MAX_VALIDATION_FILES,'VALIDATION_FILE_LIMIT');
+      bytesInventoried+=stat.size;
+      insist(bytesInventoried<=MAX_VALIDATION_BYTES,'VALIDATION_BYTE_LIMIT');
+      files.set(relative,digest(fs.readFileSync(full)));
+    }
+    return stat.size>0?1:0;
+  }
+  for(const relative of inputs) {
+    inputPath(relative);
+    insist(walk(relative)>0,'EMPTY_VALIDATION_INPUT');
+  }
+  return {inputs,filesInventoried:files.size,
+    validationDigest:digest(canonical([...files.entries()].sort())),
+    exclusions:[...excluded.values()].sort((a,b)=>a.path<b.path?-1:a.path>b.path?1:0)};
 }
 function checkTime(value,now) {
   insist(typeof value==='string' && /^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(value),'INVALID_EVIDENCE_TIME');
@@ -272,7 +356,7 @@ function storeArtifacts(root,m) {
 export async function evaluate({root=process.cwd(),stage='release',env=process.env,now=new Date()}={}) {
   root=fs.realpathSync(root);
   const checks=[], identity=currentRevision(root,env);
-  let manifest, scan;
+  let manifest, scan, validationInventory;
   async function check(id,track,fn) {
     try {const detail=await fn();checks.push({id,track,status:'PASSED',detail});return true;}
     catch(e) {checks.push({id,track,status:'FAILED',detail:/^[A-Z0-9_:-]+$/.test(e.message??'')?e.message:'CHECK_EXECUTION_FAILED'});return false;}
@@ -299,14 +383,22 @@ export async function evaluate({root=process.cwd(),stage='release',env=process.e
       return {tier,meaning:'Internal requirements profile; applicability and validated implementation remain evidence obligations.'};
     });
     await check('G3-SOURCE-SCOPE','EXPERIENCE',()=>{
-      scan=scanRoots(root,manifest.platform.sourceRoots);
-      return {...scan,heuristicStatus:scan.findings.length?'REVIEW_REQUIRED':'NO_PATTERN_MATCH',limitation:'Heuristics do not prove HIG, accessibility, permission sequencing or absence of secrets.'};
+      // v3's all-format inventory proves nonempty input scope separately. A
+      // heuristic that cannot read a language must report that limit, not reject
+      // a valid Rust/Go/other-language source tree as empty or imply it was scanned.
+      scan=scanRoots(root,manifest.platform.sourceRoots,{requireRecognizedSource:!validationInventoryRequired(manifest)});
+      return {...scan,heuristicStatus:scan.filesScanned===0?'NOT_EVALUATED_NO_RECOGNIZED_FILES':scan.findings.length?'REVIEW_REQUIRED':'NO_PATTERN_MATCH',limitation:'Extension-filtered heuristics do not prove HIG, accessibility, permission sequencing or absence of secrets. Unrecognized formats require applicable independent tools; validation inventory does not perform semantic analysis.'};
     });
     await check('G4-TRACEABILITY','TRACEABILITY',()=>{
       safePath(root,manifest.traceability.e2eSuitePath);
       safePath(root,manifest.traceability.checklistPath,{file:true});
       insist(REQUIREMENTS.every(id=>manifest.traceability.requirementsMapped.includes(id)),'MISSING_REQUIREMENT_MAPPING');
       return {e2eConfigured:true,e2eExecutedByThisCheck:false,checklist:manifest.traceability.checklistPath};
+    });
+    if(validationInventoryRequired(manifest)) await check('G4-VALIDATION-INPUTS','TRACEABILITY',()=>{
+      validationInventory=inventoryValidationInputs(root,manifest);
+      return {...validationInventory,executedByThisCheck:false,
+        limitation:'Raw-byte inventory of declared inputs and mandatory controls; not semantic analysis, test execution or universal source coverage.'};
     });
     await check('G5-RUNTIME-ARTIFACTS','ASSURANCE',()=>{storeArtifacts(root,manifest);return {configuredTargets:manifest.platform.runtimeTargets,plannedTargets:manifest.platform.plannedRuntimeTargets,storeReadiness:'NOT_VERIFIED'};});
     if(stage==='release' || stage==='evidence') {
@@ -321,6 +413,10 @@ export async function evaluate({root=process.cwd(),stage='release',env=process.e
       await check('G7-EXECUTED-EVIDENCE','ASSURANCE',()=>{
         insist(SHA.test(identity.revision??''),'EXACT_REVISION_UNAVAILABLE');
         evidence=readJson(root,manifest.traceability.evidencePath);
+        if(validationInventoryRequired(manifest)) {
+          insist(validationInventory,'VALIDATION_INVENTORY_REQUIRED');
+          insist(HASH.test(evidence.validationDigest??'') && evidence.validationDigest===validationInventory.validationDigest,'VALIDATION_DIGEST_MISMATCH');
+        }
         const required=validateEvidence(root,evidence,manifest,identity.revision,now.getTime());
         // The signed receipt must bind the exact scanned source, not a previous build.
         insist(scan && evidence.sourceDigest===scan.sourceDigest,'SOURCE_DIGEST_MISMATCH');
