@@ -50,7 +50,9 @@ invariants:
 
 URL acquisition uses direct `requests` and basic HTML-tag removal, without an AI provider
 SDK. It does not render a browser or parse PDFs. Title/publication date stay unknown unless
-the operator supplies them. HTTP failures and redirects are rejected; select the final
+the operator supplies them. Only declared text/HTML or textual JSON/XML content types are
+accepted. Missing or unsupported types and detected PDF/NUL binary content fail before
+extraction; use an extracted UTF-8 `--file` for those sources. HTTP failures and redirects are rejected; select the final
 non-retired source or model URL explicitly. `query`, `conflicts` and JSONL/CSV `export` stay
 local even when the configured ingestion backend is unavailable or retired.
 

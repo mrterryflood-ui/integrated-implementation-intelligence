@@ -386,6 +386,12 @@ def fetch_url(url: str) -> tuple[str, dict]:
     response = requests.get(url, timeout=60, headers={"User-Agent": "Mozilla/5.0"},
                             allow_redirects=False)
     check_response(response)
+    media_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().casefold()
+    if not (media_type.startswith("text/") or media_type in ("application/json", "application/xml")
+            or media_type.endswith(("+json", "+xml"))):
+        raise ValueError("unsupported or missing source content type; use HTML/text or an extracted UTF-8 --file")
+    if b"%PDF-" in response.content[:1024] or b"\x00" in response.content:
+        raise ValueError("binary/PDF source content is unsupported; provide an extracted UTF-8 --file")
     # Basic direct HTML/text acquisition; title and publication date stay unknown.
     return re.sub(r"<[^>]+>", " ", response.text), {}
 

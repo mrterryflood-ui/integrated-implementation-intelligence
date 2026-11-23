@@ -30,7 +30,10 @@ passes; it does not discover arbitrary hidden proxy aliases. Invalid environment
 explicitly. No failed route automatically switches providers.
 
 Source URLs use the existing direct `requests` acquisition path with HTTP error checks and basic
-HTML-tag removal. Source and model redirects are disabled and 3xx responses fail visibly. The
+HTML-tag removal. Declared text/HTML and textual JSON/XML types are accepted; missing/unsupported
+types and detected PDF/NUL binary content fail before extraction, including for a paid route.
+An extracted UTF-8 `--file` is the explicit alternative; no binary parser is added.
+Source and model redirects are disabled and 3xx responses fail visibly. The
 operator must select a final permitted URL. Unknown title/publication date remain unknown.
 OpenRouter host-specific requests disable the web plugin and reject its `:online` shortcut;
 ordinary OpenAI-compatible requests receive no unsupported plugin field. No server tools are
@@ -50,9 +53,10 @@ suite uses only the Python standard library, synthetic responses and temporary S
 and provider environment values are synthetic. No real model or source request supplies a test
 result. A successful mock proves request/response and local graph behavior, not model quality.
 
-The 18 native tests exercise retired selections before import/store/fetch, encoded names,
+The 19 native tests exercise retired selections before import/store/fetch, encoded names,
 default Ollama, explicit OpenAI, provider errors without fallback, OpenRouter opt-out/shortcut
-rejection, no redirects, SDK-free source acquisition, unknown metadata, real graph rejections,
+rejection, no redirects, SDK-free source acquisition, unsupported source formats before paid
+extraction, unknown metadata, real graph rejections,
 aliases, conflicts, restart query and both export formats. Syntax compilation is a separate
 check and is not static type checking. The new `.github/workflows/spoc-kg.yml` executes this suite
 against the PR head without provider secrets or deployment steps.

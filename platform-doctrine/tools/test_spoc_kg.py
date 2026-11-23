@@ -21,8 +21,10 @@ SPEC.loader.exec_module(kg)
 
 
 class Response:
-    def __init__(self, payload=None, text="", status=200):
+    def __init__(self, payload=None, text="", status=200, media_type="text/html", content=None):
         self.payload, self.text, self.status_code = payload, text, status
+        self.headers = {"Content-Type": media_type} if media_type is not None else {}
+        self.content = text.encode("utf-8") if content is None else content
 
     def raise_for_status(self):
         if self.status_code >= 400:
@@ -279,14 +281,41 @@ class RetirementTests(unittest.TestCase):
                     self.assertEqual(self.requests.post.call_count, 1)
 
     def test_direct_source_fetch_never_uses_sdk_or_invents_metadata(self):
-        self.requests.get.side_effect = None
-        self.requests.get.return_value = Response(text="<html><title>Synthetic page</title><p>Fixture text.</p></html>")
-        text, metadata = kg.fetch_url("https://source.example/fixture")
-        self.assertIn("Fixture text.", text)
-        self.assertNotIn("<p>", text)
-        self.assertEqual(metadata, {})
-        self.requests.get.assert_called_once_with("https://source.example/fixture", timeout=60,
-                                                 headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
+        fixtures = [("Text/HTML; charset=utf-8", "<html><title>Synthetic page</title><p>Fixture text.</p></html>"),
+                    ("text/plain", "Fixture text."), ("application/json", '{"text":"Fixture text."}'),
+                    ("application/rss+xml", "<rss><description>Fixture text.</description></rss>")]
+        for media_type, body in fixtures:
+            with self.subTest(media_type=media_type):
+                self.requests.get.reset_mock()
+                self.requests.get.side_effect = None
+                self.requests.get.return_value = Response(text=body, media_type=media_type)
+                text, metadata = kg.fetch_url("https://source.example/fixture")
+                self.assertIn("Fixture text.", text)
+                self.assertNotIn("<p>", text)
+                self.assertEqual(metadata, {})
+                self.requests.get.assert_called_once_with("https://source.example/fixture", timeout=60,
+                                                         headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
+        self.requests.post.assert_not_called()
+
+    def test_unsupported_source_formats_never_reach_model_or_store(self):
+        fixtures = [("application/pdf", b"%PDF-1.7 synthetic"),
+                    ("application/octet-stream", b"opaque fixture"), ("image/png", b"PNG fixture"),
+                    ("text/html", b"\n%PDF-1.7 mislabeled"), ("text/plain", b"text\x00binary"),
+                    (None, b"untyped fixture")]
+        for index, (media_type, body) in enumerate(fixtures):
+            with self.subTest(media_type=media_type, index=index):
+                self.requests.get.side_effect = None
+                self.requests.get.return_value = Response(text="Must not be extracted", media_type=media_type,
+                                                         content=body)
+                database = self.temp / ("unsupported-" + str(index) + ".sqlite")
+                # An explicitly selected paid route still must not run for unsupported input.
+                os.environ["OPENAI_API_KEY"] = "synthetic-test-key"
+                with self.assertRaisesRegex(ValueError, "source content"):
+                    self.run_cli("ingest", "--db", database, "--url", "https://source.example/fixture",
+                                 "--tier", "RESEARCH", "--backend", "openai")
+                with sqlite3.connect(database) as check:
+                    self.assertEqual(check.execute("SELECT count(*) FROM sources").fetchone()[0], 0)
+                    self.assertEqual(check.execute("SELECT count(*) FROM quads").fetchone()[0], 0)
         self.requests.post.assert_not_called()
 
     def test_retired_source_url_fails_before_import(self):
