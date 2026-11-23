@@ -21,6 +21,7 @@
     "tools/iss-ebeas/package-lock.json": "ea8a607eb3abbedfe1bd37b18d2ff8bd6a844c837b5c2955547997cd603574b7",
     "tools/iss-ebeas/package.json": "1b5b3bbaa7828ded0bfeafabf62d9a16d55309c5722b50a1a9face283a11d9d3",
     "tools/iss-ebeas/static-delivery.test.mjs": "fbaf396ed4cfa6021a5baa41f593380da7ef05513639f8ca9372e8b9a3815ae7",
-    "tools/iss-ebeas/validation-inputs.test.mjs": "c94de760a6548f29f99ae5b45089f39f43b4389b1d7818976c9abb2d0133afdb"
+    "tools/iss-ebeas/validation-inputs.test.mjs": "c94de760a6548f29f99ae5b45089f39f43b4389b1d7818976c9abb2d0133afdb",
+    "docs/engineering/ISS-EBEAS-ADOPTION-2026-11-18.md": "36a5b0ddf37057c645281a39e8bc3b47ff58b134054a004453536b910367c411"
   }
 }
