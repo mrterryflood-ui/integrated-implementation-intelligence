@@ -17,7 +17,8 @@
     "interpretationVersion": {
       "enum": [
         "1.1.0-evidence.1",
-        "1.1.0-evidence.2-static"
+        "1.1.0-evidence.2-static",
+        "1.1.0-evidence.3-validation"
       ]
     },
     "declarationKind": {
@@ -681,14 +682,27 @@
           "type": "string",
           "minLength": 1,
           "maxLength": 1000
+        },
+        "validationInputs": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 128,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000,
+            "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9_.@/\\[\\]~-]+$"
+          },
+          "description": "Additional repository-relative tests, workflows, dependency locks and build/configuration inputs. The gate also binds source roots, its own implementation, manifest, schema, E2E suite, checklist and signer workflow. Inventory is byte integrity, not proof of execution."
         }
       }
     }
   },
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://schemas.integratedservices.io/iss-ebeas-v1.1-evidence.2-static.json",
+  "$id": "https://schemas.integratedservices.io/iss-ebeas-v1.1-evidence.3-validation.json",
   "title": "ISS-EBEAS v1.1 \u2014 dual-track requirements manifest",
-  "description": "Targets and applicable runtime scope, never self-attested conformance. v1.1 engineering interpretation evidence.1 retains the owner budgets and adds independent release evidence. Planned native targets do not imply store readiness. Schema URL is an identifier, not a published endpoint claim. Additive static-delivery interpretation: only anonymous read-only public delivery may declare no application accounts, persistence or protected payload encryption. This scope never waives transport, privacy, independent applicability, executed evidence or protected release requirements.",
+  "description": "Targets and applicable runtime scope, never self-attested conformance. v1.1 engineering interpretation evidence.1 retains the owner budgets and adds independent release evidence. Planned native targets do not imply store readiness. Schema URL is an identifier, not a published endpoint claim. Additive static-delivery interpretation: only anonymous read-only public delivery may declare no application accounts, persistence or protected payload encryption. This scope never waives transport, privacy, independent applicability, executed evidence or protected release requirements. Additive validation-input interpretation binds all inventoried file bytes independently of language and requires the digest in evidence/release. It does not execute the inventory or waive existing applicability and release checks.",
   "allOf": [
     {
       "if": {
@@ -716,7 +730,10 @@
       "then": {
         "properties": {
           "interpretationVersion": {
-            "const": "1.1.0-evidence.2-static"
+            "enum": [
+              "1.1.0-evidence.2-static",
+              "1.1.0-evidence.3-validation"
+            ]
           },
           "platform": {
             "properties": {
@@ -809,7 +826,10 @@
       "else": {
         "properties": {
           "interpretationVersion": {
-            "const": "1.1.0-evidence.1"
+            "enum": [
+              "1.1.0-evidence.1",
+              "1.1.0-evidence.3-validation"
+            ]
           },
           "platform": {
             "not": {
@@ -904,6 +924,36 @@
           }
         },
         "type": "object"
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": {
+          "interpretationVersion": {
+            "const": "1.1.0-evidence.3-validation"
+          }
+        },
+        "required": [
+          "interpretationVersion"
+        ]
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "traceability": {
+            "type": "object",
+            "properties": {
+              "validationInputs": {}
+            },
+            "required": [
+              "validationInputs"
+            ]
+          }
+        },
+        "required": [
+          "traceability"
+        ]
       }
     }
   ]

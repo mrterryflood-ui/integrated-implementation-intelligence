@@ -1,0 +1,98 @@
+{
+  "scenario": "v3 source root containing nonempty Rust source only",
+  "inventory": {
+    "inputs": [
+      ".github/workflows",
+      ".github/workflows/iss-ebeas-release.yml",
+      "client/src",
+      "docs/engineering/ISS-EBEAS-RELEASE-CHECKLIST.md",
+      "iss-manifest.json",
+      "package-lock.json",
+      "schemas/iss-manifest.schema.json",
+      "tests",
+      "tests/e2e",
+      "tools/iss-ebeas"
+    ],
+    "filesInventoried": 8,
+    "validationDigest": "aa3a84b1c97fba0a767de3d4273e92322f3fc856a2673ebd63271998475777d9",
+    "exclusions": []
+  },
+  "gateStatus": "FAIL",
+  "checks": [
+    {
+      "id": "G0-INVOCATION",
+      "status": "PASSED",
+      "detail": {
+        "stage": "build"
+      }
+    },
+    {
+      "id": "G1-MANIFEST",
+      "status": "PASSED",
+      "detail": {
+        "manifestSha256": "8725a7879c715c4f04f10612c56c52bcb71916ea67970b2019cdd83658d7b359",
+        "schemaSha256": "425b0c7b2d2f62756b00efe35b01f009891d997b956b10d956eb7687d68cf570",
+        "declarationKind": "REQUIREMENTS_NOT_ATTESTATION"
+      }
+    },
+    {
+      "id": "G2-RISK-PROFILE",
+      "status": "PASSED",
+      "detail": {
+        "tier": "TIER_1_COMMERCIAL_CIVIC",
+        "meaning": "Internal requirements profile; applicability and validated implementation remain evidence obligations."
+      }
+    },
+    {
+      "id": "G3-SOURCE-SCOPE",
+      "status": "FAILED",
+      "detail": "EMPTY_SOURCE_ROOT"
+    },
+    {
+      "id": "G4-TRACEABILITY",
+      "status": "PASSED",
+      "detail": {
+        "e2eConfigured": true,
+        "e2eExecutedByThisCheck": false,
+        "checklist": "docs/engineering/ISS-EBEAS-RELEASE-CHECKLIST.md"
+      }
+    },
+    {
+      "id": "G4-VALIDATION-INPUTS",
+      "status": "PASSED",
+      "detail": {
+        "inputs": [
+          ".github/workflows",
+          ".github/workflows/iss-ebeas-release.yml",
+          "client/src",
+          "docs/engineering/ISS-EBEAS-RELEASE-CHECKLIST.md",
+          "iss-manifest.json",
+          "package-lock.json",
+          "schemas/iss-manifest.schema.json",
+          "tests",
+          "tests/e2e",
+          "tools/iss-ebeas"
+        ],
+        "filesInventoried": 8,
+        "validationDigest": "aa3a84b1c97fba0a767de3d4273e92322f3fc856a2673ebd63271998475777d9",
+        "exclusions": [],
+        "executedByThisCheck": false,
+        "limitation": "Raw-byte inventory of declared inputs and mandatory controls; not semantic analysis, test execution or universal source coverage."
+      }
+    },
+    {
+      "id": "G5-RUNTIME-ARTIFACTS",
+      "status": "PASSED",
+      "detail": {
+        "configuredTargets": [
+          "WEB_PWA"
+        ],
+        "plannedTargets": [
+          "IOS_APP_STORE",
+          "ANDROID_PLAY_STORE"
+        ],
+        "storeReadiness": "NOT_VERIFIED"
+      }
+    }
+  ]
+}

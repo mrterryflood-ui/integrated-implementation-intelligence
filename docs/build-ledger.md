@@ -196,3 +196,18 @@ Proof: the original archive and all 18 manifest members were verified; all 78 or
 Sustainment: source-package identity, raw HTML/CSV parity, county/period selection and deterministic output are executable checks. Changes to source, scope, methods or proposed claim require renewed review. Detailed findings, citations, completed actions and the unsent reporting clarification are in `research/fragmentation-harm/CRC_COMPARABILITY_REMEDIATION_2026-11-21.md`. No outside message, agency commitment or restricted-data application was made. Rollback is a reviewed revert preserving original evidence, historical failures and the qualified scientific record.
 
 Final local source-reconciliation acceptance: 315 research tests plus 13 denominator-adjudication tests passed with the full original archive and zero skips; ten existing fixtures passed. The final consumer also verified the full CDC ZIP and exact selected rows. Both affected Python modules and tests compile, and `git diff --check` passes. The independent reviewer found no blocker after closing the missing crude-rate output; exact published-SHA review and hosted results are retained in the follow-up PR. Evidence summary: `research/fragmentation-harm/source_reconciliation/verification/execution_summary.json`.
+
+
+## 2026-11-23 — ISS-EBEAS validation inventory and ATLAS/EVERLINK flow assurance
+
+**Owner instruction:** remediate the current ATLAS and EVERLINK flows and update the shared standard agnostically to match testing and validation.
+
+**Reuse and scope:** inspected current canonical, ATLAS and EVERLINK main revisions and existing standards before editing. Kept IRON-ENG-001, the evidence-aware ISS-EBEAS implementation, native application stacks, current release authority and concurrent feature work. Added interpretation `1.1.0-evidence.3-validation`; did not replace the established gate with the supplied declaration-only prototype.
+
+**Implementation:** language-independent raw-byte validation inventory with source/workflow/test/lock/schema binding; explicit unknown heuristic coverage; bounded file safety; mirror-integrity checking; mirrored documentation and CI hooks. App changes repair generic observed-status-to-display flow and private message interruption/recovery semantics.
+
+**Verification:** canonical shared suite 141/141 passed and independently replayed; mirrors identical across 16 files. Application standard/launcher/import integration passed 172 + 15 cases in ATLAS and 169 + 15 in EVERLINK (the shared 141 cases are included, not additional product coverage). Independent runtime reviews caught and closed a missing response projection and two Direct interruption defects. Author and independent receipts retain exact file hashes and failed attempts.
+
+**Record:** [Shared remediation and local evidence](engineering/assurance/2026-11-23/README.md). Implementation and independent review are local file-bound states. Hosted CI, complete application builds, protected promotion, actual users/devices, RF/power/sensor behavior and deployment remain separately evidenced. No paid service, purchase, external messaging, production mutation or automatic Copilot invocation was authorized by this work.
+
+**Next owners:** application maintainers execute current-candidate CI and measured runtime journeys; independent reviewers assess exact results; the authorized release owner controls promotion. Preserve minimal prepared operation and extend capability through optional bearers/hardware.

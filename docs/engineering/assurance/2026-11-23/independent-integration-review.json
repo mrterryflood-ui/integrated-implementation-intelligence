@@ -1,0 +1,166 @@
+{
+  "schema": "iss-independent-focused-review/1",
+  "reviewer": "/root/atlas_status_remediation",
+  "author": "/root",
+  "recordedAt": "2026-11-23T12:26:59.919076+00:00",
+  "status": "SCOPED_LOCAL_STRUCTURAL_REVIEW_PASSED",
+  "scope": "Final application v3 manifests, three EBEAS workflow integrations, two native regression workflow integrations, portable source-contract test, AGENTS addenda, and final local-evidence documentation.",
+  "baseRevisions": {
+    "canonical": "0032113b36f01c52e510b7a1a3b1e3f80b8e659a",
+    "atlas": "a8bdd325455cdd9d604c45786d56f63b57aa072f",
+    "everlink": "d8fb3fbeeefffcdabb2c150caa7b533f4e6561f8"
+  },
+  "checks": {
+    "manifestSchema": "Both application manifests pass the exact reviewed v3 strict AJV schema.",
+    "manifestPreservation": "Only interpretationVersion and validationInputs changed; other requirements preserved.",
+    "assuranceWorkflowPreservation": "All three pre-existing EBEAS workflows are unchanged after removing the added mirror-verification step.",
+    "nativeWorkflowPreservation": "EVERLINK retains every original command plus the Direct regression; ATLAS retains every original step in order and every prior push path.",
+    "statusSuiteCoverage": "All eight reviewed ATLAS status test files are configured through retained and added steps.",
+    "failureAndEvidenceBehavior": "Explicit pipefail and TAP reporter in new status step; source SHA capture and always-retained artifacts; no continue-on-error or release step added.",
+    "privilegeBoundary": "Read-only contents permissions, existing pinned actions and credential-persistence settings retained; no privileged pull_request_target or production mutation added.",
+    "policyPreservation": "AGENTS updates append to existing authority; app integration addenda retain protected-promotion and hosting limitations.",
+    "portableTest": "Every prior assertion retained; independently executed from final checkout with three passes, zero failures/skips; source text only, no operational behavior invoked.",
+    "canonicalIronParity": "Original canonical scripts/engineering_receipt_gate.py, candidate copy, and mirror iron_gate.py are byte-identical.",
+    "documentation": "Final docs distinguish configuration, local execution, prior Direct candidate, hosted CI, full inventory, physical qualification and release; shared test totals are not double-counted."
+  },
+  "findings": [
+    {
+      "id": "INTEGRATION-TAP-FORMAT-001",
+      "status": "RESOLVED",
+      "detail": "New .tap output now uses explicit --test-reporter=tap."
+    },
+    {
+      "id": "INTEGRATION-TREE-PROVENANCE-001",
+      "status": "RESOLVED",
+      "detail": "Supporting coverage metadata now separates requestedTreeRef from actual commit.tree.sha."
+    },
+    {
+      "id": "INTEGRATION-DOC-EVIDENCE-001",
+      "status": "RESOLVED",
+      "detail": "Workflow statements now describe configuration; Direct red evidence is explicitly against the prior locally reviewed candidate rather than deployment/main."
+    }
+  ],
+  "executedCommands": [
+    "Python/YAML structural parity assertions for final workflows, manifests and append-only policy changes",
+    "Strict AJV validation of both final app manifests against canonical v3 schema",
+    "cmp original/canonical/scripts/engineering_receipt_gate.py candidate/canonical/scripts/engineering_receipt_gate.py; cmp candidate/canonical/scripts/engineering_receipt_gate.py candidate/canonical/tools/iss-ebeas/iron_gate.py",
+    "node --import /workspace/scratch/c204fb316913/business-testdeps/node_modules/tsx/dist/loader.mjs --test --test-reporter=tap tests/trl6-mitigation-gates.test.ts"
+  ],
+  "reviewedFiles": [
+    {
+      "path": "atlas/iss-manifest.json",
+      "sha256": "c1c0a1cd53c2c72348ab96b70b101767b4903516284cde1820944c47b073f807",
+      "gitBlob": "d0e265c56d2535402c18dff58957d549d4271209",
+      "originalSha256": "6ed7e0f58224b459623fbc40b61a9a219faddc534a314ed9a71458ae9571d83b"
+    },
+    {
+      "path": "everlink/iss-manifest.json",
+      "sha256": "86a84666f03fe30a5137cede73681ae6e9a688b993f73dc3a4d9b3efc948c8cb",
+      "gitBlob": "1d6f8ec4ea22da75608731ee53911e6fb43195d8",
+      "originalSha256": "e1a11b3d85fb28bb8ed0c0ed2090f8f165047ab5a3a4610fedb059317190eb7f"
+    },
+    {
+      "path": "canonical/.github/workflows/iss-ebeas.yml",
+      "sha256": "cfbc777d1819b3227876b4bcc816149642e8028a9b301cf040792d35cffd6cc4",
+      "gitBlob": "c5c45d0c432815955a08b609db78f642e263aa4b",
+      "originalSha256": "ef8728f03072bc893538e6e3cc0c9a2cf5edd1435db3e8c5851c0b6befa2807c"
+    },
+    {
+      "path": "atlas/.github/workflows/iss-ebeas.yml",
+      "sha256": "eeb79a8bb4c6ae7c3d004270d7d64fb56cc4e100c9f5828203624583476ff46b",
+      "gitBlob": "c91896c1f4f6c22779aa768f703b6aa69f08aa29",
+      "originalSha256": "d198dc13b4b3b60d9532e4e8e01ecdaf28a77236037bad05445795bfeffd8f9e"
+    },
+    {
+      "path": "everlink/.github/workflows/iss-ebeas.yml",
+      "sha256": "fcbd32e808386562a01e4162c126eb1dbaca0cc0bd2fe76c2df15b012c3b7ebb",
+      "gitBlob": "f03e620b59b00c189fca97bbd04fe335c92f7290",
+      "originalSha256": "3c4ae5a386b824b3d7b776d498dfaf13e4d0cf702b642045c9d5fa5f2b155c9b"
+    },
+    {
+      "path": "atlas/.github/workflows/continuity-assurance.yml",
+      "sha256": "dea1b55d1eb9ff35be948b29cdeb79400af78d3c2acccb1646f8724ef3012a7f",
+      "gitBlob": "3090a4b4ec8589c7967faa65dd5e32ef8b02f429",
+      "originalSha256": "3ad9a6c0dc137ed41d8a51279c638ef79f3986761bd67d94276f0600b537f1d5"
+    },
+    {
+      "path": "everlink/.github/workflows/integrated-voice.yml",
+      "sha256": "52c20241f9d54d27add52dba9589ee933804de90638a1adf92571a5e34e04434",
+      "gitBlob": "e24803ff9ce49bc5e507f2d76fde9b0fc66e54d1",
+      "originalSha256": "62d7040aef7d141abc3386073943571377eef060f4c5a5053319937fcdefc252"
+    },
+    {
+      "path": "atlas/tests/trl6-mitigation-gates.test.ts",
+      "sha256": "eb67f2fc5713032e2d0aba5023551c9f65517dd07a73b75e4d6fb19ce00f8652",
+      "gitBlob": "e4607cd3dd9e6f143d14340978b2c6faf4ca7576",
+      "originalSha256": "94876de70dd8f47c7949ebb99c7ec9f5a7f586b482b860f62c85ddf49a3cffd9"
+    },
+    {
+      "path": "canonical/AGENTS.md",
+      "sha256": "fb4cc477f0ef4d27b3887a020395af2e643190c9acd20f9e37a4cea2e13d4a86",
+      "gitBlob": "d7098fbf99beccfc8a5c610427da1064741bf24a",
+      "originalSha256": "6c95dbb6a0acc78fec20423f1812fa68b57522cba23e3cb863d06dca14dfaeb1"
+    },
+    {
+      "path": "atlas/AGENTS.md",
+      "sha256": "d3f3b2d728add60cfdb9ab550f734c233ad22afa35b21905b9b3871d1aa2810d",
+      "gitBlob": "dfd9f4eb987568e79de8fdaae01ce3967e219464",
+      "originalSha256": "e7c0f5899a232ff4b93223824b96f7a0df0d543b14d5ccdb08851f1af1b6a562"
+    },
+    {
+      "path": "everlink/AGENTS.md",
+      "sha256": "86240731928c0d9205ef01911546aabcc50980e2ef8da9c6aeac8db17b9f58e4",
+      "gitBlob": "2f8dc403bdd170a4c80c7b2fbdb7d0006719781a",
+      "originalSha256": "5882fdcc3fb9fb8b4edf9c9c0aa120844c02a3702393c355f69e6d2ae77a5761"
+    },
+    {
+      "path": "canonical/docs/build-ledger.md",
+      "sha256": "b7c4756f3496d75df9ec13e113477faa1b8381388c1104e08183e249a10a3bd5",
+      "gitBlob": "2d5c16b92d85c99e07dacff52d36c0749af52df3",
+      "originalSha256": "0d5be1bbcf30ea7340cca919234033d77a6dbff2ad0a1a371c80822aceb6aac5"
+    },
+    {
+      "path": "canonical/docs/engineering/assurance/2026-11-23/README.md",
+      "sha256": "8aa3b7c294c115c29a1d0d9ec8a7d38b07df5e3821b3bc407fbf67c00dd14405",
+      "gitBlob": "c9132d3e2c37b46b1dc251cfb2fd867c9885e669",
+      "originalSha256": null
+    },
+    {
+      "path": "atlas/docs/engineering/ISS-EBEAS-INTEGRATION.md",
+      "sha256": "51fe60a771fcfc0058c696615b117b1f716b8a62ca9c7ec9e9a9f51717969452",
+      "gitBlob": "8db788ff1d02a7508369ae07969a213ed3f42435",
+      "originalSha256": "7a6789aa46796e815fa7c1b0a06ae05f6640ab1dab8de8c50df6abd08e250625"
+    },
+    {
+      "path": "everlink/docs/engineering/ISS-EBEAS-INTEGRATION.md",
+      "sha256": "b6ea54e3bdd24654f15ee94e4c611e6b04191cf6af99f53842bccdd2491225f1",
+      "gitBlob": "1c11b611e15d206e04ef168aa4802767ad0a929a",
+      "originalSha256": "724387cd8b4587a046fdbf28f31170df2621e2092d200191fe40c9a25b1c6486"
+    },
+    {
+      "path": "atlas/docs/engineering/assurance/2026-11-23/README.md",
+      "sha256": "016df588871187e9c87e48bff362064cf070af30efecd6633a87a674626de7f1",
+      "gitBlob": "2f5423b4390a66fa484124363f33d52c5bb3d2cc",
+      "originalSha256": null
+    },
+    {
+      "path": "everlink/docs/engineering/assurance/2026-11-23/README.md",
+      "sha256": "3a7b6e716002d2f406e1e5dd91faaaf9f0a9ca094c3282548e0c12f8bf9be6cc",
+      "gitBlob": "ce47d1a5e90e56ec7759232c3b3b573a9d3516f3",
+      "originalSha256": null
+    }
+  ],
+  "supportingSourceMetadata": {
+    "path": "source-tree-coverage.json",
+    "sha256": "b7777fd8ed83ae954fadd240c4e30494436dc636fa7af7c62422f1ca96b65eca",
+    "meaning": "Inspected coordinator-supplied exact-revision Git-tree metadata supports declared-path presence, nonempty size and regular-file bounds. No full local application inventory execution is inferred."
+  },
+  "evidenceClass": "LOCAL_STRUCTURAL_REVIEW_AND_SOURCE_CONTRACT_FIXTURES",
+  "limits": [
+    "No GitHub API invocation, hosted workflow execution, branch-protection change, merge or deployment by reviewer.",
+    "Partial local snapshots cannot establish complete source-byte inventory, full locked installation or application build.",
+    "Root-reported 172/169 integrated suites and 15-case importers are documented author results, not newly replayed by this structural review.",
+    "Source-contract text assertions do not establish cryptographic deployment, physical TRL, hardware operation or field outcomes.",
+    "Exact published commit, hosted checks, protected promotion and actual users/devices remain separately evidenced."
+  ]
+}

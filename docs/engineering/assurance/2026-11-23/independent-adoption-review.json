@@ -1,0 +1,47 @@
+{
+  "schema": "iss-independent-documentation-review/1",
+  "reviewer": "/root/atlas_status_remediation",
+  "recordedAt": "2026-11-23T12:37:03.907042+00:00",
+  "status": "APPEND_ONLY_ADOPTION_RECORD_REVIEW_PASSED",
+  "path": "docs/engineering/ISS-EBEAS-ADOPTION-2026-11-18.md",
+  "originalSha256": "5c71215f5e2f7ba7a913d0309b0636f853e0d0a441b4bbab5dd28f8208af12b9",
+  "candidateSha256": "36a5b0ddf37057c645281a39e8bc3b47ff58b134054a004453536b910367c411",
+  "candidateGitBlob": "dfdf27c98a532c06d58696234e2f9ea388d0632c",
+  "existingBytesPreserved": true,
+  "findings": [],
+  "reviewedClaims": [
+    "Per-repository adoption is limited to named draft branches; prior baselines and other portfolio repositories are not silently upgraded.",
+    "Canonical first implementation head and documentation-only follow-up are distinguished.",
+    "ATLAS source, inventory, continuity tested-merge SHA and equivalent tree agree with independent remote observations.",
+    "EVERLINK45-case flow and24 guard/lifecycle/flow results agree with separate independent review receipts; exact f07c published binding includes shared16 unchanged.",
+    "Unsigned mirror identity, current-head hosted results, protected release decisions and actual-device evidence remain separate.",
+    "Concurrent EVERLINK PR32 remains unmerged and combined-revision testing is not inferred."
+  ],
+  "supportingReceipts": [
+    {
+      "path": "/workspace/scratch/ca0ee7fc6d34/remediation-20261123/everlink-flow/pr34-final-head-review-association.json",
+      "sha256": "26b5513dba5de157b60298638632e0305a980586e26a311d77efbc9b5715948e"
+    },
+    {
+      "path": "/workspace/scratch/ca0ee7fc6d34/remediation-20261123/everlink-flow/independent-review-corrected.json",
+      "sha256": "f8ad756fd56ce8c210c4b38764a1a1ec686d5e0a4405c54c2de781ae3d991238"
+    },
+    {
+      "path": "/workspace/scratch/ca0ee7fc6d34/remediation-20261123/everlink-pwa/independent-review.json",
+      "sha256": "0c9e8137c65d6d68a620229bac974b1da1755ecf6c6524dc845a39af21e440a4"
+    },
+    {
+      "path": "/workspace/scratch/ca0ee7fc6d34/remediation-20261123/published-review/independent-published-review-binding.json",
+      "sha256": "e179562669117de14eb155e3e558627ce5cfd7cd24eaf34817166f198d14cc9f"
+    },
+    {
+      "path": "/workspace/scratch/ca0ee7fc6d34/remediation-20261123/published-review/atlas-hosted-ci-receipt.json",
+      "sha256": "4a692ccb242bc70411fd04712f37d4f8bf8902972769618198703bd446680aad"
+    }
+  ],
+  "limits": [
+    "Documentation-only local review; no source mutation or optional test rerun.",
+    "Published follow-up commit and its automatic checks require separate association after root publication.",
+    "Other reviewers executed EVERLINK cases; this review inspected their exact receipts and did not re-run those suites."
+  ]
+}

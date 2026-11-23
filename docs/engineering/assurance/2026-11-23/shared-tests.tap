@@ -1,0 +1,856 @@
+TAP version 13
+# Subtest: anonymous static build uses honest application scope and cannot grant release acceptance
+ok 1 - anonymous static build uses honest application scope and cannot grant release acceptance
+  ---
+  duration_ms: 148.519176
+  type: 'test'
+  ...
+# Subtest: static profile rejects visitor accounts
+ok 2 - static profile rejects visitor accounts
+  ---
+  duration_ms: 57.492537
+  type: 'test'
+  ...
+# Subtest: static profile rejects server submissions
+ok 3 - static profile rejects server submissions
+  ---
+  duration_ms: 30.617244
+  type: 'test'
+  ...
+# Subtest: static profile rejects application persistence
+ok 4 - static profile rejects application persistence
+  ---
+  duration_ms: 41.340908
+  type: 'test'
+  ...
+# Subtest: static profile rejects protected payloads
+ok 5 - static profile rejects protected payloads
+  ---
+  duration_ms: 46.645439
+  type: 'test'
+  ...
+# Subtest: static profile rejects offline runtime
+ok 6 - static profile rejects offline runtime
+  ---
+  duration_ms: 49.876062
+  type: 'test'
+  ...
+# Subtest: static profile rejects protected server data
+ok 7 - static profile rejects protected server data
+  ---
+  duration_ms: 29.628223
+  type: 'test'
+  ...
+# Subtest: static profile rejects health data classification
+ok 8 - static profile rejects health data classification
+  ---
+  duration_ms: 26.618516
+  type: 'test'
+  ...
+# Subtest: static profile rejects health tier
+ok 9 - static profile rejects health tier
+  ---
+  duration_ms: 32.115596
+  type: 'test'
+  ...
+# Subtest: static profile rejects defense tier
+ok 10 - static profile rejects defense tier
+  ---
+  duration_ms: 28.541005
+  type: 'test'
+  ...
+# Subtest: static profile rejects native runtime mixed into static scope
+ok 11 - static profile rejects native runtime mixed into static scope
+  ---
+  duration_ms: 25.788639
+  type: 'test'
+  ...
+# Subtest: static profile rejects PWA runtime mixed into static scope
+ok 12 - static profile rejects PWA runtime mixed into static scope
+  ---
+  duration_ms: 30.169382
+  type: 'test'
+  ...
+# Subtest: static profile rejects account-creation contradiction
+ok 13 - static profile rejects account-creation contradiction
+  ---
+  duration_ms: 26.033696
+  type: 'test'
+  ...
+# Subtest: static profile rejects PWA artifact contradiction
+ok 14 - static profile rejects PWA artifact contradiction
+  ---
+  duration_ms: 28.475592
+  type: 'test'
+  ...
+# Subtest: static profile rejects missing scoped declaration
+ok 15 - static profile rejects missing scoped declaration
+  ---
+  duration_ms: 28.919313
+  type: 'test'
+  ...
+# Subtest: static profile rejects unrecognized boundary state
+ok 16 - static profile rejects unrecognized boundary state
+  ---
+  duration_ms: 34.940631
+  type: 'test'
+  ...
+# Subtest: declared static entrypoints must be real files
+ok 17 - declared static entrypoints must be real files
+  ---
+  duration_ms: 29.990873
+  type: 'test'
+  ...
+# Subtest: ordinary application profile cannot borrow static no storage applicability
+ok 18 - ordinary application profile cannot borrow static no storage applicability
+  ---
+  duration_ms: 35.010596
+  type: 'test'
+  ...
+# Subtest: ordinary application profile cannot borrow static no authentication applicability
+ok 19 - ordinary application profile cannot borrow static no authentication applicability
+  ---
+  duration_ms: 28.519287
+  type: 'test'
+  ...
+# Subtest: ordinary application profile cannot borrow static no payload encryption applicability
+ok 20 - ordinary application profile cannot borrow static no payload encryption applicability
+  ---
+  duration_ms: 23.294862
+  type: 'test'
+  ...
+# Subtest: ordinary application profile cannot borrow static empty framework target applicability
+ok 21 - ordinary application profile cannot borrow static empty framework target applicability
+  ---
+  duration_ms: 29.729741
+  type: 'test'
+  ...
+# Subtest: ordinary application profile cannot borrow static provider-managed transport declaration applicability
+ok 22 - ordinary application profile cannot borrow static provider-managed transport declaration applicability
+  ---
+  duration_ms: 24.313533
+  type: 'test'
+  ...
+# Subtest: static release still rejects absent executed evidence, IRON acceptance and signature
+ok 23 - static release still rejects absent executed evidence, IRON acceptance and signature
+  ---
+  duration_ms: 62.371518
+  type: 'test'
+  ...
+# Subtest: review-record consistency keeps all mandatory requirement checks
+ok 24 - review-record consistency keeps all mandatory requirement checks
+  ---
+  duration_ms: 8.497658
+  type: 'test'
+  ...
+# Subtest: static evidence rejects stale source
+ok 25 - static evidence rejects stale source
+  ---
+  duration_ms: 5.40451
+  type: 'test'
+  ...
+# Subtest: static evidence rejects different source digest
+ok 26 - static evidence rejects different source digest
+  ---
+  duration_ms: 4.407212
+  type: 'test'
+  ...
+# Subtest: static evidence rejects changed boundary
+ok 27 - static evidence rejects changed boundary
+  ---
+  duration_ms: 4.815666
+  type: 'test'
+  ...
+# Subtest: static evidence rejects builder self-review
+ok 28 - static evidence rejects builder self-review
+  ---
+  duration_ms: 3.723936
+  type: 'test'
+  ...
+# Subtest: static evidence rejects invisible reviewer identity
+ok 29 - static evidence rejects invisible reviewer identity
+  ---
+  duration_ms: 4.433151
+  type: 'test'
+  ...
+# Subtest: static evidence rejects unresolved applicability
+ok 30 - static evidence rejects unresolved applicability
+  ---
+  duration_ms: 4.203105
+  type: 'test'
+  ...
+# Subtest: static evidence rejects unresolved scope finding
+ok 31 - static evidence rejects unresolved scope finding
+  ---
+  duration_ms: 4.654022
+  type: 'test'
+  ...
+# Subtest: static evidence rejects missing source artifacts
+ok 32 - static evidence rejects missing source artifacts
+  ---
+  duration_ms: 3.799539
+  type: 'test'
+  ...
+# Subtest: static evidence rejects tampered reviewed source
+ok 33 - static evidence rejects tampered reviewed source
+  ---
+  duration_ms: 3.439999
+  type: 'test'
+  ...
+# Subtest: static evidence rejects missing absence checks
+ok 34 - static evidence rejects missing absence checks
+  ---
+  duration_ms: 3.805463
+  type: 'test'
+  ...
+# Subtest: static profile preserves rejection of missing real-user acceptance
+ok 35 - static profile preserves rejection of missing real-user acceptance
+  ---
+  duration_ms: 2.851585
+  type: 'test'
+  ...
+# Subtest: static profile preserves rejection of high vulnerability
+ok 36 - static profile preserves rejection of high vulnerability
+  ---
+  duration_ms: 1.742277
+  type: 'test'
+  ...
+# Subtest: static profile preserves rejection of skipped persistence cases
+ok 37 - static profile preserves rejection of skipped persistence cases
+  ---
+  duration_ms: 2.055358
+  type: 'test'
+  ...
+# Subtest: static profile preserves rejection of static-only identity assertion
+ok 38 - static profile preserves rejection of static-only identity assertion
+  ---
+  duration_ms: 1.360764
+  type: 'test'
+  ...
+# Subtest: validation inventory binds required anchors and every extension without claiming execution
+ok 39 - validation inventory binds required anchors and every extension without claiming execution
+  ---
+  duration_ms: 36.22738
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only tests/e2e/browser.test.ts changes
+ok 40 - validation digest changes when only tests/e2e/browser.test.ts changes
+  ---
+  duration_ms: 9.110448
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only .github/workflows/iss-ebeas-release.yml changes
+ok 41 - validation digest changes when only .github/workflows/iss-ebeas-release.yml changes
+  ---
+  duration_ms: 6.500297
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only package-lock.json changes
+ok 42 - validation digest changes when only package-lock.json changes
+  ---
+  duration_ms: 6.041778
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only schemas/iss-manifest.schema.json changes
+ok 43 - validation digest changes when only schemas/iss-manifest.schema.json changes
+  ---
+  duration_ms: 6.240077
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only iss-manifest.json changes
+ok 44 - validation digest changes when only iss-manifest.json changes
+  ---
+  duration_ms: 7.042842
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only tools/iss-ebeas/gate.mjs changes
+ok 45 - validation digest changes when only tools/iss-ebeas/gate.mjs changes
+  ---
+  duration_ms: 6.086105
+  type: 'test'
+  ...
+# Subtest: validation digest changes when only client/src/protocol.rs changes
+ok 46 - validation digest changes when only client/src/protocol.rs changes
+  ---
+  duration_ms: 6.025023
+  type: 'test'
+  ...
+# Subtest: raw bytes, not lossy UTF-8 conversion, determine the validation digest
+ok 47 - raw bytes, not lossy UTF-8 conversion, determine the validation digest
+  ---
+  duration_ms: 6.932937
+  type: 'test'
+  ...
+# Subtest: v3 inventories a rs-only root without claiming semantic scanning
+ok 48 - v3 inventories a rs-only root without claiming semantic scanning
+  ---
+  duration_ms: 58.320291
+  type: 'test'
+  ...
+# Subtest: v3 inventories a go-only root without claiming semantic scanning
+ok 49 - v3 inventories a go-only root without claiming semantic scanning
+  ---
+  duration_ms: 27.920893
+  type: 'test'
+  ...
+# Subtest: v3 inventories a unknown-format-only root without claiming semantic scanning
+ok 50 - v3 inventories a unknown-format-only root without claiming semantic scanning
+  ---
+  duration_ms: 30.368271
+  type: 'test'
+  ...
+# Subtest: v3 still blocks a truly empty unfamiliar-language source root
+ok 51 - v3 still blocks a truly empty unfamiliar-language source root
+  ---
+  duration_ms: 22.549923
+  type: 'test'
+  ...
+# Subtest: literal tilde filenames remain inventoried without expansion or silent exclusion
+ok 52 - literal tilde filenames remain inventoried without expansion or silent exclusion
+  ---
+  duration_ms: 3.732598
+  type: 'test'
+  ...
+# Subtest: legitimate nested empty marker files remain inventoried and hash-bound
+ok 53 - legitimate nested empty marker files remain inventoried and hash-bound
+  ---
+  duration_ms: 2.344463
+  type: 'test'
+  ...
+# Subtest: input order and overlapping roots do not change inventory identity
+ok 54 - input order and overlapping roots do not change inventory identity
+  ---
+  duration_ms: 4.429796
+  type: 'test'
+  ...
+# Subtest: nested dependency/generated directories are disclosed exclusions, never executed or inventoried
+ok 55 - nested dependency/generated directories are disclosed exclusions, never executed or inventoried
+  ---
+  duration_ms: 2.524584
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects missing declared input
+ok 56 - validation inventory rejects missing declared input
+  ---
+  duration_ms: 1.123769
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects empty required E2E directory
+ok 57 - validation inventory rejects empty required E2E directory
+  ---
+  duration_ms: 1.183218
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects empty required file
+ok 58 - validation inventory rejects empty required file
+  ---
+  duration_ms: 1.33125
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects traversal
+ok 59 - validation inventory rejects traversal
+  ---
+  duration_ms: 0.742906
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects explicit excluded directory
+ok 60 - validation inventory rejects explicit excluded directory
+  ---
+  duration_ms: 1.595277
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects explicit descendant of excluded directory
+ok 61 - validation inventory rejects explicit descendant of excluded directory
+  ---
+  duration_ms: 1.448106
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects evidence path
+ok 62 - validation inventory rejects evidence path
+  ---
+  duration_ms: 1.088115
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects receipt path
+ok 63 - validation inventory rejects receipt path
+  ---
+  duration_ms: 0.971339
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects evidence parent directory
+ok 64 - validation inventory rejects evidence parent directory
+  ---
+  duration_ms: 0.915466
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects source root containing evidence output
+ok 65 - validation inventory rejects source root containing evidence output
+  ---
+  duration_ms: 0.81187
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects duplicate explicit input
+ok 66 - validation inventory rejects duplicate explicit input
+  ---
+  duration_ms: 0.624649
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects empty explicit list
+ok 67 - validation inventory rejects empty explicit list
+  ---
+  duration_ms: 0.719491
+  type: 'test'
+  ...
+# Subtest: validation inventory rejects foreign signer workflow
+ok 68 - validation inventory rejects foreign signer workflow
+  ---
+  duration_ms: 0.821294
+  type: 'test'
+  ...
+# Subtest: source links cannot escape validation scope
+ok 69 - source links cannot escape validation scope
+  ---
+  duration_ms: 1.575788
+  type: 'test'
+  ...
+# Subtest: hardlinked validation files are rejected
+ok 70 - hardlinked validation files are rejected
+  ---
+  duration_ms: 1.132542
+  type: 'test'
+  ...
+# Subtest: oversized validation files are rejected before content reads
+ok 71 - oversized validation files are rejected before content reads
+  ---
+  duration_ms: 1.4173
+  type: 'test'
+  ...
+# Subtest: special validation files are rejected before content reads on the POSIX assurance runner
+ok 72 - special validation files are rejected before content reads on the POSIX assurance runner
+  ---
+  duration_ms: 4.62516
+  type: 'test'
+  ...
+# Subtest: missing validation digest blocks executed-evidence acceptance
+ok 73 - missing validation digest blocks executed-evidence acceptance
+  ---
+  duration_ms: 75.247846
+  type: 'test'
+  ...
+# Subtest: mismatched validation digest blocks executed-evidence acceptance
+ok 74 - mismatched validation digest blocks executed-evidence acceptance
+  ---
+  duration_ms: 75.101055
+  type: 'test'
+  ...
+# Subtest: matching validation inventory passes consistency only; forged IRON and absent provenance still block release
+ok 75 - matching validation inventory passes consistency only; forged IRON and absent provenance still block release
+  ---
+  duration_ms: 62.583937
+  type: 'test'
+  ...
+# Subtest: failed inventory cannot be replaced by a matching caller digest
+ok 76 - failed inventory cannot be replaced by a matching caller digest
+  ---
+  duration_ms: 64.327487
+  type: 'test'
+  ...
+# Subtest: legacy source scanner digest semantics remain unchanged by validation-only files
+ok 77 - legacy source scanner digest semantics remain unchanged by validation-only files
+  ---
+  duration_ms: 1.371461
+  type: 'test'
+  ...
+# Subtest: new interpretation preserves static-delivery restrictions and executed evidence boundaries
+ok 78 - new interpretation preserves static-delivery restrictions and executed evidence boundaries
+  ---
+  duration_ms: 52.712924
+  type: 'test'
+  ...
+# Subtest: recorded canonical mirror matches without granting release or signature status
+ok 79 - recorded canonical mirror matches without granting release or signature status
+  ---
+  duration_ms: 2.227527
+  type: 'test'
+  ...
+# Subtest: recorded mirror rejects byte drift: tools/iss-ebeas/gate.mjs
+ok 80 - recorded mirror rejects byte drift: tools/iss-ebeas/gate.mjs
+  ---
+  duration_ms: 1.167694
+  type: 'test'
+  ...
+# Subtest: recorded mirror rejects byte drift: schemas/iss-manifest.schema.json
+ok 81 - recorded mirror rejects byte drift: schemas/iss-manifest.schema.json
+  ---
+  duration_ms: 1.087124
+  type: 'test'
+  ...
+# Subtest: recorded mirror rejects byte drift: docs/engineering/ISS-EBEAS-1.1.md
+ok 82 - recorded mirror rejects byte drift: docs/engineering/ISS-EBEAS-1.1.md
+  ---
+  duration_ms: 1.123157
+  type: 'test'
+  ...
+# Subtest: removing an inventory entry cannot hide a changed gate
+ok 83 - removing an inventory entry cannot hide a changed gate
+  ---
+  duration_ms: 0.686001
+  type: 'test'
+  ...
+# Subtest: mirror inventory cannot escape through a traversal path
+ok 84 - mirror inventory cannot escape through a traversal path
+  ---
+  duration_ms: 1.474535
+  type: 'test'
+  ...
+# Subtest: mirror inventory rejects linked files
+ok 85 - mirror inventory rejects linked files
+  ---
+  duration_ms: 1.009497
+  type: 'test'
+  ...
+# Subtest: valid multi-root build passes configuration and never grants release/store acceptance
+ok 86 - valid multi-root build passes configuration and never grants release/store acceptance
+  ---
+  duration_ms: 24.928054
+  type: 'test'
+  ...
+# Subtest: negative performance budget
+ok 87 - negative performance budget
+  ---
+  duration_ms: 23.419147
+  type: 'test'
+  ...
+# Subtest: zero first value
+ok 88 - zero first value
+  ---
+  duration_ms: 26.206476
+  type: 'test'
+  ...
+# Subtest: duplicate targets
+ok 89 - duplicate targets
+  ---
+  duration_ms: 23.402383
+  type: 'test'
+  ...
+# Subtest: unknown declaration property
+ok 90 - unknown declaration property
+  ---
+  duration_ms: 26.811364
+  type: 'test'
+  ...
+# Subtest: traversal output
+ok 91 - traversal output
+  ---
+  duration_ms: 23.596844
+  type: 'test'
+  ...
+# Subtest: non-HTTPS policy
+ok 92 - non-HTTPS policy
+  ---
+  duration_ms: 28.949898
+  type: 'test'
+  ...
+# Subtest: missing source root
+ok 93 - missing source root
+  ---
+  duration_ms: 25.44439
+  type: 'test'
+  ...
+# Subtest: missing E2E path
+ok 94 - missing E2E path
+  ---
+  duration_ms: 46.69548
+  type: 'test'
+  ...
+# Subtest: wrong owner
+ok 95 - wrong owner
+  ---
+  duration_ms: 28.314592
+  type: 'test'
+  ...
+# Subtest: active/planned collision
+ok 96 - active/planned collision
+  ---
+  duration_ms: 24.457938
+  type: 'test'
+  ...
+# Subtest: defense enum alone cannot pass risk profile
+ok 97 - defense enum alone cannot pass risk profile
+  ---
+  duration_ms: 27.618818
+  type: 'test'
+  ...
+# Subtest: iOS missing privacy artifact
+ok 98 - iOS missing privacy artifact
+  ---
+  duration_ms: 31.501852
+  type: 'test'
+  ...
+# Subtest: missing iss-manifest.json emits safe failure receipt
+ok 99 - missing iss-manifest.json emits safe failure receipt
+  ---
+  duration_ms: 5.958193
+  type: 'test'
+  ...
+# Subtest: malformed iss-manifest.json emits safe failure receipt
+ok 100 - malformed iss-manifest.json emits safe failure receipt
+  ---
+  duration_ms: 4.305819
+  type: 'test'
+  ...
+# Subtest: missing schemas/iss-manifest.schema.json emits safe failure receipt
+ok 101 - missing schemas/iss-manifest.schema.json emits safe failure receipt
+  ---
+  duration_ms: 4.156275
+  type: 'test'
+  ...
+# Subtest: malformed schemas/iss-manifest.schema.json emits safe failure receipt
+ok 102 - malformed schemas/iss-manifest.schema.json emits safe failure receipt
+  ---
+  duration_ms: 3.959269
+  type: 'test'
+  ...
+# Subtest: empty source root fails
+ok 103 - empty source root fails
+  ---
+  duration_ms: 24.446341
+  type: 'test'
+  ...
+# Subtest: source symlink cannot escape scan
+ok 104 - source symlink cannot escape scan
+  ---
+  duration_ms: 25.06548
+  type: 'test'
+  ...
+# Subtest: receipt directory symlink cannot overwrite outside root
+ok 105 - receipt directory symlink cannot overwrite outside root
+  ---
+  duration_ms: 0.998781
+  type: 'test'
+  ...
+# Subtest: hardlinked source/output are rejected
+ok 106 - hardlinked source/output are rejected
+  ---
+  duration_ms: 0.590327
+  type: 'test'
+  ...
+# Subtest: literal bracket route filenames are scanned and every changed route remains source-bound
+ok 107 - literal bracket route filenames are scanned and every changed route remains source-bound
+  ---
+  duration_ms: 22.897995
+  type: 'test'
+  ...
+# Subtest: bracket path support preserves traversal, shell-character, symbolic-link and hard-link rejection
+ok 108 - bracket path support preserves traversal, shell-character, symbolic-link and hard-link rejection
+  ---
+  duration_ms: 0.849446
+  type: 'test'
+  ...
+# Subtest: potential secret is redacted and review required, not proof of no secrets
+ok 109 - potential secret is redacted and review required, not proof of no secrets
+  ---
+  duration_ms: 24.25312
+  type: 'test'
+  ...
+# Subtest: component name does not excuse a permission call
+ok 110 - component name does not excuse a permission call
+  ---
+  duration_ms: 24.554123
+  type: 'test'
+  ...
+# Subtest: source binding distinguishes original invalid UTF-8 bytes
+ok 111 - source binding distinguishes original invalid UTF-8 bytes
+  ---
+  duration_ms: 1.300855
+  type: 'test'
+  ...
+# Subtest: firmware and deployment-shell roots are scanned and changes are hash-bound
+ok 112 - firmware and deployment-shell roots are scanned and changes are hash-bound
+  ---
+  duration_ms: 24.671389
+  type: 'test'
+  ...
+# Subtest: firmware and shell secret-pattern findings are actionable without exposing their values
+ok 113 - firmware and shell secret-pattern findings are actionable without exposing their values
+  ---
+  duration_ms: 25.395246
+  type: 'test'
+  ...
+# Subtest: extra mapped application control cannot disappear
+ok 114 - extra mapped application control cannot disappear
+  ---
+  duration_ms: 1.482888
+  type: 'test'
+  ...
+# Subtest: release defaults fail closed without signed executed evidence
+ok 115 - release defaults fail closed without signed executed evidence
+  ---
+  duration_ms: 25.351812
+  type: 'test'
+  ...
+# Subtest: provider SHA cannot make missing evidence pass
+ok 116 - provider SHA cannot make missing evidence pass
+  ---
+  duration_ms: 23.894912
+  type: 'test'
+  ...
+# Subtest: unknown stage cannot downgrade release
+ok 117 - unknown stage cannot downgrade release
+  ---
+  duration_ms: 24.314532
+  type: 'test'
+  ...
+# Subtest: runner repository mismatch fails
+ok 118 - runner repository mismatch fails
+  ---
+  duration_ms: 25.078481
+  type: 'test'
+  ...
+# Subtest: rejects stale revision
+ok 119 - rejects stale revision
+  ---
+  duration_ms: 1.085341
+  type: 'test'
+  ...
+# Subtest: rejects future timestamp
+ok 120 - rejects future timestamp
+  ---
+  duration_ms: 0.697959
+  type: 'test'
+  ...
+# Subtest: rejects missing checklist row
+ok 121 - rejects missing checklist row
+  ---
+  duration_ms: 1.62394
+  type: 'test'
+  ...
+# Subtest: rejects skipped required check
+ok 122 - rejects skipped required check
+  ---
+  duration_ms: 0.887985
+  type: 'test'
+  ...
+# Subtest: rejects static browser claim
+ok 123 - rejects static browser claim
+  ---
+  duration_ms: 0.801534
+  type: 'test'
+  ...
+# Subtest: rejects mismatched artifact hash
+ok 124 - rejects mismatched artifact hash
+  ---
+  duration_ms: 0.657357
+  type: 'test'
+  ...
+# Subtest: rejects unresolved findings
+ok 125 - rejects unresolved findings
+  ---
+  duration_ms: 1.148216
+  type: 'test'
+  ...
+# Subtest: rejects slow FCP
+ok 126 - rejects slow FCP
+  ---
+  duration_ms: 1.135917
+  type: 'test'
+  ...
+# Subtest: rejects zero INP samples
+ok 127 - rejects zero INP samples
+  ---
+  duration_ms: 1.163668
+  type: 'test'
+  ...
+# Subtest: rejects high CVEs
+ok 128 - rejects high CVEs
+  ---
+  duration_ms: 1.535867
+  type: 'test'
+  ...
+# Subtest: rejects synthetic testers
+ok 129 - rejects synthetic testers
+  ---
+  duration_ms: 1.253173
+  type: 'test'
+  ...
+# Subtest: rejects too few testers
+ok 130 - rejects too few testers
+  ---
+  duration_ms: 1.259031
+  type: 'test'
+  ...
+# Subtest: rejects self approval
+ok 131 - rejects self approval
+  ---
+  duration_ms: 1.15159
+  type: 'test'
+  ...
+# Subtest: rejects invisible identity bypass
+ok 132 - rejects invisible identity bypass
+  ---
+  duration_ms: 1.206984
+  type: 'test'
+  ...
+# Subtest: rejects static durable E2E
+ok 133 - rejects static durable E2E
+  ---
+  duration_ms: 0.965691
+  type: 'test'
+  ...
+# Subtest: rejects zero executed cases
+ok 134 - rejects zero executed cases
+  ---
+  duration_ms: 1.367425
+  type: 'test'
+  ...
+# Subtest: rejects synthetic human mode
+ok 135 - rejects synthetic human mode
+  ---
+  duration_ms: 1.249227
+  type: 'test'
+  ...
+# Subtest: rejects wrong tested persona
+ok 136 - rejects wrong tested persona
+  ---
+  duration_ms: 1.574115
+  type: 'test'
+  ...
+# Subtest: rejects slow human attempts
+ok 137 - rejects slow human attempts
+  ---
+  duration_ms: 1.627275
+  type: 'test'
+  ...
+# Subtest: rejects false first-value summary
+ok 138 - rejects false first-value summary
+  ---
+  duration_ms: 1.255517
+  type: 'test'
+  ...
+# Subtest: rejects duplicate human participant
+ok 139 - rejects duplicate human participant
+  ---
+  duration_ms: 1.449748
+  type: 'test'
+  ...
+# Subtest: consistent fabricated metadata still cannot pass actual IRON or signature gate
+ok 140 - consistent fabricated metadata still cannot pass actual IRON or signature gate
+  ---
+  duration_ms: 128.133521
+  type: 'test'
+  ...
+# Subtest: CLI unknown arguments emit receipt and nonzero exit
+ok 141 - CLI unknown arguments emit receipt and nonzero exit
+  ---
+  duration_ms: 226.229249
+  type: 'test'
+  ...
+1..141
+# tests 141
+# suites 0
+# pass 141
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 2807.244452

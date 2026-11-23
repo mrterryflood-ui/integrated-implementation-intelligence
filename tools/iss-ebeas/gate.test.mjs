@@ -9,6 +9,8 @@ import { evaluate, writeReceipt, digest, canonical, safePath, validateEvidence, 
 import { setupFixture, put, evidenceFixture } from './fixture.mjs';
 // Keep the additive static-delivery contracts in every existing gate-test entrypoint.
 import './static-delivery.test.mjs';
+import './validation-inputs.test.mjs';
+import './mirror-integrity.test.mjs';
 
 const here=path.dirname(fileURLToPath(import.meta.url));
 const schema=JSON.parse(fs.readFileSync(path.join(here,'../../schemas/iss-manifest.schema.json'),'utf8'));

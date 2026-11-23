@@ -1,0 +1,152 @@
+{
+  "schema": "iss-independent-focused-review/1",
+  "reviewer": "/root/atlas_status_remediation",
+  "authors": [
+    "/root",
+    "/root/assurance_review"
+  ],
+  "recordedAt": "2026-11-23T12:15:55.754735+00:00",
+  "repository": "mrterryflood-ui/integrated-implementation-intelligence",
+  "sourceParentRevision": "0032113b36f01c52e510b7a1a3b1e3f80b8e659a",
+  "status": "SCOPED_LOCAL_REVIEW_PASSED",
+  "scope": "Canonical shared gate, schema v3/static compatibility, validation inventory, mirror integrity and honest evidence boundaries; no repository-specific release authorization.",
+  "findings": [
+    {
+      "id": "ISS-VALIDATION-UNKNOWN-LANGUAGE-001",
+      "severity": "MATERIAL_SCOPE_COMPATIBILITY",
+      "before": "Nonempty Rust-only root was rejected as EMPTY_SOURCE_ROOT by legacy extension heuristic although v3 byte inventory passed.",
+      "correction": "Validation-enabled G3 permits no-recognized-language roots only with explicit NOT_EVALUATED status; mandatory all-format G4 still rejects empty scope. Legacy scanRoots default preserved.",
+      "status": "RESOLVED",
+      "beforeReceipt": "independent-language-scope-probe.json",
+      "afterReceipt": "independent-language-scope-final.json"
+    }
+  ],
+  "checks": {
+    "suiteCommand": "node --test --test-reporter=tap tools/iss-ebeas/gate.test.mjs",
+    "passed": 141,
+    "failed": 0,
+    "skipped": 0,
+    "mirrorCommand": "node tools/iss-ebeas/mirror-integrity.mjs",
+    "mirrorFilesVerified": 15,
+    "independentFileHashComparisons": 16,
+    "additionalAdversarialProbes": [
+      "Rust-only source",
+      "Go-only source",
+      "Unknown-extension source",
+      "Truly empty source",
+      "Legacy unsupported-only source behavior",
+      "Symlink named node_modules",
+      "Tilde traversal and shell metacharacter paths"
+    ],
+    "mirrorLimitConfirmed": "Local mutable hash inventory is not authenticated provenance; canonical pin/review and signed release provenance remain separate.",
+    "staticCompatibility": "Existing static-delivery positives, denied scope changes and required evidence obligations retained.",
+    "fileSafety": "Safe lexical containment, symlink/hardlink/special/oversized read rejection, declared exclusions and self-referential output rejection inspected and tested."
+  },
+  "mirrorComparison": {
+    "atlas": {
+      "status": "MATCH",
+      "filesCompared": 16,
+      "differences": []
+    },
+    "everlink": {
+      "status": "MATCH",
+      "filesCompared": 16,
+      "differences": []
+    }
+  },
+  "reviewedFiles": [
+    {
+      "path": "tools/iss-ebeas/origin.json",
+      "sha256": "e2cf3f5d373776b53bd9e88bb317c054329dc63c8b41b0e29357720d810c6fa0",
+      "originalSha256": "8100776ecb5cbd144e8bc276f715fe78237794655114e06ed20de468f9931996"
+    },
+    {
+      "path": "tools/iss-ebeas/README.md",
+      "sha256": "411d9ffae563a12eeafbfa4c48b84e4f37f485447cefc4dd8cd2d9ee640ef220",
+      "originalSha256": "3412a7ef58130d68d3764ff062bd74d838012d276df9412383dc96e53a0efb77"
+    },
+    {
+      "path": "tools/iss-ebeas/fixture.mjs",
+      "sha256": "6998426852e5d173cf9a0abb3b10b00b8d1762826c1c93337e402edb8260f72a",
+      "originalSha256": "6998426852e5d173cf9a0abb3b10b00b8d1762826c1c93337e402edb8260f72a"
+    },
+    {
+      "path": "tools/iss-ebeas/gate.mjs",
+      "sha256": "3d44d14e837e2d04cf3e4a26c3a2c012c054fd308b961361b397a3a4b75c97ec",
+      "originalSha256": "d3f53bdde4a2f2320aa867dfda3499b7e0d93c081723764446f76267f9d837e8"
+    },
+    {
+      "path": "tools/iss-ebeas/gate.test.mjs",
+      "sha256": "5b0a192641d965f69a3e0e81ac4872ca3b86c840c080b506ca1b2f146bba61b7",
+      "originalSha256": "1cc886c31f5752af95304d77e1ec9f148590e17560ff1ec11e479a960c088390"
+    },
+    {
+      "path": "tools/iss-ebeas/iron_gate.py",
+      "sha256": "e1f961ef619a38e1322b079dceaf83e9501af925b4b4de57fce1d469f0040022",
+      "originalSha256": "e1f961ef619a38e1322b079dceaf83e9501af925b4b4de57fce1d469f0040022"
+    },
+    {
+      "path": "tools/iss-ebeas/mirror-integrity.mjs",
+      "sha256": "4ebaeafcbca4d5c72f194c3ce34ef2ad4031cc56b587b07cc016574369648101",
+      "originalSha256": null
+    },
+    {
+      "path": "tools/iss-ebeas/mirror-integrity.test.mjs",
+      "sha256": "51e5163ef7b0c3786d738018f7afa9c8470279521f0f97bded12a9c8025265d0",
+      "originalSha256": null
+    },
+    {
+      "path": "tools/iss-ebeas/package-lock.json",
+      "sha256": "ea8a607eb3abbedfe1bd37b18d2ff8bd6a844c837b5c2955547997cd603574b7",
+      "originalSha256": "ea8a607eb3abbedfe1bd37b18d2ff8bd6a844c837b5c2955547997cd603574b7"
+    },
+    {
+      "path": "tools/iss-ebeas/package.json",
+      "sha256": "1b5b3bbaa7828ded0bfeafabf62d9a16d55309c5722b50a1a9face283a11d9d3",
+      "originalSha256": "1b5b3bbaa7828ded0bfeafabf62d9a16d55309c5722b50a1a9face283a11d9d3"
+    },
+    {
+      "path": "tools/iss-ebeas/static-delivery.test.mjs",
+      "sha256": "fbaf396ed4cfa6021a5baa41f593380da7ef05513639f8ca9372e8b9a3815ae7",
+      "originalSha256": "fbaf396ed4cfa6021a5baa41f593380da7ef05513639f8ca9372e8b9a3815ae7"
+    },
+    {
+      "path": "tools/iss-ebeas/validation-inputs.test.mjs",
+      "sha256": "c94de760a6548f29f99ae5b45089f39f43b4389b1d7818976c9abb2d0133afdb",
+      "originalSha256": null
+    },
+    {
+      "path": "schemas/iss-manifest.schema.json",
+      "sha256": "757303604dc7e694977abacc34e00b428bb29724903f1c9f4766d0d7a0851648",
+      "originalSha256": "b16cf431cc77f2ba903d2160c9fb660a3b06a4b49d329fbbb203876cdb15c3e8"
+    },
+    {
+      "path": "docs/engineering/ISS-EBEAS-1.1.md",
+      "sha256": "1fad58bc4d7955aa7e7c26104a3dab8d99d1504108b78696fb76b052486a2a1d",
+      "originalSha256": "0de2e1783b86d7a6812a3c9a9de8f3fd743d193197851aa20e1f732645003671"
+    },
+    {
+      "path": "docs/engineering/ISS-EBEAS-RELEASE-CHECKLIST.md",
+      "sha256": "44ee7c6ddae79bba353937a05d62441a776146c90eaa5e3c595a8405bde08765",
+      "originalSha256": "4f51561c7f396905e48dc3ffc52d17823d445d53c365c5e2bc7039db60b9dc76"
+    },
+    {
+      "path": "docs/engineering/ISS-EBEAS-VALIDATION-MIRROR.md",
+      "sha256": "fa71dcc9cec0d11bec4d075c5d79e595266c5cce7601da42645c03c11611f26c",
+      "originalSha256": null
+    }
+  ],
+  "evidenceClass": "SOFTWARE_FIXTURE_AND_LOCAL_BYTE_REVIEW",
+  "limits": [
+    "Not hosted CI, remote candidate-commit review, protected branch enforcement, merge or deployment acceptance",
+    "Does not execute every inventoried application language/input or prove actual application behavior",
+    "Does not authenticate locally editable origin.json independently; expected canonical pin remains required",
+    "No device, physical field, store, compliance or human-outcome claims"
+  ],
+  "artifactHashes": {
+    "independent-shared-final.tap": "d5a7a2e23c438ba2cd810abf2da45426d990fff4a8a8e98ced574bfdf62f8079",
+    "independent-mirror-final.json": "16a11724c5b6dfd56b4af59a7d7db3af6af333aa6144598ae71905a2bc250cee",
+    "independent-language-scope-probe.json": "1fac24831fde1eb541bd542c6755dbe772167190d7727eb820c38ffcbb217f09",
+    "independent-language-scope-final.json": "4be72e2df313c001f226f39e59fa7b3483cd467da6718141f3e346fd8d89bc18"
+  }
+}

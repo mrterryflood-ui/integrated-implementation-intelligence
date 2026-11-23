@@ -22,6 +22,8 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci --prefix tools/iss-ebeas --ignore-scripts --no-audit --no-fund
+      - name: Verify recorded canonical kit integrity
+        run: node tools/iss-ebeas/mirror-integrity.mjs
       - name: Exercise synthetic normal, denial and tampering cases
         run: node --test tools/iss-ebeas/gate.test.mjs
       - name: Preserve canonical IRON validator
