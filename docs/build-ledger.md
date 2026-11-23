@@ -211,3 +211,14 @@ Final local source-reconciliation acceptance: 315 research tests plus 13 denomin
 **Record:** [Shared remediation and local evidence](engineering/assurance/2026-11-23/README.md). Implementation and independent review are local file-bound states. Hosted CI, complete application builds, protected promotion, actual users/devices, RF/power/sensor behavior and deployment remain separately evidenced. No paid service, purchase, external messaging, production mutation or automatic Copilot invocation was authorized by this work.
 
 **Next owners:** application maintainers execute current-candidate CI and measured runtime journeys; independent reviewers assess exact results; the authorized release owner controls promotion. Preserve minimal prepared operation and extend capability through optional bearers/hardware.
+
+
+## 2026-11-23 — SPOC Perplexity retirement source candidate
+
+Before: the two mirrored SPOC helpers selected `pplx` by default and attempted provider-SDK URL retrieval before their direct source path. Actual manual invocation or billed use was not established. Terry's Perplexity retirement instruction authorizes the bounded source correction; production remains HOLD.
+
+Changed: remove the SDK extraction/acquisition paths, default to the existing local Ollama route, retain explicit OpenAI-compatible extraction, reject known retired selections before source/store/transport, and disable redirects. Recognized OpenRouter requests opt out of the web plugin and reject the online shortcut; account locks remain unverified. Preserve provenance, quote/typed-predicate checks, aliases, conflict review and local query/export. Add identical offline native tests to both mirrors and a read-only PR workflow.
+
+Proof and scope: see [SPOC retirement assurance](assurance/SPOC_PERPLEXITY_RETIREMENT_2026-11-23.md). The task evidence receipt binds source, test, workflow and documentation bytes to each draft head and records actual native execution, hosted CI and separate independent review. Hashes are not execution or signed provenance. No runtime synchronization, deployment, credential mutation or paid inference is performed. Local Ollama availability and live search/AI quality remain unverified.
+
+Owners and closure: the builder prepares the matching source candidates; the independent reviewer checks their exact identities and synthetic execution; repository maintainers own drift checks, runtime prerequisites and an authorized release journey. Terry retains consequential release authority. Any rollback requires review and preserves this correction record.
