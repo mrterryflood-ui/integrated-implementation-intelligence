@@ -1,0 +1,175 @@
+{
+  "schema_version": "0.3",
+  "status": "proposal_stage_variable_reservation_and_resolution_limited_tolerance",
+  "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint S809, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+  "supersedes_proposal_only": "comparability-contract.v0.2.json is NOT modified or deleted by this file. v0.2 remains in force until an accountable owner adopts or rejects this proposal.",
+  "change_from_0_2": [
+    "stage_variable_state becomes a four-state enum; the executed field is null by design because the publisher reserves substitution (^ footnote, third sentence, quoted below)",
+    "share_rate_tolerance_pp becomes a resolution-anchored rule; a fixed 0.5 pp absolute margin is withdrawn as unusable for this pair because it is 1.836119510439 times the entire contrast",
+    "every assessment must print tolerance/contrast, and any assessment whose tolerance is at or above its contrast must be reported RESOLUTION_LIMITED, never as within tolerance",
+    "a within_system_control_distribution block is required for every two-county comparison",
+    "the ordering of the variable-layer threshold against the completeness pivot is recorded as a first-class field, because it decides which ledger row can close first"
+  ],
+  "publisher_authority": {
+    "locator": "State Cancer Profiles, Incidence Rates Table, Colon & Rectum (Late Stage^), 2019-2023, All Races, Both Sexes, All Ages, by county, stateFIPS=48 and stateFIPS=28",
+    "read_at": "2026-11-25T22:41Z",
+    "late_stage_footnote_verbatim": "^ Late Stage is defined as cases determined to be regional or distant. Due to changes in stage coding, Combined Summary Stage with Expanded Regional Codes (2004+) is used for data from Surveillance, Epidemiology, and End Results (SEER) databases and Merged Summary Stage is used for data from National Program of Cancer Registries databases. Due to the increased complexity with staging, other staging variables maybe used if necessary.",
+    "source_legend_verbatim": {
+      "1": "Source: National Program of Cancer Registries and Surveillance, Epidemiology, and End Results SEER*Stat Database - United States Department of Health and Human Services, Centers for Disease Control and Prevention and National Cancer Institute. Based on the 2025 submission.",
+      "7": "Source: SEER November 2025 submission."
+    },
+    "reservation_consequence": "The third sentence of the late-stage footnote permits the publisher to use other staging variables if necessary. The executed field is therefore not attestable from the publication for either county, and no further page reading can close it."
+  },
+  "stage_variable_state_enum": [
+    "DOCUMENTED_DEFAULT_WITH_PUBLISHER_RESERVATION",
+    "EXECUTED_FIELD_ATTESTED_BY_REGISTRY_EXTRACT",
+    "EXECUTED_FIELD_ATTESTED_BY_PUBLISHER_STATEMENT",
+    "NOT_TESTABLE_FROM_AVAILABLE_DATA"
+  ],
+  "records": [
+    {
+      "comparison_id": "hinds-harris-crc-2019-2023",
+      "comparison_status": "RESOLUTION_LIMITED",
+      "claim_level": "descriptive",
+      "causal_harm_established": false,
+      "cells": {
+        "hinds": {
+          "marker": "2",
+          "source": "NPCR 2025 submission",
+          "rate_per_100k": 29.9,
+          "ci": [
+            26.8,
+            33.2
+          ],
+          "ci_rank": [
+            39,
+            18,
+            58
+          ],
+          "average_annual_late": 75,
+          "percent_late": 63.7
+        },
+        "harris": {
+          "marker": "7",
+          "source": "SEER November 2025 submission",
+          "rate_per_100k": 23.9,
+          "ci": [
+            23.3,
+            24.6
+          ],
+          "ci_rank": [
+            127,
+            101,
+            138
+          ],
+          "average_annual_late": 1098,
+          "percent_late": 63.4
+        }
+      },
+      "contrast_pp": 0.272313429032,
+      "stage_variable_state": "DOCUMENTED_DEFAULT_WITH_PUBLISHER_RESERVATION",
+      "stage_variable": {
+        "hinds": {
+          "documented_default": "NPCR Merged Summary Stage; 2018+ leg is the directly assigned Summary Stage 2018, NAACCR item 764",
+          "executed_field": null
+        },
+        "harris": {
+          "documented_default": "SEER CSS-ERC (2004+); 2018+ leg is the Derived Summary Stage 2018, NAACCR item 762",
+          "executed_field": null
+        },
+        "reservation": "publisher may use other staging variables if necessary; the executed field is null by design and not by omission",
+        "closure_requires": "registry extract naming the item used, or a publisher statement that the reservation was not exercised for these cells"
+      },
+      "resolution": {
+        "one_case_pp": {
+          "hinds": 0.169779286927,
+          "harris": 0.011547344111
+        },
+        "contrast_in_cases": {
+          "hinds": 1.603926096998,
+          "harris": 23.58234295416
+        },
+        "printed_cell_envelope_pp": [
+          0.2,
+          0.4
+        ],
+        "variable_layer_sign_flip_envelope_harris_cases": [
+          16.125636672326,
+          30.402376910017
+        ],
+        "completeness_pivot_pp": 0.4037778,
+        "completeness_pivot_source": "carried from sprint S807; not re-derived in S809",
+        "completeness_pivot_harris_cases": 34.96715748,
+        "ordering_margin_harris_cases": 4.564780569983,
+        "ordering_statement": "the stage-variable offset binds before the staging-completeness pivot at every admissible pair on the stated grid, so closing the completeness question alone cannot sign this contrast",
+        "ordering_caveat": "robust only to a pivot error below 4.5648 Harris cases; the pivot's uncertainty is not quantified in S807's record"
+      },
+      "share_rate_tolerance_rule": {
+        "rule": "tolerance_pp = k * (100 / min(all_stage_denominators)), with k declared and justified, and tolerance/contrast printed beside every assessment",
+        "k_adopted": null,
+        "state": "PROPOSED_NOT_RATIFIED",
+        "evaluation_for_this_pair": {
+          "k1_pp": 0.169779286927,
+          "k1_over_contrast": 0.62347012239,
+          "k2_pp": 0.339558573854,
+          "k2_over_contrast": 1.24694024478,
+          "fixed_0_5_pp_over_contrast": 1.836119510439,
+          "verdict": "only a single-case floor is discriminating in form, and it is defeated by the 2.38 Hinds-case completeness pivot; the pair is RESOLUTION_LIMITED"
+        },
+        "withdrawn_basis": "0.5 pp fixed margin justified against 0.1603448276 pp (Hinds) and 0.2052631579 pp (Harris) cited to S525-C2: neither is one case at an integer denominator (623.66 and 487.18 implied denominators) and neither appears in Q04's stored evidence, verdict or correction text"
+      },
+      "within_system_control_distribution": {
+        "required_fields": [
+          "n",
+          "p25",
+          "median",
+          "p75",
+          "iqr",
+          "contrast_over_iqr"
+        ],
+        "texas_counties_marker7_2019_2023": {
+          "n": 179,
+          "p10": 54.74,
+          "p25": 57.95,
+          "median": 61.5,
+          "p75": 65.25,
+          "p90": 69.8,
+          "mean": 62.0167597765,
+          "sd": 6.4969438453,
+          "iqr": 7.3,
+          "contrast_over_iqr": 26.807344852412
+        },
+        "mississippi_counties_marker2_2019_2023": {
+          "n": 75,
+          "p10": 52.82,
+          "p25": 60.1,
+          "median": 64.5,
+          "p75": 67.8,
+          "p90": 72.26,
+          "mean": 63.436,
+          "sd": 7.5265052369,
+          "iqr": 7.7,
+          "contrast_over_iqr": 28.276240460763
+        },
+        "pilot_percentile_in_own_state": {
+          "harris": 65.921787709497,
+          "hinds": 43.333333333333
+        },
+        "state_median_gap_pp": 3,
+        "state_median_gap_over_contrast": 11.016717062635,
+        "suppression_caveat": "counties suppressed at the 16-record floor (75 of 254 in Texas, 7 of 82 in Mississippi) are excluded by construction; the distribution is of counties large enough to publish a percent"
+      },
+      "inference": "the near-identity of the two cells is 1/27 of the within-system IQR and cannot be read as evidence of comparable care delivery, comparable constructs or equal system performance; it also cannot be read as evidence of equality, only of indistinguishability at the published grain",
+      "follow_up_completion_after_abnormal_test": {
+        "state": "UNKNOWN",
+        "definition": "numerator, individuals with an abnormal screening-indication colorectal test who had a completed diagnostic colonoscopy with pathology documented within 180 days of the abnormal result; denominator, individuals with an abnormal screening-indication colorectal test in the same window; exclusions named in advance; a test ordered does not populate the numerator"
+      }
+    }
+  ],
+  "record_defects": [
+    "D-S809-1 Q04's ledger closure_test column holds 200 characters and ends mid-sentence",
+    "D-S809-2 the tolerance basis cites S525-C2 numbers no longer recoverable from Q04's stored fields",
+    "D-S809-3 the SEER registry roster page was not read; footnote 7 is the authority used for the Harris marker"
+  ],
+  "validation": "no validator was executed; this file is a proposal and no test, lint, type check or CI leg was run by the authoring sprint"
+}
