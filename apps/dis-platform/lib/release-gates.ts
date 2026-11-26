@@ -6,12 +6,17 @@ export type ReleaseEnvironment = {
   DIS_TRUSTED_UPLOAD_SUBJECTS?: string;
 };
 
-/**
- * A Vercel production deployment is not an identity release when configured
- * with Clerk development credentials. Never return or log key material.
- */
+/** The alternate host must enforce production gates, even if stale Vercel
+ * preview variables exist. Local development and existing Vercel previews
+ * retain their separate test behavior. */
+export function productionRelease(env: ReleaseEnvironment): boolean {
+  return env.DIS_HOST_PRODUCTION === "1" || env.VERCEL_ENV === "production" ||
+    (env.VERCEL_ENV === undefined && env.NODE_ENV === "production");
+}
+
+/** Production requires live identity credentials. Never return or log keys. */
 export function productionIdentityBlocked(env: ReleaseEnvironment): boolean {
-  if (env.VERCEL_ENV !== "production") return false;
+  if (!productionRelease(env)) return false;
   return !(
     env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY?.startsWith("pk_live_") &&
     env.CLERK_SECRET_KEY?.startsWith("sk_live_")
@@ -28,7 +33,7 @@ export function trustedProductionUploader(
   env: ReleaseEnvironment,
 ): boolean {
   if (!subjectId || productionIdentityBlocked(env)) return false;
-  if (env.VERCEL_ENV !== "production") return true;
+  if (!productionRelease(env)) return true;
   const ids = new Set(
     (env.DIS_TRUSTED_UPLOAD_SUBJECTS || "")
       .split(",")
