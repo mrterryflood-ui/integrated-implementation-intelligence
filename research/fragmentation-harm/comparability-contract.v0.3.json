@@ -153,7 +153,17 @@
         },
         "pilot_percentile_in_own_state": {
           "harris": 65.921787709497,
-          "hinds": 43.333333333333
+          "hinds": 43.333333333333,
+          "estimator": "midrank county-count CDF within the state's published-county set: 100 * (counties strictly below + 0.5 * counties tied) / n",
+          "estimator_reproduction": {
+            "harris_rank_implied": 117.99999999999962,
+            "harris_n": 179,
+            "hinds_midrank_implied": 32.49999999999975,
+            "hinds_n": 75,
+            "max_abs_error": 3.8e-13
+          },
+          "identifiability_caveat": "not identifiable from the published quantiles alone: on the same printed cells a piecewise-linear reading gives harris 62.632794457273, hinds 45.268367031949 and a normal reading from the printed mean and sd gives harris 58.430005636361, hinds 51.399064868624, so the field is only reproducible against the county list, which is not in this record; do not quote it as a published figure",
+          "added_by": "AI review, sprint S841, ledger item Q04 - estimator named after S836 recorded the two fields as unreproduced"
         },
         "state_median_gap_pp": 3,
         "state_median_gap_over_contrast": 11.016717062635,
@@ -167,6 +177,7 @@
     }
   ],
   "record_defects": [
+    "D-S841-1 pilot_percentile_in_own_state carried no estimator until S841; the two values reproduce exactly as a midrank county-count CDF (118/179 and 32.5/75) and not under interpolation of the printed quantiles, and the county list behind them is not in the record",
     "D-S809-1 Q04's ledger closure_test column holds 200 characters and ends mid-sentence",
     "D-S809-2 the tolerance basis cites S525-C2 numbers no longer recoverable from Q04's stored fields",
     "D-S809-3 the SEER registry roster page was not read; footnote 7 is the authority used for the Harris marker"
