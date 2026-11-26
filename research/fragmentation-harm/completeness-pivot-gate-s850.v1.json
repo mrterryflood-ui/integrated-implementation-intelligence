@@ -1,0 +1,126 @@
+{
+  "schema": "s850-completeness-pivot-correction.v1",
+  "status": "CORRECTION_PROPOSAL_NOT_RATIFIED",
+  "ledger_item": "Q04",
+  "sprint": "S850",
+  "authored_at": "2026-11-26T19:20Z",
+  "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint S850, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+  "does_not_modify": [
+    "research/fragmentation-harm/comparability-contract.v0.3.json is NOT modified or deleted by this file",
+    "comparability-contract.v0.2.json is NOT modified or deleted by this file",
+    "no baseline report, register or prior receipt is modified"
+  ],
+  "model": "q_j = s_j * (1 - u_j), where s_j is the carried printed share and u_j the unstaged fraction. This is the record's own model, from which the withdrawn pivot was derived.",
+  "carried_inputs": {
+    "hinds_late": 375,
+    "hinds_total": 589,
+    "harris_late": 5490,
+    "harris_total": 8660,
+    "harris_anchor_unstaged_fraction": 0.06,
+    "hinds_inventory_ceiling_fraction": "0.363327674024",
+    "harris_inventory_ceiling_fraction": "0.366050808314",
+    "note": "all decimals below are decimal strings produced by exact rational arithmetic over BigInt at 12 dp; no floating point"
+  },
+  "withdrawn_fields_in_v0_3": [
+    {
+      "path": "records[0].resolution.completeness_pivot_pp",
+      "value_withdrawn": 0.4037778,
+      "reason": "C-S850-1, C-S850-3, C-S850-6: the field is a threshold on the unstaged-share differential, not a quantity in the same variable as contrast_pp, and its stated zero crossing is wrong"
+    },
+    {
+      "path": "records[0].resolution.completeness_pivot_harris_cases",
+      "value_withdrawn": 34.96715748,
+      "reason": "C-S850-5: seven-decimal rounding propagated into a case count; exact value 34.967159304925, gap 0.000001824925 Harris cases"
+    },
+    {
+      "path": "records[0].resolution.ordering_statement",
+      "value_withdrawn": "the stage-variable offset binds before the staging-completeness pivot at every admissible pair on the stated grid, so closing the completeness question alone cannot sign this contrast",
+      "reason": "C-S850-4: withdrawn. The ordering conclusion survives on S844 F2's ground (both cells execute Summary Stage 2018 from diagnosis year 2018), not on any pivot margin"
+    },
+    {
+      "path": "records[0].resolution.ordering_caveat",
+      "value_withdrawn": "robust only to a pivot error below 4.5648 Harris cases",
+      "reason": "C-S850-4: withdrawn with the ordering statement"
+    },
+    {
+      "path": "records[0].share_rate_tolerance_rule.evaluation_for_this_pair.verdict (partial)",
+      "value_withdrawn": "defeated by the 2.38 Hinds-case completeness pivot",
+      "reason": "C-S850-2: on the corrected differential the figure is 2.368143 Hinds cases, and the pivot is not a single case count"
+    }
+  ],
+  "replacement": {
+    "sign_rule": "q_H > q_R  <=>  u_H < 1 - (1 - u_R) / r,  with r = s_H / s_R = 1.004295508735",
+    "differential_form": "q_H > q_R  <=>  u_H - u_R < (1 - u_R) * (r - 1) / r",
+    "differential_form_note": "the left side is u_H - u_R, not u_R - u_H, and the right side divides by r rather than multiplying by it; both errors appear in the withdrawn S807/S810 statement",
+    "zero_crossing_pct_at_anchor": "6.402050808314",
+    "zero_crossing_pct_at_uR_zero": "0.427713625866",
+    "record_stated_crossing_pct": "5.596222178927",
+    "contrast_at_record_stated_crossing_pp": "0.513048787810",
+    "contrast_at_record_stated_crossing_ratio_to_printed": "1.884037778211",
+    "tolerated_differential_pp_at_anchor": "0.402050808314",
+    "pivot_over_contrast_ratio": "1.482768670310",
+    "pivot_over_contrast_ratio_identity": "(1 - u_R) / s_R; a units artefact, not a margin",
+    "commensurable_equal_completeness_effect_pp": "0.255974623290",
+    "identified_set_pp": [
+      "-22.859754102193",
+      "23.478074833701"
+    ],
+    "identified_set_width_pp": "46.337828935894",
+    "sign_preserved_fraction_of_admissible_box": "0.513253498021",
+    "sign_preserved_fraction_bruteforce_grid_check": "0.513243 on 4004001 cells",
+    "pool_table": [
+      {
+        "u_harris_pct": "0",
+        "exact_crossing_u_hinds_pct": "0.427713625866",
+        "record_stated_crossing_u_hinds_pct": "-0.429550873482",
+        "tolerated_differential_pp": "0.427713625866"
+      },
+      {
+        "u_harris_pct": "6",
+        "exact_crossing_u_hinds_pct": "6.402050808314",
+        "record_stated_crossing_u_hinds_pct": "5.596222178927",
+        "tolerated_differential_pp": "0.402050808314"
+      },
+      {
+        "u_harris_pct": "10",
+        "exact_crossing_u_hinds_pct": "10.384942263279",
+        "record_stated_crossing_u_hinds_pct": "9.613404213866",
+        "tolerated_differential_pp": "0.384942263279"
+      },
+      {
+        "u_harris_pct": "25",
+        "exact_crossing_u_hinds_pct": "25.320785219400",
+        "record_stated_crossing_u_hinds_pct": "24.677836844889",
+        "tolerated_differential_pp": "0.320785219400"
+      },
+      {
+        "u_harris_pct": "36.605080831409",
+        "exact_crossing_u_hinds_pct": "36.876229538800",
+        "record_stated_crossing_u_hinds_pct": "36.332767402377",
+        "tolerated_differential_pp": "0.271148707391"
+      }
+    ],
+    "infeasibility_note": "the withdrawn formula returns a negative unstaged share (-0.429550873482 pct) at u_R = 0, which is a category error; the exact crossing there is +0.427713625866 pct",
+    "ceiling_note": "at the Harris ceiling the crossing (36.876229538800 pct) exceeds the Hinds ceiling (36.332767402377 pct), so no Hinds value inverts the sign at maximum Harris incompleteness",
+    "denominator_convention_open": "C-S850-6: if the published percent divides all cases rather than stage-known cases (S820 F8), then q_j = s_j, the completeness term is identically zero and the pivot is vacuous rather than mis-signed. This file does not resolve the convention and does not claim to."
+  },
+  "mechanism": "measurement artefact; no ancestry-linked or biomarker variable in any arithmetic; race a variable in nothing; the county label proxies registry programme, submission product and area poverty",
+  "pilot_primary_outcome": "completed diagnostic follow-up at 180 days after an abnormal screening-indication colorectal test; UNMEASURED at both counties; a test ordered is not a completed action",
+  "falsification_condition": "the printed sign is falsified by any admissible pair with u_H >= 1 - (1 - u_R) / r; at the Harris anchor that is u_H >= 6.402050808314 pct",
+  "gate": {
+    "artefact": "2026-11-26_S850_Q04_completeness_pivot_gate_v1.cjs",
+    "bytes": 9092,
+    "controls": "24 numeric plus 8 structural, evaluated in full before any result byte",
+    "mutants_refused": "8 of 8 at exit 63 with zero stdout",
+    "unknown_flag": "exit 7, zero stdout",
+    "determinism": "three byte-identical runs at stdout md5 767de5ab3c5ce67a895b64558c5bf720 under node v22.23.2, offline, no clock, no random source",
+    "independent_route": "awk double precision agreeing on 15 of 15 quantities to twelve decimals; 4004001-cell grid check on the sign-region area"
+  },
+  "unrun": [
+    "every repository test, lint, type check, build, CI leg and deployment: UNRUN, none attempted, nothing cloned",
+    "no external source check was made this sprint; every number derives from the record's own carried cells",
+    "no registry extract, no data-use agreement, no case-level record, no measured unstaged fraction at either county"
+  ],
+  "external_checks_used": 0,
+  "repository_reads_used": 1
+}
