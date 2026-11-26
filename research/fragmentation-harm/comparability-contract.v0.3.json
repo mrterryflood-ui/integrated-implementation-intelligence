@@ -125,7 +125,7 @@
           "median",
           "p75",
           "iqr",
-          "contrast_over_iqr"
+          "iqr_over_contrast"
         ],
         "texas_counties_marker7_2019_2023": {
           "n": 179,
@@ -137,7 +137,7 @@
           "mean": 62.0167597765,
           "sd": 6.4969438453,
           "iqr": 7.3,
-          "contrast_over_iqr": 26.807344852412
+          "iqr_over_contrast": 26.807344852412
         },
         "mississippi_counties_marker2_2019_2023": {
           "n": 75,
@@ -149,7 +149,7 @@
           "mean": 63.436,
           "sd": 7.5265052369,
           "iqr": 7.7,
-          "contrast_over_iqr": 28.276240460763
+          "iqr_over_contrast": 28.276240460763
         },
         "pilot_percentile_in_own_state": {
           "harris": 65.921787709497,
@@ -177,6 +177,7 @@
     }
   ],
   "record_defects": [
+    "D-S841-2 the within_system_control_distribution field was named contrast_over_iqr while holding iqr/contrast (26.807344852412 and 28.276240460763); renamed iqr_over_contrast in S841, value unchanged, because a consumer reading the name would invert the ratio by a factor of 718.5",
     "D-S841-1 pilot_percentile_in_own_state carried no estimator until S841; the two values reproduce exactly as a midrank county-count CDF (118/179 and 32.5/75) and not under interpolation of the printed quantiles, and the county list behind them is not in the record",
     "D-S809-1 Q04's ledger closure_test column holds 200 characters and ends mid-sentence",
     "D-S809-2 the tolerance basis cites S525-C2 numbers no longer recoverable from Q04's stored fields",
