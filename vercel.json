@@ -1,7 +1,5 @@
 {
   "git": {
-    "deploymentEnabled": {
-      "internal-replit-host-preflight": false
-    }
+    "deploymentEnabled": false
   }
 }
