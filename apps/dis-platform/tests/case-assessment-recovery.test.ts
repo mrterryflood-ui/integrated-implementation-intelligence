@@ -10,9 +10,12 @@ const id="00000000-0000-4000-8000-000000000001",eventId="00000000-0000-4000-8000
 const failure=(status:number)=>(e:unknown)=>e instanceof AssessmentRecoveryError&&e.status===status;
 
 test("assessment restoration rejects missing and foreign browser origins",()=>{
- validateAssessmentOrigin(new Request("https://example.org/api/cases/restore",{headers:{origin:"https://example.org"}}));
- for(const origin of [undefined,"null","https://other.example.org","http://example.org"])
-  assert.throws(()=>validateAssessmentOrigin(new Request("https://example.org/api/cases/restore",{headers:origin?{origin}:{}})),failure(403));
+ const previous=process.env.DIS_PUBLIC_ORIGIN;process.env.DIS_PUBLIC_ORIGIN='https://example.org';
+ try{
+  validateAssessmentOrigin(new Request("https://example.org/api/cases/restore",{headers:{host:'example.org',origin:"https://example.org"}}));
+  for(const origin of [undefined,"null","https://other.example.org","http://example.org"])
+   assert.throws(()=>validateAssessmentOrigin(new Request("https://example.org/api/cases/restore",{headers:{host:'example.org',...(origin?{origin}:{})}})),failure(403));
+ }finally{if(previous===undefined)delete process.env.DIS_PUBLIC_ORIGIN;else process.env.DIS_PUBLIC_ORIGIN=previous;}
 });
 
 test("recovery accepts only an archived event reference and exact current integer version",()=>{

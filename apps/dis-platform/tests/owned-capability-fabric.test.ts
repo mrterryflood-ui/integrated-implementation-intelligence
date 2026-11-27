@@ -90,7 +90,7 @@ test("private server endpoint is behind identity, quota, origin and separate con
  assert.match(proxy,/\/api\/capability-fabric\(\.\*\)/);
  assert.match(route,/productionIdentityBlocked\(process\.env\)/);
  assert.match(route,/await auth\(\)/);
- assert.match(route,/Origin mismatch/);
+ assert.match(route,/sameOriginRequestFailure\(request,\{allowMissingOrigin:true\}\)/);
  assert.match(route,/externalConsent!==true/);
  assert.match(route,/dis_consult_usage/);
  assert.match(studio,/Check permitted intelligence/);

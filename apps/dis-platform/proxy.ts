@@ -1,6 +1,7 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 import { productionIdentityBlocked, RELEASE_NOTICE } from "./lib/release-gates";
+import {canonicalRequestOrigin,RequestOriginError} from './lib/request-origin';
 
 const protectedPages = createRouteMatcher(["/workspace(.*)"]);
 const privateRoutes = createRouteMatcher([
@@ -27,6 +28,14 @@ const authenticatedProxy = clerkMiddleware(async (auth, req) => {
 });
 
 export default function proxy(req: NextRequest, event: NextFetchEvent) {
+  // The owned apex serves public links too. Canonicalize safe navigation before
+  // relative API requests; mutations must still pass the exact www Host guard.
+  if ((req.method === 'GET' || req.method === 'HEAD') && req.headers.get('host') === 'dynamicintel.io' &&
+      (process.env.DIS_PUBLIC_ORIGIN === 'https://www.dynamicintel.io' || process.env.DIS_PUBLIC_ORIGIN === 'https://www.dynamicintel.io/')) {
+    const destination = new URL('https://www.dynamicintel.io');
+    destination.pathname = req.nextUrl.pathname; destination.search = req.nextUrl.search;
+    return NextResponse.redirect(destination, 308);
+  }
   // Vendor metadata is public and contains no user, organization, or token data.
   if (req.method === "GET" && req.nextUrl.pathname === "/api/integrations/decisions/client") return NextResponse.next();
   if (productionIdentityBlocked(process.env)) {
@@ -39,7 +48,8 @@ export default function proxy(req: NextRequest, event: NextFetchEvent) {
           { status: 503, headers: { "Cache-Control": "no-store" } },
         );
       }
-      return NextResponse.redirect(new URL("/?workspace=pending", req.url));
+      try{return NextResponse.redirect(new URL("/?workspace=pending", canonicalRequestOrigin(req)));}
+      catch(error){return NextResponse.json({error:error instanceof RequestOriginError?error.message:'Public DIS address unavailable'},{status:error instanceof RequestOriginError?error.status:503,headers:{'Cache-Control':'no-store'}});}
     }
     // Public-only documentation, local draft generation, and read-only tools
     // may run; private APIs remain fail-closed without a Clerk handshake.

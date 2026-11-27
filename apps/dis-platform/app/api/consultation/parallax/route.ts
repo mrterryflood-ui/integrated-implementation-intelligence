@@ -3,6 +3,7 @@ import {neon} from "@neondatabase/serverless";
 import {productionIdentityBlocked} from "../../../../lib/release-gates";
 import {compareRpliceParallax, RpliceBridgeError, validatePerspectives} from "../../../../lib/rplice-adapter";
 import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
+import {sameOriginRequestFailure} from '../../../../lib/request-origin';
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -15,13 +16,7 @@ export async function POST(request: Request) {
   if (size > 24_000) return Response.json({error:"Request too large"},{status:413});
   if (!request.headers.get("content-type")?.includes("application/json"))
     return Response.json({error:"JSON request required"},{status:415});
-  const origin = request.headers.get("origin");
-  if (origin) {
-    try {
-      if (new URL(origin).origin !== new URL(request.url).origin)
-        return Response.json({error:"Origin mismatch"},{status:403});
-    } catch { return Response.json({error:"Invalid request origin"},{status:403}); }
-  }
+  const originError=sameOriginRequestFailure(request,{allowMissingOrigin:true});if(originError)return originError;
   let body:any;try{body=await readBoundedJsonRequest(request,24000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e)});}
   if (!body || typeof body !== "object")
     return Response.json({error:"Invalid input"},{status:400});

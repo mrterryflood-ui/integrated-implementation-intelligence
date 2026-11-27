@@ -8,6 +8,7 @@ import {randomUUID} from "node:crypto";
 import {admitCaseReport} from "../../../lib/research-case-admission";
 import {buildResearchWorkflowCase,reviseResearchWorkflowReport} from "../../../lib/research-workflow";
 import {CASE_RESEARCH_REVISION_SQL} from "../../../lib/research-case-revision";
+import {sameOriginRequestFailure} from '../../../lib/request-origin';
 export const runtime="nodejs";
 const uuid=/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i;
 async function context(){const {userId}=await auth();if(!userId)return null;if(!process.env.DIS_DATABASE_URL)throw Error("Data unavailable");return {userId,sql:neon(process.env.DIS_DATABASE_URL)}}
@@ -34,7 +35,7 @@ export async function POST(request:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
  let input=await readBoundedCaseJson(request);
  if(input.researchWorkflow!==undefined){
-  if(request.headers.get("origin")!==new URL(request.url).origin)return Response.json({error:"Same-origin research save required"},{status:403});
+  const originError=sameOriginRequestFailure(request);if(originError)return originError;
   if(Object.keys(input).some(k=>!["workspaceId","researchWorkflow"].includes(k)))return Response.json({error:"Research saves accept workflow inputs and a workspace only"},{status:400});
   input={workspaceId:input.workspaceId,...buildResearchWorkflowCase(input.researchWorkflow)};
  }else if(input.report!==undefined){input={...input,report:admitCaseReport(input.report)};}
@@ -62,7 +63,7 @@ export async function PATCH(request:Request){try{
  const ctx=await context();if(!ctx)return Response.json({error:"Sign in required"},{status:401});
  const input=await readBoundedCaseJson(request),id=String(input.id||""),version=Number(input.version);
  if(input.researchWorkflow!==undefined){
-  if(request.headers.get("origin")!==new URL(request.url).origin)return Response.json({error:"Same-origin research revision required"},{status:403});
+  const originError=sameOriginRequestFailure(request);if(originError)return originError;
   if(Object.keys(input).some(k=>!["id","version","researchWorkflow"].includes(k))||!uuid.test(id)||typeof input.version!=="number"||!Number.isSafeInteger(version)||version<1||version>=2147483647)return Response.json({error:"Research revision requires exact case ID, integer version and typed inputs"},{status:400});
   const prior=await ctx.sql.transaction([ctx.sql`SELECT set_config('dis.subject_id',${ctx.userId},true)`,ctx.sql`SELECT CASE WHEN octet_length(report::text)<=${CASE_REPORT_MAX_DB_BYTES} THEN report ELSE NULL END AS report FROM dis_casework WHERE id=${id}::uuid AND version=${version}`]);
   if(!prior[1].length)return Response.json({error:"Case changed or access denied. Reload before retrying."},{status:409});

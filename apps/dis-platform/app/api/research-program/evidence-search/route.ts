@@ -4,6 +4,7 @@ import {research} from "../../../../lib/council-runtime";
 import {retainedAbstractSummary} from "../../../../lib/literature-lineage";
 import {looksLikePrivateRecord} from "../../../../lib/answer-release-policy";
 import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
+import {sameOriginRequestFailure} from '../../../../lib/request-origin';
 
 export const runtime="nodejs";
 export const maxDuration=15;
@@ -19,12 +20,7 @@ export async function POST(request:Request){
     return Response.json({error:"Research query too large."},{status:413,headers});
   if(!request.headers.get("content-type")?.includes("application/json"))
     return Response.json({error:"JSON content required."},{status:415,headers});
-  const origin=request.headers.get("origin");
-  if(origin){
-    try{if(new URL(origin).origin!==new URL(request.url).origin)
-      return Response.json({error:"Request origin mismatch."},{status:403,headers});}
-    catch{return Response.json({error:"Invalid request origin."},{status:403,headers});}
-  }
+  const originError=sameOriginRequestFailure(request,{allowMissingOrigin:true});if(originError)return originError;
   let body:any;try{body=await readBoundedJsonRequest(request,2000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e),headers});}
   const query=body&&typeof body==="object"&&typeof body.query==="string"?body.query.trim():"";
   if(query.length<8||query.length>200||looksLikePrivateRecord(query))

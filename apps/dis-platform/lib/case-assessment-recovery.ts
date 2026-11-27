@@ -1,4 +1,5 @@
 import {CASE_PLAYBOOK_MAX_DB_BYTES,CASE_REPORT_MAX_CHARS,CASE_REPORT_MAX_DB_BYTES,CasePayloadError,serializeCaseReport} from "./case-payload-capacity";
+import {assertSameOriginRequest,RequestOriginError} from './request-origin';
 
 /** Restore only a report already archived by this case. This is recovery, not validation. */
 export const CASE_RECOVERY_MAX_REPORT_BYTES=CASE_REPORT_MAX_DB_BYTES;
@@ -9,7 +10,7 @@ export class AssessmentRecoveryError extends Error{
  constructor(message:string,readonly status:400|403|409|413|503){super(message);this.name="AssessmentRecoveryError";}
 }
 export function validateAssessmentOrigin(request:Request):void{
- if(request.headers.get("origin")!==new URL(request.url).origin)throw new AssessmentRecoveryError("Same-origin recovery request required",403);
+ try{assertSameOriginRequest(request);}catch(error){if(error instanceof RequestOriginError)throw new AssessmentRecoveryError(error.message,error.status);throw error;}
 }
 export function assessmentRestoreRequest(input:unknown):AssessmentRestoreRequest{
  if(!input||typeof input!=="object"||Array.isArray(input))throw new AssessmentRecoveryError("Case recovery request required",400);
