@@ -35,13 +35,29 @@ invariants:
 ## Workflow (every project)
 1. **Pick a profile** (or add a small one) in `PROFILES`. Keep the predicate lists short.
 2. **Ingest:** `python spoc_kg.py ingest --db <project>_kg.sqlite --url <url> --tier <TIER> --profile <profile>`.
-   The backend can be `ollama` (free and local, llama3.2, as in the article), `openai`
-   (any compatible endpoint) or `pplx`.
+   The default backend is `ollama` at `http://localhost:11434` with `llama3.2`; the operator
+   must have it installed and available. `OLLAMA_URL` remains an explicit override.
+   Existing `openai` support requires explicit `--backend openai` or `SPOC_BACKEND=openai`
+   and the chosen compatible endpoint/key. It can incur that provider's charges. There is
+   no automatic provider fallback. Perplexity/PPLX/Sonar selections are retired and rejected
+   before ingestion. Known OpenRouter hosts receive a web-plugin opt-out and cannot select
+   `:online`; account locks and opaque proxy routing still require separate verification.
 3. **Review:** `conflicts`, unmapped predicates and `rejections`. Add aliases and adjust
    constraints, then run `revalidate()`.
 4. **Use:** advisors query quads first (deterministic), then fall back to passage retrieval,
    and label the result.
 5. **Record:** add the ingest counts (kept, rejected, unmapped, conflicts) to the Build Ledger.
+
+URL acquisition uses direct `requests` and basic HTML-tag removal, without an AI provider
+SDK. It does not render a browser or parse PDFs. Title/publication date stay unknown unless
+the operator supplies them. Only declared text/HTML or textual JSON/XML content types are
+accepted. Missing or unsupported types and detected PDF/NUL binary content fail before
+extraction; use an extracted UTF-8 `--file` for those sources. HTTP failures and redirects are rejected; select the final
+non-retired source or model URL explicitly. `query`, `conflicts` and JSONL/CSV `export` stay
+local even when the configured ingestion backend is unavailable or retired.
+
+See [SPOC retirement assurance](../../docs/assurance/SPOC_PERPLEXITY_RETIREMENT_2026-11-23.md)
+for the bounded source change, native tests and unverified runtime/release conditions.
 
 ## Where it applies (by product)
 Product-specific profiles live in the product repos. This list shows intended use only:
