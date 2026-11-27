@@ -6,12 +6,15 @@ export type ReleaseEnvironment = {
   DIS_TRUSTED_UPLOAD_SUBJECTS?: string;
 };
 
-/** The alternate host must enforce production gates, even if stale Vercel
- * preview variables exist. Local development and existing Vercel previews
- * retain their separate test behavior. */
+/** Unknown or missing deployment identity is production-restricted.
+ * Explicit local development/test and existing Vercel previews retain their
+ * separate behavior. An explicit alternate-host flag takes precedence. */
 export function productionRelease(env: ReleaseEnvironment): boolean {
-  return env.DIS_HOST_PRODUCTION === "1" || env.VERCEL_ENV === "production" ||
-    (env.VERCEL_ENV === undefined && env.NODE_ENV === "production");
+  if (env.DIS_HOST_PRODUCTION !== undefined) return true;
+  if (env.VERCEL_ENV !== undefined) {
+    return env.VERCEL_ENV !== "preview" && env.VERCEL_ENV !== "development";
+  }
+  return env.NODE_ENV !== "test" && env.NODE_ENV !== "development";
 }
 
 /** Production requires live identity credentials. Never return or log keys. */

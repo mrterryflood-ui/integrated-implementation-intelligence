@@ -25,3 +25,14 @@ test('existing Vercel preview and local test behavior remains separate',()=>{
     assert.equal(trustedProductionUploader('fixture-a',{...env,...dev}),true);
   }
 });
+test('missing, unknown and contradictory deployment markers fail closed',()=>{
+  for(const env of [{},{NODE_ENV:''},{NODE_ENV:'staging'},{VERCEL_ENV:''},{VERCEL_ENV:'unknown',NODE_ENV:'test'},{DIS_HOST_PRODUCTION:'0',NODE_ENV:'development'},{DIS_HOST_PRODUCTION:'',VERCEL_ENV:'preview'},{VERCEL_ENV:'production',NODE_ENV:'test'}]){
+    assert.equal(productionRelease(env),true);
+    assert.equal(productionIdentityBlocked(env),true);
+    assert.equal(productionIdentityBlocked({...env,...dev}),true);
+    assert.equal(trustedProductionUploader('fixture-a',env),false);
+    assert.equal(trustedProductionUploader('fixture-a',{...env,...live}),false);
+    assert.equal(trustedProductionUploader('fixture-a',{...env,...live,DIS_TRUSTED_UPLOAD_SUBJECTS:'fixture-b'}),false);
+    assert.equal(trustedProductionUploader('fixture-a',{...env,...live,DIS_TRUSTED_UPLOAD_SUBJECTS:'fixture-a'}),true);
+  }
+});
