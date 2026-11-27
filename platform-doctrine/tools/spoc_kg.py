@@ -9,8 +9,8 @@ Unstructured Text with an LLM" (Iván Palomares Carrascosa, MachineLearningMaste
 
 What this version adds (Integrated Implementation Intelligence evidence discipline):
   1. Evidence binding: every fact must carry a verbatim quote from the source. A fact whose
-     quote is not found in the source text is REJECTED, not stored. This stops the LLM from
-     inventing facts.
+     quote is not found in the source text is REJECTED, not stored. Quote presence does not
+     prove that the quote supports the extracted fact; review remains necessary.
   2. Structured context: C = source_id. A provenance table records the URL, title, published
      date, retrieval date, tier (REGISTER, OFFICIAL-DAILY, OFFICIAL-ANNUAL,
      HEALTH-SURVEILLANCE, NEWS-REPORTED, RESEARCH, MODEL) and the extractor model.
@@ -22,8 +22,8 @@ What this version adds (Integrated Implementation Intelligence evidence discipli
   6. Conflict detection: the same (subject, predicate, qualifier) with different objects
      across contexts is surfaced, never silently resolved.
   7. Persistent SQLite store (or in-memory), with query and export to JSONL/CSV.
-  8. Pluggable LLM backend: `ollama` (free and local, as in the article), `openai` (any
-     OpenAI-compatible endpoint), or `pplx` (Perplexity Computer sandbox).
+  8. LLM backend: `ollama` (local endpoint by default) or explicitly selected `openai`.
+     Perplexity/PPLX/Sonar selections are retired. There is no automatic provider fallback.
 
 Usage:
   python spoc_kg.py ingest --db kg.sqlite --url https://... --tier NEWS-REPORTED --profile violence
@@ -34,6 +34,7 @@ Usage:
 """
 from __future__ import annotations
 import argparse, csv, datetime as dt, hashlib, json, os, re, sqlite3, sys, unicodedata
+from urllib.parse import unquote, urlsplit
 
 TIERS = ["REGISTER", "OFFICIAL-DAILY", "OFFICIAL-ANNUAL", "HEALTH-SURVEILLANCE",
          "NEWS-REPORTED", "RESEARCH", "MODEL", "INTERNAL"]
@@ -141,32 +142,92 @@ SCHEMA = {
 
 
 # ---------------------------------------------------------------- LLM backends
-def llm_json(prompt: str, backend: str, model: str | None) -> dict:
-    if backend == "ollama":  # the article's free local path
-        import requests
-        r = requests.post(os.environ.get("OLLAMA_URL", "http://localhost:11434") + "/api/generate",
-                          json={"model": model or "llama3.2", "prompt": prompt, "format": "json",
-                                "stream": False, "options": {"temperature": 0}}, timeout=600)
-        r.raise_for_status()
-        return json.loads(r.json()["response"])
-    if backend == "openai":  # any OpenAI-compatible endpoint
-        import requests
+def selection_forms(value: str | None):
+    """Bounded decoding for known selection names; this does not resolve opaque proxies."""
+    value = value or ""
+    for _ in range(4):  # original plus up to three URL-decoding passes
+        value = unicodedata.normalize("NFKC", value).casefold()
+        yield value
+        decoded = unquote(value)
+        if decoded == value:
+            break
+        value = decoded
+
+
+def reject_retired_selection(value: str | None):
+    """Reject known retired names without echoing endpoints, credentials or config."""
+    if any(re.search(r"(?<![a-z0-9])(?:perplexity|pplx|sonar)(?![a-z0-9])", form)
+           for form in selection_forms(value)):
+        raise ValueError("Perplexity/PPLX/Sonar selections are retired; choose a supported route explicitly")
+
+
+def reject_retired_source_url(url: str):
+    """Retire provider hosts without treating source path/query words as models."""
+    # Requests treats a literal backslash as an authority/path delimiter, before
+    # userinfo parsing. Match that boundary without decoding source path/query.
+    for form in selection_forms(urlsplit(url.replace("\\", "/")).hostname or ""):
+        host = form.rstrip(".")
+        if any(host == domain or host.endswith("." + domain)
+               for domain in ("perplexity.ai", "pplx.ai")):
+            raise ValueError("retired provider endpoint; supply the publisher URL")
+
+
+def is_openrouter_url(value: str) -> bool:
+    for form in selection_forms(value):
+        host = (urlsplit(form).hostname or "").rstrip(".")
+        if host == "openrouter.ai" or host.endswith(".openrouter.ai"):
+            return True
+    return False
+
+
+def llm_route(backend: str, model: str | None) -> tuple[str, str]:
+    """Validate before SDK import, credential lookup, source acquisition or store writes."""
+    reject_retired_selection(backend)
+    if backend == "ollama":
+        base = os.environ.get("OLLAMA_URL", "http://localhost:11434")
+        selected_model = model or "llama3.2"
+    elif backend == "openai":
         base = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        selected_model = model or "gpt-4o-mini"
+    else:
+        raise ValueError("unknown backend; choose ollama or openai explicitly")
+    reject_retired_selection(base)
+    reject_retired_selection(selected_model)
+    if backend == "openai" and is_openrouter_url(base):
+        if any(re.search(r":online(?:\b|$)", form) for form in selection_forms(selected_model)):
+            raise ValueError("OpenRouter online web-search shortcuts are disabled; choose a model explicitly")
+    return base, selected_model
+
+
+def check_response(response):
+    # A permitted endpoint must not redirect a request to a retired provider.
+    if 300 <= response.status_code < 400:
+        raise ValueError("redirects are disabled; configure the final non-retired URL explicitly")
+    response.raise_for_status()
+
+
+def llm_json(prompt: str, backend: str, model: str | None) -> dict:
+    base, selected_model = llm_route(backend, model)
+    import requests
+    if backend == "ollama":
+        r = requests.post(base + "/api/generate",
+                          json={"model": selected_model, "prompt": prompt, "format": "json",
+                                "stream": False, "options": {"temperature": 0}}, timeout=600,
+                          allow_redirects=False)
+        check_response(r)
+        return json.loads(r.json()["response"])
+    if backend == "openai":
+        payload = {"model": selected_model, "temperature": 0,
+                   "response_format": {"type": "json_object"},
+                   "messages": [{"role": "user", "content": prompt}]}
+        if is_openrouter_url(base):
+            # Account-level 'Prevent overrides' can supersede this; verify it separately.
+            payload["plugins"] = [{"id": "web", "enabled": False}]
         r = requests.post(base + "/chat/completions", timeout=600,
                           headers={"Authorization": "Bearer " + os.environ["OPENAI_API_KEY"]},
-                          json={"model": model or "gpt-4o-mini", "temperature": 0,
-                                "response_format": {"type": "json_object"},
-                                "messages": [{"role": "user", "content": prompt}]})
-        r.raise_for_status()
+                          json=payload, allow_redirects=False)
+        check_response(r)
         return json.loads(r.json()["choices"][0]["message"]["content"])
-    if backend == "pplx":  # Perplexity Computer sandbox
-        import pplx_sdk
-        res = pplx_sdk.llm.extract(items=[prompt], instruction="Follow the instructions in the item exactly.",
-                                   output_schema=SCHEMA, max_tokens=32768)[0]
-        if res.error:
-            raise RuntimeError(f"llm error: {res.error}")
-        return res.result
-    raise ValueError(f"unknown backend {backend}")
 
 
 # ---------------------------------------------------------------- text utilities
@@ -286,8 +347,9 @@ class QuadStore:
 
 
 # ---------------------------------------------------------------- extraction
-def extract(store: QuadStore, text: str, source: dict, profile="generic", backend="pplx", model=None,
+def extract(store: QuadStore, text: str, source: dict, profile="generic", backend="ollama", model=None,
             min_conf=0.5) -> dict:
+    llm_route(backend, model)
     preds = PROFILES.get(profile, PROFILES["generic"]) + (PROFILES["dataset"] if profile != "dataset" else [])
     source = dict(source)
     source.update(profile=profile, extractor=f"{backend}:{model or 'default'}",
@@ -330,16 +392,19 @@ def extract(store: QuadStore, text: str, source: dict, profile="generic", backen
 
 
 def fetch_url(url: str) -> tuple[str, dict]:
-    try:
-        import pplx_sdk
-        r = pplx_sdk.content.fetch([url])[0]
-        if r.error:
-            raise RuntimeError(r.error)
-        return r.content or "", {"title": r.title, "published": r.published_date}
-    except ImportError:
-        import requests
-        html = requests.get(url, timeout=60, headers={"User-Agent": "Mozilla/5.0"}).text
-        return re.sub(r"<[^>]+>", " ", html), {}
+    reject_retired_source_url(url)
+    import requests
+    response = requests.get(url, timeout=60, headers={"User-Agent": "Mozilla/5.0"},
+                            allow_redirects=False)
+    check_response(response)
+    media_type = response.headers.get("Content-Type", "").split(";", 1)[0].strip().casefold()
+    if not (media_type.startswith("text/") or media_type in ("application/json", "application/xml")
+            or media_type.endswith(("+json", "+xml"))):
+        raise ValueError("unsupported or missing source content type; use HTML/text or an extracted UTF-8 --file")
+    if b"%PDF-" in response.content[:1024] or b"\x00" in response.content:
+        raise ValueError("binary/PDF source content is unsupported; provide an extracted UTF-8 --file")
+    # Basic direct HTML/text acquisition; title and publication date stay unknown.
+    return re.sub(r"<[^>]+>", " ", response.text), {}
 
 
 # ---------------------------------------------------------------- CLI
@@ -350,8 +415,8 @@ def main():
     i.add_argument("--db", required=True); i.add_argument("--url"); i.add_argument("--file")
     i.add_argument("--source-id"); i.add_argument("--tier", required=True, choices=TIERS)
     i.add_argument("--profile", default="generic", choices=list(PROFILES))
-    i.add_argument("--backend", default=os.environ.get("SPOC_BACKEND", "pplx"),
-                   choices=["pplx", "ollama", "openai"])
+    i.add_argument("--backend", default=os.environ.get("SPOC_BACKEND", "ollama"),
+                   choices=["ollama", "openai"])
     i.add_argument("--model"); i.add_argument("--published"); i.add_argument("--title")
     q = sub.add_parser("query"); q.add_argument("--db", required=True)
     for k in ("subject", "predicate", "object", "context", "tier"):
@@ -359,12 +424,20 @@ def main():
     c = sub.add_parser("conflicts"); c.add_argument("--db", required=True)
     e = sub.add_parser("export"); e.add_argument("--db", required=True); e.add_argument("--out", required=True)
     a = ap.parse_args()
+    if a.cmd == "ingest":
+        try:
+            llm_route(a.backend, a.model)
+            if a.url:
+                reject_retired_source_url(a.url)
+        except ValueError as exc:
+            ap.error(str(exc))
     st = QuadStore(a.db)
     if a.cmd == "ingest":
         if a.url:
             text, meta = fetch_url(a.url)
         else:
-            text, meta = open(a.file, encoding="utf-8").read(), {}
+            with open(a.file, encoding="utf-8") as handle:
+                text, meta = handle.read(), {}
         sid = a.source_id or slug((a.url or a.file))[:60]
         stats = extract(st, text, {"source_id": sid, "url": a.url, "title": a.title or meta.get("title"),
                                    "published": a.published or meta.get("published"), "tier": a.tier},

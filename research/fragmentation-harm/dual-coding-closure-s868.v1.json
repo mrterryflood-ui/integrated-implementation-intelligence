@@ -1,0 +1,220 @@
+{
+  "schema": "s868-dual-coding-closure.v1",
+  "status": "CORRECTION_PROPOSAL_NOT_RATIFIED",
+  "ledger_item": "Q04",
+  "sprint": "S868",
+  "authored_at": "2026-11-27T04:30Z",
+  "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint S868, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+  "does_not_modify": [
+    "research/fragmentation-harm/comparability-contract.v0.3.json is NOT modified or deleted by this file",
+    "comparability-contract.v0.2.json is NOT modified or deleted by this file",
+    "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json is NOT modified or deleted by this file",
+    "no baseline report, register or prior receipt is modified"
+  ],
+  "question": "Can the Q04 falsification condition - a derived-minus-direct code-9 excess at or above 0.427713625866 pp in Harris - be tested inside the pilot's own colorectal case pool, and by what instrument?",
+  "carried_inputs": {
+    "hinds_total": 589,
+    "harris_total": 8660,
+    "combined_total": 9249,
+    "margin_pp": "0.427713625866",
+    "margin_proportion": "0.00427713625866",
+    "margin_harris_cases": "37.040000000000",
+    "margin_hinds_cases": "2.519233256350",
+    "carried_contrast_pp": "0.272313429031",
+    "carried_share_ratio": "1.004295508734",
+    "note": "every decimal below is a decimal string produced by exact fixed-point arithmetic over BigInt at scale 1e18 with an integer square root; no floating point on any result path"
+  },
+  "withdrawn_claim": {
+    "source": "S864 closure test, Q04",
+    "claim_withdrawn": "the cross-tabulation needs no data-use agreement because public SEER research data supply it",
+    "reason": "no source read supports the clause. The publisher states Derived Summary Stage 2018 [762] is only available at the central registry level in every version read (EOD Data v1.0 through v3.3), and the public SEER*Stat dictionaries read expose a stage variable built from the derived item (Combined Summary Stage (2004+), Combined Summary Stage with Expanded Regional Codes (2004+)) rather than the directly assigned NAACCR 764 beside it. Whether any public file carries both items on the same case is NOT established.",
+    "effect": "the closure test's resources-and-authority statement must be raised: the dual-coding cross-tabulation needs the same central-registry extract as the three integers, not a public download"
+  },
+  "publisher_statements_verified": [
+    {
+      "source": "staging.seer.cancer.gov, NAACCR Item #762 Derived Summary Stage 2018, EOD Data v3.3 and v3.2 and v3.1 and v2.0 and v1.7 and v1.1 and v1.0",
+      "quote": "Derived Summary Stage 2018 [762] is only available at the central registry level.",
+      "agreement": "consistent across every version read; contradicts the withdrawn S864 clause"
+    },
+    {
+      "source": "seer.cancer.gov/data-software/documentation/seerstat/nov2025/seerstat-variable-dictionary-nov2025.pdf",
+      "quote": "Combined Summary Stage with Expanded Regional Codes (2004+) ... Created from SEER Combined Summary Stage 2000 (2004-2017) & Derived Summary Stage 2018 (2018+); available in Research, Research Limited-Field and Research Plus Limited-Field",
+      "agreement": "establishes that the derived construction reaches public files as a combined variable; does not establish that NAACCR 764 is exposed beside it"
+    },
+    {
+      "source": "seer.cancer.gov/archive/manuals/2018/SPCSM_2018_maindoc.pdf, SEER Program Coding and Staging Manual 2018",
+      "quote": "Summary Stage 2018, NAACCR Item #: 764 ... stores the directly assigned Summary Stage 2018; Derived Summary Stage 2018, NAACCR Item #: 762 ... derived using the EOD data collection system (EOD Primary Tumor, EOD Regional Nodes, and EOD Metastases) algorithm",
+      "agreement": "confirms the two items share one code table, including 9 = unknown if extension or metastasis (unstaged, unknown, or unspecified) Death certificate only case, so a cross-tabulation is well defined in principle"
+    },
+    {
+      "source": "umc.edu, Mississippi Cancer Registry Reporting Manual Revised 2018, General Instructions and Data Items",
+      "quote": "The SEER Summary Staging Manual - 2018 is to be used for staging cases diagnosed January 1, 2018 and forward. ... SUMMARY STAGE 2018 Item Length: 1 ... NAACCR Item #764",
+      "agreement": "resolves the MCR stage-scheme flag handed to Q04 by S867 (C-S867-5): the 2000 scheme is confined to diagnoses through 31 December 2017, so the pilot window 2019-2023 is uniformly 2018-scheme and the flag is immaterial for this pilot"
+    }
+  ],
+  "design_arithmetic": {
+    "model": "within-county paired binary comparison on dual-coded colorectal cases, each case carrying both NAACCR 762 and NAACCR 764; margin delta = 0.427713625866 pp on the code-9 share difference",
+    "formula": "n = ( z_{1-alpha/2} * sqrt(d) + z_{1-beta} * sqrt(d - delta^2) )^2 / delta^2, d = p01 + p10 total discordance, Connor form for paired proportions",
+    "settings": "alpha 0.05 two-sided (z 1.959963984540054), power 0.80 (z 0.8416212335729143); one-sided variant substitutes z 1.6448536269514722",
+    "required_pairs_two_sided": [
+      {
+        "discordance": "0.005",
+        "n": 2143,
+        "volume_multiple_of_harris_pool": "0.247459",
+        "exceeds_pool": false
+      },
+      {
+        "discordance": "0.010",
+        "n": 4289,
+        "volume_multiple_of_harris_pool": "0.495265",
+        "exceeds_pool": false
+      },
+      {
+        "discordance": "0.020",
+        "n": 8579,
+        "volume_multiple_of_harris_pool": "0.990646",
+        "exceeds_pool": false
+      },
+      {
+        "discordance": "0.050",
+        "n": 21450,
+        "volume_multiple_of_harris_pool": "2.476905",
+        "exceeds_pool": true
+      },
+      {
+        "discordance": "0.100",
+        "n": 42903,
+        "volume_multiple_of_harris_pool": "4.954157",
+        "exceeds_pool": true
+      },
+      {
+        "discordance": "0.200",
+        "n": 85807,
+        "volume_multiple_of_harris_pool": "9.908429",
+        "exceeds_pool": true
+      }
+    ],
+    "required_pairs_one_sided": [
+      {
+        "discordance": "0.005",
+        "n": 1688
+      },
+      {
+        "discordance": "0.010",
+        "n": 3378
+      },
+      {
+        "discordance": "0.020",
+        "n": 6758
+      },
+      {
+        "discordance": "0.050",
+        "n": 16896
+      },
+      {
+        "discordance": "0.100",
+        "n": 33794
+      },
+      {
+        "discordance": "0.200",
+        "n": 67590
+      }
+    ],
+    "minimum_detectable_excess_at_harris_pool_8660_pp": [
+      {
+        "discordance": "0.005",
+        "delta_min_pp": "0.212848585831",
+        "ratio_to_margin": "0.497642",
+        "margin_resolvable": true
+      },
+      {
+        "discordance": "0.010",
+        "delta_min_pp": "0.301013356815",
+        "ratio_to_margin": "0.703773",
+        "margin_resolvable": true
+      },
+      {
+        "discordance": "0.020",
+        "delta_min_pp": "0.425697171663",
+        "ratio_to_margin": "0.995285",
+        "margin_resolvable": true
+      },
+      {
+        "discordance": "0.050",
+        "delta_min_pp": "0.673086327973",
+        "ratio_to_margin": "1.573684",
+        "margin_resolvable": false
+      },
+      {
+        "discordance": "0.100",
+        "delta_min_pp": "0.951887813668",
+        "ratio_to_margin": "2.225526",
+        "margin_resolvable": false
+      },
+      {
+        "discordance": "0.200",
+        "delta_min_pp": "1.346172655947",
+        "ratio_to_margin": "3.147369",
+        "margin_resolvable": false
+      }
+    ],
+    "minimum_detectable_excess_at_hinds_pool_589_pp": [
+      "0.814632297402",
+      "1.152064043333",
+      "1.629264594804",
+      "2.576093515326",
+      "3.643146387315",
+      "5.152187030652"
+    ],
+    "minimum_detectable_excess_at_combined_pool_9249_at_d_0_05_pp": "0.651307517080",
+    "break_even_discordance_at_harris_pool": {
+      "two_sided": "0.020189921863",
+      "one_sided": "0.025630723449"
+    },
+    "reading": "the margin is resolvable within the Harris pool only if total 762-against-764 discordance on colorectal cases is at or below 2.019 per cent two-sided (2.563 per cent one-sided). Above that the required pairs exceed the county: at 5 per cent discordance the design needs 2.48 times the entire Harris colorectal pool. A census of both counties returns the excess exactly and needs no inference; a sample-based dual-coding study is not feasible at any plausible discordance."
+  },
+  "closure_test_revision": {
+    "population": "adults 45-74 with a first primary invasive colorectal carcinoma resident at diagnosis in Hinds County MS (FIPS 28049) and Harris County TX (FIPS 48201), diagnoses 2019-2023",
+    "comparator": "the same case coded under NAACCR 762 and under NAACCR 764; the county contrast is the second comparison and is not replaced",
+    "primary_outcome_of_this_limb": "the derived-minus-direct code-9 share difference in Harris, printed beside the derived-minus-direct late share difference, the three integers per county (late, localized, unstaged) and the late-stage rate per 100000 person-years; the pilot primary outcome, completed diagnostic follow-up at 180 days after an abnormal screening-indication colorectal test, remains UNMEASURED at both counties, is reported beside these numbers and is never replaced by them, and a test ordered is not a completed action",
+    "what_closes_it": "one central-registry extract per state under a data-use agreement carrying both NAACCR 762 and NAACCR 764 on colorectal cases, which supplies the three integers and the cross-tabulation in one pass; the public-download route is withdrawn",
+    "resources_and_authority": "one extract per state from the Mississippi State Department of Health and the Texas Cancer Registry at DSHS, both items requested explicitly in the data request, one analyst-week, one named human analyst who signs the extract, no IRB action for aggregate cells; the dual-coding arm no longer needs a separate data-use agreement because it rides the same extract",
+    "harms": "none to patients; the interpretive harm is quoting 0.2723 pp as measured when the publication supports 0.20 to 0.38 pp, and the inverse harm is retiring a real difference the published grain cannot see; the second-order harm is a study design that cannot answer its own falsification condition and would burn an extract to learn that",
+    "equity": "at county-aggregate grain this limb can neither detect nor conceal a within-county disparity; the county label proxies registry programme, submission stream and stage-variable production process; race enters nothing and proxies nothing here",
+    "sustainment": "the gate is deterministic, offline, sub-second and re-runnable at any vintage; the break-even discordance is a published number the extract can be checked against before any analysis",
+    "falsification_condition": "the practical consequence of C-S864-2 is falsified if the observed derived-minus-direct code-9 excess is below 0.427713625866 pp; the derived-minus-direct excess itself is falsified as a material mechanism if it is below one case at the Harris denominator (0.011547344110 pp) on a complete dual-coded census",
+    "smallest_test": "the two-item extract on the county census; it settles the sign, the construct and the volume question together"
+  },
+  "consumer_pointer_gap": {
+    "observed": "comparability-contract.v0.3.json (sha af1f88f543f955b2c84ee80cd97596f3bffe24f9, 10884 bytes, read live 2026-11-27T04:18Z) still carries records[0].resolution.completeness_pivot_pp 0.4037778, completeness_pivot_harris_cases 34.96715748, ordering_statement and ordering_caveat, and carries contrast_pp 0.272313429032 with no band field. It contains no reference to C-S850, C-S856 or C-S864.",
+    "why_it_persists": "PR 130 added research/fragmentation-harm/completeness-pivot-gate-s850.v1.json, which states it does not modify the contract. The withdrawal is therefore a side-car by design, not a failed merge.",
+    "residual_risk": "a consumer that reads only the contract gets the retracted pivot, the retracted ordering statement and a point contrast with no identification band, and no pointer to the side-car",
+    "proposed_change": "add one field to the contract at records[0].resolution, withdrawal_pointers, listing the side-car files and the ledger correction ids that qualify each numeric field, and add identification_band_pp [0.202564914865, 0.377786557244] beside contrast_pp. This file does not make that change.",
+    "status": "recorded as a handoff ask, not applied"
+  },
+  "mechanism": "measurement artefact at the level of the stage variable's production; no ancestry-linked or biomarker variable in any arithmetic; race a variable in nothing and proxying nothing, the county label proxying registry programme, submission stream and stage-variable production process",
+  "pilot_primary_outcome": "completed diagnostic follow-up at 180 days after an abnormal screening-indication colorectal test; UNMEASURED at both counties; a test ordered is not a completed action",
+  "gate": {
+    "artefact": "2026-11-26_S868_Q04_dualcode_volume_gate_v1.cjs",
+    "bytes": 14409,
+    "md5": "7cd2862152995445c94d616c655430f0",
+    "controls": "38 evaluated in full before any result byte, 38 PASS, 0 FAIL",
+    "mutants_refused": "8 of 8 at exit 63 with zero stdout, each naming its catcher (M01 C05, M02 C08, M03 C13, M04 C14, M05 C22, M06 C23, M07 C32, M08 C25)",
+    "refusal_paths": "unknown flag, unknown mutant, stray argument and a stray argument beside a valid flag each at exit 7 with zero stdout",
+    "determinism": "three byte-identical runs at stdout md5 5db0eebfdb26a356f72bfda731e87a3b of 3811 bytes under node v22.23.2, offline",
+    "independent_route": "awk double precision sharing no code agreeing on 14 of 14 quantities, six required-pair counts identical and every delta and break-even value to eleven decimal places",
+    "build_defects_caught": [
+      "D-S868-1 two scale errors in the first draft, mul(2n, DELTA) treating the integer 2 as a fixed-point value and a ratio computed at double scale; both caught before any result byte",
+      "D-S868-2 three control premises were wrong in the first draft (a scale-bearing identity compared against a bare integer, a contrast window off by a factor of one hundred, and an inequality that assumed a one-sided design needs more pairs than a two-sided one at the same nominal alpha); all three corrected and the corrections preserved",
+      "D-S868-3 the mutant harness initially inverted refusal semantics, exiting 0 where the gate should refuse; corrected so every false mutant premise exits 63"
+    ]
+  },
+  "unrun": [
+    "every repository test, lint, type check, build, CI leg and deployment: UNRUN by this sprint, none attempted, nothing cloned",
+    "no registry file was read, no case was dual-coded, no unstaged share at either county was observed",
+    "no public file was inspected to enumerate its variables; the availability of NAACCR 764 beside 762 in any public file is NOT established either way"
+  ],
+  "external_checks_used": 4,
+  "repository_reads_used": 2,
+  "ai_review_label": "AI review, unverified by human - not scientific acceptance, not clinical acceptance, no patient benefit claimed or measured"
+}

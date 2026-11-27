@@ -1,0 +1,28 @@
+name: SPOC offline provider retirement
+on:
+  pull_request:
+    paths:
+      - 'platform-doctrine/tools/spoc_kg.py'
+      - 'platform-doctrine/tools/test_spoc_kg.py'
+      - 'platform-doctrine/references/evidence-knowledge-graph.md'
+      - 'docs/assurance/SPOC_PERPLEXITY_RETIREMENT_2026-11-23.md'
+      - '.github/workflows/spoc-kg.yml'
+permissions:
+  contents: read
+jobs:
+  spoc-offline:
+    name: SPOC synthetic extraction and retirement
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: '3.12'
+      - name: Compile changed Python inputs
+        run: python -m py_compile platform-doctrine/tools/spoc_kg.py platform-doctrine/tools/test_spoc_kg.py
+      - name: Exercise synthetic transports and local SQLite journeys
+        run: python platform-doctrine/tools/test_spoc_kg.py
