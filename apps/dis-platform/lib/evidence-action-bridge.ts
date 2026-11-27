@@ -11,25 +11,13 @@ import type {IntelligenceRecord} from "./consultation-research";
 import {PUBLIC_MEASUREMENT_KEYS,CORRECTION_RECEIPT_KEYS,objectRecord,credentialFreeHttps,
  scaleViolation,strictTimestamp,hasOnlyKeys} from "./evidence-action-input-integrity";
 import {diagnosePretrends,type PretrendDiagnostics} from "./evidence-action-pretrend";
-const colorectalRequirements=[
- {id:"all-stage-incidence",construct:"DISEASE_INCIDENCE",problem:"Source-matched all-stage colorectal incidence is not available among accepted measurements."},
- {id:"screening-denominator",construct:"SCREENING_COMPLETION",problem:"Eligibility-based screening completion is not available among accepted measurements."},
- {id:"diagnostic-resolution",construct:"DIAGNOSTIC_FOLLOWUP",problem:"Abnormal-result diagnostic follow-up is not available among accepted measurements."}
-] as const;
-const medicalGaps=new Set<string>(colorectalRequirements.map(x=>x.id));
-/** Colorectal requirements are recomputed after quarantine, never from rejected measurements. */
+/** Condition-agnostic: the engine raises the three medical obligations; this facade no longer removes them by condition literal. */
 export function reviewEvidenceToAction(program:ResearchProgram,bindings:readonly MeasureBinding[],discovery:readonly IntelligenceRecord[]=[]):EvidenceActionReview{
  const out=coreReview(program,bindings,discovery);
- if(program.site!=="colorectal")out.gaps=out.gaps.filter(g=>!medicalGaps.has(g.id));
  const counts=new Map<string,number>();for(const b of bindings)counts.set(b.indicatorId,(counts.get(b.indicatorId)||0)+1);
  const invalid=out.measures.filter(m=>(counts.get(m.id)||0)>1||scaleViolation(m.indicator.value,m.indicator.unit)!==null);
  const removed=new Set(invalid.map(m=>m.id));out.measures=out.measures.filter(m=>!removed.has(m.id));out.links=out.links.filter(l=>!removed.has(l.left)&&!removed.has(l.right));
  for(const id of removed)out.gaps.push({id:"quarantined:"+id,severity:"MEASUREMENT_BLOCK",problem:"Ambiguous binding or inadmissible numeric measurement quarantined.",ownerRole:"Measurement reviewer",nextEvidence:"Resolve the original definition and source value; no first-binding-wins or impossible values."});
- if(program.site==="colorectal")for(const requirement of colorectalRequirements){
-  if(!out.measures.some(m=>m.construct===requirement.construct)&&!out.gaps.some(g=>g.id===requirement.id))
-   out.gaps.push({id:requirement.id,severity:"RESEARCH_REQUIRED",problem:requirement.problem,
-    ownerRole:"Research and measurement owners",nextEvidence:"Obtain a source-verified measure with the appropriate population, denominator and period. Rejected evidence cannot close this obligation."});
- }
  out.literature=boundDiscoveryLeads(discovery);
  if(!out.literature.length&&!out.gaps.some(g=>g.id==="literature-not-retrieved"))out.gaps.push({id:"literature-not-retrieved",severity:"RESEARCH_REQUIRED",problem:"No admissible scholarly discovery leads remain.",ownerRole:"Research librarian",nextEvidence:"Retrieve and verify an actual scholarly source; rejected records do not close this gap."});
  return out;
