@@ -1,0 +1,246 @@
+{
+  "schema": "s871-cof-e-parameter-provenance.v1",
+  "status": "PARAMETER_PROVENANCE_ESTABLISHED_BUILD_LIMB_STILL_OPEN",
+  "ledger_item": "BB05",
+  "sprint": "S871",
+  "authored_at": "2026-11-27T06:00Z",
+  "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint S871, ledger item BB05). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+  "does_not_modify": [
+    "research/fragmentation-harm/comparability-contract.v0.3.json is NOT modified or deleted by this file",
+    "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json is NOT modified or deleted by this file",
+    "research/fragmentation-harm/dual-coding-closure-s868.v1.json is NOT modified or deleted by this file",
+    "no baseline report, register or prior receipt is modified"
+  ],
+  "question": "Which parameters of the pilot primary outcome's national measure (NCQA HEDIS COF-E) are settled by an authoritative document, and does the S629 eight-item build inventory cover them?",
+  "source_retrievals": [
+    {
+      "source": "NCQA, HEDIS Measurement Year 2027 Post-Public Comment Summary Report",
+      "url": "https://www.ncqa.org/about-ncqa/contact-us/public-comments/hedis-measurement-year-2027-post-public-comment-summary-report/",
+      "retrieved_at": "2026-11-27T05:43Z",
+      "http_status": 200,
+      "location": "Table 1, row 'Follow-Up After Positive Colorectal Cancer Non-Invasive Screening Test (COF-E)', Decision column",
+      "quote": "Add the COF-E measure, with the 45-75 age stratification only.",
+      "note": "hyphen rendered as en dash in source"
+    },
+    {
+      "source": "same document",
+      "location": "Table 2, COF-E row, NCQA responses 3-6 and Decision",
+      "quotes": [
+        "3. NCQA added an exclusion for individuals that receive a colonoscopy in the year prior given expert feedback.",
+        "4. NCQA maintained the proposed 180-day time frame.",
+        "5. NCQA will remove the 76-85 age stratification in the final version of the specification.",
+        "6. NCQA added an exclusion for stool-based test results that occur during an inpatient, ED or observation stay.",
+        "Decision: Add the COF-E measure, with the 45-75 age stratification only, for MY 2027."
+      ]
+    },
+    {
+      "source": "same document",
+      "location": "Table 2, COF-E row, commenter themes",
+      "quote": "Commenters noted challenges with access to structured laboratory data and linking results to follow-up colonoscopy.",
+      "note": "Corroborates C-S629-3 as a sector-level implementation barrier; does not verify any repository state."
+    }
+  ],
+  "parameter_provenance": [
+    {
+      "parameter": "age_bounds",
+      "s629_declaration": "45-75",
+      "ncqa_final_decision": "45-75, stratification only",
+      "comparison": "MATCHES"
+    },
+    {
+      "parameter": "follow_up_event",
+      "s629_declaration": "colonoscopy",
+      "ncqa_final_decision": "colonoscopy",
+      "comparison": "MATCHES"
+    },
+    {
+      "parameter": "follow_up_window_days",
+      "s629_declaration": "180",
+      "ncqa_final_decision": "180 maintained",
+      "comparison": "MATCHES"
+    },
+    {
+      "parameter": "index_test_class",
+      "s629_declaration": "non-invasive stool-based",
+      "ncqa_final_decision": "positive colorectal cancer non-invasive screening test",
+      "comparison": "MATCHES_AT_CLASS_LEVEL"
+    },
+    {
+      "parameter": "exclusion_prior_year_colonoscopy",
+      "s629_declaration": "ABSENT from the eight-item inventory",
+      "ncqa_final_decision": "added",
+      "comparison": "CONTRADICTS_COMPLETENESS_OF_THE_EIGHT_ITEM_TEST"
+    },
+    {
+      "parameter": "exclusion_inpatient_ed_observation_setting",
+      "s629_declaration": "item 4 ActCode setting exclusion, presence only",
+      "ncqa_final_decision": "added",
+      "comparison": "PARTIAL_ITEM_EXISTS_BUT_NOT_TESTED_AS_AN_EXCLUSION"
+    },
+    {
+      "parameter": "denominator_enrolment_rule",
+      "s629_declaration": "not specified",
+      "ncqa_final_decision": "not stated in this document",
+      "comparison": "NOT_COMPARABLE_NOT_RETRIEVED"
+    },
+    {
+      "parameter": "index_result_window",
+      "s629_declaration": "not specified",
+      "ncqa_final_decision": "not stated in this document",
+      "comparison": "NOT_COMPARABLE_NOT_RETRIEVED"
+    },
+    {
+      "parameter": "my2027_volume2_technical_wording",
+      "s629_declaration": "named as the owner limb",
+      "ncqa_final_decision": "not published in this document",
+      "comparison": "NOT_RETRIEVED"
+    }
+  ],
+  "repository_remeasurement": {
+    "repo": "ISS-LLC22/bettersciencelab",
+    "head_sha": "a49bc2dcf0945f00986591f4620b2a5b294d9539",
+    "head_commit_date": "2026-11-27T02:34:05Z",
+    "read_at": "2026-11-27T05:42Z-05:43Z",
+    "files": [
+      {
+        "path": "server/fhir-connector.ts",
+        "blob_sha": "88394bbb141efbc985a1221143f1c5679c8c88af",
+        "bytes": 5304,
+        "identical_to_s629_read": true
+      },
+      {
+        "path": "server/fhir-routes.ts",
+        "blob_sha": "a3dc52479df7915f8b0fccbd7d69f324ec84448e",
+        "bytes": 7508,
+        "identical_to_s629_read": true
+      }
+    ],
+    "transfer_statement": "Both blobs are byte-identical to the S629 read at f3d62979, so the measured fail transfers to head a49bc2d without re-derivation.",
+    "persistence_check": "Only auditEvents insert (routes line 64) and fhirConnections insert/update (lines 115-116, 148) write. No fetched Observation or Procedure resource is stored; no later join is possible without a schema change.",
+    "counting_method": "Comment-stripped code-line counting; LOINC and CPT tokens appearing only in the header comments at connector lines 5-6 score 0."
+  },
+  "build_inventory_v2": [
+    {
+      "n": 1,
+      "item": "loinc_stool_code_set",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 2,
+      "item": "snomed_positive_qualifier",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 3,
+      "item": "cpt_colonoscopy_code_set",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 4,
+      "item": "actcode_setting_exclusion",
+      "value": 0,
+      "new_in_v2": false,
+      "v2_strengthening": "must exclude IMP, EMER and OBSENC encounters, not merely contain an ActCode token"
+    },
+    {
+      "n": 5,
+      "item": "window_180_days",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 6,
+      "item": "age_lower_45",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 7,
+      "item": "age_upper_75",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 8,
+      "item": "persisted_observation_procedure_join",
+      "value": 0,
+      "new_in_v2": false
+    },
+    {
+      "n": 9,
+      "item": "prior_year_colonoscopy_exclusion",
+      "value": 0,
+      "new_in_v2": true,
+      "basis": "NCQA MY 2027 final decision, Table 2 COF-E response 3"
+    }
+  ],
+  "closure_test_revision": {
+    "population": "adults 45-75 with an index positive stool-based colorectal screening test in one participating system register, Hinds County first and Harris County as replication, aggregates and adjudicated records only",
+    "comparator": "a hand-counted reference set of positives with adjudicated colonoscopy completion",
+    "primary_outcome_of_this_limb": "the share of eligible members with a colonoscopy on or within 180 days of the earliest positive stool-based result, after both NCQA exclusions, reported beside the positives-with-no-any-procedure share, the late-stage share and the late-stage rate per 100,000 person-years",
+    "what_closes_it": "ONE COMMIT adds the nine items inside the existing ingestion path and the inventory regenerated from that commit makes 2026-11-27_S871_BB05_inventory_test_v2.awk exit 0 at a recorded head sha, plus a three-fixture check that each exclusion removes a member",
+    "resources_and_authority": "one maintainer with merge rights on ISS-LLC22/bettersciencelab; no purchase; a written owner decision that the platform carries the measure; the MY 2027 Volume 2 specification once published",
+    "harms": "a half-built join prints a plausible wrong rate and ranks two counties on an artefact; omitting the prior-year exclusion inflates the denominator; a mis-coded exclusion deletes legitimate follow-up",
+    "equity": "the measure hides the disparity it exists to find, because a member with no colonoscopy has no Procedure record and vanishes from the numerator; every rate carries the positives-with-no-any-procedure share beside it",
+    "sustainment": "annual LOINC and CPT decay is caught only by a test that runs on every commit",
+    "falsification_condition": "the not-implementable claim is falsified if a maintainer shows the join and the four code systems already exist under other names in the same file set; the parameter findings are falsified if the published MY 2027 Volume 2 wording differs from the post-public-comment summary",
+    "smallest_test": "one commit adding the nine items, the inventory regenerated from it, the v2 test exiting 0 at a recorded head sha, and three fixtures showing each exclusion removes a member"
+  },
+  "gate": {
+    "artefact": "2026-11-27_S871_BB05_inventory_test_v2.awk",
+    "bytes": 1940,
+    "md5": "4f73c514cd2d30a98a148e53fc53ed70",
+    "inventory": {
+      "file": "2026-11-27_S871_BB05_inventory_v2.csv",
+      "bytes": 239,
+      "md5": "56320a3b57af87a88b8138b718943e9c"
+    },
+    "head_measurement": "exit 1, items_present=0 items_missing=9, output 350 B md5 ef0cf5463928ffc35e0f484ef4b608b9, byte-identical on immediate repeat",
+    "controls": "header-only exit 1 with nine missing; conformant nine-item fixture exit 0; near-miss with only prior_year_colonoscopy_exclusion at 0 exit 1 naming exactly that item; non-integer value exit 2; duplicate item exit 2; unknown item exit 2; absent input exit 2",
+    "determinism": "GNU Awk 5.4.1, offline, two runs byte-identical",
+    "build_defects_caught": [
+      "test item name cpt_colonoscopy_set did not match inventory key cpt_colonoscopy_code_set, first run exited 2; corrected",
+      "header-only input exited 2 instead of exit 1 with all items missing; corrected",
+      "items 5-7 remain presence checks, so a commit could declare 45/75/180 and never apply them; v2 is necessary, not sufficient"
+    ]
+  },
+  "corrections": [
+    {
+      "id": "C-S871-1",
+      "severity": "material",
+      "class": "design",
+      "statement": "the S629 eight-item build inventory omits NCQA's prior-year colonoscopy exclusion; the closure test is replaced by the nine-item v2"
+    },
+    {
+      "id": "C-S871-2",
+      "severity": "material",
+      "class": "record",
+      "statement": "the 45-75 bounds and the 180-day window are confirmed against an authoritative NCQA document, not only against development literature"
+    },
+    {
+      "id": "C-S871-3",
+      "severity": "record",
+      "class": "record",
+      "statement": "the build-limb measurement transfers from f3d62979 to head a49bc2d by blob identity; no re-derivation of the zeros is claimed"
+    },
+    {
+      "id": "C-S871-4",
+      "severity": "record",
+      "class": "record",
+      "statement": "the owner limb moves from wholly UNRUN to PARTIALLY EVIDENCED; the enrolment rule, index window and Volume 2 wording are not retrieved"
+    }
+  ],
+  "mechanism": "measurement artefact primary (differential structured-lab capture, differential procedure capture, setting exclusion, prior-year exclusion, denominator construction); access and care delivery secondary; structural exposure tertiary; inherited biology not implicated; race is not a variable and at most proxies structural exposure and differential capture",
+  "pilot_primary_outcome": "unchanged and still unmeasured in both counties: completed diagnostic follow-up at 180 days after an abnormal screening-indication colorectal test, reported beside the late-stage share and the late-stage rate per 100,000 person-years; a test ordered is not a completed action",
+  "unrun": [
+    "the MY 2027 Volume 2 technical specification was not retrieved and is not claimed",
+    "no repository suite was executed; the sandbox has no network and no interpreter for the application code",
+    "no cohort was assembled and no follow-up rate was computed in either county"
+  ],
+  "external_checks_used": 2,
+  "repository_reads_used": 3,
+  "ai_review_label": "AI review, unverified by human. Engineering reproducibility is asserted for the offline inventory and test only; scientific acceptance is none; clinical benefit is none claimed or measured."
+}
