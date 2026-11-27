@@ -13,6 +13,7 @@ export async function POST(req:Request){try{
   onBeforeGenerateToken:async(path,clientPayload)=>{
    sameOrigin(req);const actor=await organizationActor();if(!trustedProductionUploader(actor,process.env))throw new OrganizationError('Upload access not released',403);
    const payload=JSON.parse(clientPayload||'{}'),org=uuid(payload.organizationId),id=uuid(payload.reservationId);
+   if(process.env.DIS_OBJECT_STORAGE_PROVIDER||!path.startsWith('organizations/'+org+'/'+id+'/'))throw new OrganizationError('Use the upload method assigned to this reservation',409);
    const row=await inOrganizationTransaction(actor,db=>claimOriginalToken(db,actor,org,id,path));
    return{allowedContentTypes:[row.media_type],maximumSizeInBytes:Number(row.expected_bytes),validUntil:new Date(row.expires_at).getTime(),addRandomSuffix:false,allowOverwrite:false,tokenPayload:JSON.stringify({actor,organizationId:org,reservationId:id,pathname:row.pathname})};
   },

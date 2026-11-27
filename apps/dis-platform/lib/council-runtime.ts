@@ -4,6 +4,8 @@ import {reviewAnswer} from './answer-quality';
 import {COLLABORATION_RULES,conversationalTask} from './collaboration-policy';
 import {reconstructEvidence,evidenceContext,inspectCompletion} from './evidence-integrity';
 import {getVercelOidcToken} from "@vercel/oidc";
+import {NeonGatewayError,requestNeonInference} from './ai-gateway-neon';
+import {NetworkBudget} from './ecosystem/transport';
 import {selectCouncil,DEFAULT_RED} from "./council";
 import type {CouncilMember} from "./council";
 type Source=import('./evidence-integrity').EvidenceSource;
@@ -25,8 +27,14 @@ export async function research(query:string,fetcher=fetch):Promise<{sources:Sour
 }
 const instructions="You are an analysis role in DIS, a multidisciplinary research and implementation platform. The named thinkers are conceptual lenses derived from documented work; do not imitate their speech, invent quotes, or claim their participation. Treat retrieved source metadata and abstracts as limited evidence only. Cite scholarly abstracts as [S1] and labeled platform excerpts as [E1] only when the supplied text supports the precise claim. Otherwise explicitly call the assertion a hypothesis or unknown. Deliberately ask what is missing; consider stakeholders, ethics, feasible action, decision rights, falsification and sustainable outcomes. Never claim an action or test was executed if it was not.";
 function sourceContext(sources:Source[]){return evidenceContext(sources)}
-function model(){return process.env.AI_GATEWAY_MODEL||"openai/gpt-5.4-mini"}
-export async function infer(system:string,prompt:string,modelOverride?:string,fetcher=fetch):Promise<{ok:boolean,text:string,error?:string,model?:string,fallbackUsed?:boolean}>{
+function model(){return process.env.AI_GATEWAY_MODEL||(process.env.DIS_AI_TRANSPORT==='neon'?'':"openai/gpt-5.4-mini")}
+export async function infer(system:string,prompt:string,modelOverride?:string,fetcher=fetch):Promise<{ok:boolean,text:string,error?:string,model?:string,fallbackUsed?:boolean,transport?:string,recipient?:string,endpoint?:string,modelOwner?:string,modelVerified?:boolean,unavailableReason?:string}>{
+ if(process.env.DIS_AI_TRANSPORT==='neon'){
+  try{
+   const response=await requestNeonInference('chat',modelOverride??model(),{max_tokens:2400,messages:[{role:'system',content:instructions+'\n'+withOperatingContract(system)+'\n'+COLLABORATION_RULES},{role:'user',content:prompt}]},process.env,new NetworkBudget(2,19000,524288,fetcher));
+   return{...inspectCompletion(response.data),model:response.modelIdentity,modelOwner:response.modelOwner,modelVerified:true,transport:response.transport,recipient:response.recipient,endpoint:response.endpoint,fallbackUsed:false};
+  }catch(error){return{ok:false,text:'',error:error instanceof NeonGatewayError?error.message:'Neon AI Gateway could not complete this request.',unavailableReason:error instanceof NeonGatewayError?error.code:'gateway_unavailable',transport:'neon',fallbackUsed:false};}
+ }
  const token=process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||await getVercelOidcToken().catch(()=>null);
  if(!token)return {ok:false,text:"",error:"AI Gateway authentication not configured"};
  const primary=modelOverride||model(),fallback=model();
@@ -99,8 +107,8 @@ async function conveneInternal(input:{prompt:string,count:number,redCount:number
  const shared=`Question: ${prompt}\nRequested depth: ${input.depth}\nSources (bounded excerpts, not independently verified):\n${ctx||"NO VERIFIED SOURCES RETRIEVED"}`;
  const [first,second,critic]=await Promise.all([
   deps.infer("Primary council strand A. Analyze problem, propose alternative hypotheses. Intellectual lenses: "+p1,shared,process.env.AI_GATEWAY_PRIMARY_A_MODEL||model()),
-  deps.infer("Primary council strand B. Independently explore stakeholder needs, feasibility, and counterarguments. Lenses: "+p2,shared,process.env.AI_GATEWAY_PRIMARY_B_MODEL||"google/gemini-3.5-flash-lite"),
-  input.challengeEnabled===false?Promise.resolve({ok:true,text:"Challenge council disabled by user choice.",error:undefined as string|undefined}):deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared,process.env.AI_GATEWAY_RED_MODEL||"deepseek/deepseek-v4.1-flash-fast")
+  deps.infer("Primary council strand B. Independently explore stakeholder needs, feasibility, and counterarguments. Lenses: "+p2,shared,process.env.AI_GATEWAY_PRIMARY_B_MODEL||(process.env.DIS_AI_TRANSPORT==='neon'?'':"google/gemini-3.5-flash-lite")),
+  input.challengeEnabled===false?Promise.resolve({ok:true,text:"Challenge council disabled by user choice.",error:undefined as string|undefined}):deps.infer("Independent challenge strand. Perform adversarial analysis with no presumption of agreement. Lenses: "+challenge,shared,process.env.AI_GATEWAY_RED_MODEL||(process.env.DIS_AI_TRANSPORT==='neon'?'':"deepseek/deepseek-v4.1-flash-fast"))
  ]);
  const calls=[first,second,critic];
  const primaryViews=primary.map(m=>({id:m.id,name:m.name,perspective:m.lens,question:`From the ${m.domain.toLowerCase()} perspective, what evidence could prove or disprove our approach?`}));
@@ -112,7 +120,9 @@ async function conveneInternal(input:{prompt:string,count:number,redCount:number
  const planner=await deps.infer("Produce a concise tailored decision implementation workplan. Return ONLY a JSON object with tasks (3 to 5 objects with title,why,success) and metrics (3 to 4 objects with label,baseline,target,unit). Make tasks actionable for the precise question and intended stakeholders. All targets are proposals, not observed facts; use 'Not measured' if baseline unknown. Include a stop/go validation checkpoint and an adoption/sustainability measure. Do not invent outcomes or mark work complete.",shared+"\n\nCouncil synthesis and dissent:\n"+synthesis.text.slice(0,4300)+"\n\nAdversarial review:\n"+critic.text.slice(0,1800),process.env.AI_GATEWAY_PLAN_MODEL||model());
  const actionPlan=planner.ok?parseActionPlan(planner.text):null;
  const identities=[first,second,critic].map(x=>(x as {model?:string}).model||null);
- const providerSet=new Set(identities.filter((x):x is string=>Boolean(x)).map(x=>x.split("/")[0]));
+ // Bare model names are not separate provider identities. Neon inference binds
+ // the actual returned bare ID to its catalog owner before reaching this point.
+ const providerSet=new Set(identities.filter((x):x is string=>Boolean(x&&/^[a-z][a-z0-9_-]*\/[A-Za-z0-9][A-Za-z0-9._-]*$/.test(x))).map(x=>x.split("/")[0]));
  const independentSystemsVerified=identities.every(Boolean)&&providerSet.size>=3;
  const audit=citationAudit(synthesis.text,found.sources);
  return {state:audit.unknownIds.length?"CITATION_IDS_INVALID":"PRELIMINARY_DELIBERATION",primary:primaryViews,red:redViews,sources:found.sources,retrieval:found.status,actionPlan,deliberation:{primaryA:first.text,primaryB:second.text,challenge:critic.text,synthesis:synthesis.text},citations:audit,modelProvenance:{models:identities,verifiedProviderCount:providerSet.size,independentSystemsVerified},callStatuses:[...calls,synthesis].map(x=>({ok:x.ok,model:(x as {model?:string}).model||null,fallbackUsed:(x as {fallbackUsed?:boolean}).fallbackUsed||false})),limitations:"Up to five model inference requests were made, not separate human experts or necessarily distinct model providers. Evidence was evaluated from bounded scholarly abstracts and any explicitly labeled platform excerpts, not full-text independent appraisal. All implementation proposals remain unexecuted."};

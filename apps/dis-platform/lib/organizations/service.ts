@@ -1,6 +1,7 @@
 import {createHash,randomUUID} from 'node:crypto';
 import {normalizeReport,reconciliationInput,planDigest,approvalStatus,type PlanningReport,type Governance,PLANNING_SECTIONS} from '../planning-contract';
 import {buildResearchPlanningSnapshot,researchPlanningReport,validateResearchPlanningSnapshot,ResearchPlanningError} from '../research-planning-handoff';
+import {IMPLEMENTATION_SCIENCE_SCHEMA,IMPLEMENTATION_FIELDS,implementationEvidenceReferences} from '../implementation-science';
 import type {Queryable} from './database';
 export class OrganizationError extends Error {constructor(message:string,public status=400){super(message)}}
 export const digest=(value:unknown)=>createHash('sha256').update(JSON.stringify(value)).digest('hex');
@@ -31,6 +32,7 @@ async function requireAuthority(db:Queryable,orgId:string,actor:string,scope:str
  if(!row)throw new OrganizationError('The organization’s verified delegation is required. Technical administration does not confer this decision authority.',403);return row;
 }
 async function checkedSources(db:Queryable,orgId:string,ids:unknown){const selected=strings(ids??[],50);for(const id of selected){uuid(id);const r=await getRecord(db,orgId,id);if(!['submission','baseline','evidence'].includes(r.kind)||r.visibility!=='organization')throw new OrganizationError('Select shared, source-bound reports or evidence');}return selected;}
+async function checkedImplementationReferences(db:Queryable,orgId:string,report:PlanningReport){for(const ref of implementationEvidenceReferences(report.implementationScience)){const row=await getRecord(db,orgId,ref.recordId);if(row.visibility!=='organization'||!['submission','baseline','evidence'].includes(row.kind))throw new OrganizationError('Implementation references must identify shared reports or evidence.');if(row.version!==ref.version||row.digest!==ref.digest)throw new OrganizationError('An implementation source changed. Review the current source version before saving its reference.',409);}}
 async function baselineId(db:Queryable,orgId:string){return (await db.query("SELECT id FROM dis_organization_records WHERE organization_id=$1 AND kind='baseline' ORDER BY created_at DESC,id DESC LIMIT 1",[orgId])).rows[0]?.id||null;}
 export async function listOrganizations(db:Queryable){return(await db.query('SELECT o.id,o.name,o.created_at,m.role FROM dis_organizations o JOIN dis_organization_members m ON m.organization_id=o.id AND m.subject_id=current_setting(\'dis.subject_id\',true) AND m.active ORDER BY o.created_at DESC LIMIT 100')).rows;}
 export async function createOrganization(db:Queryable,actor:string,name:unknown,displayName:unknown){
@@ -102,7 +104,7 @@ export async function actOnOrganization(db:Queryable,actor:string,input:any){
   await db.query('UPDATE dis_organization_members SET active=false WHERE organization_id=$1 AND subject_id=$2 AND role<>\'admin\'',[orgId,text(input.subject,200,true)]);return{revoked:true};
  }
  if(input.action==='save-draft'){
-  const report=normalizeReport(input.report);let originalUploadId:string|null=null;
+  const report=normalizeReport(input.report);await checkedImplementationReferences(db,orgId,report);let originalUploadId:string|null=null;
   if(input.originalUploadId){originalUploadId=uuid(input.originalUploadId);const upload=(await db.query("SELECT id FROM dis_organization_uploads WHERE id=$1 AND organization_id=$2 AND owner_subject=$3 AND status='ARCHIVED'",[originalUploadId,orgId,actor])).rows[0];if(!upload)throw new OrganizationError('Original upload is not available',404);}
   if(!input.id){const base=input.baseBaselineId?uuid(input.baseBaselineId):null;if(base&&(await getRecord(db,orgId,base)).kind!=='baseline')throw new OrganizationError('Common baseline required');let baseReference=null;if(input.baseReference){const r=await getRecord(db,orgId,uuid(input.baseReference.id));if(!['baseline','proposal','submission'].includes(r.kind)||r.visibility!=='organization'||r.version!==input.baseReference.version||r.digest!==input.baseReference.digest)throw new OrganizationError('The selected common starting version changed; inspect it again',409);baseReference={id:r.id,version:r.version,digest:r.digest,kind:r.kind};}return insertRecord(db,orgId,actor,'draft',report.title,{report,baseBaselineId:base,baseReference,originalUploadId});}
   const row=await getRecord(db,orgId,uuid(input.id));if(row.kind!=='draft'||row.owner_subject!==actor)throw new OrganizationError('Only the author may edit this draft',403);expectVersion(row,input.version);
@@ -126,12 +128,13 @@ export async function actOnOrganization(db:Queryable,actor:string,input:any){
   if(!Array.isArray(input.selected)||input.selected.length<1||input.selected.length>30)throw new OrganizationError('Select 1–30 exact submitted reports');
   const rows:any[]=[];for(const selected of input.selected){const row=await getRecord(db,orgId,uuid(selected.id));if(row.kind!=='submission'||row.visibility!=='organization')throw new OrganizationError('Only currently shared submissions can be reconciled');expectVersion(row,selected.version);rows.push(row);}
   const manifest=reconciliationInput(rows.map(r=>({id:r.id,revision:r.version,authorLabel:r.owner_subject,visibility:'submitted',report:normalizeReport(r.body.report)})));
-  const report:PlanningReport=normalizeReport({schemaVersion:'dis.planning.report.v1',title:text(input.title||'Reconciled working proposal',180,true),sections:Object.fromEntries(PLANNING_SECTIONS.map(([key])=>[key,rows.map(r=>'Perspective — '+r.title+'\n'+r.body.report.sections[key]).join('\n\n')]))});
+  const implementationScience=manifest.implementationScience?{schemaVersion:IMPLEMENTATION_SCIENCE_SCHEMA,fields:Object.fromEntries(IMPLEMENTATION_FIELDS.map(({id})=>[id,rows.some(r=>r.body.report.implementationScience?.fields[id]?.trim())?rows.map(r=>'Perspective — '+r.title+'\n'+(r.body.report.implementationScience?.fields[id]||'Not supplied')).join('\n\n'):''])),evidenceRefs:Object.fromEntries(IMPLEMENTATION_FIELDS.map(({id})=>[id,[...new Map(rows.flatMap(r=>r.body.report.implementationScience?.evidenceRefs?.[id]||[]).map(ref=>[JSON.stringify(ref),ref])).values()]]))}:undefined;
+  const report:PlanningReport=normalizeReport({schemaVersion:'dis.planning.report.v1',title:text(input.title||'Reconciled working proposal',180,true),sections:Object.fromEntries(PLANNING_SECTIONS.map(([key])=>[key,rows.map(r=>'Perspective — '+r.title+'\n'+r.body.report.sections[key]).join('\n\n')])),...(implementationScience?{implementationScience}:{})});
   return insertRecord(db,orgId,actor,'proposal',report.title,{report,manifest,contributors:[...new Set([actor,...rows.map(r=>r.owner_subject)])],sourceIds:rows.map(r=>r.id),baseBaselineId:await baselineId(db,orgId),status:'DISCUSSION_REQUIRED'},'organization');
  }
  if(input.action==='save-proposal'){
   const row=await getRecord(db,orgId,uuid(input.id));if(row.kind!=='proposal'||row.visibility!=='organization')throw new OrganizationError('Shared proposal required');expectVersion(row,input.version);
-  const report=normalizeReport(input.report);return replaceRecord(db,row,actor,{...row.body,report,sourceIds:input.sourceIds===undefined?row.body.sourceIds:await checkedSources(db,orgId,input.sourceIds),contributors:[...new Set([...(row.body.contributors||[]),actor])],status:'DISCUSSION_REQUIRED'},report.title);
+  const report=normalizeReport(input.report);await checkedImplementationReferences(db,orgId,report);return replaceRecord(db,row,actor,{...row.body,report,sourceIds:input.sourceIds===undefined?row.body.sourceIds:await checkedSources(db,orgId,input.sourceIds),contributors:[...new Set([...(row.body.contributors||[]),actor])],status:'DISCUSSION_REQUIRED'},report.title);
  }
  if(input.action==='consent'){
   const row=await getRecord(db,orgId,uuid(input.id));expectVersion(row,input.version);if(!['proposal','submission','baseline','evidence'].includes(row.kind)||row.visibility!=='organization')throw new OrganizationError('Select an exact shared planning record');
@@ -147,7 +150,7 @@ export async function actOnOrganization(db:Queryable,actor:string,input:any){
  }
  if(input.action==='vote'||input.action==='publish-baseline'){
   const row=await getRecord(db,orgId,uuid(input.id));expectVersion(row,input.version);if(row.kind!=='proposal')throw new OrganizationError('A saved shared proposal is required');
-  const policy=(await db.query("SELECT * FROM dis_organization_records WHERE organization_id=$1 AND kind='governance' ORDER BY created_at DESC,id DESC LIMIT 1",[orgId])).rows[0];if(!policy)throw new OrganizationError('The chapter has not confirmed its decision authority',409);
+  const policy=(await db.query("SELECT * FROM dis_organization_records WHERE organization_id=$1 AND kind='governance' ORDER BY created_at DESC,id DESC LIMIT 1",[orgId])).rows[0];if(!policy)throw new OrganizationError('The organization has not confirmed its decision authority',409);
   const governance=policy.body as Governance,report=normalizeReport(row.body.report),hash=row.digest;
   if(input.action==='vote'){
    await requireAuthority(db,orgId,actor,'approve_plan');if(!governance.approverSubjects.includes(actor))throw new OrganizationError('Not an approver under the current policy',403);
@@ -196,4 +199,4 @@ export async function channelMessages(db:Queryable,orgId:string,channelId:string
  const rows=(await db.query('SELECT m.*,p.display_name FROM dis_organization_messages m JOIN dis_organization_members p ON p.organization_id=m.organization_id AND p.subject_id=m.author_subject WHERE m.organization_id=$1 AND m.channel_id=$2 AND ($3::timestamptz IS NULL OR m.created_at<$3) ORDER BY m.created_at DESC,m.id DESC LIMIT 101',[orgId,channelId,before||null])).rows;return{messages:rows.slice(0,100).reverse(),more:rows.length>100,nextBefore:rows.length>100?rows[99].created_at:null,chatLinkedByDefault:false};
 }
 export async function storeEvidence(db:Queryable,orgId:string,actor:string,bundle:any){await lockOrganization(db,orgId,actor);return insertRecord(db,orgId,actor,'evidence','Research: '+String(bundle.query||'public sources').slice(0,150),{bundle,claimValidation:'NOT_INDEPENDENTLY_VERIFIED',retrievedAt:new Date().toISOString()},'organization');}
-export async function storeCouncilReceipt(db:Queryable,orgId:string,actor:string,receipt:any){await membership(db,orgId,actor,true);return insertRecord(db,orgId,actor,'council','Council review — '+receipt.targetTitle,receipt,'organization');}
+export async function storeCouncilReceipt(db:Queryable,orgId:string,actor:string,receipt:any){await membership(db,orgId,actor,true);return insertRecord(db,orgId,actor,'council',((receipt.reviewType==='knowledge-answer'?'Source answer — ':'Council review — ')+receipt.targetTitle).slice(0,180),receipt,'organization');}

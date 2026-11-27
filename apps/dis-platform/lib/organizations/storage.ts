@@ -4,13 +4,13 @@ import {lockOrganization,membership,OrganizationError,uuid} from './service';
 import {documentType,safeFilename} from '../document-capacity';
 export const ORGANIZATION_FILE_BYTES=100*1024*1024;
 export const ORGANIZATION_DEFAULT_BYTES=100*1024*1024*1024;
-export async function reserveOriginal(db:Queryable,actor:string,orgId:string,filename:unknown,size:unknown){
+export async function reserveOriginal(db:Queryable,actor:string,orgId:string,filename:unknown,size:unknown,provider?:'railway'){
  await lockOrganization(db,orgId,actor);
  // Expired reservations that never received an upload token cannot contain an authorized object.
  // Release them under the organization lock before checking concurrent quota and pending count.
  await db.query("UPDATE dis_organization_uploads SET status='REJECTED' WHERE organization_id=$1 AND status='RESERVED' AND expires_at<=now()",[orgId]);
  if(typeof filename!=='string'||filename.length>200||!Number.isSafeInteger(size)||Number(size)<1||Number(size)>ORGANIZATION_FILE_BYTES)throw new OrganizationError('Use an allowed document of 1 byte to 100 MiB',413);
- const type=documentType(filename),name=safeFilename(filename),id=randomUUID(),path='organizations/'+orgId+'/'+id+'/'+name;
+ const type=documentType(filename),name=safeFilename(filename),id=randomUUID(),path=(provider==='railway'?'railway/':'')+'organizations/'+orgId+'/'+id+'/'+name;
  const capacity=(await db.query('SELECT storage_quota_bytes,dis_org_storage_usage(id) AS used FROM dis_organizations WHERE id=$1',[orgId])).rows[0];
  if(!capacity||Number(capacity.used)+Number(size)>Number(capacity.storage_quota_bytes))throw new OrganizationError('Organization storage allocation is full; no upload token was issued',413);
  const count=(await db.query("SELECT count(*)::int AS n FROM dis_organization_uploads WHERE organization_id=$1 AND owner_subject=$2 AND status IN ('RESERVED','TOKEN_ISSUED')",[orgId,actor])).rows[0].n;if(count>=10)throw new OrganizationError('Resolve unfinished uploads before starting another batch',429);

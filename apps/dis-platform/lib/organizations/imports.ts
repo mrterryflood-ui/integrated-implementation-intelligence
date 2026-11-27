@@ -4,6 +4,7 @@ import JSZip from 'jszip';
 import {extractRawText} from 'mammoth';
 import {normalizeReport,reportFromText,PLANNING_SCHEMA,PLANNING_SECTIONS,type PlanningReport} from '../planning-contract';
 import {OrganizationError} from './service';
+import {isImplementationTextField,implementationFromTextFields} from '../implementation-science';
 const MAX_TEXT=1000000,MAX_EXPANDED=64*1024*1024;
 /** Inspect central-directory declarations BEFORE a document parser decompresses any entry. ZIP64 and encrypted archives require offline review. */
 export function inspectOfficeZip(buffer:Buffer){
@@ -46,10 +47,11 @@ function reportFromRows(rows:string[][]){
   if(['field','field id','sectionid','section id','schemaversion'].includes(key.toLowerCase())&&/response|value|section/i.test(value))continue;
   key=key.replace(/^\[DIS_FIELD:/,'').replace(/\]$/,'');
   if(key==='schemaVersion'){schema=value.trim();continue;}
-  if(key==='title'||PLANNING_SECTIONS.some(([id])=>id===key)){if(Object.hasOwn(fields,key))throw new OrganizationError('Duplicate template field: '+key);fields[key]=value;}
+  if(key==='title'||PLANNING_SECTIONS.some(([id])=>id===key)||isImplementationTextField(key)){if(Object.hasOwn(fields,key))throw new OrganizationError('Duplicate template field: '+key);fields[key]=value;}
   else throw new OrganizationError('Unmapped spreadsheet/CSV row: '+key+'. Use the field/value input sheet.');
  }
- return normalizeReport({schemaVersion:schema,title:fields.title||'',sections:Object.fromEntries(PLANNING_SECTIONS.map(([id])=>[id,fields[id]||'']))});
+ const implementationScience=implementationFromTextFields(fields);
+ return normalizeReport({schemaVersion:schema,title:fields.title||'',sections:Object.fromEntries(PLANNING_SECTIONS.map(([id])=>[id,fields[id]||''])),...(implementationScience===undefined?{}:{implementationScience})});
 }
 async function spreadsheetRows(buffer:Buffer){
  const manifest=inspectOfficeZip(buffer);if(!manifest.names.includes('xl/workbook.xml'))throw new OrganizationError('Not an XLSX workbook');
@@ -71,7 +73,7 @@ export async function extractPlanningFile(filename:string,bytes:Buffer){
  if(ext==='json'){
   if(bytes.length>MAX_TEXT)throw new OrganizationError('JSON template exceeds 1 MiB');const input=JSON.parse(bytes.toString('utf8'));
   // Explicit compatibility with the previously delivered content contract; no unknown-field dropping.
-  if(input.content&&!input.sections)report=normalizeReport({schemaVersion:input.schemaVersion,title:input.title,sections:input.content});else report=normalizeReport(input);
+  if(input.content&&!input.sections)report=normalizeReport({schemaVersion:input.schemaVersion,title:input.title,sections:input.content,...(input.implementationScience===undefined?{}:{implementationScience:input.implementationScience})});else report=normalizeReport(input);
  }else if(ext==='csv')report=reportFromRows(csvRows(bytes.toString('utf8')));
  else if(ext==='xlsx')report=await spreadsheetRows(bytes);
  else{

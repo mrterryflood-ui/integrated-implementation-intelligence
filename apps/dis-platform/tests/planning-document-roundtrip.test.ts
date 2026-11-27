@@ -3,7 +3,18 @@ import {extractRawText} from 'mammoth';
 import {GET} from '../app/api/planning/template/route';
 import {reportFromText,PLANNING_SECTIONS} from '../lib/planning-contract';
 import {evidenceContext} from '../lib/evidence-integrity';
+import {IMPLEMENTATION_FIELDS,IMPLEMENTATION_SCIENCE_SCHEMA} from '../lib/implementation-science';
 test('actual generated DOCX round-trips all sections without headings leaking into responses',async()=>{const response=await GET(new Request('https://example.org/api/planning/template?format=docx'));assert.equal(response.status,200);const bytes=Buffer.from(await response.arrayBuffer());assert.equal(bytes.subarray(0,2).toString(),'PK');const text=(await extractRawText({buffer:bytes})).value;const report=reportFromText(text);assert.equal(report.title,'[Enter report title]');for(const[key,title]of PLANNING_SECTIONS){assert.equal(report.sections[key],'[Enter your response, or UNKNOWN]',title);}});
 test('missing end-of-field marker is not silently imported',()=>assert.throws(()=>reportFromText('[DIS_FIELD:schemaVersion]\ndis.planning.report.v1\n[DIS_FIELD:title]\nA\n[DIS_END]')));
 test('blank working-template downloads are editable formats rather than PDF',async()=>{for(const format of ['json','csv']){const response=await GET(new Request('https://example.org/api/planning/template?format='+format));assert.equal(response.status,200);assert.ok((await response.text()).includes('dis.planning.report.v1'));}assert.equal((await GET(new Request('https://example.org/api/planning/template?format=pdf'))).status,400);});
 test('external public documents remain distinct from owned-platform excerpts',()=>{const ctx=JSON.parse(evidenceContext([{id:'E701',title:'Statute',doi:null,url:'https://tcss.legis.texas.gov/',year:null,abstract:'Public legal text',evidenceKind:'PRIMARY_PUBLIC_DOCUMENT'}]));assert.equal(ctx.sources[0].evidenceKind,'PRIMARY_PUBLIC_DOCUMENT');assert.equal(ctx.sources[0].abstractStatus,'RETRIEVED_PUBLIC_DOCUMENT_PASSAGES_NOT_APPLICANT_CERTIFICATION');});
+test('opt-in implementation template exposes distinct editable fields and imports actual DOCX',async()=>{
+ const response=await GET(new Request('https://example.org/api/planning/template?format=docx&implementationScience=1'));
+ assert.equal(response.status,200);const text=(await extractRawText({buffer:Buffer.from(await response.arrayBuffer())})).value;
+ const report=reportFromText(text);assert.equal(report.implementationScience?.schemaVersion,IMPLEMENTATION_SCIENCE_SCHEMA);
+ for(const field of IMPLEMENTATION_FIELDS)assert.equal(report.implementationScience?.fields[field.id],'UNKNOWN');
+ const legacyResponse=await GET(new Request('https://example.org/api/planning/template?format=json'));
+ assert.equal(Object.hasOwn(await legacyResponse.json(),'implementationScience'),false);
+ const jsonResponse=await GET(new Request('https://example.org/api/planning/template?format=json&implementationScience=1'));
+ assert.equal((await jsonResponse.json()).implementationScience.schemaVersion,IMPLEMENTATION_SCIENCE_SCHEMA);
+});
