@@ -13,12 +13,13 @@ import {auth} from '@clerk/nextjs/server';
 import {MEMBERS,councilBrief,DEFAULT_RED} from '../../../lib/council';
 import {convene as executeCouncil,infer} from '../../../lib/council-engine';
 import {integratedCouncilResearch} from '../../../lib/integrated-research';
+import {sameOriginRequestFailure} from '../../../lib/request-origin';
 const convene=(input:Parameters<typeof executeCouncil>[0])=>executeCouncil(input,{research:integratedCouncilResearch,infer});
 export const runtime='nodejs';export const maxDuration=120;
 export async function GET(){const oidc=await getVercelOidcToken().then(()=>true).catch(()=>false);return NextResponse.json({operatingContract:OPERATING_CONTRACT_RECEIPT,members:[...new Map(MEMBERS.map(m=>[m.id,m])).values()],defaultRed:DEFAULT_RED,runtime:{model:process.env.AI_GATEWAY_MODEL||null,gatewayConfigured:Boolean(process.env.AI_GATEWAY_API_KEY||process.env.VERCEL_OIDC_TOKEN||oidc)},notice:'Gateway connectivity requires live authenticated POST verification'})}
 export async function POST(req:Request){
  if(productionIdentityBlocked(process.env))return NextResponse.json({error:'Private identity not released'},{status:503});
- const origin=req.headers.get('origin');if(origin){try{if(new URL(origin).origin!==new URL(req.url).origin)return NextResponse.json({error:'Origin mismatch'},{status:403})}catch{return NextResponse.json({error:'Invalid origin'},{status:403})}}
+ const originError=sameOriginRequestFailure(req,{allowMissingOrigin:true});if(originError)return originError;
  let body:any;try{body=await readBoundedOfficeRequest(req,32000)}catch{return NextResponse.json({error:'Invalid JSON'},{status:400})}
  const prompt=typeof body.prompt==='string'?body.prompt.trim():'';if(prompt.length<5||prompt.length>3000)return NextResponse.json({error:'Question must be 5–3000 characters'},{status:400});
  let conversation;try{conversation=sanitizeConversation(body.conversation)}catch(e){return NextResponse.json({error:e instanceof Error?e.message:'Invalid conversation'},{status:400})}

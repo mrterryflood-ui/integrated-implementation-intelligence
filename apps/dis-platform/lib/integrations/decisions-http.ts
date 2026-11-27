@@ -2,6 +2,7 @@ import {BoundedJsonRequestError, readBoundedJsonRequest} from '../bounded-json-r
 import {organizationFailure, organizationResponse, sameOrigin} from '../organizations/http';
 import {OrganizationError} from '../organizations/service';
 import {DecisionsError, type DecisionsConfiguration} from './decisions-contract';
+import {canonicalRequestOrigin,RequestOriginError} from '../request-origin';
 
 export function decisionsFailure(error: unknown) {
   if (error instanceof DecisionsError) return organizationResponse({error: error.message, code: error.code}, error.status);
@@ -16,7 +17,8 @@ export async function decisionsBody(request: Request, allowed: string[]): Promis
   return body as Record<string, unknown>;
 }
 export function decisionsPublicOrigin(request: Request, config: DecisionsConfiguration) {
-  if (new URL(request.url).origin !== config.publicOrigin) throw new OrganizationError('This connection must use the configured DIS address', 403);
+  try { canonicalRequestOrigin(request, {...process.env, DIS_PUBLIC_ORIGIN: config.publicOrigin}); }
+  catch (error) { if (error instanceof RequestOriginError) throw new OrganizationError(error.message, error.status); throw error; }
 }
 export function decisionsReturn(config: DecisionsConfiguration, authorized: boolean, organizationId?: string) {
   const destination = new URL('/planning', config.publicOrigin);

@@ -3,6 +3,7 @@ import {productionIdentityBlocked} from "../../../../lib/release-gates";
 import {evaluateHIL} from "../../../../lib/whole-system-exercise";
 import {runSelectedRpliceMcp,RpliceBridgeError,type SpecialistChoice} from "../../../../lib/rplice-adapter";
 import {readBoundedJsonRequest,jsonRequestStatus} from "../../../../lib/bounded-json-request";
+import {sameOriginRequestFailure} from '../../../../lib/request-origin';
 export const runtime="nodejs";
 export const maxDuration=30;
 /** Stateless specialist analysis; no database mutation, inferred approval or PHI access. */
@@ -12,10 +13,7 @@ export async function POST(request:Request){
  if(!userId)return Response.json({error:"Sign in required"},{status:401});
  if(Number(request.headers.get("content-length")||0)>14000)return Response.json({error:"Request too large"},{status:413});
  if(!request.headers.get("content-type")?.includes("application/json"))return Response.json({error:"JSON required"},{status:415});
- const origin=request.headers.get("origin");
- if(origin)try{
-   if(new URL(origin).origin!==new URL(request.url).origin)return Response.json({error:"Origin mismatch"},{status:403});
- }catch{return Response.json({error:"Invalid request origin"},{status:403});}
+ const originError=sameOriginRequestFailure(request,{allowMissingOrigin:true});if(originError)return originError;
  let b:any;try{b=await readBoundedJsonRequest(request,14000)}catch(e){return Response.json({error:"Invalid or oversized JSON request"},{status:jsonRequestStatus(e)});}
  if(!b||typeof b!=="object")return Response.json({error:"Invalid input"},{status:400});
  const method=b.method as SpecialistChoice;

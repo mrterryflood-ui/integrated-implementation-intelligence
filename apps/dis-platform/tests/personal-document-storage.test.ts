@@ -15,7 +15,7 @@ type Statement={text:string;values:unknown[]};
 type Stored={bytes:Buffer;contentType:string;sha256:string};
 const hash=(bytes:Uint8Array)=>createHash('sha256').update(bytes).digest('hex');
 const origin='https://synthetic-documents.test',owner='synthetic-document-owner',other='synthetic-other-owner';
-const envKeys=['DIS_DATABASE_URL','NODE_ENV','VERCEL_ENV','DIS_HOST_PRODUCTION','NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY','CLERK_SECRET_KEY','DIS_TRUSTED_UPLOAD_SUBJECTS','DIS_OBJECT_STORAGE_PROVIDER','DIS_S3_ENDPOINT','DIS_S3_BUCKET','DIS_S3_REGION','DIS_S3_ACCESS_KEY_ID','DIS_S3_SECRET_ACCESS_KEY','DIS_S3_URL_STYLE','BLOB_READ_WRITE_TOKEN'] as const;
+const envKeys=['DIS_DATABASE_URL','DIS_PUBLIC_ORIGIN','NODE_ENV','VERCEL_ENV','DIS_HOST_PRODUCTION','NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY','CLERK_SECRET_KEY','DIS_TRUSTED_UPLOAD_SUBJECTS','DIS_OBJECT_STORAGE_PROVIDER','DIS_S3_ENDPOINT','DIS_S3_BUCKET','DIS_S3_REGION','DIS_S3_ACCESS_KEY_ID','DIS_S3_SECRET_ACCESS_KEY','DIS_S3_URL_STYLE','BLOB_READ_WRITE_TOKEN'] as const;
 
 test('personal document consumers preserve provider, ownership and receipt boundaries',async t=>{
  const directory=mkdtempSync(join(tmpdir(),'dis-personal-storage-')),bundlePath=join(directory,'routes.cjs');
@@ -29,7 +29,7 @@ test('personal document consumers preserve provider, ownership and receipt bound
  const globals=globalThis as typeof globalThis&{__disPersonalStorageFixture?:any};
  try{
   for(const key of envKeys)delete process.env[key];
-  Object.assign(process.env,{DIS_DATABASE_URL:'synthetic-pglite-transport',NODE_ENV:'production',NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:'pk_live_fixture',CLERK_SECRET_KEY:'sk_live_fixture',DIS_TRUSTED_UPLOAD_SUBJECTS:owner,DIS_OBJECT_STORAGE_PROVIDER:'railway',DIS_S3_ENDPOINT:'https://fixture.storageapi.dev',DIS_S3_BUCKET:'synthetic-documents',DIS_S3_REGION:'auto',DIS_S3_ACCESS_KEY_ID:'fixture-access-key',DIS_S3_SECRET_ACCESS_KEY:'fixture-secret-not-a-credential',DIS_S3_URL_STYLE:'virtual'});
+  Object.assign(process.env,{DIS_DATABASE_URL:'synthetic-pglite-transport',DIS_PUBLIC_ORIGIN:origin,NODE_ENV:'production',NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY:'pk_live_fixture',CLERK_SECRET_KEY:'sk_live_fixture',DIS_TRUSTED_UPLOAD_SUBJECTS:owner,DIS_OBJECT_STORAGE_PROVIDER:'railway',DIS_S3_ENDPOINT:'https://fixture.storageapi.dev',DIS_S3_BUCKET:'synthetic-documents',DIS_S3_REGION:'auto',DIS_S3_ACCESS_KEY_ID:'fixture-access-key',DIS_S3_SECRET_ACCESS_KEY:'fixture-secret-not-a-credential',DIS_S3_URL_STYLE:'virtual'});
   await db.exec(readFileSync('tests/fixtures/casework-recovery-schema.sql','utf8'));
   // Existing source-controlled fixture supplies workspace RLS. Document select
   // and insert policies below are synthetic owner checks, not a migration or a
@@ -83,10 +83,10 @@ test('personal document consumers preserve provider, ownership and receipt bound
    },
   }]});
   const api=createRequire(import.meta.url)(bundlePath) as {documents:{POST:(r:Request)=>Promise<Response>;GET:(r:Request)=>Promise<Response>;DELETE:(r:Request)=>Promise<Response>};download:{GET:(r:Request)=>Promise<Response>}};
-  const request=(method:string,id?:string,requestOrigin:string|null=origin)=>new Request(origin+'/api/documents'+(id?'?id='+id:''),{method,headers:requestOrigin?{origin:requestOrigin}:{}});
+  const request=(method:string,id?:string,requestOrigin:string|null=origin)=>new Request(origin+'/api/documents'+(id?'?id='+id:''),{method,headers:{host:new URL(origin).host,...(requestOrigin?{origin:requestOrigin}:{})}});
   const upload=(name='planning-notes.txt',bytes:Uint8Array=new TextEncoder().encode('Synthetic planning notes'),workspace=workspaceId,requestOrigin:string|null=origin)=>{
    const form=new FormData();form.set('workspaceId',workspace);form.set('file',new File([Buffer.from(bytes)],name,{type:'text/plain'}));
-   return new Request(origin+'/api/documents',{method:'POST',headers:requestOrigin?{origin:requestOrigin}:{},body:form});
+   return new Request(origin+'/api/documents',{method:'POST',headers:{host:new URL(origin).host,...(requestOrigin?{origin:requestOrigin}:{})},body:form});
   };
   const count=async()=>Number((await db.query<{n:number}>('SELECT count(*)::int AS n FROM dis_documents')).rows[0].n);
   const storedRow=async(id:string)=>(await db.query<any>('SELECT * FROM dis_documents WHERE id=$1',[id])).rows[0];
@@ -108,7 +108,7 @@ test('personal document consumers preserve provider, ownership and receipt bound
   });
   await t.test('multipart body, file size and file type bounds cannot be bypassed by an absent or false length',async()=>{
    for(const length of [undefined,'1']){
-    const r=new Request(origin+'/api/documents',{method:'POST',headers:{origin,'content-type':'multipart/form-data; boundary=synthetic',...(length?{'content-length':length}:{})},body:new Uint8Array(5*1024*1024+100001)});
+    const r=new Request(origin+'/api/documents',{method:'POST',headers:{host:new URL(origin).host,origin,'content-type':'multipart/form-data; boundary=synthetic',...(length?{'content-length':length}:{})},body:new Uint8Array(5*1024*1024+100001)});
     assert.equal((await api.documents.POST(r)).status,413);
    }
    assert.equal((await api.documents.POST(upload('notes.txt',new Uint8Array(5*1024*1024+1)))).status,413);

@@ -5,6 +5,7 @@ import {createHash,randomUUID} from "node:crypto";
 import {trustedProductionUploader} from "../../../lib/release-gates";
 import {isRailwayObjectPath,ObjectStoreError,railwayObjectStore,railwayStorageConfiguration} from "../../../lib/organizations/object-store";
 import {ALLOWED_EXT,extension,safeName,extractFile} from "./file-processing";
+import {sameOriginRequestFailure} from '../../../lib/request-origin';
 export const runtime="nodejs";
 export const maxDuration=60;
 const MAX_BYTES=5*1024*1024;
@@ -12,11 +13,7 @@ const MAX_FORM_BYTES=MAX_BYTES+100000;
 const PERSONAL_PATH=/^(?:railway\/)?dis\/[a-f0-9]{8}-[a-f0-9]{4}-[1-5][a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}\/(?!\.{1,2}$)[A-Za-z0-9._-]{1,110}$/;
 const MIME:Record<string,string>={pdf:"application/pdf",docx:"application/vnd.openxmlformats-officedocument.wordprocessingml.document",txt:"text/plain",md:"text/markdown",csv:"text/csv",json:"application/json",xml:"application/xml",html:"text/html",htm:"text/html",log:"text/plain",eml:"message/rfc822",yaml:"application/yaml",yml:"application/yaml",rtf:"application/rtf"};
 function originFailure(request:Request){
- const origin=request.headers.get("origin");
- if(!origin)return Response.json({error:"Origin required"},{status:403});
- try{if(origin!==new URL(request.url).origin)return Response.json({error:"Origin mismatch"},{status:403});}
- catch{return Response.json({error:"Invalid origin"},{status:403});}
- return null;
+ return sameOriginRequestFailure(request);
 }
 class UploadRequestError extends Error {constructor(message:string,readonly status:number){super(message);}}
 /** Bound actual multipart bytes even when Content-Length is absent or false. */

@@ -7,6 +7,7 @@ import {neon} from "@neondatabase/serverless";
 import {productionIdentityBlocked} from "../../../lib/release-gates";
 import {planOwnedCapabilities,invokeOwnedCapabilities} from "../../../lib/owned-capability-fabric";
 import {readBoundedJsonRequest,jsonRequestStatus} from "../../../lib/bounded-json-request";
+import {sameOriginRequestFailure} from '../../../lib/request-origin';
 export const runtime="nodejs";
 export const maxDuration=35;
 
@@ -20,8 +21,7 @@ export async function POST(request:Request){
  let userId:string|null;
  try{({userId}=await auth())}catch{return Response.json({error:"Identity service unavailable"},{status:503})}
  if(!userId)return Response.json({error:"Authentication required"},{status:401});
- const origin=request.headers.get("origin");
- if(origin){try{if(new URL(origin).host!==new URL(request.url).host)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}}
+ const originError=sameOriginRequestFailure(request,{allowMissingOrigin:true});if(originError)return originError;
  if(Number(request.headers.get("content-length")||0)>4000)return Response.json({error:"Request too large"},{status:413});
  let body:unknown;
  try{body=await readBoundedJsonRequest(request,4000)}catch(e){return Response.json({error:"Invalid or oversized request JSON"},{status:jsonRequestStatus(e)})}

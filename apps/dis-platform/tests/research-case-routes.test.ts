@@ -20,6 +20,7 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
  const directory=mkdtempSync(join(tmpdir(),"dis-research-routes-"));
  const databaseDirectory=join(directory,"database"),bundlePath=join(directory,"routes.cjs");
  const previousDatabaseUrl=process.env.DIS_DATABASE_URL;
+ const previousPublicOrigin=process.env.DIS_PUBLIC_ORIGIN;
  let db=new PGlite(databaseDirectory);await db.waitReady;
  const app=process.cwd();
  try{
@@ -60,6 +61,7 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
   process.env.DIS_DATABASE_URL="synthetic-pglite-transport-not-a-credential";
   await db.exec(readFileSync("tests/fixtures/casework-recovery-schema.sql","utf8"));
   const origin="https://synthetic-research.test",owner="synthetic-research-owner",other="synthetic-other-owner";
+  process.env.DIS_PUBLIC_ORIGIN=origin;
   const as=async<T>(actor:string,work:()=>Promise<T>)=>{
    await db.exec("BEGIN; SET LOCAL ROLE dis_app_safe;");
    try{await db.query("SELECT set_config('dis.subject_id',$1,true)",[actor]);const result=await work();await db.exec("COMMIT");return result;}
@@ -72,7 +74,7 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
   const workspaceId=await workspace(owner),otherWorkspaceId=await workspace(other);
   const call=async(actor:string|null,handler:(req:Request)=>Promise<Response>,path:string,method:string,body?:unknown,requestOrigin:string|null=origin)=>{
    fixture.__disResearchRouteActor=actor;
-   const response=await handler(new Request(origin+path,{method,headers:{"content-type":"application/json",...(requestOrigin?{origin:requestOrigin}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})}));
+   const response=await handler(new Request(origin+path,{method,headers:{host:new URL(origin).host,"content-type":"application/json",...(requestOrigin?{origin:requestOrigin}:{})},...(body===undefined?{}:{body:JSON.stringify(body)})}));
    return {status:response.status,body:await response.json()};
   };
   const workflow=api.emptyResearchWorkflow();workflow.publicAggregateConfirmed=true;
@@ -362,5 +364,6 @@ test("research case handlers retain complete inputs, enforce boundaries and reco
   await db.close();rmSync(directory,{recursive:true,force:true});
   delete fixture.__disResearchRouteActor;delete fixture.__disResearchRouteDb;delete fixture.__disResearchAfterTransaction;
   if(previousDatabaseUrl===undefined)delete process.env.DIS_DATABASE_URL;else process.env.DIS_DATABASE_URL=previousDatabaseUrl;
+  if(previousPublicOrigin===undefined)delete process.env.DIS_PUBLIC_ORIGIN;else process.env.DIS_PUBLIC_ORIGIN=previousPublicOrigin;
  }
 });

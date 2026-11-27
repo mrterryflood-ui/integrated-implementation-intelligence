@@ -5,12 +5,13 @@ import {sanitizeIntake} from "../../../../lib/consultation";
 import {buildPackage,attachUnverifiedOwnedIntelAnnex} from "../../../../lib/consultation-package";
 import {exportPptx,exportDocx} from "../../../../lib/consultation-export";
 import type {IntelligenceBundle} from "../../../../lib/consultation-research";
+import {sameOriginRequestFailure} from '../../../../lib/request-origin';
 export const runtime="nodejs";
 export const maxDuration=45;
 export async function POST(req:Request){
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in to export Office documents"},{status:401});
  if(Number(req.headers.get("content-length")||0)>240000)return Response.json({error:"Export request too large"},{status:413});
- const origin=req.headers.get("origin");if(origin){try{if(new URL(origin).host!==new URL(req.url).host)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}}
+ const originError=sameOriginRequestFailure(req,{allowMissingOrigin:true});if(originError)return originError;
  let input:any;try{input=await readBoundedOfficeRequest(req)}catch(e){return Response.json({error:e instanceof Error?e.message:"Invalid export request"},{status:e instanceof Error&&e.message.includes("too large")?413:400})}
  const format=input?.format==="pptx"?"pptx":input?.format==="docx"?"docx":null;
  if(!format)return Response.json({error:"Supported formats: pptx, docx"},{status:400});

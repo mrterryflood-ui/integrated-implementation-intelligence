@@ -6,6 +6,7 @@ import {infer} from "../../../lib/council-engine";
 import {productionIdentityBlocked} from "../../../lib/release-gates";
 import {looksLikePrivateRecord} from "../../../lib/answer-release-policy";
 import {validatePerspectiveRequest} from "../../../lib/perspective-translation";
+import {sameOriginRequestFailure} from '../../../lib/request-origin';
 export const runtime="nodejs";export const maxDuration=45;
 // A 9,000-character source can require substantially more than 9,000 UTF-8 bytes,
 // especially with Japanese text or JSON-escaped control characters. The bounded
@@ -13,9 +14,7 @@ export const runtime="nodejs";export const maxDuration=45;
 export const PERSPECTIVE_JSON_MAX_BYTES=100*1024;
 export async function POST(req:Request){
  if(productionIdentityBlocked(process.env))return Response.json({error:"Private identity not released",state:"UNAVAILABLE"},{status:503});
- const origin=req.headers.get("origin");
- if(!origin)return Response.json({error:"Same-origin request required"},{status:403});
- try{if(new URL(origin).origin!==new URL(req.url).origin)return Response.json({error:"Origin mismatch"},{status:403})}catch{return Response.json({error:"Invalid origin"},{status:403})}
+ const originError=sameOriginRequestFailure(req);if(originError)return originError;
  if(Number(req.headers.get("content-length")||0)>PERSPECTIVE_JSON_MAX_BYTES)return Response.json({error:"Request exceeds bounded intake"},{status:413});
  const {userId}=await auth();if(!userId)return Response.json({error:"Sign in before AI perspective translation",state:"SIGN_IN_REQUIRED"},{status:401});
  let raw:unknown;try{raw=await readBoundedJsonRequest(req,PERSPECTIVE_JSON_MAX_BYTES)}catch(e){return Response.json({error:"Invalid or oversized JSON",state:"REQUEST_REJECTED"},{status:jsonRequestStatus(e)})}
