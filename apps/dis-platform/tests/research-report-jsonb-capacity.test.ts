@@ -17,6 +17,7 @@ const globals=globalThis as Globals;
 test("research report JSONB expansion does not lock an admitted investigation",async t=>{
  const folder=mkdtempSync(join(tmpdir(),"dis-report-capacity-")),bundle=join(folder,"routes.cjs");
  const priorUrl=process.env.DIS_DATABASE_URL;
+ const priorPublicOrigin=process.env.DIS_PUBLIC_ORIGIN;
  const db=new PGlite();await db.waitReady;
  try{
   const routePath=join(process.cwd(),"app/api/cases/route.ts");
@@ -51,11 +52,12 @@ test("research report JSONB expansion does not lock an admitted investigation",a
   globals.__reportCapacityDb=db;process.env.DIS_DATABASE_URL="synthetic-capacity-transport-not-a-credential";
   await db.exec(readFileSync("tests/fixtures/casework-recovery-schema.sql","utf8"));
   const owner="synthetic-capacity-owner",other="synthetic-capacity-other",origin="https://capacity-fixture.test";
+  process.env.DIS_PUBLIC_ORIGIN=origin;
   await db.query("INSERT INTO dis_subjects VALUES($1),($2)",[owner,other]);
   const workspace=String((await db.query<{id:string}>("INSERT INTO dis_workspaces(owner_subject,title) VALUES($1,$2) RETURNING id",[owner,"Synthetic capacity regression"])).rows[0].id);
   const call=async(actor:string|null,handler:(r:Request)=>Promise<Response>,method:string,body:unknown,requestOrigin=origin)=>{
    globals.__reportCapacityActor=actor;
-   const r=await handler(new Request(origin+"/api/cases",{method,headers:{"content-type":"application/json",origin:requestOrigin},body:JSON.stringify(body)}));
+   const r=await handler(new Request(origin+"/api/cases",{method,headers:{host:new URL(origin).host,"content-type":"application/json",origin:requestOrigin},body:JSON.stringify(body)}));
    return {status:r.status,body:await r.json()};
   };
   const events=async(id:string)=>Number((await db.query<{n:number}>("SELECT count(*)::int AS n FROM dis_case_events WHERE case_id=$1",[id])).rows[0].n);
@@ -132,6 +134,7 @@ test("research report JSONB expansion does not lock an admitted investigation",a
   });
  }finally{
   if(priorUrl===undefined)delete process.env.DIS_DATABASE_URL;else process.env.DIS_DATABASE_URL=priorUrl;
+  if(priorPublicOrigin===undefined)delete process.env.DIS_PUBLIC_ORIGIN;else process.env.DIS_PUBLIC_ORIGIN=priorPublicOrigin;
   delete globals.__reportCapacityActor;delete globals.__reportCapacityDb;await db.close();rmSync(folder,{recursive:true,force:true});
  }
 });
