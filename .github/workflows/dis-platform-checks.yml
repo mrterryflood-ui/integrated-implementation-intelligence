@@ -27,6 +27,13 @@ jobs:
           node-version: '22'
       - run: npm install --no-audit --no-fund
       - run: npx tsc --noEmit
+      - name: Verify replacement-host identity and upload gates without credentials
+        run: |
+          if [ -f lib/host-release.test.mjs ]; then
+            env -i PATH="$PATH" HOME="$HOME" ./node_modules/.bin/tsx --test lib/host-release.test.mjs
+          else
+            echo 'Host release regression file missing'; exit 1
+          fi
       - run: npm test
         env:
           DIS_EVAL_ARTIFACT_DIR: test-results/decision-contracts
