@@ -319,11 +319,113 @@ class RetirementTests(unittest.TestCase):
         self.requests.post.assert_not_called()
 
     def test_retired_source_url_fails_before_import(self):
-        for url in ("https://api.perplexity.ai", "https://pplx.ai/source", "https://source.example/%53ONAR"):
+        for url in ("https://perplexity.ai/source", "https://api.perplexity.ai/source",
+                    "https://pplx.ai/source", "https://api.pplx.ai/source",
+                    "https://PERPLEXITY.AI./source", "https://API.PPLX.AI.:443/source",
+                    "https://source.example@perplexity.ai/source",
+                    "https://%70erplexity.ai/source", "https://pplx%2Eai/source",
+                    "https://%2570erplexity.ai/source"):
             with self.subTest(url=url), self.assertRaises(ValueError):
                 kg.fetch_url(url)
         self.requests.get.assert_not_called()
         self.assertNotIn("requests", self.imports)
+
+    def test_source_path_and_query_words_are_not_provider_selections(self):
+        urls = ("https://source.example/reports/sonar-index-2026",
+                "https://source.example/?topic=perplexity",
+                "https://source.example/pplx-migration-notes",
+                "https://source.example/%53ONAR",
+                "https://source.example/?url=https%3A%2F%2Fperplexity.ai")
+        for url in urls:
+            with self.subTest(url=url):
+                self.requests.get.reset_mock()
+                self.requests.get.side_effect = None
+                self.requests.get.return_value = Response(text=TEXT)
+                self.assertEqual(kg.fetch_url(url), (TEXT, {}))
+                self.requests.get.assert_called_once_with(url, timeout=60,
+                                                         headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
+        self.requests.post.assert_not_called()
+
+    def test_source_retirement_uses_actual_host_not_userinfo_or_lookalikes(self):
+        for url in ("https://perplexity.ai@source.example/research",
+                    "https://perplexity.ai.example/research", "https://notpplx.ai/research",
+                    "https://sonar.example/research"):
+            with self.subTest(url=url):
+                self.requests.get.reset_mock()
+                self.requests.get.side_effect = None
+                self.requests.get.return_value = Response(text=TEXT)
+                self.assertEqual(kg.fetch_url(url), (TEXT, {}))
+                self.requests.get.assert_called_once_with(url, timeout=60,
+                                                         headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
+        self.requests.post.assert_not_called()
+
+    def test_cli_ingests_legitimate_source_words_and_preserves_url_provenance(self):
+        urls = ("https://source.example/reports/sonar-index-2026",
+                "https://source.example/?topic=perplexity",
+                "https://source.example/pplx-migration-notes",
+                "https://source.example/%53ONAR")
+        for index, url in enumerate(urls):
+            with self.subTest(url=url):
+                self.requests.get.reset_mock()
+                self.requests.post.reset_mock()
+                self.requests.get.side_effect = None
+                self.requests.get.return_value = Response(text=TEXT)
+                self.respond([fact()])
+                database = self.temp / ("source-word-" + str(index) + ".sqlite")
+                result = json.loads(self.run_cli("ingest", "--db", database, "--url", url,
+                                                 "--tier", "RESEARCH", "--profile", "violence"))
+                self.assertEqual(result["kept"], 1)
+                with sqlite3.connect(database) as check:
+                    self.assertEqual(check.execute("SELECT url FROM sources").fetchone(), (url,))
+                    self.assertEqual(check.execute("SELECT count(*) FROM quads").fetchone()[0], 1)
+                self.assertEqual(self.requests.get.call_args.args[0], url)
+                self.requests.get.assert_called_once()
+                self.requests.post.assert_called_once()
+
+    def test_cli_retired_source_hosts_fail_before_store_or_transport(self):
+        urls = ("https://perplexity.ai/source", "https://api.perplexity.ai/source",
+                "https://pplx.ai/source", "https://api.pplx.ai/source",
+                "https://PERPLEXITY.AI./source", "https://API.PPLX.AI.:443/source",
+                "https://source.example@perplexity.ai/source",
+                "https://%70erplexity.ai/source", "https://pplx%2Eai/source")
+        for index, url in enumerate(urls):
+            database = self.temp / ("retired-source-" + str(index) + ".sqlite")
+            with self.subTest(url=url), mock.patch.object(kg, "fetch_url") as fetch:
+                with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as caught:
+                    self.run_cli("ingest", "--db", database, "--url", url, "--tier", "RESEARCH")
+                self.assertEqual(caught.exception.code, 2)
+                fetch.assert_not_called()
+                self.assertFalse(database.exists())
+        self.requests.get.assert_not_called()
+        self.requests.post.assert_not_called()
+
+    def test_backslash_authority_boundary_matches_requests_url_preparation(self):
+        # Observed offline with Requests: these prepare to the retired host;
+        # urllib.parse.urlsplit alone instead interprets source.example as host.
+        urls = ("https://perplexity.ai\\@source.example/",
+                "https://pplx.ai\\ignored@source.example/")
+        for index, url in enumerate(urls):
+            with self.subTest(url=url):
+                with self.assertRaises(ValueError):
+                    kg.fetch_url(url)
+                database = self.temp / ("backslash-" + str(index) + ".sqlite")
+                with mock.patch.object(kg, "fetch_url") as fetch:
+                    with contextlib.redirect_stderr(io.StringIO()), self.assertRaises(SystemExit) as caught:
+                        self.run_cli("ingest", "--db", database, "--url", url, "--tier", "RESEARCH")
+                    self.assertEqual(caught.exception.code, 2)
+                    fetch.assert_not_called()
+                    self.assertFalse(database.exists())
+        self.requests.get.assert_not_called()
+        self.requests.post.assert_not_called()
+        self.assertNotIn("requests", self.imports)
+
+        # The reverse form prepares to source.example, not the provider host.
+        url = "https://source.example\\@perplexity.ai/"
+        self.requests.get.side_effect = None
+        self.requests.get.return_value = Response(text=TEXT)
+        self.assertEqual(kg.fetch_url(url), (TEXT, {}))
+        self.requests.get.assert_called_once_with(url, timeout=60,
+                                                 headers={"User-Agent": "Mozilla/5.0"}, allow_redirects=False)
 
     def test_source_failures_and_redirects_cannot_become_extracted_facts(self):
         for status in (302, 404, 503):

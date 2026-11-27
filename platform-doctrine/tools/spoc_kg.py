@@ -161,6 +161,17 @@ def reject_retired_selection(value: str | None):
         raise ValueError("Perplexity/PPLX/Sonar selections are retired; choose a supported route explicitly")
 
 
+def reject_retired_source_url(url: str):
+    """Retire provider hosts without treating source path/query words as models."""
+    # Requests treats a literal backslash as an authority/path delimiter, before
+    # userinfo parsing. Match that boundary without decoding source path/query.
+    for form in selection_forms(urlsplit(url.replace("\\", "/")).hostname or ""):
+        host = form.rstrip(".")
+        if any(host == domain or host.endswith("." + domain)
+               for domain in ("perplexity.ai", "pplx.ai")):
+            raise ValueError("retired provider endpoint; supply the publisher URL")
+
+
 def is_openrouter_url(value: str) -> bool:
     for form in selection_forms(value):
         host = (urlsplit(form).hostname or "").rstrip(".")
@@ -381,7 +392,7 @@ def extract(store: QuadStore, text: str, source: dict, profile="generic", backen
 
 
 def fetch_url(url: str) -> tuple[str, dict]:
-    reject_retired_selection(url)
+    reject_retired_source_url(url)
     import requests
     response = requests.get(url, timeout=60, headers={"User-Agent": "Mozilla/5.0"},
                             allow_redirects=False)
@@ -417,7 +428,7 @@ def main():
         try:
             llm_route(a.backend, a.model)
             if a.url:
-                reject_retired_selection(a.url)
+                reject_retired_source_url(a.url)
         except ValueError as exc:
             ap.error(str(exc))
     st = QuadStore(a.db)

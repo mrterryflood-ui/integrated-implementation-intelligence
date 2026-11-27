@@ -1,6 +1,7 @@
 # SPOC provider retirement: source candidate
 
-Date: 2026-11-23. Decision: source-only DRAFT; runtime and release HOLD. Terry owns consequential
+Original record: 2026-11-23. Source integration authorized 2026-11-27, subject to final checks;
+runtime and deployment acceptance remain unverified. See the November 27 correction below. Terry owns consequential
 release decisions; repository maintainers own runtime configuration and drift checks. The builder
 and independent reviewer are separate agent roles, recorded with exact final revisions in the
 task's `spoc-perplexity-evidence.json` and `spoc-independent-review.json`. These are engineering
@@ -53,7 +54,7 @@ suite uses only the Python standard library, synthetic responses and temporary S
 and provider environment values are synthetic. No real model or source request supplies a test
 result. A successful mock proves request/response and local graph behavior, not model quality.
 
-The 19 native tests exercise retired selections before import/store/fetch, encoded names,
+The original 19 native tests exercise retired selections before import/store/fetch, encoded names,
 default Ollama, explicit OpenAI, provider errors without fallback, OpenRouter opt-out/shortcut
 rejection, no redirects, SDK-free source acquisition, unsupported source formats before paid
 extraction, unknown metadata, real graph rejections,
@@ -81,7 +82,7 @@ signed provenance, execution of a test, or permission to release.
 The independent reviewer challenges the exact candidate and replays the isolated suite; hosted
 CI must finish on the final PR heads. The external task receipt records observed results rather
 than inferring them here. Draft PR creation, merge, deployment, runtime health and billing closure
-are separate states. Neither production source nor runtime configuration changes with this draft.
+are separate states. Source integration does not itself change the deployed runtime or its configuration.
 
 Maintainers must verify local Ollama/model availability or the intentionally chosen existing
 provider, then complete authorized release controls and a runtime journey. OpenRouter account
@@ -98,3 +99,18 @@ restoring a retired provider path is not an automatic rollback permission.
 Primary broker reference: [OpenRouter plugins](https://openrouter.ai/docs/guides/features/plugins),
 inspected 2026-11-23, documents request opt-outs, locked account precedence and the `:online`
 shortcut. No account configuration or billable call was used to establish this source behavior.
+
+
+## November 27 correction: distinguish source hosts from model selections
+
+**Owner and authority:** Terry authorized merging ready changes on November 27, 2026. Repository maintainers own the mirrored helper and later runtime acceptance. Source integration is authorized subject to final hosted checks; deployment, live inference, account settings and billing closure remain separate unverified observations.
+
+**Before and cause:** the source URL path reused the stricter provider/model selection guard. That incorrectly refused legitimate publisher URLs containing `sonar`, `perplexity` or `pplx` in a path or query. The first CVR source review missed this regression; the subsequent canonical review exposed it after CVR PR5 merged. The expanded suite reproduced the false refusals against the old source. The merged helper had not been deployed by this task.
+
+**Changed:** both direct acquisition and CLI preflight now examine only the parsed source hostname, including its explicit subdomain boundary, case, trailing root dot and bounded decoding. Ordinary publisher path/query words remain usable and the original source URL remains recorded as provenance. The guard accounts for Requests treating literal backslashes as authority/path delimiters, closing the independently reproduced userinfo/parser mismatch. Strict backend/model/endpoint guards, redirect refusal, local default, explicit alternative-provider selection and the no-fallback rule remain intact.
+
+**Proof:** the expanded native suite passes 24/24 in each mirror, with zero failures or skips, on Python 3.12. The independent root reviewer reran both layouts. Added regressions cover ordinary and encoded publisher words, valid/lookalike/userinfo hosts, successful CLI ingestion and stored URL provenance, blocked retired hosts before database creation or transport, and the observed backslash mismatch. A separate offline 15-case Requests URL-preparation probe blocked DNS and socket connections; no prepared retired-provider hostname passed the corrected guard. Inspected Requests pipelines rejected raw Unicode-dot variants before transport. No live source or paid model request contributed to these results. Python compilation also passed.
+
+The corrected source Git blob is `9c2ef1a48354312b45418ffaf2aeb657bb0a7f55`; the corrected test blob is `572293010ab0c5dbc9e9a91ccb83b110a2c28f75`. Source and tests are byte-identical in both repositories. Hosted execution and final commit/merge identities are recorded by the associated GitHub PR and workflow receipts. These hashes identify bytes; they are not signatures or deployment receipts.
+
+**Limits and follow-through:** no scheduled harvester, production data, credential, provider account, paid fallback or deployment is changed. General-purpose source crawling/SSRF policy is outside this bounded helper correction; operators still choose the final permitted source. Maintain these regression cases whenever Requests/URL parsing or source routing changes. Rollback is a reviewed scoped revert retaining the failure record and the separate provider-retirement controls.

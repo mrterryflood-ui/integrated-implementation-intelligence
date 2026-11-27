@@ -222,3 +222,10 @@ Changed: remove the SDK extraction/acquisition paths, default to the existing lo
 Proof and scope: see [SPOC retirement assurance](assurance/SPOC_PERPLEXITY_RETIREMENT_2026-11-23.md). The task evidence receipt binds source, test, workflow and documentation bytes to each draft head and records actual native execution, hosted CI and separate independent review. Hashes are not execution or signed provenance. No runtime synchronization, deployment, credential mutation or paid inference is performed. Local Ollama availability and live search/AI quality remain unverified.
 
 Owners and closure: the builder prepares the matching source candidates; the independent reviewer checks their exact identities and synthetic execution; repository maintainers own drift checks, runtime prerequisites and an authorized release journey. Terry retains consequential release authority. Any rollback requires review and preserves this correction record.
+
+
+## 2026-11-27 — SPOC source-host guard correction
+
+Terry authorized merging ready changes. Correct the provider/model regex being applied to publisher source paths and queries; preserve normal source URLs and block retired provider hostnames at fetch and CLI preflight. Match the Requests backslash authority boundary after independently reproducing that parser mismatch. Source and test blobs are `9c2ef1a48354312b45418ffaf2aeb657bb0a7f55` and `572293010ab0c5dbc9e9a91ccb83b110a2c28f75`, matching the CVR correction.
+
+Both local mirrored native suites passed 24/24 with no failures/skips, independently rerun by the root reviewer; compilation and 15 offline Requests preparation probes passed. Current-main integration review confirmed all six original PR path preimages unchanged at `37afa0fb8c43f950cb0fd529e30336d99ee5c80d`, preserving the six newly added research artifacts. Hosted checks and merge receipts remain the authoritative subsequent observations. See `docs/assurance/SPOC_PERPLEXITY_RETIREMENT_2026-11-23.md` for the missed regression, correction, ownership, limits and rollback. No deployment, paid request, account/billing closure or scientific acceptance is asserted.
