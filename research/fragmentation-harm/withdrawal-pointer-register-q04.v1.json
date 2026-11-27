@@ -1,0 +1,204 @@
+{
+  "schema": "withdrawal-pointer-register.v1",
+  "status": "POINTER_LAYER_PROPOSAL_NOT_RATIFIED",
+  "ledger_item": "Q04",
+  "sprint": "S878",
+  "authored_at": "2026-11-27T09:52Z",
+  "authorship": "AI review, authored by the DIS-RPLICE campaign loop (sprint S878, ledger item Q04). Not qualified human scientific acceptance, not clinical acceptance, and no patient benefit is claimed or implied.",
+  "defect_closed": "C-S868-5: comparability-contract.v0.3.json gives a consumer no pointer from a withdrawn field to its withdrawal. It still prints completeness_pivot_pp 0.4037778, the pivot in cases 34.96715748, ordering_statement and ordering_caveat, and contrast_pp 0.272313429032 as a point with no band, and names none of C-S850, C-S856 or C-S864. This register supplies the pointer layer without editing the contract, because v0.3 is in force until an accountable owner adopts or rejects a replacement.",
+  "binds_to": {
+    "path": "research/fragmentation-harm/comparability-contract.v0.3.json",
+    "blob_sha256": "de6b32c484d4c2943768146e65e30f9478b9ca1b03f64395195be677c824f073",
+    "bytes": 10884,
+    "note": "the binding is to the file bytes, not to a version string: if the contract is edited, the gate refuses and this register must be re-derived"
+  },
+  "pointer_invariant": "every field withdrawn by a correction side-car carries exactly one pointer in this register, naming the withdrawal code, the side-car record that withdraws it, and the replacement; a live quantity whose only source is a withdrawn field carries a pointer too and is marked DEPENDENT_ON_WITHDRAWN",
+  "withdrawal_pointers": [
+    {
+      "path": "records[0].resolution.completeness_pivot_pp",
+      "kind": "field_value",
+      "value_withdrawn": 0.4037778,
+      "state": "WITHDRAWN",
+      "withdrawn_by": [
+        "C-S850-1",
+        "C-S850-3",
+        "C-S850-6"
+      ],
+      "pointer_to": {
+        "file": "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json",
+        "schema": "s850-completeness-pivot-correction.v1",
+        "json_path": "withdrawn_fields_in_v0_3[0]"
+      },
+      "replacement": {
+        "statement": "the pivot is a threshold on the unstaged-share differential, not a quantity in the same variable as contrast_pp; the sign rule q_H > q_R <=> u_H - u_R < (1 - u_R)(r - 1)/r replaces it, with r = 1.004295508735, and the denominator convention behind the published percent is unresolved (C-S850-6), so the pivot may be vacuous rather than merely mis-signed",
+        "json_path": "replacement.sign_rule"
+      },
+      "consumer_action": "do not quote 0.4037778 pp as a completeness margin; quote the sign rule and the break-even discordance 0.020189921863 two-sided"
+    },
+    {
+      "path": "records[0].resolution.completeness_pivot_harris_cases",
+      "kind": "field_value",
+      "value_withdrawn": 34.96715748,
+      "state": "WITHDRAWN",
+      "withdrawn_by": [
+        "C-S850-5"
+      ],
+      "pointer_to": {
+        "file": "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json",
+        "schema": "s850-completeness-pivot-correction.v1",
+        "json_path": "withdrawn_fields_in_v0_3[1]"
+      },
+      "replacement": {
+        "statement": "the exact value over the record's own carried cells is 34.967159304925 Harris cases; the printed figure is 0.000001824925 cases short because seven-decimal rounding was propagated into a case count",
+        "json_path": "withdrawn_fields_in_v0_3[1].reason"
+      },
+      "consumer_action": "quote 34.967159304925 if a case count is needed at all, and only beside the sign rule"
+    },
+    {
+      "path": "records[0].resolution.ordering_statement",
+      "kind": "field_value",
+      "value_withdrawn": "the stage-variable offset binds before the staging-completeness pivot at every admissible pair on the stated grid, so closing the completeness question alone cannot sign this contrast",
+      "state": "WITHDRAWN",
+      "withdrawn_by": [
+        "C-S850-4"
+      ],
+      "pointer_to": {
+        "file": "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json",
+        "schema": "s850-completeness-pivot-correction.v1",
+        "json_path": "withdrawn_fields_in_v0_3[2]"
+      },
+      "replacement": {
+        "statement": "the ordering conclusion survives only on the ground that both cells execute Summary Stage 2018 from diagnosis year 2018; it does not survive on any pivot margin, and no pivot margin may be cited for it",
+        "json_path": "withdrawn_fields_in_v0_3[2].reason"
+      },
+      "consumer_action": "do not cite an ordering margin; cite the stage-variable ground"
+    },
+    {
+      "path": "records[0].resolution.ordering_caveat",
+      "kind": "field_substring",
+      "value_withdrawn": "robust only to a pivot error below 4.5648 Harris cases",
+      "state": "WITHDRAWN",
+      "withdrawn_by": [
+        "C-S850-4"
+      ],
+      "pointer_to": {
+        "file": "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json",
+        "schema": "s850-completeness-pivot-correction.v1",
+        "json_path": "withdrawn_fields_in_v0_3[3]"
+      },
+      "replacement": {
+        "statement": "withdrawn with the ordering statement; the ceiling condition that replaces it is that at the Harris ceiling the crossing 36.876229538800 pct exceeds the Hinds ceiling 36.332767402377 pct, so no Hinds value inverts the sign at maximum Harris incompleteness. The surviving tail of the field, \"the pivot's uncertainty is not quantified in S807's record\", stands and is the reason no pivot margin may be quoted.",
+        "json_path": "replacement.ceiling_note"
+      },
+      "consumer_action": "do not quote a robustness margin in cases",
+      "labelling": "the side-car withdraws the first 54 characters of a 114-character string without marking it (partial); D-S878-2"
+    },
+    {
+      "path": "records[0].share_rate_tolerance_rule.evaluation_for_this_pair.verdict",
+      "kind": "field_substring",
+      "value_withdrawn": "defeated by the 2.38 Hinds-case completeness pivot",
+      "state": "PARTIALLY_WITHDRAWN",
+      "withdrawn_by": [
+        "C-S850-2"
+      ],
+      "pointer_to": {
+        "file": "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json",
+        "schema": "s850-completeness-pivot-correction.v1",
+        "json_path": "withdrawn_fields_in_v0_3[4]"
+      },
+      "replacement": {
+        "statement": "on the corrected differential the figure is 2.368143 Hinds cases and the pivot is not a single case count, so the clause cannot be used to defeat the tolerance rule; the surviving part of the verdict is that only a single-case floor is discriminating in form",
+        "json_path": "replacement.tolerated_differential_pp_at_anchor"
+      },
+      "consumer_action": "quote the surviving clause only"
+    },
+    {
+      "path": "records[0].resolution.ordering_margin_harris_cases",
+      "kind": "field_value",
+      "value_withdrawn": 4.564780569983,
+      "state": "DEPENDENT_ON_WITHDRAWN",
+      "withdrawn_by": [
+        "D-S878-1",
+        "C-S850-4"
+      ],
+      "pointer_to": {
+        "file": "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json",
+        "schema": "s850-completeness-pivot-correction.v1",
+        "json_path": "withdrawn_fields_in_v0_3[1]"
+      },
+      "replacement": {
+        "statement": "this field was not listed among the five withdrawn fields and is a new finding of S878: it is exactly completeness_pivot_harris_cases 34.96715748 minus variable_layer_sign_flip_envelope_harris_cases[1] 30.402376910017, so its only source is a withdrawn field, and it also inherits that field's rounding error; over the exact pivot it would read 4.564782394908. It must not be quoted as a live margin."
+      },
+      "consumer_action": "treat as withdrawn with the ordering statement; quote no margin in cases"
+    }
+  ],
+  "identification_bands": {
+    "records[0].contrast_pp": {
+      "point": 0.272313429032,
+      "identification_band_pp": [
+        0.2,
+        0.4
+      ],
+      "interval_open": true,
+      "band_kind": "printed_cell_rounding_envelope",
+      "width_pp": 0.2,
+      "point_over_width": 1.361567145159,
+      "derivation": "the two published cells print to one decimal, Hinds 63.7 and Harris 63.4, so each true share lies in a half-open interval of width 0.1 pp and the difference lies in (63.65 - 63.45, 63.75 - 63.35) = (0.200000000000, 0.400000000000) pp; the envelope is open at both ends and its width is 0.200000000000 pp",
+      "matches_contract_field": "records[0].resolution.printed_cell_envelope_pp [0.2, 0.4] reproduces exactly, so the band existed in the record and was simply not attached to the point",
+      "not_the_identification_set": "the side-car's replacement.identified_set_pp [-22.859754102193, 23.478074833701], width 46.337828935894 pp, bounds the stage-share contrast once the unstaged fraction is allowed to vary; it is a different estimand, 231.7 times wider, and neither band may be substituted for the other",
+      "unreproduced_quote": {
+        "quote": "0.20 to 0.38 pp",
+        "where": "Q04 ledger verdict, S868, harms clause",
+        "finding": "not reproducible from either file read this sprint: the rounding envelope is (0.2000, 0.4000) and the identification set is [-22.86, 23.48]; a consumer must not quote the 0.38 figure until its derivation is produced"
+      },
+      "consumer_action": "print contrast_pp only as 0.272313429032 pp inside (0.200000, 0.400000) pp, and say which of the two bands is being used"
+    }
+  },
+  "orphan_scan": {
+    "block": "records[0].resolution",
+    "rule": "a live scalar in the resolution block that equals a withdrawn scalar minus another live scalar to 1e-9 is a derived dependent of a withdrawn field and must carry a pointer; array members are primitives and are excluded as dependents",
+    "detected": [
+      {
+        "dependent": "records[0].resolution.ordering_margin_harris_cases",
+        "minuend": "records[0].resolution.completeness_pivot_harris_cases",
+        "subtrahend": "records[0].resolution.variable_layer_sign_flip_envelope_harris_cases",
+        "recomputed": 4.564780569983
+      }
+    ]
+  },
+  "does_not_modify": [
+    "research/fragmentation-harm/comparability-contract.v0.3.json is NOT modified or deleted by this file",
+    "research/fragmentation-harm/comparability-contract.v0.2.json is NOT modified or deleted by this file",
+    "research/fragmentation-harm/completeness-pivot-gate-s850.v1.json is NOT modified or deleted by this file",
+    "no baseline report, register or prior receipt is modified"
+  ],
+  "mechanism": "measurement artefact; no ancestry-linked or biomarker variable enters any arithmetic in this file; race is a variable in nothing here; the county label proxies registry programme, submission product and stage-variable production process",
+  "pilot_primary_outcome": "completed diagnostic follow-up at 180 days after an abnormal screening-indication colorectal test; UNMEASURED at both counties; a test ordered is not a completed action, and neither band in this file stands in for it",
+  "unrun": [
+    "no repository test, lint, type check, build, CI leg or deployment was executed by the authoring sprint; the gate in this directory runs offline on three files and nothing else",
+    "no external source was read this sprint; every number derives from the contract's own carried cells and the side-car's own record",
+    "no registry extract, no data-use agreement, no case-level record, no measured unstaged fraction at either county, no measured 180-day follow-up"
+  ],
+  "external_checks_used": 0,
+  "repository_reads_used": 3,
+  "new_defects": [
+    {
+      "code": "D-S878-1",
+      "severity": "MATERIAL, integration",
+      "statement": "records[0].resolution.ordering_margin_harris_cases 4.564780569983 is live in contract v0.3 although its only source is the withdrawn completeness pivot; it is not among the five fields the S850 side-car withdraws, so the side-car withdrawal set was itself incomplete and the pointer layer as specified would have left a withdrawn-derived number printing as live",
+      "evidence": "4.564780569983 = 34.96715748 - 30.402376910017 exactly, recomputed by the gate; over the exact pivot 34.967159304925 the field would read 4.564782394908"
+    },
+    {
+      "code": "D-S878-2",
+      "severity": "MINOR, provenance",
+      "statement": "the S850 side-car withdraws ordering_caveat by prefix but does not label the entry (partial), unlike the verdict entry which it does label; a consumer matching on exact equality would report drift on a correct withdrawal",
+      "evidence": "54-character prefix of a 114-character string"
+    },
+    {
+      "code": "D-S878-3",
+      "severity": "MATERIAL, citation",
+      "statement": "the harms clause of Q04s S868 verdict instructs a consumer to quote 0.2723 pp as within 0.20 to 0.38 pp; that band is reproducible neither as the printed-cell rounding envelope (0.200000 to 0.400000 pp) nor as the identification set (-22.859754102193 to 23.478074833701 pp), and it is not in either file read this sprint",
+      "evidence": "the two candidate bands both recompute exactly and neither equals [0.2026, 0.3778]"
+    }
+  ]
+}
