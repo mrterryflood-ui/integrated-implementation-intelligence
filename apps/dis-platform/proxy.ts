@@ -27,6 +27,8 @@ const authenticatedProxy = clerkMiddleware(async (auth, req) => {
 });
 
 export default function proxy(req: NextRequest, event: NextFetchEvent) {
+  // Vendor metadata is public and contains no user, organization, or token data.
+  if (req.method === "GET" && req.nextUrl.pathname === "/api/integrations/decisions/client") return NextResponse.next();
   if (productionIdentityBlocked(process.env)) {
     const pathname = req.nextUrl.pathname;
     const councilRun = pathname === "/api/council" && req.method === "POST";

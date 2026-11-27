@@ -1,5 +1,9 @@
 export default {
   reactStrictMode: true,
+  // The authenticated raw-original route independently enforces its exact
+  // reservation size, 100 MiB bound and two concurrent quarantine spools.
+  // Proxy's default 10 MiB buffer would otherwise truncate valid originals.
+  experimental: { proxyClientMaxBodySize: 104857600 },
   async headers() {
     return [{
       source: "/(.*)",

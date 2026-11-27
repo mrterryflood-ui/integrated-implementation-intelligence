@@ -7,3 +7,9 @@
 /tools/iss-ebeas-ui/tests/*-receipt.json
 /tools/iss-ebeas-ui/tests/screenshots/
 /audit/
+/apps/dis-platform/node_modules/
+/apps/dis-platform/.next/
+/apps/dis-platform/tsconfig.tsbuildinfo
+/apps/dis-platform/test-results/
+/apps/dis-platform/next-env.d.ts
+/apps/dis-platform/build/

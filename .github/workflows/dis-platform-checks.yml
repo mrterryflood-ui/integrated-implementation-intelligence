@@ -25,7 +25,7 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npx tsc --noEmit
       - name: Verify replacement-host identity and upload gates without credentials
         run: |
@@ -67,14 +67,24 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+      - name: Trust this checkout for revision receipts
+        # The browser container may run as a different UID from checkout.
+        # Trust only this runner workspace, preserving real Git SHA inspection.
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
-      - run: npm install --no-audit --no-fund
+      - run: npm ci --no-audit --no-fund
       - run: npm install --no-save --no-package-lock --no-audit --no-fund playwright@1.56.1
-      - run: node -e 'const { chromium, webkit } = require("playwright"); if (!chromium || !webkit) process.exit(1)'
+      - name: Verify browser and native fixture dependencies
+        run: node -e 'const { chromium, webkit } = require("playwright"); if (!chromium || !webkit) process.exit(1); for (const name of ["esbuild", "tsx", "@electric-sql/pglite", "jszip", "pptxgenjs"]) require.resolve(name)'
       - name: Build exact candidate with private identity intentionally unavailable
         run: npm run build
+      - name: Verify native decision cycle with synthetic identity and real RLS
+        # This loopback/PGlite fixture is not Clerk or deployed-database acceptance.
+        run: node --import tsx tests/e2e/organization-native.mjs
+        env:
+          DIS_E2E_ARTIFACT_DIR: test-results/dis-candidate-browser/organization-native
       - name: Run real candidate Chromium and iPhone WebKit journeys
         run: |
           npm run start -- --hostname 127.0.0.1 --port 3000 > /tmp/dis-candidate.log 2>&1 &
@@ -85,6 +95,7 @@ jobs:
             sleep 1
           done
           node tests/e2e/public-site.mjs
+          node tests/e2e/audience-home.mjs
           node tests/e2e/perspective-studio.mjs
           node tests/e2e/decision-lab.mjs
           node tests/e2e/research-program.mjs

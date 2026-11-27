@@ -1,5 +1,5 @@
 import {inOrganizationTransaction} from '../../../../lib/organizations/database';
-import {prepareOrganizationCouncil,claimOrganizationCouncil,finishOrganizationCouncil} from '../../../../lib/organizations/council';
+import {prepareOrganizationCouncil,claimOrganizationCouncil,finishOrganizationCouncil,assertOrganizationCouncilProviderTransfer} from '../../../../lib/organizations/council';
 import {uuid,OrganizationError} from '../../../../lib/organizations/service';
 import {organizationActor,readOrganizationAction,organizationFailure,organizationResponse} from '../../../../lib/organizations/http';
 import {convene,infer} from '../../../../lib/council-engine';
@@ -15,7 +15,8 @@ export async function POST(req:Request){try{
  const question=execution.context.transfer;
  const researchQuery=organizationCouncilResearchQuery(execution.context.payload);
  const roster=assemble({prompt:question,count:6,redCount:4});
- let result:any;try{result=await convene({prompt:question,providedEvidence:execution.context.providerSources,count:6,redCount:4,selected:[],redSelected:[],depth:'Deep',primaryMembers:roster.primary,redMembers:roster.red,challengeEnabled:true},{research:()=>integratedCouncilResearch(researchQuery),infer});}catch{result={state:'INCOMPLETE',error:'Provider execution failed; no approval or synthesis is inferred'};}
+ const approvedProvider=execution.context.payload.providerTransfer;
+ let result:any;try{result=await convene({prompt:question,providedEvidence:execution.context.providerSources,count:6,redCount:4,selected:[],redSelected:[],depth:'Deep',primaryMembers:roster.primary,redMembers:roster.red,challengeEnabled:true},{research:()=>{assertOrganizationCouncilProviderTransfer(approvedProvider);return integratedCouncilResearch(researchQuery);},infer:(system,prompt,model)=>{assertOrganizationCouncilProviderTransfer(approvedProvider);return infer(system,prompt,model);}});}catch{result={state:'INCOMPLETE',error:'Provider execution failed or its configuration changed; no approval or synthesis is inferred'};}
  const receipt=await inOrganizationTransaction(actor,db=>finishOrganizationCouncil(db,actor,org,id,execution,result));
  return organizationResponse({receipt,approvalGranted:false});
  }catch(e){return organizationFailure(e)}}
