@@ -67,6 +67,10 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
         with:
           persist-credentials: false
+      - name: Trust this checkout for revision receipts
+        # The browser container may run as a different UID from checkout.
+        # Trust only this runner workspace, preserving real Git SHA inspection.
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: '22'
