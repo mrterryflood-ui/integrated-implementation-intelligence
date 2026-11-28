@@ -11,6 +11,7 @@ import type {IntelligenceRecord} from "./consultation-research";
 import {PUBLIC_MEASUREMENT_KEYS,CORRECTION_RECEIPT_KEYS,objectRecord,credentialFreeHttps,
  scaleViolation,strictTimestamp,hasOnlyKeys} from "./evidence-action-input-integrity";
 import {diagnosePretrends,type PretrendDiagnostics} from "./evidence-action-pretrend";
+import {declaresMedicalObligations} from "./condition-contract";
 const medicalRequirements=[
  {id:"all-stage-incidence",construct:"DISEASE_INCIDENCE",problem:"Source-matched all-stage colorectal incidence is not available among accepted measurements."},
  {id:"screening-denominator",construct:"SCREENING_COMPLETION",problem:"Eligibility-based screening completion is not available among accepted measurements."},
@@ -29,7 +30,7 @@ const declaresClinicalMeasurement=(program:ResearchProgram):boolean=>{
 /** Medical requirements are recomputed after quarantine, never from rejected measurements. */
 export function reviewEvidenceToAction(program:ResearchProgram,bindings:readonly MeasureBinding[],discovery:readonly IntelligenceRecord[]=[]):EvidenceActionReview{
  const out=coreReview(program,bindings,discovery);
- const clinical=declaresClinicalMeasurement(program);
+ const clinical=declaresMedicalObligations([program.caseId,program.site],declaresClinicalMeasurement(program));
  if(!clinical)out.gaps=out.gaps.filter(g=>!medicalGaps.has(g.id));
  const counts=new Map<string,number>();for(const b of bindings)counts.set(b.indicatorId,(counts.get(b.indicatorId)||0)+1);
  const invalid=out.measures.filter(m=>(counts.get(m.id)||0)>1||scaleViolation(m.indicator.value,m.indicator.unit)!==null);
